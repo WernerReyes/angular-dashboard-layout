@@ -1,5 +1,6 @@
-import { LayoutService } from '@/core/services/layout.service';
+
 import { AppConfigurator } from '@/shared/components/configurator/configurator';
+import { LayoutService } from '@/shared/services/layout.service';
 import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';

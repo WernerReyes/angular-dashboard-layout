@@ -1,4 +1,5 @@
-import { LayoutService } from '@/core/services/layout.service';
+
+import { LayoutService } from '@/shared/services/layout.service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, computed, inject, PLATFORM_ID, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';

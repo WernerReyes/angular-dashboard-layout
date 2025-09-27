@@ -17,28 +17,30 @@ import { SplitterModule } from 'primeng/splitter';
 import { TabsModule } from 'primeng/tabs';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-menu.page',
     imports: [
-        CommonModule,
-        FormsModule,
-        ToolbarModule,
-        ButtonModule,
-        RippleModule,
-        SplitButtonModule,
-        AccordionModule,
-        FieldsetModule,
-        MenuModule,
-        InputTextModule,
-        DividerModule,
-        SplitterModule,
-        PanelModule,
-        TabsModule,
-        IconFieldModule,
-        InputIconModule,
-        ToggleButtonModule
-    ],
+    CommonModule,
+    FormsModule,
+    ToolbarModule,
+    ButtonModule,
+    RippleModule,
+    SplitButtonModule,
+    AccordionModule,
+    FieldsetModule,
+    MenuModule,
+    InputTextModule,
+    DividerModule,
+    SplitterModule,
+    PanelModule,
+    TabsModule,
+    IconFieldModule,
+    InputIconModule,
+    ToggleButtonModule,
+    RouterLink
+],
     templateUrl: './menu.page.html',
     styleUrl: './menu.page.scss'
 })

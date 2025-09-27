@@ -3,18 +3,21 @@
         <div class="flex items-center justify-between mb-4">
             <h4 class="font-semibold text-xl mb-4">Menu</h4>
             <div class="flex gap-2">
-                <p-button label="Nuevo" icon="pi pi-plus" styleClass="p-button-outlined"></p-button>
                 <!-- <p-button label="Previsualizar" icon="pi pi-eye" styleClass="p-button-outlined"></p-button> -->
 
-                <p-togglebutton [(ngModel)]="checked" 
+                <a routerLink="/dashboard/menu/new" pButton icon="pi pi-plus">
+                    <span pButtonLabel>Nuevo</span>
+                </a>
+
+                <!-- <p-togglebutton [(ngModel)]="checked" 
                 onLabel="Desactivar"
                 offLabel="Previsualizar"
                 onIcon="pi pi-check" 
                 offIcon="pi pi-times" 
               
            
-                lass="w-36" ariaLabel="Do you confirm" 
-                />
+                class="w-36" ariaLabel="Do you confirm" 
+                /> -->
             </div>
         </div>
 

@@ -1,6 +1,6 @@
 import { Component, ElementRef } from '@angular/core';
 
-import { Menu } from '../menu/menu';
+import { Menu } from './menu/menu';
 
 @Component({
     selector: 'dashboard-sidebar',

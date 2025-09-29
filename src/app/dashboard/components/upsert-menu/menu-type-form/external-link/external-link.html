@@ -1,10 +1,14 @@
-<div class="flex flex-col grow basis-0 gap-2">
-    <label for="url">URL Externa</label>
-    <input pInputText id="url" type="text" placeholder="https://ejemplo.com" />
-</div>
+<div [formGroup]="form()">
+    <div class="flex flex-col grow basis-0 gap-2">
+        <label for="url">URL Externa</label>
+        <input pInputText id="url" type="text" placeholder="https://ejemplo.com" formControlName="url" />
+        @if (FormUtils.isInvalidField(form(), 'url')) {
+        <small id="url-help" class="text-red-500">{{FormUtils.getFieldError(form(), 'url')}}</small>
+        } 
+    </div>
 
-<div class="flex items-center mt-5" [formGroup]="form">
-    <p-toggleswitch formControlName="active" />
-    <span class="ml-2 font-bold">Menú activo</span>
+    <div class="flex items-center mt-5">
+        <p-toggleswitch formControlName="active" />
+        <span class="ml-2 font-bold">Menú activo</span>
+    </div>
 </div>
-

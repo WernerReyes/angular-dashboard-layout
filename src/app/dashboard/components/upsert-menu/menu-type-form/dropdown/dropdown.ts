@@ -1,28 +1,67 @@
-import { ToggleSwitch } from '@/shared/components/toggle-switch/toggle-switch';
-import { Component, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { MenuFormService } from '@/dashboard/services/menu-form.service';
+import { JsonPipe } from '@angular/common';
+import { Component, inject, signal } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { OrderListModule } from 'primeng/orderlist';
 import { SelectModule } from 'primeng/select';
-
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { ExternalLink } from '../external-link/external-link';
+import { InternalPage } from '../internal-page/internal-page';
+import { FormUtils } from '@/utils/form-utils';
+import { MessageModule } from 'primeng/message';
+import {CdkDrag, CdkDragDrop, DragDropModule, moveItemInArray} from '@angular/cdk/drag-drop';
 @Component({
     selector: 'menu-type-dropdown',
-    imports: [ToggleSwitch, OrderListModule, SelectModule, FormsModule, ButtonModule, InputTextModule],
-    templateUrl: './dropdown.html'
+    imports: [DragDropModule, ToggleSwitchModule, OrderListModule, MessageModule, SelectModule, FormsModule, ButtonModule, InputTextModule, InternalPage, ExternalLink, ReactiveFormsModule],
+    templateUrl: './dropdown.html',
+    styleUrl: './dropdown.scss'
 })
 export class Dropdown {
-    checked = signal(true);
+    private readonly menuFormService = inject(MenuFormService);
 
-    ngAfterViewInit() {
-        document.querySelector('.p-orderlist-controls')?.classList.add('!hidden');
-    }
+    form = this.menuFormService.form;
 
-    dropdownItems = signal<Array<{ id: number; title: string; link: string }>>([{ id: 1, title: '', link: '' }]);
+    FormUtils = FormUtils;
+
+    // ngAfterViewInit() {
+    //     document.querySelector('.p-orderlist-controls')?.classList.add('!hidden');
+    // }
+
+    dropdownType = this.menuFormService.dropdownType;
+
+    dropdownItems = this.menuFormService.dropdownItems;
 
     handleAddDropdownItem() {
-        const currentItems = this.dropdownItems();
-        const newItem = { id: currentItems.length + 1, title: '', link: '' };
-        this.dropdownItems.update((items) => [...items, newItem]);
+        this.menuFormService.addDropdown();
+    }
+
+    handleRemoveDropdownItem(index: number) {
+        this.menuFormService.removeDropdown(index);
+    }
+
+    drop(event: any) {
+        console.log(event);
+         // Mover los controles en el FormArray
+        const draggedControl = this.dropdownItems.at(event.previousIndex);
+        this.dropdownItems.removeAt(event.previousIndex);
+        this.dropdownItems.insert(event.currentIndex, draggedControl);
+
+        // Actualizar el campo 'order' en cada elemento después del reordenamiento
+        this.updateItemsOrder();
+        
+        // Forzar actualización del FormArray
+        this.dropdownItems.updateValueAndValidity();
+  }
+
+  private updateItemsOrder() {
+        this.dropdownItems.controls.forEach((control, index) => {
+            // Si tienes un campo 'order' en tu FormGroup
+            if (control.get('order')) {
+                control.get('order')?.setValue(index + 1);
+            }
+            
+        });
     }
 }

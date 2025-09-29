@@ -1,3 +1,4 @@
+import { PatternsConst } from '@/shared/constants/patterns';
 import {
   AbstractControl,
   FormArray,
@@ -40,9 +41,22 @@ export class FormUtils {
         case 'noStrider':
           return `No se puede usar el username de strider en la app`;
 
+        case 'minLengthArray':
+          const error = errors['minLengthArray'].requiredLength;
+          return `El arreglo debe tener al menos ${error ? error : '1'} elemento(s)`;
+
+
+        case 'duplicate':
+          return `Elemento duplicado no es permitido`;
+
         case 'pattern':
           if (errors['pattern'].requiredPattern === FormUtils.emailPattern) {
             return 'El valor ingresado no luce como un correo electrónico';
+          }
+          
+
+          if (errors['pattern'].requiredPattern === PatternsConst.URL.toString()) {
+            return 'El valor ingresado no luce como una URL válida';
           }
 
           return 'Error de patrón contra expresión regular';
@@ -57,7 +71,7 @@ export class FormUtils {
 
   static isInvalidField(form: FormGroup, fieldName: string): boolean | null {
     return (
-      !!form.controls[fieldName].errors && form.controls[fieldName].touched
+      !!form.controls[fieldName]?.errors && form.controls[fieldName]?.touched
     );
   }
 

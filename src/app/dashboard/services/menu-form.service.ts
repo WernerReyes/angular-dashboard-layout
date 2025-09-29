@@ -1,6 +1,7 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MenuType, MenuTypes } from '../interfaces/menu';
+import { PatternsConst } from '@/shared/constants/patterns';
 
 @Injectable({
     providedIn: 'root'
@@ -14,9 +15,11 @@ export class MenuFormService {
         { name: 'Dropdown', code: MenuTypes.DROPDOWN }
     ]);
 
+    dropdownType = computed<MenuType[]>(() => this.menusType().filter((menu) => menu.code !== MenuTypes.DROPDOWN));
+
     form = this.fb.nonNullable.group({
         title: ['', [Validators.required, Validators.minLength(3)]],
-        type: [
+        menuType: [
             {
                 value: '',
                 disabled: true
@@ -27,18 +30,35 @@ export class MenuFormService {
         active: [true, [Validators.required]],
         pageId: [null],
         url: [null],
-        dropdowns: this.fb.array<FormGroup<any>>([])
+        dropdownItems: this.fb.array<FormGroup<any>>([])
     });
 
     selectedMenuType = signal<MenuType | undefined>(undefined);
 
-    private createDropdownGroup() {
-        return this.fb.nonNullable.group({
-            parentId: [null, [Validators.required]],
+    private createDropdownGroup(order: number = this.dropdownItems.length + 1) {
+        const group = this.fb.nonNullable.group({
             title: ['', [Validators.required, Validators.minLength(3)]],
-            order: [1, [Validators.required, Validators.min(1)]],
-            active: [true, [Validators.required]]
+            order: [order, [Validators.required, Validators.min(1)]],
+            active: [true, [Validators.required]],
+            menuType: ['' as MenuTypes, [Validators.required]],
+            pageId: [null],
+            url: [null]
         });
+
+        // Aplico validaciones iniciales según el tipo
+        // this.applyTypeValidators(group, menuType);
+
+        // Me suscribo a cambios de menuType para actualizar validaciones dinámicamente
+        group.get('menuType')?.valueChanges.subscribe((type: MenuTypes | '') => {
+            console.log('Dropdown item menuType changed to:', type);
+            this.applyTypeValidators(group, type);
+        });
+
+        group.get('pageId')?.valueChanges.subscribe(() => {
+            this.dropdownItems.updateValueAndValidity();
+        });
+
+        return group;
     }
 
     constructor() {
@@ -47,28 +67,25 @@ export class MenuFormService {
 
     ngOnInit() {
         this.form.get('title')?.valueChanges.subscribe((titleValue) => {
-            console.log('Title changed:', titleValue);
             this.handleTitleChange(titleValue);
 
             if (this.isValidTitle(titleValue) === false) {
-                // this.onSelectedMenuType.emit(undefined!);
                 this.selectedMenuType.set(undefined);
             }
         });
 
-        this.form.get('type')?.valueChanges.subscribe((typeValue) => {
+        this.form.get('menuType')?.valueChanges.subscribe((typeValue) => {
             const selectedType = this.menusType().find((menu) => menu.code === typeValue);
             if (selectedType) {
                 this.selectedMenuType.set(selectedType);
-
-                this.setValidatorsForForm();
-                // this.onSelectedMenuType.emit(this.selectedMenuType());
+                // this.setValidatorsForForm();
+                this.applyTypeValidators(this.form, selectedType.code);
             }
         });
     }
 
     private handleTitleChange(titleValue: string) {
-        const typeControl = this.form.get('type');
+        const typeControl = this.form.get('menuType');
 
         if (this.isValidTitle(titleValue)) {
             typeControl?.enable();
@@ -82,46 +99,69 @@ export class MenuFormService {
         return !!(title && title.trim().length > 0 && titleControl?.valid);
     }
 
-    setValidatorsForForm() {
-        const type = this.selectedMenuType();
-
-        if (!type) return;
-
+    private applyTypeValidators(group: FormGroup, menuType: MenuTypes | '') {
+        if (!menuType) return;
         // Resetea validadores primero
-        this.form.controls['pageId'].clearValidators();
-        this.form.controls['url'].clearValidators();
-        this.form.controls['dropdowns'].clearValidators();
+        ['pageId', 'url', 'dropdownItems'].forEach((controlName) => {
+            group.get(controlName)?.clearValidators();
+            group.get(controlName)?.updateValueAndValidity();
+        });
 
-        switch (type.code) {
+        const resetValues: any = {
+            pageId: null,
+            url: null
+        };
+
+        if (group.get('dropdownItems')) {
+            this.dropdownItems.clear();
+        }
+
+        switch (menuType) {
             case MenuTypes.INTERNAL_PAGE:
-                this.form.controls['pageId'].setValidators([Validators.required]);
+                group.get('pageId')?.setValidators([Validators.required]);
+                // console.log(group.get('pageId')?.;
+                delete resetValues.pageId;
                 break;
 
             case MenuTypes.EXTERNAL_LINK:
-                this.form.controls['url'].setValidators([Validators.required, Validators.pattern(/^https?:\/\//)]);
+                console.log('Setting validators for EXTERNAL_LINK');
+                group.get('url')?.setValidators([Validators.required, Validators.pattern(PatternsConst.URL)]);
+                delete resetValues.url;
+
                 break;
 
             case MenuTypes.DROPDOWN:
-                this.form.setControl('dropdowns', this.fb.array<FormGroup<any>>([this.createDropdownGroup()]));
-                this.form.controls['dropdowns'].setValidators([this.minLengthArray(1)]);
+                this.form.setControl('dropdownItems', this.fb.array<FormGroup<any>>([this.createDropdownGroup()]));
+                this.form.controls['dropdownItems'].setValidators([this.minLengthArray(1), this.uniquePageIdValidator]);
+
+                // this.dropdownItems.
+
                 break;
         }
-
-        // 👈 Importante: actualizar validadores
-        this.form.controls['pageId'].updateValueAndValidity();
-        this.form.controls['url'].updateValueAndValidity();
-        this.form.controls['dropdowns'].updateValueAndValidity();
     }
 
-    get dropdowns() {
-        return this.form.get('dropdowns') as FormArray;
+    get dropdownItems() {
+        return this.form.get('dropdownItems') as FormArray<FormGroup>;
     }
 
     addDropdown() {
-        this.dropdowns.push(this.createDropdownGroup());
+        this.dropdownItems.push(this.createDropdownGroup());
+
+        this.dropdownItems.updateValueAndValidity();
     }
     removeDropdown(index: number) {
-        this.dropdowns.removeAt(index);
+        this.dropdownItems.removeAt(index);
+
+        this.updateDropdownOrder();
+
+        // Forzar actualización del FormArray
+        this.dropdownItems.updateValueAndValidity();
+    }
+
+     private updateDropdownOrder() {
+        this.dropdownItems.controls.forEach((control, index) => {
+            control.get('order')?.setValue(index + 1);
+        });
     }
 
     minLengthArray(min: number) {
@@ -132,4 +172,40 @@ export class MenuFormService {
             return null;
         };
     }
+
+    private uniquePageIdValidator = (control: AbstractControl): ValidationErrors | null => {
+        if (!(control instanceof FormArray)) return null;
+
+        const pageIds: (string | number)[] = [];
+        const duplicates: number[] = [];
+
+        control.controls.forEach((group, index) => {
+            if (group instanceof FormGroup) {
+                const pageIdControl = group.get('pageId');
+                const menuTypeControl = group.get('menuType');
+
+                // Solo validar si es tipo internal-page y tiene pageId
+                if (menuTypeControl?.value === MenuTypes.INTERNAL_PAGE && pageIdControl?.value) {
+                    const pageId = pageIdControl.value;
+
+                    if (pageIds.includes(pageId)) {
+                        duplicates.push(index);
+                        // Marcar error en el control específico
+                        pageIdControl.setErrors({ duplicate: true });
+                    } else {
+                        pageIds.push(pageId);
+                        // Limpiar error de duplicado si existía
+                        const currentErrors = pageIdControl.errors;
+                        if (currentErrors?.['duplicate']) {
+                            delete currentErrors['duplicate'];
+                            const hasOtherErrors = Object.keys(currentErrors).length > 0;
+                            pageIdControl.setErrors(hasOtherErrors ? currentErrors : null);
+                        }
+                    }
+                }
+            }
+        });
+
+        return duplicates.length > 0 ? { duplicate: { indices: duplicates } } : null;
+    };
 }

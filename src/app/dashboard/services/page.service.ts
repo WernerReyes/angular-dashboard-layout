@@ -1,6 +1,6 @@
-import { inject, Injectable, signal } from '@angular/core';
 import type { Page } from '@/shared/interfaces/page';
 import { HttpClient } from '@angular/common/http';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { ApiResponse } from '../../shared/interfaces/api-response';
 
@@ -14,16 +14,20 @@ export class PageService {
 
     pagesList = signal<Page[]>([]);
 
+    freePagesOnlyList = computed(() => this.pagesList().filter(page => page.menuId === null));
+
     constructor() {
         this.getAll();
     }
 
     getAll() {
-        this.http.get<ApiResponse<Page[]>>(this.prefix, {
-            withCredentials: true
-        }).subscribe({
-            next: (response) => this.pagesList.set(response.data),
-            error: (error) => console.error('Error fetching pages:', error)
-        });
+        this.http
+            .get<ApiResponse<Page[]>>(this.prefix, {
+                withCredentials: true
+            })
+            .subscribe({
+                next: (response) => this.pagesList.set(response.data),
+                error: (error) => console.error('Error fetching pages:', error)
+            });
     }
 }

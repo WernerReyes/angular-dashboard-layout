@@ -8,7 +8,6 @@ import { StyleClassModule } from 'primeng/styleclass';
 
 @Component({
     selector: 'dashboard-topbar',
-    standalone: true,
     imports: [RouterModule, StyleClassModule, AppConfigurator],
     templateUrl: './topbar.html'
 })

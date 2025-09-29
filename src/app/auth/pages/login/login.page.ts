@@ -11,6 +11,7 @@ import type { LoginRequest } from '@/auth/interfaces/login';
 
 @Component({
     selector: 'app-login-page',
+        standalone: true,
     imports: [
         ButtonModule,
         CheckboxModule,
@@ -23,7 +24,8 @@ import type { LoginRequest } from '@/auth/interfaces/login';
         // AppFloatingConfigurator
     ],
     templateUrl: './login.page.html',
-    styleUrl: './login.page.scss'
+    styleUrl: './login.page.scss',
+   
 })
 export default class LoginPage {
     private readonly authService = inject(AuthService);

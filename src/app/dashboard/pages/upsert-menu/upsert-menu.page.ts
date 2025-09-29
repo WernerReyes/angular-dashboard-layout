@@ -14,7 +14,7 @@ import { CreateMenu, MenuTypes } from '@/dashboard/interfaces/menu';
 
 @Component({
     selector: 'app-upsert-menu.page',
-    imports: [JsonPipe, UpsertMenu, FluidModule, ButtonModule, RouterLink, ReactiveFormsModule, ToastModule],
+    imports: [UpsertMenu, FluidModule, ButtonModule, RouterLink, ReactiveFormsModule, ToastModule],
     templateUrl: './upsert-menu.page.html',
     styleUrl: './upsert-menu.page.scss',
     providers: [MessageService]

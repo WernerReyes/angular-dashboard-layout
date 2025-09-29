@@ -1,0 +1,53 @@
+<app-toggle-switch [checked]="checked()" text="Menú activo" />
+<div class="flex flex-col gap-4 mt-10">
+    <div class="flex items-center justify-between">
+        <h5 class="font-semibold text-xl">Elementos del Dropdown</h5>
+        <div class="flex gap-3">
+            <p-button label="Agregar" (click)="handleAddDropdownItem()" icon="pi pi-plus" styleClass="p-button-outlined"></p-button>
+            <p-button label="Guardar Cambios" icon="pi pi-save"></p-button>
+        </div>
+    </div>
+    <p-orderlist [value]="dropdownItems()" dataKey="id" [dragdrop]="true" [responsive]="true" breakpoint="575px" scrollHeight="50rem">
+        <ng-template let-option let-selected="selected" #item>
+            <div class="mb-3 card w-full">
+                <!-- Header con badge y botón eliminar -->
+                <div class="flex items-center justify-between mb-4">
+                    <span class="bg-primary text-white px-3 py-1 rounded-full text-sm"> Elemento-{{option.id}} </span>
+                    <p-button icon="pi pi-trash" styleClass="p-button-text p-button-sm p-button-danger" pTooltip="Eliminar elemento"> </p-button>
+                </div>
+
+                <!-- Campos del formulario -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-white font-medium">Título</label>
+                        <input pInputText [(ngModel)]="option.title" placeholder="Ingresa el título" />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-white font-medium">Tipo</label>
+                        <p-select [options]="[]" [(ngModel)]="option.type" optionLabel="name" optionValue="code" placeholder="Selecciona tipo" class="w-full" />
+                    </div>
+                </div>
+
+                <!-- Campo página (solo si es página interna) -->
+                <!-- @if (option.type === 'internal-page') {
+                <div class="flex flex-col gap-2 mb-4">
+                    <label class="text-white font-medium">Página</label>
+                    <p-select [options]="pages()" [(ngModel)]="option.page" optionLabel="title" placeholder="Selecciona una página" class="w-full" />
+                </div>
+                } @else if (option.type === 'external-link') {
+                <div class="flex flex-col gap-2 mb-4">
+                    <label class="text-white font-medium">URL</label>
+                    <input pInputText [(ngModel)]="option.link" placeholder="https://ejemplo.com" class="w-full bg-gray-600 border-gray-500 text-white" />
+                </div>
+                } -->
+
+                <!-- Toggle elemento activo -->
+                <app-toggle-switch [checked]="checked()" text="Elemento activo" />
+                <!-- <div class="flex items-center mt-5 mb-10">
+                    <p-toggleswitch [(ngModel)]="checked" />
+                    <span class="ml-2 font-bold">Elemento activo</span>
+                </div> -->
+            </div>
+        </ng-template>
+    </p-orderlist>
+</div>

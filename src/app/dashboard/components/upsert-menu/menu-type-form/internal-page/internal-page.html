@@ -1,7 +1,16 @@
-<div class="flex flex-col grow basis-0 gap-2">
-    <label for="page-select">Página Asignada</label>
-    <!-- <p-select id="page-select" placeholder="Selecciona una página" [options]="pages()" [(ngModel)]="selectedPage" optionLabel="title" class="w-full" /> -->
+<div [formGroup]="form">
+    <div class="flex flex-col grow basis-0 gap-2">
+        <label for="page-select">Página Asignada</label>
+        <p-select id="page-select" placeholder="Selecciona una página" [checkmark]="true" [showClear]="true" [options]="pages()" formControlName="pageId" optionValue="id" optionLabel="title" class="w-full" />
+        @if (FormUtils.isInvalidField(form, 'pageId')) {
+        <small id="page-help" class="text-red-500">{{FormUtils.getFieldError(form, 'pageId')}}</small>
+        }
+    </div>
+
+    <div class="flex items-center mt-5">
+        <p-toggleswitch formControlName="active" />
+        <span class="ml-2 font-bold">Menú activo</span>
+    </div>
 </div>
-<div class="flex items-center mt-5">
-    <app-toggle-switch [checked]="checked" text="Menú activo" />
-</div>
+
+{{form.value | json}}

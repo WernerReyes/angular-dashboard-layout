@@ -17,8 +17,10 @@ export class MenuService {
     menuCreated = signal<Menu | null>(null);
 
     errorMessage = signal<string | null>(null);
+    successMessage = signal<string | null>(null);
 
     createMenu(create: CreateMenu) {
+        console.log('Creating menu with data:', create);
         return this.http
             .post<ApiResponse<Menu>>(`${this.prefix}`, create, {
                 withCredentials: true
@@ -26,11 +28,13 @@ export class MenuService {
             .pipe(
                 tap(({ data }) => {
                     this.menuCreated.set(data);
+                    this.successMessage.set('Menu creado exitosamente');
                 }),
-                catchError((error) => {
+                catchError(({ error }) => {
                     this.errorMessage.set(error.message);
                     return throwError(() => error);
                 })
-            );
+            )
+            
     }
 }

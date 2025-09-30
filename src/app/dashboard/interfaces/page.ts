@@ -1,0 +1,3 @@
+interface GetAllPagesFilter {
+    freePagesOnly?: boolean;
+}

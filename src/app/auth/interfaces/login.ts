@@ -1,4 +1,4 @@
-import { User } from '@/shared/interfaces/user';
+import type { UserEntity } from '@/shared/mappers/user.mapper';
 
 export interface LoginRequest {
     email: string;
@@ -6,7 +6,7 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-    readonly user: User;
+    readonly user: UserEntity;
     readonly accessToken: string;
     readonly refreshToken: string;
 }

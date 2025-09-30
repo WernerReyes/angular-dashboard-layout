@@ -3,8 +3,9 @@ import { inject, Injectable, signal } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import type { CreateMenu } from '../interfaces/menu';
 import type { Menu } from '@/shared/interfaces/menu';
-import { catchError, tap, throwError } from 'rxjs';
-import { ApiResponse } from '@/shared/interfaces/api-response';
+import { catchError, map, tap, throwError } from 'rxjs';
+import { type ApiResponse } from '@/shared/interfaces/api-response';
+import { mapMenuEntityToMenu, type MenuEntity } from '@/shared/mappers/menu.mapper';
 
 @Injectable({
     providedIn: 'root'
@@ -22,19 +23,25 @@ export class MenuService {
     createMenu(create: CreateMenu) {
         console.log('Creating menu with data:', create);
         return this.http
-            .post<ApiResponse<Menu>>(`${this.prefix}`, create, {
+            .post<ApiResponse<MenuEntity>>(`${this.prefix}`, create, {
                 withCredentials: true
             })
             .pipe(
-                tap(({ data }) => {
-                    this.menuCreated.set(data);
-                    this.successMessage.set('Menu creado exitosamente');
+                map(({ data, ...rest }) => {
+                    return {
+                        menu: mapMenuEntityToMenu(data),
+                        ...rest
+                    };
                 }),
-                catchError(({ error }) => {
-                    this.errorMessage.set(error.message);
-                    return throwError(() => error);
+                tap(({ menu, message }) => {
+                    this.menuCreated.set(menu);
+                    this.successMessage.set(message);
+                }),
+                catchError((error) => {
+                    this.menuCreated.set(null);
+                    this.errorMessage.set(error.error?.message);
+                    return [];
                 })
-            )
-            
+            );
     }
 }

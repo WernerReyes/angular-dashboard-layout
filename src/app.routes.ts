@@ -22,7 +22,7 @@ export const appRoutes: Routes = [
         redirectTo: () => {
             const authService = inject(AuthService);
             return authService.me().pipe(
-                map(({ data: user }) => {
+                map((user) => {
                     if (user) {
                         return '/dashboard';
                     } else {

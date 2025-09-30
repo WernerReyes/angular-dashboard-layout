@@ -13,7 +13,7 @@ export const authGuard: CanActivateFn = (route, state) => {
     }
 
     return authService.me().pipe(
-        map(({ data: user }) => {
+        map((user) => {
             console.log('Auth guard check:', user);
             if (user) {
                 return true;

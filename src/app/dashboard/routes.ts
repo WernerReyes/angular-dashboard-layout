@@ -14,6 +14,10 @@ const dashboardRoutes: Route[] = [
         loadComponent: () => import('./pages/upsert-menu/upsert-menu.page')
     },
     {
+        path: 'menu/edit/:id',
+        loadComponent: () => import('./pages/update-menu/update-menu.page')
+    },
+    {
         path: '**',
         redirectTo: ''
     }

@@ -1,12 +1,12 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
-import type { LoginRequest, LoginResponse } from '../interfaces/login';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
 import type { User } from '@/shared/interfaces/user';
+import { mapUserEntityToUser, UserEntity } from '@/shared/mappers/user.mapper';
+import { HttpClient } from '@angular/common/http';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, map, pipe, tap } from 'rxjs';
+import { catchError, map, tap, throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { ApiResponse } from '../../shared/interfaces/api-response';
-import { mapUserEntityToUser } from '@/shared/mappers/user.mapper';
+import type { LoginRequest, LoginResponse } from '../interfaces/login';
 
 @Injectable({
     providedIn: 'root'
@@ -47,17 +47,22 @@ export class AuthService {
 
     me() {
         return this.http
-            .get<ApiResponse<LoginResponse>>(`${environment.apiUrl}${this.prefix}/me`, {
+            .get<ApiResponse<UserEntity>>(`${environment.apiUrl}${this.prefix}/me`, {
                 withCredentials: true
             })
             .pipe(
-                map(({ data }) => mapUserEntityToUser(data.user)),
+                map(({ data }) => {
+                    
+                    return mapUserEntityToUser(data);
+                }),
                 tap((user) => {
                     this.user.set(user);
                 }),
-                catchError(() => {
+
+                catchError((error) => {
+                    console.log('Error in me():', error);
                     this.user.set(null);
-                    return [];
+                    return throwError(() => new Error('Not authenticated'));
                 })
             );
     }

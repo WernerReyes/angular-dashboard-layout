@@ -1,5 +1,4 @@
 import { UpsertMenu } from '@/dashboard/components/upsert-menu/upsert-menu';
-import { CreateMenu, MenuTypes } from '@/dashboard/interfaces/menu';
 import { MenuFormService } from '@/dashboard/services/menu-form.service';
 import { MenuService } from '@/dashboard/services/menu.service';
 import { PageService } from '@/dashboard/services/page.service';
@@ -11,11 +10,12 @@ import { ButtonModule } from 'primeng/button';
 import { FluidModule } from 'primeng/fluid';
 import { ToastModule } from 'primeng/toast';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { JsonPipe } from '@angular/common';
+import { CreateMenu, MenuTypes } from '@/dashboard/interfaces/menu';
 @Component({
     selector: 'app-upsert-menu.page',
-    imports: [UpsertMenu, FluidModule, ButtonModule, RouterLink, ReactiveFormsModule, ToastModule],
-    templateUrl: './upsert-menu.page.html',
-    styleUrl: './upsert-menu.page.scss',
+    imports: [JsonPipe, UpsertMenu, FluidModule, ButtonModule, RouterLink, ReactiveFormsModule, ToastModule],
+    templateUrl: './update-menu.page.html',
     providers: [MessageService]
 })
 export default class UpsertMenuPage {
@@ -27,6 +27,10 @@ export default class UpsertMenuPage {
 
     private paramMap = toSignal(this.route.paramMap);
 
+    // formValue = toSignal(this.menuFormService.form.valueChanges, { initialValue: this.menuFormService.form.value });
+
+    // initialFormValue: any;
+
     menuId = computed(() => {
         const id = this.paramMap()?.get('id');
         return id ? Number(id) : null;
@@ -36,10 +40,8 @@ export default class UpsertMenuPage {
 
     menuExists = computed(() => !!this.menuService.currentMenu());
 
-    constructor() {}
-
-    createMenu() {
-        if (this.menuFormService.form.valid) {
+    updateMenu() {
+        if (this.menuFormService.form.valid && this.menuId()) {
             const menuData = this.menuFormService.form.getRawValue();
             const format: CreateMenu = {
                 title: menuData.title,
@@ -50,27 +52,53 @@ export default class UpsertMenuPage {
                 url: menuData.url,
                 dropdownArray: menuData.dropdownItems as any
             };
-
-            console.log(format);
-            this.menuService.createMenu(format).subscribe({
-                next: () => {
-                    this.menuFormService.form.reset();
-                    this.pageService.pagesList.update((pages) => {
-                        return pages.filter((page) => menuData.pageId !== page.id);
-                    });
-                    if (format.dropdownArray && format.dropdownArray.length > 0) {
-                        this.pageService.pagesList.update((pages) => {
-                            return pages.filter((page) => !format.dropdownArray?.some((item) => item.pageId === page.id));
-                        });
-                    }
-                }
-            });
+            this.menuService.updateMenu(this.menuId()!, format).subscribe();
         }
     }
 
     private sendRequest = effect(() => {
         if (this.menuId()) {
-            this.menuService.getById(this.menuId()!).subscribe();
+            this.menuService.getById(this.menuId()!).subscribe((menu) => {
+                if (menu.page) {
+                    this.pageService.pageIdsActived.set([menu.page.id]);
+                }
+
+                // this.menuFormService.dropdownItems.clear();
+            });
+        }
+    });
+
+    private populateForm = effect(() => {
+        if (this.menuExists() && this.menuService.currentMenu()) {
+            const menu = this.menuService.currentMenu()!;
+            this.menuFormService.form.patchValue({
+                title: menu.title,
+                order: menu.order,
+                menuType: menu.type,
+                pageId: (menu.page?.id ? menu.page.id : null) as any,
+                active: menu.active,
+                url: menu.url as any
+            });
+
+            if (menu.children && menu.children.length > 1) {
+                for (let i = 1; i < menu.children.length; i++) {
+                    this.menuFormService.addDropdown(menu.children[i].order);
+                }
+            }
+
+            if (menu.children && menu.children.length >= 1) {
+                this.menuFormService.dropdownItems.patchValue(
+                    menu.children.map((child) => ({ title: child.title, url: child.url, order: child.order, active: child.active, menuType: child.type, pageId: (child.page?.id ? child.page.id : null) as any }))
+                );
+
+                let ids = [];
+                for (const child of menu.children) {
+                    if (child.page) {
+                        ids.push(child.page.id);
+                    }
+                }
+                this.pageService.pageIdsActived.set(ids);
+            }
         }
     });
 
@@ -88,3 +116,6 @@ export default class UpsertMenuPage {
         }
     });
 }
+
+
+// TODO: Fix the dropdown not being populated when editing a menu with children

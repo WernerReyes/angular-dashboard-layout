@@ -1,15 +1,6 @@
-// $this->id = $data['id_menu'];
-//         $this->title = $data['title'];
-//         $this->url = $data['url'];
-//         $this->slug = $data['slug'];
-//         $this->order = $data['order'];
-//         $this->active = $data['active'] == 1 ? true : false;
-//         $this->parentId = $data['parent_id'];
-//         $this->userId = $data['users_id'];
-
-import { Menu } from "../interfaces/menu";
-
-
+import { MenuTypes } from '@/dashboard/interfaces/menu';
+import type { Menu } from '../interfaces/menu';
+import { mapPageEntityToPage, type PageEntity } from './page.mapper';
 
 export interface MenuEntity {
     readonly id_menu: number;
@@ -20,6 +11,8 @@ export interface MenuEntity {
     readonly active: number; // 1 or 0
     readonly parent_id: number | null;
     readonly users_id: number;
+    readonly page: PageEntity | null;
+    readonly children?: MenuEntity[];
 }
 
 export const mapMenuEntityToMenu = (entity: MenuEntity): Menu => {
@@ -31,6 +24,23 @@ export const mapMenuEntityToMenu = (entity: MenuEntity): Menu => {
         order: entity.order,
         active: entity.active === 1,
         parentId: entity.parent_id,
-        userId: entity.users_id
+        userId: entity.users_id,
+        children: entity.children ? entity.children.map(mapMenuEntityToMenu) : [],
+        type: getMenuType(entity),
+        page: entity.page ? mapPageEntityToPage(entity.page) : null
     };
-}
+};
+
+const getMenuType = (menu: MenuEntity): MenuTypes  => {
+    if (menu.url) {
+        return MenuTypes.EXTERNAL_LINK;
+    }
+
+    if (menu.children && menu.children.length > 0) {
+        return MenuTypes.DROPDOWN;
+    }
+
+   
+    return MenuTypes.INTERNAL_PAGE;
+    // return "unknown";   
+};

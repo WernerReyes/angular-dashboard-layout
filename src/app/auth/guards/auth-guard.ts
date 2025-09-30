@@ -7,6 +7,7 @@ export const authGuard: CanActivateFn = (route, state) => {
     const authService = inject(AuthService);
     const router = inject(Router);
     
+    console.log('Auth guard invoked for route:', state.url);
 
     if (authService.isAuthenticated()) {
         return true;
@@ -18,14 +19,15 @@ export const authGuard: CanActivateFn = (route, state) => {
             if (user) {
                 return true;
             } else {
-                router.navigate(['/auth/login']);
+                // router.navigate(['/auth/login']);
                 return false;
             }
         }),
         catchError(() => {
             console.log('Navigation to login due to error in authentication check.');
-            router.navigate(['/auth/login']);
+            // router.navigate(['/auth/login']);
             return of(false);
         })
     );
+
 };

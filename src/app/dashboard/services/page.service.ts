@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { ApiResponse } from '../../shared/interfaces/api-response';
+import { map, tap } from 'rxjs';
+import { mapPageEntityToPage, PageEntity } from '@/shared/mappers/page.mapper';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +16,9 @@ export class PageService {
 
     pagesList = signal<Page[]>([]);
 
-    freePagesOnlyList = computed(() => this.pagesList().filter(page => page.menuId === null));
+    pageIdsActived = signal<number[] | null>(null);
+
+    freePagesOnlyList = computed(() => this.pagesList().filter((page) => page.menuId === null || (this.pageIdsActived() && this.pageIdsActived()!.includes(page.id))));
 
     constructor() {
         this.getAll();
@@ -22,12 +26,13 @@ export class PageService {
 
     getAll() {
         this.http
-            .get<ApiResponse<Page[]>>(this.prefix, {
+            .get<ApiResponse<PageEntity[]>>(this.prefix, {
                 withCredentials: true
             })
-            .subscribe({
-                next: (response) => this.pagesList.set(response.data),
-                error: (error) => console.error('Error fetching pages:', error)
-            });
+            .pipe(
+                map(({ data }) => data.map(mapPageEntityToPage)),
+                tap((pages) => this.pagesList.set(pages))
+            )
+            .subscribe();
     }
 }

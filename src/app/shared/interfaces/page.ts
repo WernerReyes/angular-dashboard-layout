@@ -4,8 +4,8 @@ export interface Page {
     readonly title: string;
     readonly description: string | null;
     readonly active: boolean;
-    readonly menuId: number;
+    readonly menuId: number | null;
     readonly createdAt: Date;
     readonly updatedAt: Date;
-    readonly sectionCount: number | null;
+    // readonly sectionCount: number | null;
 }

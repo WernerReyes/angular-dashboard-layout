@@ -50,7 +50,6 @@ export class MenuFormService {
 
         // Me suscribo a cambios de menuType para actualizar validaciones dinámicamente
         group.get('menuType')?.valueChanges.subscribe((type: MenuTypes | '') => {
-            console.log('Dropdown item menuType changed to:', type);
             this.applyTypeValidators(group, type);
         });
 
@@ -69,12 +68,13 @@ export class MenuFormService {
         this.form.get('title')?.valueChanges.subscribe((titleValue) => {
             this.handleTitleChange(titleValue);
 
-            if (this.isValidTitle(titleValue) === false) {
-                this.selectedMenuType.set(undefined);
-            }
+            // if (this.isValidTitle(titleValue) === false) {
+            //     // this.selectedMenuType.set(undefined);
+            // }
         });
 
         this.form.get('menuType')?.valueChanges.subscribe((typeValue) => {
+            console.log(typeValue, 'typeValue');
             const selectedType = this.menusType().find((menu) => menu.code === typeValue);
             if (selectedType) {
                 this.selectedMenuType.set(selectedType);
@@ -88,10 +88,14 @@ export class MenuFormService {
         const typeControl = this.form.get('menuType');
 
         if (this.isValidTitle(titleValue)) {
-            typeControl?.enable();
-        } else {
-            typeControl?.disable();
+        // Solo habilitar el control sin triggear cambios
+        if (typeControl?.disabled) {
+            typeControl.enable({ emitEvent: false }); // 👈 No emitir eventos
         }
+    } else {
+        typeControl?.disable({ emitEvent: false }); // 👈 No emitir eventos
+        //TODO // this.selectedMenuType.set(undefined);
+    }
     }
 
     private isValidTitle(title: string): boolean {
@@ -112,26 +116,27 @@ export class MenuFormService {
             url: null
         };
 
-        if (group.get('dropdownItems')) {
-            this.dropdownItems.clear();
-        }
+        // if (group.get('dropdownItems')) {
+        //     this.dropdownItems.clear();
+        // }
 
         switch (menuType) {
             case MenuTypes.INTERNAL_PAGE:
                 group.get('pageId')?.setValidators([Validators.required]);
-                // console.log(group.get('pageId')?.;
                 delete resetValues.pageId;
                 break;
 
             case MenuTypes.EXTERNAL_LINK:
-                console.log('Setting validators for EXTERNAL_LINK');
                 group.get('url')?.setValidators([Validators.required, Validators.pattern(PatternsConst.URL)]);
                 delete resetValues.url;
 
                 break;
 
             case MenuTypes.DROPDOWN:
-                this.form.setControl('dropdownItems', this.fb.array<FormGroup<any>>([this.createDropdownGroup()]));
+                if (this.dropdownItems.length === 0) {
+                    this.addDropdown();
+                    // this.form.setControl('dropdownItems', this.fb.array<FormGroup<any>>([this.createDropdownGroup()]));
+                }
                 this.form.controls['dropdownItems'].setValidators([this.minLengthArray(1), this.uniquePageIdValidator]);
 
                 // this.dropdownItems.
@@ -144,8 +149,11 @@ export class MenuFormService {
         return this.form.get('dropdownItems') as FormArray<FormGroup>;
     }
 
-    addDropdown() {
-        this.dropdownItems.push(this.createDropdownGroup());
+    addDropdown(order: number = this.dropdownItems.length + 1) {
+        
+        this.dropdownItems.push(this.createDropdownGroup(order));
+        
+
 
         this.dropdownItems.updateValueAndValidity();
     }

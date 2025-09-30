@@ -19,20 +19,22 @@ export const appRoutes: Routes = [
 
     {
         path: '**',
-        redirectTo: () => {
-            const authService = inject(AuthService);
-            return authService.me().pipe(
-                map((user) => {
-                    if (user) {
-                        return '/dashboard';
-                    } else {
-                        return '/auth/login';
-                    }
-                }),
-                catchError(() => {
-                    return '/auth/login';
-                })
-            );
-        }
+        // redirectTo: () => {
+        //     const authService = inject(AuthService);
+        //     return authService.me().pipe(
+        //         map((user) => {
+        //             console.log('Wildcard route check, user:', user);
+        //             if (user) {
+        //                 return '/dashboard';
+        //             } else {
+        //                 return '/auth/login';
+        //             }
+        //         }),
+        //         catchError(() => {
+        //             return '/auth/login';
+        //         })
+        //     );
+        // }
+        redirectTo: '/dashboard'
     }
 ];

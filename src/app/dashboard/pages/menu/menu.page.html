@@ -3,79 +3,10 @@
         <div class="flex items-center justify-between mb-4">
             <h4 class="font-semibold text-xl mb-4">Menu</h4>
             <div class="flex gap-2">
-                <!-- <p-button label="Previsualizar" icon="pi pi-eye" styleClass="p-button-outlined"></p-button> -->
-
-                <a routerLink="/dashboard/menu/new" pButton icon="pi pi-plus">
-                    <span pButtonLabel>Nuevo</span>
-                </a>
-
-                <!-- <p-togglebutton [(ngModel)]="checked" 
-                onLabel="Desactivar"
-                offLabel="Previsualizar"
-                onIcon="pi pi-check" 
-                offIcon="pi pi-times" 
-              
-           
-                class="w-36" ariaLabel="Do you confirm" 
-                /> -->
+                <p-button label="Nuevo" icon="pi pi-plus" (click)="goToNewMenu()"></p-button>
             </div>
         </div>
 
-        <p-toolbar>
-            <ng-template #start>
-                <p-button icon="pi pi-plus" class="mr-2" severity="secondary" text />
-                <p-button icon="pi pi-print" class="mr-2" severity="secondary" text />
-                <p-button icon="pi pi-upload" severity="secondary" text />
-            </ng-template>
-
-            <ng-template #center>
-                <p-iconfield>
-                    <p-inputicon>
-                        <i class="pi pi-search"></i>
-                    </p-inputicon>
-                    <input pInputText placeholder="Search" />
-                </p-iconfield>
-            </ng-template>
-
-            <!-- <ng-template #end><p-splitbutton label="Save" [model]="items"></p-splitbutton></ng-template> -->
-        </p-toolbar>
-
-        <p-toolbar>
-            <ng-template #start>
-                <p-button icon="pi pi-plus" class="mr-2" severity="secondary" text />
-                <p-button icon="pi pi-print" class="mr-2" severity="secondary" text />
-                <p-button icon="pi pi-upload" severity="secondary" text />
-            </ng-template>
-
-            <ng-template #center>
-                <p-iconfield>
-                    <p-inputicon>
-                        <i class="pi pi-search"></i>
-                    </p-inputicon>
-                    <input pInputText placeholder="Search" />
-                </p-iconfield>
-            </ng-template>
-
-            <!-- <ng-template #end><p-splitbutton label="Save" [model]="items"></p-splitbutton></ng-template> -->
-        </p-toolbar>
-
-        <p-toolbar>
-            <ng-template #start>
-                <p-button icon="pi pi-plus" class="mr-2" severity="secondary" text />
-                <p-button icon="pi pi-print" class="mr-2" severity="secondary" text />
-                <p-button icon="pi pi-upload" severity="secondary" text />
-            </ng-template>
-
-            <ng-template #center>
-                <p-iconfield>
-                    <p-inputicon>
-                        <i class="pi pi-search"></i>
-                    </p-inputicon>
-                    <input pInputText placeholder="Search" />
-                </p-iconfield>
-            </ng-template>
-
-            <!-- <ng-template #end><p-splitbutton label="Save" [model]="items"></p-splitbutton></ng-template> -->
-        </p-toolbar>
+        <menu></menu>
     </div>
 </div>

@@ -1,6 +1,6 @@
 import { PageService } from '@/dashboard/services/page.service';
 import { FormUtils } from '@/utils/form-utils';
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, effect, inject, input, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
@@ -19,7 +19,4 @@ export class InternalPage {
 
     pages = this.pageService.freePagesOnlyList;
 
-    selectedPage = signal(undefined);
-
-    checked = signal(true);
 }

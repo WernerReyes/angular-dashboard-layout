@@ -17,9 +17,7 @@ export class BasicInfoForm {
     private readonly menuFormService = inject(MenuFormService);
 
     FormUtils = FormUtils;
-
-    onSelectedMenuType = output<MenuType>();
-
+    
     form = this.menuFormService.form;
 
     menusType = computed<MenuType[]>(() => this.menuFormService.menusType());

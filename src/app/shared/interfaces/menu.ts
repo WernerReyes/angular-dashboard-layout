@@ -1,3 +1,4 @@
+import { Page } from "./page";
 
 export interface Menu {
     readonly id: number;
@@ -8,4 +9,7 @@ export interface Menu {
     readonly active: boolean;
     readonly parentId: number | null;
     readonly userId: number;
+    readonly children?: Menu[];
+    readonly page: Page | null;
+    readonly type: string;
 }

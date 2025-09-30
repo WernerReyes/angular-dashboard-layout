@@ -1,5 +1,5 @@
 import { MenuFormService } from '@/dashboard/services/menu-form.service';
-import { Component, forwardRef, inject } from '@angular/core';
+import { Component, effect, forwardRef, inject } from '@angular/core';
 import { Dropdown } from './dropdown/dropdown';
 import { ExternalLink } from './external-link/external-link';
 import { InternalPage } from './internal-page/internal-page';
@@ -15,5 +15,9 @@ import { InternalPage } from './internal-page/internal-page';
 export class MenuTypeForm {
     menuFormService = inject(MenuFormService);
     selectedMenuType = this.menuFormService.selectedMenuType;
+
+    private eff = effect(() => {
+        console.log(this.selectedMenuType(), 'selectedMenuType in menu-type-form');
+    })
     
 }

@@ -9,6 +9,7 @@ export enum MenuTypes {
     DROPDOWN = 'dropdown'
 }
 
+
 export interface CreateMenu {
     readonly title: string;
     readonly order: number;

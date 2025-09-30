@@ -1,1 +1,45 @@
-<p>menu works!</p>
+<div class="card flex justify-center">
+    @if (menuItems().length === 0) {
+     <p-message severity="info" text="No hay menús creados aún." class="w-full"></p-message>
+    } @else {
+<p-panelmenu [model]="menuItems()" 
+    class="w-full">
+        <ng-template #item let-item>
+            @let type = menuTypeRenderer(item.type);
+
+            <div class="p-3 border-b border-gray-300 flex gap-4 items-center">
+                <!-- <i class="pi pi-bars cursor-pointer"></i> -->
+                @if (item.isDroppable) {
+                <i class="pi pi-angle-right cursor-pointer"></i>
+                }
+
+                <p-badge [value]="item.order" class="mr-2"></p-badge>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-xl">{{ item.label }}</span>
+                        <p-tag [severity]="type.severity" [value]="type.label"></p-tag>
+                    </div>
+                    <!-- <p class="text-sm text-gray-600"></p> -->
+
+                    @if (item.type === MenuTypes.DROPDOWN) { @let itemCount = item.items?.length || 0;
+                    <p class="text-sm text-gray-600">{{ itemCount === 1 ? '1 ítem' : itemCount + ' ítems' }}</p>
+                    } @else if (item.type === MenuTypes.EXTERNAL_LINK) {
+                    <a [href]="item.externalLink" target="_blank" class="text-sm hover:underline">{{ item.externalLink }}</a>
+                    } @else if (item.type === MenuTypes.INTERNAL_PAGE) {
+                    <p class="text-sm text-gray-600">Página interna</p>
+                    }
+                </div>
+
+                @if (!item.isChild) {
+                <div class="ml-auto">
+                    <!-- <p-button icon="pi pi-pencil" [rounded]="true" [text]="true"></p-button> -->
+                    <p-button icon="pi pi-pencil" link [routerLink]="['/dashboard/menu/edit', item.id]" />
+                    <p-button icon="pi pi-trash" severity="secondary"></p-button>
+                </div>
+                }
+            </div>
+        </ng-template>
+    </p-panelmenu>
+    }
+    
+</div>

@@ -42,6 +42,7 @@ export class MenuFormService {
             active: [true, [Validators.required]],
             menuType: ['' as MenuTypes, [Validators.required]],
             pageId: [null],
+            menuId: [0],
             url: [null]
         });
 
@@ -74,7 +75,6 @@ export class MenuFormService {
         });
 
         this.form.get('menuType')?.valueChanges.subscribe((typeValue) => {
-            console.log(typeValue, 'typeValue');
             const selectedType = this.menusType().find((menu) => menu.code === typeValue);
             if (selectedType) {
                 this.selectedMenuType.set(selectedType);
@@ -134,8 +134,8 @@ export class MenuFormService {
 
             case MenuTypes.DROPDOWN:
                 if (this.dropdownItems.length === 0) {
-                    this.addDropdown();
-                    // this.form.setControl('dropdownItems', this.fb.array<FormGroup<any>>([this.createDropdownGroup()]));
+                    // this.addDropdown();
+                    this.form.setControl('dropdownItems', this.fb.array<FormGroup<any>>([this.createDropdownGroup()]));
                 }
                 this.form.controls['dropdownItems'].setValidators([this.minLengthArray(1), this.uniquePageIdValidator]);
 

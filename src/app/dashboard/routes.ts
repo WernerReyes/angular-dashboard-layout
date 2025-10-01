@@ -7,15 +7,24 @@ const dashboardRoutes: Route[] = [
     },
     {
         path: 'menu',
-        loadComponent: () => import('./pages/menu/menu.page')
+        loadComponent: () => import('./pages/menu/menu.page'),
     },
     {
         path: 'menu/new',
-        loadComponent: () => import('./pages/upsert-menu/upsert-menu.page')
+        loadComponent: () => import('./pages/create-menu/create-menu.page')
     },
     {
         path: 'menu/edit/:id',
         loadComponent: () => import('./pages/update-menu/update-menu.page')
+    },
+
+    {
+        path: 'pages',
+        loadComponent: () => import('./pages/page/pages.page')
+    },
+    {
+        path: 'pages/new',
+        loadComponent: () => import('./pages/create-page/create-page.page')
     },
     {
         path: '**',

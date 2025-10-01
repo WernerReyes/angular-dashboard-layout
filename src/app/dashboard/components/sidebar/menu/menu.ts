@@ -22,6 +22,11 @@ export class Menu {
                         label: 'Menu',
                         icon: 'pi pi-fw pi-bars',
                         routerLink: ['/dashboard/menu']
+                    },
+                    {
+                        label: 'Pages',
+                        icon: 'pi pi-fw pi-file',
+                        routerLink: ['/dashboard/pages']
                     }
                 ]
             }

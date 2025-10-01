@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import type { CreateMenu } from '../interfaces/menu';
+import type { CreateMenu, MenuTypes } from '../interfaces/menu';
 import type { Menu } from '@/shared/interfaces/menu';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { type ApiResponse } from '@/shared/interfaces/api-response';
@@ -20,6 +20,8 @@ export class MenuService {
     }
 
     menuList = signal<Menu[]>([]);
+
+
 
     menuCreated = signal<Menu | null>(null);
 
@@ -95,7 +97,7 @@ export class MenuService {
                     };
                 }),
                 tap(({ menu, message }) => {
-                    this.currentMenu.set(menu);
+                    // this.currentMenu.set(menu);
                     this.menuList.update((menus) => {
                         const index = menus.findIndex((m) => m.id === menu.id);
                         if (index !== -1) {
@@ -106,10 +108,30 @@ export class MenuService {
                     this.successMessage.set(message);
                 }),
                 catchError((error) => {
-                    this.currentMenu.set(null);
+                    // this.currentMenu.set(null);
                     this.errorMessage.set(error.error?.message);
                     return throwError(() => error);
                 })
             );
     }
+
+    deleteMenu(id: number, type: MenuTypes) {
+        return this.http
+            .delete<ApiResponse<null>>(`${this.prefix}/${id}`, {
+                withCredentials: true,
+                params: { type }
+            })
+            .pipe(
+                tap(() => {
+                    this.menuList.update((menus) => menus.filter((m) => m.id !== id));
+                    // this.successMessage.set('Menu deleted successfully');
+                }),
+                catchError((error) => {
+                    this.errorMessage.set(error.error?.message);
+                    return throwError(() => error);
+                })
+            );
+    }
+
+    
 }

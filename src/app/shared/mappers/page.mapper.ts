@@ -1,4 +1,5 @@
-import { Page } from "../interfaces/page";
+import { Page } from '../interfaces/page';
+import { mapMenuEntityToMenu, MenuEntity } from './menu.mapper';
 
 export interface PageEntity {
     readonly id_pages: number;
@@ -8,7 +9,7 @@ export interface PageEntity {
     readonly menu_id: number | null;
     readonly created_at: string; // ISO date string
     readonly updated_at: string; // ISO date string
-
+    readonly menu: MenuEntity | null;
 }
 
 export const mapPageEntityToPage = (entity: PageEntity): Page => ({
@@ -19,6 +20,5 @@ export const mapPageEntityToPage = (entity: PageEntity): Page => ({
     menuId: entity.menu_id,
     createdAt: new Date(entity.created_at),
     updatedAt: new Date(entity.updated_at),
-    // createdAtString: entity.created_at,
-    // updatedAtString: entity.updated_at
+    menu: entity.menu ? mapMenuEntityToMenu(entity.menu) : null
 });

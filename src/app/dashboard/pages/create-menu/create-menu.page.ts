@@ -12,10 +12,9 @@ import { FluidModule } from 'primeng/fluid';
 import { ToastModule } from 'primeng/toast';
 import { toSignal } from '@angular/core/rxjs-interop';
 @Component({
-    selector: 'app-upsert-menu.page',
+    selector: 'app-create-menu.page',
     imports: [UpsertMenu, FluidModule, ButtonModule, RouterLink, ReactiveFormsModule, ToastModule],
-    templateUrl: './upsert-menu.page.html',
-    styleUrl: './upsert-menu.page.scss',
+    templateUrl: './create-menu.page.html',
     providers: [MessageService]
 })
 export default class UpsertMenuPage {
@@ -51,7 +50,6 @@ export default class UpsertMenuPage {
                 dropdownArray: menuData.dropdownItems as any
             };
 
-            console.log(format);
             this.menuService.createMenu(format).subscribe({
                 next: () => {
                     this.menuFormService.form.reset();

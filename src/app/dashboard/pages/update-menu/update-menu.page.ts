@@ -89,7 +89,13 @@ export default class UpsertMenuPage {
                 url: menuData.url,
                 dropdownArray: menuData.dropdownItems as any
             };
-            this.menuService.updateMenu(this.menuId()!, format).subscribe();
+            console.log('Updating menu with data:', format);
+            this.menuService.updateMenu(this.menuId()!, format).subscribe({
+                next: ({ menu }) => {
+                    // console.log('Menu updated successfully:', menu);
+                    // this.menuService.currentMenu.set(menu);
+                }
+            });
         }
     }
 
@@ -106,8 +112,6 @@ export default class UpsertMenuPage {
     private populateFormData() {
         const menu = this.menuService.currentMenu()!;
 
-        console.log('Populating form with menu:', menu, this.menuService.currentMenu()!);
-        
         // Poblar datos básicos
         this.menuFormService.form.patchValue({
             title: menu.title,
@@ -141,7 +145,8 @@ export default class UpsertMenuPage {
                     title: child.title, 
                     url: child.url, 
                     order: child.order, 
-                    active: child.active, 
+                    active: child.active,
+                    menuId: child.id, 
                     menuType: child.type, 
                     pageId: (child.page?.id ? child.page.id : null) as any 
                 })),

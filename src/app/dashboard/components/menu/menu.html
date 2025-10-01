@@ -1,3 +1,5 @@
+<p-toast />
+<p-confirmdialog />
 <div class="card flex justify-center">
     @if (menuItems().length === 0) {
     <p-message severity="info" text="No hay menús creados aún." class="w-full"></p-message>
@@ -35,7 +37,7 @@
                 <div class="ml-auto">
                     <!-- <p-button icon="pi pi-pencil" [rounded]="true" [text]="true"></p-button> -->
                     <p-button icon="pi pi-pencil" link (click)="goToEdit(item.id)" />
-                    <p-button icon="pi pi-trash" severity="secondary"></p-button>
+                    <p-button icon="pi pi-trash" severity="secondary" (click)="confirm2($event, item)"></p-button>
                 </div>
                 }
             </div>

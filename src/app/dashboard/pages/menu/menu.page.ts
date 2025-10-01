@@ -10,6 +10,7 @@ import { ButtonModule } from 'primeng/button';
     imports: [
     Menu,
     ButtonModule,
+    
 ],
     templateUrl: './menu.page.html',
     styleUrl: './menu.page.scss'
@@ -18,6 +19,8 @@ export default class MenuPage {
     private readonly menuFormService = inject(MenuFormService);
     private readonly pageService = inject(PageService);
     private readonly router = inject(Router);
+
+
     goToNewMenu() {
         this.menuFormService.form.reset();
         this.menuFormService.form.clearValidators();

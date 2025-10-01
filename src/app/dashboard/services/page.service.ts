@@ -31,7 +31,10 @@ export class PageService {
             })
             .pipe(
                 map(({ data }) => data.map(mapPageEntityToPage)),
-                tap((pages) => this.pagesList.set(pages))
+                tap((pages) => {
+                    console.log('Fetched pages:', pages);
+                    this.pagesList.set(pages)
+                })
             )
             .subscribe();
     }

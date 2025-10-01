@@ -43,7 +43,7 @@ export class FormUtils {
 
         case 'minLengthArray':
           const error = errors['minLengthArray'].requiredLength;
-          return `El arreglo debe tener al menos ${error ? error : '1'} elemento(s)`;
+          return `Debe tener al menos ${error ? error : '1'} elemento(s)`;
 
 
         case 'duplicate':

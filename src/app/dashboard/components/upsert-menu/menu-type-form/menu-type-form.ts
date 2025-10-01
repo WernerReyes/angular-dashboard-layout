@@ -15,9 +15,5 @@ import { InternalPage } from './internal-page/internal-page';
 export class MenuTypeForm {
     menuFormService = inject(MenuFormService);
     selectedMenuType = this.menuFormService.selectedMenuType;
-
-    private eff = effect(() => {
-        console.log(this.selectedMenuType(), 'selectedMenuType in menu-type-form');
-    })
     
 }

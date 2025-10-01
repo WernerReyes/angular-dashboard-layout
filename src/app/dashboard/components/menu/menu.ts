@@ -6,17 +6,18 @@ import { ButtonModule } from 'primeng/button';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { TagModule } from 'primeng/tag';
 import { BadgeModule } from 'primeng/badge';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MessageModule } from 'primeng/message';
 
 @Component({
     selector: 'menu',
-    imports: [PanelMenuModule, TagModule, ButtonModule, BadgeModule, RouterLink, MessageModule],
+    imports: [PanelMenuModule, TagModule, ButtonModule, BadgeModule, MessageModule],
     templateUrl: './menu.html',
     styleUrl: './menu.scss'
 })
 export class Menu {
     private readonly menuService = inject(MenuService);
+    private readonly router = inject(Router);
     items: MenuItem[] = [];
 
     MenuTypes = MenuTypes;
@@ -41,6 +42,11 @@ export class Menu {
                 })) ?? []
         }));
     });
+
+    goToEdit = (menuId: string) => {
+        this.menuService.currentMenu.set(null);
+        this.router.navigate(['/dashboard/menu/edit', menuId]);
+    };
 
     menuTypeRenderer = (
         type: MenuTypes

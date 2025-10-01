@@ -20,7 +20,11 @@ export default class MenuPage {
     private readonly router = inject(Router);
     goToNewMenu() {
         this.menuFormService.form.reset();
+        this.menuFormService.form.clearValidators();
+        this.menuFormService.form.updateValueAndValidity();
+        this.menuFormService.dropdownItems.clear();
         this.pageService.pageIdsActived.set(null);
+        this.menuFormService.selectedMenuType.set(undefined);
         this.router.navigate(['/dashboard/menu/new']);
     }
 }

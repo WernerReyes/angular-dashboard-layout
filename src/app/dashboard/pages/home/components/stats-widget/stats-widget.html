@@ -1,0 +1,12 @@
+@for ( stat of stats(); track stat) {
+<div class="col-span-12 lg:col-span-6 xl:col-span-3">
+    <stat-card 
+    [loading]="stat.loading"
+    [title]="stat.title" [value]="stat.value" [description]="stat.description">
+        <div [class]="'flex items-center justify-center rounded-border ' + stat.iconBackground" style="width: 2.5rem; height: 2.5rem">
+            <!-- {{stat.loading ? 'Cargando...' : stat.value}} -->
+            <i [class]="stat.icon + ' text-xl! ' + stat.iconColor"></i>
+        </div>
+    </stat-card>
+</div>
+}

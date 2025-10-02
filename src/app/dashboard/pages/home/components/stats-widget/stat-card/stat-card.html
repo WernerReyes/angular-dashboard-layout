@@ -1,0 +1,15 @@
+@if(loading()) {
+<stat-card-skeleton></stat-card-skeleton>
+} @else {
+<div class="card mb-0">
+    <div class="flex justify-between mb-4">
+        <div>
+            <span class="block text-muted-color font-medium mb-4">{{ title() }}</span>
+            <div class="text-surface-900 dark:text-surface-0 font-bold text-3xl">{{ value() }}</div>
+        </div>
+        <ng-content></ng-content>
+    </div>
+    <span class="text-muted-color">{{ description() }}</span>
+</div>
+
+}

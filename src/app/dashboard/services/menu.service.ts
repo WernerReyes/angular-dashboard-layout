@@ -21,8 +21,6 @@ export class MenuService {
 
     menuList = signal<Menu[]>([]);
 
-
-
     menuCreated = signal<Menu | null>(null);
 
     currentMenu = signal<Menu | null>(null);
@@ -44,6 +42,14 @@ export class MenuService {
                 }),
                 tap(({ menus }) => this.menuList.set(menus))
             );
+    }
+
+    getAllCount() {
+        return this.http
+            .get<ApiResponse<number>>(`${this.prefix}/count`, {
+                withCredentials: true
+            })
+            .pipe(map(({ data }) => data));
     }
 
     getById(id: number) {
@@ -132,6 +138,4 @@ export class MenuService {
                 })
             );
     }
-
-    
 }

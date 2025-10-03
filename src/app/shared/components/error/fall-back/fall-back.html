@@ -1,0 +1,12 @@
+<div class="flex justify-center gap-x-2 items-center text-slate-500">
+    <i
+        class="pi text-4xl text-slate-300"
+        [class]="{
+        'pi-spin': loading(),
+        'pi-exclamation-triangle': !loading()
+    }"
+    ></i>
+    <span>{{ message() }}</span>
+
+    <p-button text icon="pi pi-refresh" (click)="retry.emit()"></p-button>
+</div>

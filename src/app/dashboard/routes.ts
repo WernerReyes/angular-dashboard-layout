@@ -27,6 +27,10 @@ const dashboardRoutes: Route[] = [
         loadComponent: () => import('./pages/create-page/create-page.page')
     },
     {
+        path: 'links',
+        loadComponent: () => import('./pages/link/link.page')
+    },
+    {
         path: '**',
         redirectTo: ''
     }

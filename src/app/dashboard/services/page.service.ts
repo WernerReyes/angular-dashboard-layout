@@ -1,5 +1,5 @@
 import type { Page } from '@/shared/interfaces/page';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, httpResource } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { ApiResponse } from '../../shared/interfaces/api-response';
@@ -18,14 +18,29 @@ export class PageService {
 
     pageIdsActived = signal<number[] | null>(null);
 
-    freePagesOnlyList = computed(() => this.pagesList().filter((page) => page.menuId === null || (this.pageIdsActived() && this.pageIdsActived()!.includes(page.id))));
+    freePagesOnlyList = computed(() => []);
 
     constructor() {
-        this.getAll();
+        this.getAll().subscribe();
     }
 
+    pagesListResource = httpResource<Page[]>(
+        () => ({
+            url: this.prefix,
+            method: 'GET',
+            cache: 'reload',
+            withCredentials: true
+        }),
+        {
+            parse: (value) => {
+                const data = value as ApiResponse<PageEntity[]>;
+                return data.data.map(mapPageEntityToPage);
+            }
+        }
+    );
+
     getAll() {
-        this.http
+        return this.http
             .get<ApiResponse<PageEntity[]>>(this.prefix, {
                 withCredentials: true
             })
@@ -33,9 +48,8 @@ export class PageService {
                 map(({ data }) => data.map(mapPageEntityToPage)),
                 tap((pages) => {
                     console.log('Fetched pages:', pages);
-                    this.pagesList.set(pages)
+                    this.pagesList.set(pages);
                 })
-            )
-            .subscribe();
+            );
     }
 }

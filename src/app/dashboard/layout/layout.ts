@@ -1,18 +1,24 @@
+import { LayoutService } from '@/shared/services/layout.service';
 import { CommonModule } from '@angular/common';
-import { Component, inject, Renderer2, ViewChild } from '@angular/core';
+import { Component, effect, inject, Renderer2, ViewChild } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { MessageService as MessageServicePrime } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 import { filter, Subscription } from 'rxjs';
 import { Sidebar } from '../components/sidebar/sidebar';
 import { Topbar } from '../components/topbar/topbar';
-import { LayoutService } from '@/shared/services/layout.service';
+import { MessageService } from '@/shared/services/message.service';
 
 @Component({
     selector: 'app-layout',
     standalone: true,
-    imports: [CommonModule, Topbar, Sidebar, RouterModule],
-    templateUrl: './layout.html'
+    imports: [CommonModule, Topbar, Sidebar, RouterModule, ToastModule],
+    templateUrl: './layout.html',
+    providers: [MessageServicePrime]
 })
 export class DashboardLayout {
+    private readonly messageServicePrime = inject(MessageServicePrime);
+    private readonly messageService = inject(MessageService);
     private readonly layoutService = inject(LayoutService);
     private readonly router = inject(Router);
     private readonly renderer = inject(Renderer2);
@@ -44,6 +50,22 @@ export class DashboardLayout {
             this.hideMenu();
         });
     }
+
+    private showSuccess = effect(() => {
+        const { message, summary } = this.messageService.success();
+        if (message) {
+            this.messageServicePrime.add({ severity: 'success', summary, detail: message, life: 3000 });
+            this.messageService.clearSuccess();
+        }
+    });
+
+    private showError = effect(() => {
+        const { message, summary } = this.messageService.error();
+        if (message) {
+            this.messageServicePrime.add({ severity: 'error', summary, detail: message, life: 3000 });
+            this.messageService.clearError();
+        }
+    });
 
     isOutsideClicked(event: MouseEvent) {
         const sidebarEl = document.querySelector('.layout-sidebar');

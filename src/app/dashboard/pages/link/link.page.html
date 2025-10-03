@@ -1,0 +1,63 @@
+<div class="flex flex-col max-w-7xl mx-auto">
+    <div class="card">
+        <div class="flex justify-between items-center flex-wrap gap-4 mb-4">
+            <div class="flex flex-col gap-0">
+                <h5 class="!text-4xl !font-extrabold !m-0">Links</h5>
+                <span class="text-muted-color text-xl">Gestiona los enlaces internos y externos</span>
+            </div>
+            <p-button label="Nuevo Link" icon="pi pi-plus" class="p-button-sm p-button-outlined" (click)="display.set(true)"></p-button>
+        </div>
+
+        @if (linksList.isLoading()) {
+        <app-data-view-skeleton></app-data-view-skeleton>
+        } @else { @if (linksList.error()) {
+        <app-fall-back [loading]="linksList.isLoading()" message="Ocurrió un error cargando los enlaces recientes." (retry)="linksList.reload()"> </app-fall-back>
+        } @else {
+        <p-dataview [paginator]="true" [totalRecords]="linksList.value()?.length" [rowsPerPageOptions]="[5, 10, 20]" [rows]="5" [value]="linksList.value()" layout="list" emptyMessage="No hay enlaces recientes">
+            <ng-template #list let-items>
+                <div class="flex flex-col">
+                    @for (item of items; let i = $index; track item.id) { @let page = item?.page;
+                    <div class="flex flex-col sm:flex-row sm:items-center p-6 gap-4" [ngClass]="{ 'border-t border-surface': i !== 0 }">
+                        <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
+                            <div class="flex flex-row md:flex-col justify-between items-start gap-2">
+                                <div class="flex items-center gap-2">
+                                    <i
+                                        class="pi text-3xl text-primary"
+                                        [class]="{
+                                        'pi-external-link': item.type === LinkType.EXTERNAL,
+                                        'pi-link': item.type === LinkType.PAGE,
+                                        
+                                    }"
+                                    ></i>
+                                    <div class="text-lg font-medium">
+                                        {{item.title}} 
+                                        <div class="bg-surface-100 px-3 w-fit" style="border-radius: 30px">
+                                            @if(page) {
+                                            <i class="pi pi-file !text-[12px] text-secondary dark:text-black mr-2"></i>
+                                            <span class="text-secondary dark:text-black font-medium text-sm">/{{ page.slug }}</span>
+                                        } @else {
+                                            <i class="pi pi-globe !text-[12px] text-secondary dark:text-black mr-2"></i>
+                                            <a href="{{ item.url }}" target="_blank" class="text-sm font-medium hover:underline"> {{ item.url }} </a>
+                                        }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col md:items-end gap-8">
+                                <div class="flex flex-row-reverse md:flex-row gap-2">
+                                    <p-button label="Editar" text icon="pi pi-pencil" (click)="openDialogAndEdit(item)"></p-button>
+                                    <p-button label="Eliminar" text icon="pi pi-trash" severity="danger"></p-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    }
+                </div>
+            </ng-template>
+        </p-dataview>
+        } }
+    </div>
+</div>
+
+<link-dialog-form [display]="display()" [selectedLink]="selectedLink()" (closeDialog)="display.set(false)"></link-dialog-form>

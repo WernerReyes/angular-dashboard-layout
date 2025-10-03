@@ -1,9 +1,9 @@
-import { HttpClient } from '@angular/common/http';
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { HttpClient, httpResource } from '@angular/common/http';
+import { computed, inject, Injectable, resource, signal } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import type { CreateMenu, MenuTypes } from '../interfaces/menu';
 import type { Menu } from '@/shared/interfaces/menu';
-import { catchError, map, tap, throwError } from 'rxjs';
+import { catchError, firstValueFrom, map, tap, throwError } from 'rxjs';
 import { type ApiResponse } from '@/shared/interfaces/api-response';
 import { mapMenuEntityToMenu, type MenuEntity } from '@/shared/mappers/menu.mapper';
 
@@ -14,6 +14,11 @@ export class MenuService {
     private readonly http = inject(HttpClient);
 
     private readonly prefix = `${environment.apiUrl}/menu`;
+
+    // menuListResource = resource({
+    //     loader: async () => await firstValueFrom(this.getAll().pipe(map(() => this.menuList()))),
+        
+    // });
 
     constructor() {
         this.getAll().subscribe();
@@ -28,6 +33,22 @@ export class MenuService {
     errorMessage = signal<string | null>(null);
     successMessage = signal<string | null>(null);
 
+    menuListResource = httpResource<Menu[]>(
+        () => ({
+            url: this.prefix,
+            method: 'GET',
+            cache: 'reload',
+            withCredentials: true
+        }),
+        {
+            parse: (value) => {
+                const data = value as ApiResponse<MenuEntity[]>;
+                return data.data.map(mapMenuEntityToMenu);
+            }
+        }
+    );
+
+
     getAll() {
         return this.http
             .get<ApiResponse<MenuEntity[]>>(this.prefix, {
@@ -40,7 +61,12 @@ export class MenuService {
                         ...rest
                     };
                 }),
-                tap(({ menus }) => this.menuList.set(menus))
+                tap(({ menus }) => this.menuList.set(menus)),
+                catchError((error) => {
+                    console.log(error)
+                    // this.errorMessage.set(error.error?.message);
+                    return throwError(() => "Error fetching menus");
+                })
             );
     }
 

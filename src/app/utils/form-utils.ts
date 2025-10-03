@@ -70,6 +70,7 @@ export class FormUtils {
   }
 
   static isInvalidField(form: FormGroup, fieldName: string): boolean | null {
+    console.log(form.controls[fieldName]?.errors);
     return (
       !!form.controls[fieldName]?.errors && form.controls[fieldName]?.touched
     );

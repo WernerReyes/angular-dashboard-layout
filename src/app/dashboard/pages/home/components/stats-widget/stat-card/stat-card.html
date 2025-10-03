@@ -1,6 +1,12 @@
 @if(loading()) {
 <stat-card-skeleton></stat-card-skeleton>
 } @else {
+
+@if (error()) {
+<div class="card mb-0 flex justify-center items-center h-full">
+    <app-fall-back [loading]="loading()" [message]="message()" (retry)="retry.emit()"></app-fall-back>
+</div>
+} @else {
 <div class="card mb-0">
     <div class="flex justify-between mb-4">
         <div>
@@ -12,4 +18,5 @@
     <span class="text-muted-color">{{ description() }}</span>
 </div>
 
+}
 }

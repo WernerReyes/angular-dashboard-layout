@@ -1,0 +1,31 @@
+ @if (resource.isLoading()) {
+            @if (loadingTemplate) {
+                <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
+            } @else {
+                <p-skeleton 
+                    [width]="skeletonWidth" 
+                    [height]="skeletonHeight" 
+                    [shape]="skeletonShape">
+                </p-skeleton>
+            }
+        } @else if (resource.error()) {
+            @if (errorTemplate) {
+                <ng-container *ngTemplateOutlet="errorTemplate; context: { error: resource.error(), retry: resource.reload }"></ng-container>
+            } @else {
+                <app-fall-back 
+                    [loading]="resource.isLoading()" 
+                    [message]="errorMessage" 
+                    (retry)="resource.reload()">
+                </app-fall-back>
+            }
+        } @else {
+            @if (resource.value()) {
+                <ng-content></ng-content>
+            } @else if (emptyTemplate) {
+                <ng-container *ngTemplateOutlet="emptyTemplate"></ng-container>
+            } @else if (showEmptyMessage) {
+                <div class="text-center py-4 text-surface-500">
+                    {{ emptyMessage }}
+                </div>
+            }
+        }

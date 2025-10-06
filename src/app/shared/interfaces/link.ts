@@ -1,4 +1,4 @@
-import type { LinkType } from '../mappers/link.mapper';
+import { LinkType } from '../mappers/link.mapper';
 import { Page } from './page';
 
 type PageLink = Pick<Page, 'id' | 'title' | 'slug'>;
@@ -14,3 +14,20 @@ export interface Link {
     readonly openInNewTab?: boolean;
     readonly page?: PageLink | null;
 }
+
+
+type Options = {
+    label: string;
+    value: LinkType;
+};
+
+export const linkTypeOptions: Record<LinkType, Options> = {
+    [LinkType.EXTERNAL]: {
+        label: 'URL Externa',
+        value: LinkType.EXTERNAL
+    },
+    [LinkType.PAGE]: {
+        label: 'Página Interna',
+        value: LinkType.PAGE
+    }
+};

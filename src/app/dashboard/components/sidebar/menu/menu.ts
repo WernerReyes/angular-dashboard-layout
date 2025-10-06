@@ -7,7 +7,6 @@ import { RouterModule } from '@angular/router';
     selector: 'dashboard-menu',
     imports: [MenuItem, RouterModule],
     templateUrl: './menu.html',
-    styleUrl: './menu.scss'
 })
 export class Menu {
     model: IMenuItem[] = [];
@@ -19,9 +18,9 @@ export class Menu {
                 items: [
                     { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/dashboard'] },
                     {
-                        label: 'Menu',
+                        label: 'Menus',
                         icon: 'pi pi-fw pi-bars',
-                        routerLink: ['/dashboard/menu']
+                        routerLink: ['/dashboard/menus']
                     },
                     {
                         label: 'Pages',
@@ -29,9 +28,14 @@ export class Menu {
                         routerLink: ['/dashboard/pages']
                     },
                     {
-                        label: 'Links',
+                        label: 'Enlaces',
                         icon: 'pi pi-fw pi-link',
                         routerLink: ['/dashboard/links']
+                    },
+                    {
+                        label: 'Secciones',
+                        icon: 'pi pi-th-large',
+                        routerLink: ['/dashboard/sections']
                     }
                 ]
             }

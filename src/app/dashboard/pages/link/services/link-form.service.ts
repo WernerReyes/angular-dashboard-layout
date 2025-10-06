@@ -1,3 +1,4 @@
+import { PatternsConst } from '@/shared/constants/patterns';
 import type { Link } from '@/shared/interfaces/link';
 import { LinkType } from '@/shared/mappers/link.mapper';
 import { inject, Injectable } from '@angular/core';
@@ -24,7 +25,7 @@ export class LinkFormService {
                 this.form.get('url')?.clearValidators();
                 // this.form.get('url')?.setValue(null);
             } else if (type === LinkType.EXTERNAL) {
-                this.form.get('url')?.setValidators([Validators.required, Validators.pattern(/^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/[\w-]*)*\/?$/)]);
+                this.form.get('url')?.setValidators([Validators.required, Validators.pattern(PatternsConst.URL)]);
                 this.form.get('pageId')?.clearValidators();
                 // this.form.get('pageId')?.setValue(null);
             }
@@ -36,7 +37,7 @@ export class LinkFormService {
             this.form.get('pageId')?.setValidators([Validators.required, Validators.min(1)]);
             this.form.get('url')?.clearValidators();
         } else if (link.type === LinkType.EXTERNAL) {
-            this.form.get('url')?.setValidators([Validators.required, Validators.pattern(/^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/[\w-]*)*\/?$/)]);
+            this.form.get('url')?.setValidators([Validators.required, Validators.pattern(PatternsConst.URL)]);
             this.form.get('pageId')?.clearValidators();
         }
         this.form.patchValue({
@@ -51,5 +52,9 @@ export class LinkFormService {
     clearTemporalValidators() {
         this.form.get('pageId')?.clearValidators();
         this.form.get('url')?.clearValidators();
+    }
+
+    reset() {
+        this.form.reset()
     }
 }

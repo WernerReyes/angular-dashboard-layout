@@ -1,33 +1,34 @@
-import { LinkType } from '../mappers/link.mapper';
-import { Page } from './page';
+import { Link } from './link';
 
 export interface Menu {
-    readonly id: number;
-    readonly title: string;
-    readonly url: string | null;
-    readonly slug: string;
-    readonly order: number;
-    readonly active: boolean;
-    readonly parentId: number | null;
-    readonly userId: number;
-    readonly children?: Menu[];
-    readonly page: Page | null;
-    readonly type: string;
+    id: number;
+    title: string;
+    order: number;
+    active: boolean;
+    parentId: number | null;
+    linkId: number | null;
+    children: Menu[] | null;
+    link: Link | null;
 }
-// LinkType
 
-type Options = {
+type MenuActiveStatus = {
     label: string;
-    value: LinkType;
+    icon: string;
+    value: boolean;
+    severity: 'success' | 'danger';
 };
 
-export const linkTypeOptions: Record<LinkType, Options> = {
-    [LinkType.EXTERNAL]: {
-        label: 'URL Externa',
-        value: LinkType.EXTERNAL
+export const menuActiveStatusOptions: Record<string, MenuActiveStatus> = {
+    true: {
+        label: 'Activo',
+        icon: 'pi pi-check',
+        value: true,
+        severity: 'success'
     },
-    [LinkType.PAGE]: {
-        label: 'Página Interna',
-        value: LinkType.PAGE
+    false: {
+        label: 'Inactivo',
+        icon: 'pi pi-times',
+        value: false,
+        severity: 'danger'
     }
 };

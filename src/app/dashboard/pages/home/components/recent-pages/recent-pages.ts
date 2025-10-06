@@ -1,9 +1,8 @@
 import { PageService } from '@/dashboard/services/page.service';
-import { FallBack } from '@/shared/components/error/fall-back/fall-back';
+import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
 import { DataViewSkeleton } from '@/shared/components/skeleton/data-view-skeleton/data-view-skeleton';
-import { PageStatus, pageStatusOptions } from '@/shared/interfaces/page';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { CommonModule, DatePipe, NgClass } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -13,7 +12,11 @@ import { TagModule } from 'primeng/tag';
 
 @Component({
     selector: 'home-recent-pages',
-    imports: [DataViewSkeleton, FallBack, NgClass, DataViewModule, TagModule, FormsModule, DatePipe, SkeletonModule, CommonModule, ButtonModule],
+    imports: [
+    ErrorBoundary,
+    DataViewSkeleton,  DataViewModule, TagModule, FormsModule, DatePipe, SkeletonModule, CommonModule, ButtonModule,
+   
+],
     templateUrl: './recent-pages.html',
     styles: `
         ::ng-deep {
@@ -29,7 +32,7 @@ export class RecentPages {
 
     isMobile = false;
 
-    pageStatusOptions = pageStatusOptions;
+   
 
     pagesList = this.pageService.pagesListResource;
 
@@ -43,7 +46,5 @@ export class RecentPages {
             });
     }
 
-    getStatus(status: PageStatus) {
-        return this.pageStatusOptions[status];
-    }
+    
 }

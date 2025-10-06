@@ -1,33 +1,25 @@
-import { Menu } from '@/dashboard/components/menu/menu';
-import { MenuFormService } from '@/dashboard/services/menu-form.service';
-import { PageService } from '@/dashboard/services/page.service';
-import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
+import { MenuList } from './components/menu-list/menu-list';
+import { MenuFormService } from './services/menu-form.service';
+import { DialogForm } from './components/dialog-form/dialog-form';
+import type { Menu } from '@/shared/interfaces/menu';
 
 @Component({
     selector: 'app-menu.page',
-    imports: [
-    Menu,
-    ButtonModule,
-    
-],
-    templateUrl: './menu.page.html',
-    styleUrl: './menu.page.scss'
+    imports: [MenuList, DialogForm, ButtonModule],
+    templateUrl: './menu.page.html'
 })
 export default class MenuPage {
     private readonly menuFormService = inject(MenuFormService);
-    private readonly pageService = inject(PageService);
-    private readonly router = inject(Router);
 
+    selectedMenu = signal<Menu | null>(null);
 
-    goToNewMenu() {
-        this.menuFormService.form.reset();
-        this.menuFormService.form.clearValidators();
-        this.menuFormService.form.updateValueAndValidity();
-        this.menuFormService.dropdownItems.clear();
-        this.pageService.pageIdsActived.set(null);
-        this.menuFormService.selectedMenuType.set(undefined);
-        this.router.navigate(['/dashboard/menu/new']);
+    display = signal<boolean>(false);
+
+    closeDialog() {
+        this.display.set(false);
+        this.menuFormService.reset();
+        this.selectedMenu.set(null);
     }
 }

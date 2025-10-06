@@ -1,22 +1,16 @@
-@if(loading()) {
-<stat-card-skeleton></stat-card-skeleton>
-} @else {
+<app-error-boundary fallbackType="card" [resource]="resource()" [skeletonHeight]="'6rem'" [errorMessage]="message()!">
+    <ng-template #loading>
+        <app-card-skeleton></app-card-skeleton>
+    </ng-template>
 
-@if (error()) {
-<div class="card mb-0 flex justify-center items-center h-full">
-    <app-fall-back [loading]="loading()" [message]="message()" (retry)="retry.emit()"></app-fall-back>
-</div>
-} @else {
-<div class="card mb-0">
-    <div class="flex justify-between mb-4">
-        <div>
-            <span class="block text-muted-color font-medium mb-4">{{ title() }}</span>
-            <div class="text-surface-900 dark:text-surface-0 font-bold text-3xl">{{ value() }}</div>
+    <div class="card mb-0">
+        <div class="flex justify-between mb-4">
+            <div>
+                <span class="block text-muted-color font-medium mb-4">{{ title() }}</span>
+                <div class="text-surface-900 dark:text-surface-0 font-bold text-3xl">{{ value() }}</div>
+            </div>
+            <ng-content></ng-content>
         </div>
-        <ng-content></ng-content>
+        <span class="text-muted-color">{{ description() }}</span>
     </div>
-    <span class="text-muted-color">{{ description() }}</span>
-</div>
-
-}
-}
+</app-error-boundary>

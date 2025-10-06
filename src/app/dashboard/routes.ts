@@ -6,29 +6,20 @@ const dashboardRoutes: Route[] = [
         loadComponent: () => import('./pages/home/home.page')
     },
     {
-        path: 'menu',
+        path: 'menus',
         loadComponent: () => import('./pages/menu/menu.page'),
     },
-    {
-        path: 'menu/new',
-        loadComponent: () => import('./pages/create-menu/create-menu.page')
-    },
-    {
-        path: 'menu/edit/:id',
-        loadComponent: () => import('./pages/update-menu/update-menu.page')
-    },
-
     {
         path: 'pages',
         loadComponent: () => import('./pages/page/pages.page')
     },
     {
-        path: 'pages/new',
-        loadComponent: () => import('./pages/create-page/create-page.page')
-    },
-    {
         path: 'links',
         loadComponent: () => import('./pages/link/link.page')
+    },
+    {
+        path: 'sections',
+        loadComponent: () => import('./pages/section/section.page')
     },
     {
         path: '**',

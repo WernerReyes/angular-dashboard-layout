@@ -6,12 +6,14 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { CreateLink } from '../interfaces/link';
 import { map, tap } from 'rxjs';
+import { MessageService } from '@/shared/services/message.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class LinkService {
     private readonly http = inject(HttpClient);
+    private readonly messageService = inject(MessageService);
     prefix = `${environment.apiUrl}/link`;
 
     linksListResource = httpResource<Link[]>(
@@ -24,20 +26,42 @@ export class LinkService {
         {
             parse: (value) => {
                 const data = value as ApiResponse<LinkEntity[]>;
-                return data.data.map(mapLinkEntityToLink);
+                return data.data.map((entity) => mapLinkEntityToLink(entity));
             }
         }
     );
 
     createLink(create: CreateLink) {
-        return this.http.post<ApiResponse<LinkEntity>>(this.prefix, create, {
-            withCredentials: true
-        }).pipe(
-            map(({ data }) => mapLinkEntityToLink(data)),
-            tap((link) => {
-                console.log('Link created:', link);
-                this.linksListResource.update((links) => [link, ...links!]);
+        return this.http
+            .post<ApiResponse<LinkEntity>>(this.prefix, create, {
+                withCredentials: true
             })
-        );
+            .pipe(
+                map(({ data, message }) => ({
+                    link: mapLinkEntityToLink(data),
+                    message
+                })),
+                tap(({ message, link }) => {
+                    this.messageService.setSuccess(message);
+                    this.linksListResource.update((links) => [link, ...links!]);
+                })
+            );
+    }
+
+    updateLink(id: number, update: Partial<CreateLink>) {
+        return this.http
+            .put<ApiResponse<LinkEntity>>(`${this.prefix}/${id}`, update, {
+                withCredentials: true
+            })
+            .pipe(
+                map(({ data, message }) => ({
+                    link: mapLinkEntityToLink(data),
+                    message
+                })),
+                tap(({ message, link }) => {
+                    this.messageService.setSuccess(message);
+                    this.linksListResource.update((links) => links!.map((l) => (l.id === link.id ? link : l)));
+                })
+            );
     }
 }

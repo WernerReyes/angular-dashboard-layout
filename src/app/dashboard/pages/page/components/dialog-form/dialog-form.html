@@ -1,0 +1,40 @@
+<p-dialog
+    [header]="selectedPage() ? 'Editar página' : 'Crear nueva página'"
+    class="!overflow-hidden"
+    [visible]="display()"
+    (visibleChange)="onCloseDialog.emit()"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    [style]="{ width: '25rem' }"
+    [modal]="true"
+>
+    <form id="link-form" class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="saveChanges()">
+        <div class="flex flex-col gap-2">
+            <label for="title">Titulo</label>
+            <!-- <p-select id="title" formControlName="type" [options]="linkTypes()" optionLabel="label" optionValue="value" placeholder="Selecciona el tipo de enlace"></p-select> -->
+            <input id="title" type="text" pInputText formControlName="title" placeholder="Título del enlace" />
+            @if (form.controls['title']?.errors) {
+            <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'title') }} </p-message>
+            }
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="slug">Slug</label>
+            <input id="slug" type="text" pInputText formControlName="slug" placeholder="slug-de-la-pagina" />
+            @if (form.controls['slug']?.errors) {
+            <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'slug') }} </p-message>
+            }
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="content">Contenido (opcional)</label>
+            <textarea id="content" rows="5" cols="30" pTextarea [autoResize]="true" formControlName="content"></textarea>
+            @if (form.controls['content']?.errors) {
+            <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'content') }} </p-message>
+            }
+        </div>
+    </form>
+
+    <ng-template #footer>
+        <button pButton icon="pi pi-save" type="submit" form="link-form" [disabled]="form.invalid" label="Guardar"></button>
+    </ng-template>
+</p-dialog>

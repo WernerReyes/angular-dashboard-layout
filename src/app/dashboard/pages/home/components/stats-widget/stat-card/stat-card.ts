@@ -1,20 +1,21 @@
-import { Component, input, output } from '@angular/core';
-import { Skeleton } from './skeleton/skeleton';
-import { FallBack } from '@/shared/components/error/fall-back/fall-back';
+import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
+import { CardSkeleton } from '@/shared/components/skeleton/card-skeleton/card-skeleton';
+import type { ResourceState } from '@/shared/interfaces/resource';
+import { Component, input } from '@angular/core';
 
 @Component({
     selector: 'stat-card',
-    imports: [Skeleton, FallBack],
+    imports: [ErrorBoundary, CardSkeleton],
     templateUrl: './stat-card.html'
 })
 export class StatCard {
     title = input.required<string>();
     value = input.required<string | number>();
     description = input.required<string>();
-    loading = input<boolean>(false);
-    error = input.required<boolean>();
     message = input<string>();
-    retry = output<void>();
+  
+
+    resource = input.required<ResourceState<any[]>>();
 
     
 }

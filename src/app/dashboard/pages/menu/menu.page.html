@@ -1,8 +1,15 @@
-<div class="flex items-center justify-between mb-4">
-    <h4 class="font-semibold text-xl mb-4">Menus</h4>
-    <div class="flex gap-2">
-        <p-button label="Nuevo" icon="pi pi-plus" (click)="goToNewMenu()"></p-button>
+<div class="flex flex-col max-w-7xl mx-auto">
+    <div class="card">
+        <div class="flex justify-between items-center flex-wrap gap-4 mb-4">
+            <div class="flex flex-col gap-0">
+                <h5 class="!text-4xl !font-extrabold !m-0">Menus</h5>
+                <span class="text-muted-color text-xl">Gestiona la estructura de navegación de tu sitio web</span>
+            </div>
+            <p-button label="Nuevo Menu" icon="pi pi-plus" (click)="display.set(true)"></p-button>
+        </div>
+
+        <menu-list (onDisplay)="display.set($event)" (onSelectedMenu)="selectedMenu.set($event)"></menu-list>
+
+        <link-dialog-form [display]="display()" [selectedMenu]="selectedMenu()" (onCloseDialog)="closeDialog()"></link-dialog-form>
     </div>
 </div>
-
-<menu></menu>

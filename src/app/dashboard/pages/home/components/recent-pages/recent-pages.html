@@ -1,56 +1,54 @@
 <div class="flex flex-col">
     <div class="card">
         <div class="font-semibold text-xl">Páginas Recientes</div>
-        @if (pagesList.isLoading()) {
-        <div class="flex flex-col">
-            <app-data-view-skeleton [rows]="6"></app-data-view-skeleton>
-        </div>
-        } @else { @if (pagesList.error()) {
-        <div class="flex flex-col mt-5">
-            <app-fall-back [loading]="pagesList.isLoading()" message="Ocurrió un error cargando las páginas recientes." (retry)="pagesList.reload()"> </app-fall-back>
-        </div>
-        } @else {
-        <p-dataview [lazy]="true" [value]="recentPages()" layout="list" emptyMessage="No hay páginas recientes">
-            <ng-template #list let-items>
+
+        <app-error-boundary [resource]="pagesList" errorMessage="Ocurrió un error cargando las páginas recientes.">
+            <ng-template #loading>
                 <div class="flex flex-col">
-                    @for (item of items; let i = $index; track item.id) { @let status = getStatus(item.status);
-                    <div class="flex flex-col sm:flex-row sm:items-center p-6 gap-4" [ngClass]="{ 'border-t border-surface': i !== 0 }">
-                        <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
-                            <div class="flex flex-row md:flex-col justify-between items-start gap-2">
-                                <div class="flex items-center gap-2">
-                                    <i class="pi pi-file text-3xl text-primary"></i>
-                                    <div class="text-lg font-medium">{{ item.title }}</div>
-                                </div>
+                    <app-data-view-skeleton [rows]="6"></app-data-view-skeleton>
+                </div>
+            </ng-template>
 
-                                @if(!isMobile) {
-                                <div class="bg-surface-100 py-1 px-3" style="border-radius: 30px">
-                                    <span class="text-secondary dark:text-black font-medium text-sm">/{{ item.slug }}</span>
-                                </div>
-                                } @else {
-                                <p-tag [value]="status.label" [severity]="status.severity"></p-tag>
-                                }
-                            </div>
-                            <div class="flex flex-col md:items-end gap-8">
-                                @if(!isMobile) {
-                                <p-tag [value]="status.label" [severity]="status.severity"></p-tag>
-                                } @else {
-                                <div class="bg-surface-100 w-fit py-1 px-3" style="border-radius: 30px">
-                                    <span class="text-secondary dark:text-black font-medium text-sm">/{{ item.slug }}</span>
-                                </div>
-                                }
+            <p-dataview [lazy]="true" [value]="recentPages()" layout="list" emptyMessage="No hay páginas recientes">
+                <ng-template #list let-items>
+                    <div class="flex flex-col">
+                        @for (item of items; let i = $index; track item.id) {
+                        <div class="flex flex-col sm:flex-row sm:items-center p-6 gap-4" [ngClass]="{ 'border-t border-surface': i !== 0 }">
+                            <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
+                                <div class="flex flex-row md:flex-col justify-between items-start gap-2">
+                                    <div class="flex items-center gap-2">
+                                        <i class="pi pi-file text-3xl text-primary"></i>
+                                        <div class="text-lg font-medium">{{ item.title }}</div>
+                                    </div>
 
-                                <div class="flex flex-row-reverse md:flex-row gap-2">
-                                    <span class="text-sm text-surface-500 dark:text-surface-400">Última edición: {{ item.updatedAt | date:'medium' }}</span>
+                                    @if(!isMobile) {
+                                    <div class="bg-surface-100 py-1 px-3" style="border-radius: 30px">
+                                        <span class="text-secondary dark:text-black font-medium text-sm">/{{ item.slug }}</span>
+                                    </div>
+                                    } @else {
+                                    <!-- <p-tag [value]="status.label" [severity]="status.severity"></p-tag> -->
+                                    }
+                                </div>
+                                <div class="flex flex-col md:items-end gap-8">
+                                    @if(!isMobile) {
+                                    <!-- <p-tag [value]="status.label" [severity]="status.severity"></p-tag> -->
+                                    } @else {
+                                    <div class="bg-surface-100 w-fit py-1 px-3" style="border-radius: 30px">
+                                        <span class="text-secondary dark:text-black font-medium text-sm">/{{ item.slug }}</span>
+                                    </div>
+                                    }
+
+                                    <div class="flex flex-row-reverse md:flex-row gap-2">
+                                        <span class="text-sm text-surface-500 dark:text-surface-400">Última edición: {{ item.updatedAt | date:'medium' }}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+                        }
                     </div>
-
-                    }
-                </div>
-            </ng-template>
-        </p-dataview>
-
-        } }
+                </ng-template>
+            </p-dataview>
+        </app-error-boundary>
     </div>
 </div>

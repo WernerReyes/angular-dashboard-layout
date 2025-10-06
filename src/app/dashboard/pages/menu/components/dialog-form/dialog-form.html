@@ -1,0 +1,72 @@
+<p-dialog
+    [header]="selectedMenu() ? 'Editar menu' : 'Crear nuevo menu'"
+    class="!overflow-hidden"
+    [visible]="display()"
+    (visibleChange)="onCloseDialog.emit()"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    [style]="{ width: '25rem' }"
+    [modal]="true"
+    [maximizable]="true"
+>
+    <form class="flex flex-col gap-4" [formGroup]="form" id="menu-form" (ngSubmit)="saveChanges()">
+        <div class="flex flex-col gap-2">
+            <label for="title">Titulo</label>
+            <!-- <p-select id="title" formControlName="type" [options]="linkTypes()" optionLabel="label" optionValue="value" placeholder="Selecciona el tipo de enlace"></p-select> -->
+            <input id="title" type="text" pInputText formControlName="title" placeholder="Título del enlace" />
+            @if (form.controls['title']?.errors) {
+            <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'title') }} </p-message>
+            }
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="link">Enlace</label>
+            <app-error-boundary skeletonHeight="2.5rem" [resource]="linksList" errorMessage="Ocurrió un error cargando los enlaces.">
+                <ng-template #content let-links>
+                    <p-select
+                        [overlayOptions]="{
+                    mode: 'modal'
+                }"
+                        class="w-full"
+                        id="link"
+                        formControlName="linkId"
+                        [options]="links"
+                        [checkmark]="true"
+                        optionLabel="title"
+                        optionValue="id"
+                        placeholder="Selecciona una página"
+                    >
+                    </p-select>
+                    @if (form.controls['linkId']?.errors) {
+                    <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'linkId') }} </p-message>
+                    }
+                </ng-template>
+            </app-error-boundary>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="parent">Item padre (opcional)</label>
+            <app-error-boundary skeletonHeight="2.5rem" [resource]="linksList" errorMessage="Ocurrió un error cargando los enlaces.">
+                <p-select
+                    [overlayOptions]="{
+                    mode: 'modal'
+                }"
+                    class="w-full"
+                    id="parent"
+                    formControlName="parentId"
+                    [options]="menuParentsList()"
+                    [checkmark]="true"
+                    optionLabel="title"
+                    optionValue="id"
+                    placeholder="Selecciona una página"
+                >
+                </p-select>
+            </app-error-boundary>
+        </div>
+
+        <p-togglebutton formControlName="active" onLabel="Activo" offLabel="Inactivo" onIcon="pi pi-check" offIcon="pi pi-times" onIcon="pi pi-lock-open" offIcon="pi pi-lock" class="w-36" ariaLabel="Do you confirm" />
+    </form>
+
+    <ng-template #footer>
+        <button pButton type="submit" form="menu-form" icon="pi pi-save" [disabled]="form.invalid" label="Guardar"></button>
+    </ng-template>
+</p-dialog>

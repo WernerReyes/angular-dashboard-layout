@@ -1,16 +1,20 @@
-import { Component, computed, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { DataViewModule } from 'primeng/dataview';
-import { CommonModule, NgClass } from '@angular/common';
 import { CategoryService } from '@/dashboard/services/category.service';
+import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
 import { DataViewSkeleton } from '@/shared/components/skeleton/data-view-skeleton/data-view-skeleton';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { FallBack } from '@/shared/components/error/fall-back/fall-back';
+import { DatePipe, NgClass, NgOptimizedImage } from '@angular/common';
+import { Component, computed, inject } from '@angular/core';
+import { ButtonModule } from 'primeng/button';
+import { DataViewModule } from 'primeng/dataview';
 
 @Component({
     selector: 'home-recent-categories',
-    imports: [DataViewSkeleton, FallBack, NgClass, DataViewModule, FormsModule, CommonModule, ButtonModule],
+    imports: [
+    ErrorBoundary,
+    DataViewSkeleton, DatePipe, DataViewModule, ButtonModule,
+    NgOptimizedImage, NgClass
+ 
+],
     templateUrl: './recent-categories.html'
 })
 export class RecentCategories {

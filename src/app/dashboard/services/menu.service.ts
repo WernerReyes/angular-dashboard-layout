@@ -1,28 +1,23 @@
-import { HttpClient, httpResource } from '@angular/common/http';
-import { computed, inject, Injectable, resource, signal } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import type { CreateMenu, MenuTypes } from '../interfaces/menu';
-import type { Menu } from '@/shared/interfaces/menu';
-import { catchError, firstValueFrom, map, tap, throwError } from 'rxjs';
 import { type ApiResponse } from '@/shared/interfaces/api-response';
+import type { Menu } from '@/shared/interfaces/menu';
 import { mapMenuEntityToMenu, type MenuEntity } from '@/shared/mappers/menu.mapper';
+import { HttpClient, httpResource } from '@angular/common/http';
+import { inject, Injectable, signal } from '@angular/core';
+import { catchError, map, tap, throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import type { CreateMenu, MenuTypes, UpdateMenuOrder } from '../interfaces/menu';
+import { MessageService } from '@/shared/services/message.service';
+import { MenuUtils } from '../utils/menu.utils';
 
 @Injectable({
     providedIn: 'root'
 })
 export class MenuService {
     private readonly http = inject(HttpClient);
+    private readonly messageService = inject(MessageService);
 
     private readonly prefix = `${environment.apiUrl}/menu`;
 
-    // menuListResource = resource({
-    //     loader: async () => await firstValueFrom(this.getAll().pipe(map(() => this.menuList()))),
-        
-    // });
-
-    constructor() {
-        this.getAll().subscribe();
-    }
 
     menuList = signal<Menu[]>([]);
 
@@ -43,32 +38,10 @@ export class MenuService {
         {
             parse: (value) => {
                 const data = value as ApiResponse<MenuEntity[]>;
-                return data.data.map(mapMenuEntityToMenu);
+                return data.data.map((entity) => mapMenuEntityToMenu(entity));
             }
         }
     );
-
-
-    getAll() {
-        return this.http
-            .get<ApiResponse<MenuEntity[]>>(this.prefix, {
-                withCredentials: true
-            })
-            .pipe(
-                map(({ data, ...rest }) => {
-                    return {
-                        menus: data.map(mapMenuEntityToMenu),
-                        ...rest
-                    };
-                }),
-                tap(({ menus }) => this.menuList.set(menus)),
-                catchError((error) => {
-                    console.log(error)
-                    // this.errorMessage.set(error.error?.message);
-                    return throwError(() => "Error fetching menus");
-                })
-            );
-    }
 
     getAllCount() {
         return this.http
@@ -76,19 +49,6 @@ export class MenuService {
                 withCredentials: true
             })
             .pipe(map(({ data }) => data));
-    }
-
-    getById(id: number) {
-        return this.http
-            .get<ApiResponse<MenuEntity>>(`${this.prefix}/${id}`, {
-                withCredentials: true
-            })
-            .pipe(
-                map(({ data }) => {
-                    return mapMenuEntityToMenu(data);
-                }),
-                tap((menu) => this.currentMenu.set(menu))
-            );
     }
 
     createMenu(create: CreateMenu) {
@@ -104,19 +64,23 @@ export class MenuService {
                     };
                 }),
                 tap(({ menu, message }) => {
-                    this.menuCreated.set(menu);
-                    this.menuList.update((menus) => [...menus, menu].sort((a, b) => a.order - b.order));
-                    this.successMessage.set(message);
+                    this.messageService.setSuccess(message);
+
+                    this.menuListResource.update((menus) => {
+                        if (!menus) return [menu];
+
+                        return MenuUtils.insertMenuItem(menus, menu);
+                    });
                 }),
                 catchError((error) => {
-                    this.menuCreated.set(null);
-                    this.errorMessage.set(error.error?.message);
+                    this.messageService.setError(error.error?.message);
+
                     return throwError(() => error);
                 })
             );
     }
 
-    updateMenu(id: number, update: CreateMenu) {
+    updateMenu(id: number, update: Partial<CreateMenu>) {
         return this.http
             .put<ApiResponse<MenuEntity>>(`${this.prefix}/${id}`, update, {
                 withCredentials: true
@@ -129,22 +93,31 @@ export class MenuService {
                     };
                 }),
                 tap(({ menu, message }) => {
-                    // this.currentMenu.set(menu);
-                    this.menuList.update((menus) => {
-                        const index = menus.findIndex((m) => m.id === menu.id);
-                        if (index !== -1) {
-                            menus[index] = menu;
-                        }
-                        return menus;
+                    this.menuListResource.update((menus) => {
+                        if (!menus) return [];
+                        return MenuUtils.updateNestedMenu(menus, menu);
                     });
-                    this.successMessage.set(message);
+
+                    this.messageService.setSuccess(message);
                 }),
                 catchError((error) => {
                     // this.currentMenu.set(null);
-                    this.errorMessage.set(error.error?.message);
+                    this.messageService.setError(error.error?.message);
                     return throwError(() => error);
                 })
             );
+    }
+
+    updateOrder(menus: UpdateMenuOrder[]) {
+        return this.http.put<ApiResponse<void>>(`${this.prefix}/order`, { menuOrderArray: menus }, { withCredentials: true }).pipe(
+            tap(({ message }) => {
+                this.messageService.setSuccess(message);
+            }),
+            catchError((error) => {
+                this.messageService.setError(error.error?.message);
+                return throwError(() => error);
+            })
+        );
     }
 
     deleteMenu(id: number, type: MenuTypes) {

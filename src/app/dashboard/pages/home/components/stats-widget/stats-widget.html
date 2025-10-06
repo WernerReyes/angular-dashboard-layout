@@ -1,6 +1,6 @@
 @for ( stat of stats(); track stat.id) {
 <div class="col-span-12 lg:col-span-6 xl:col-span-3">
-    <stat-card [loading]="stat.loading" [error]="stat.error" (retry)="stat.retry()" [message]="stat.message" [title]="stat.title" [value]="stat.value" [description]="stat.description">
+    <stat-card [resource]="stat.resource" [message]="stat.message" [title]="stat.title" [value]="stat.value" [description]="stat.description">
         <div [class]="'flex items-center justify-center rounded-border ' + stat.iconBackground" style="width: 2.5rem; height: 2.5rem">
             <i [class]="stat.icon + ' text-xl! ' + stat.iconColor"></i>
         </div>

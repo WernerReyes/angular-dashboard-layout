@@ -1,9 +1,10 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, Resource } from '@angular/core';
 import { CategoryService } from '@/dashboard/services/category.service.js';
 import { MenuService } from '@/dashboard/services/menu.service.js';
 import { PageService } from '@/dashboard/services/page.service.js';
 import { StatCard } from './stat-card/stat-card.js';
 import { LinkService } from '@/dashboard/services/link.service.js';
+import type { ResourceState } from '@/shared/interfaces/resource.js';
 
 @Component({
     selector: 'home-stats-widget',
@@ -27,9 +28,7 @@ export class StatsWidget {
                 id: 'pages',
                 title: 'Páginas',
                 value: this.getValue(this.pageList),
-                loading: this.pageList.isLoading(),
-                error: !!this.pageList.error(),
-                retry: () => this.pageList.reload(),
+                resource: this.pageList,
                 message: 'No se pudieron cargar los datos de las páginas.',
                 description: 'Páginas totales',
                 icon: 'pi pi-file',
@@ -40,9 +39,8 @@ export class StatsWidget {
                 id: 'links',
                 title: 'Enlaces',
                 value: this.getValue(this.linksList),
-                loading: this.linksList.isLoading(),
-                error: !!this.linksList.error(),
-                retry: () => this.linksList.reload(),
+
+                resource: this.linksList,
                 message: 'No se pudieron cargar los datos de los enlaces.',
                 description: 'Enlaces totales',
                 icon: 'pi pi-link',
@@ -53,9 +51,7 @@ export class StatsWidget {
                 id: 'menu',
                 title: 'Menú',
                 value: this.getValue(this.menuList),
-                loading: this.menuList.isLoading(),
-                error: !!this.menuList.error(),
-                retry: () => this.menuList.reload(),
+                resource: this.menuList,
                 message: 'No se pudieron cargar los datos del menú.',
                 description: 'Items en el menú',
                 icon: 'pi pi-align-justify',
@@ -66,9 +62,7 @@ export class StatsWidget {
                 id: 'categories',
                 title: 'Categorías',
                 value: this.getValue(this.categoriesList),
-                loading: this.categoriesList.isLoading(),
-                error: !!this.categoriesList.error(),
-                retry: () => this.categoriesList.reload(),
+                resource: this.categoriesList,
                 message: 'No se pudieron cargar los datos de las categorías.',
                 description: 'Categorías de productos',
                 icon: 'pi pi-folder-open',
@@ -78,7 +72,7 @@ export class StatsWidget {
         ];
     });
 
-    private getValue(list: any): string | number {
-        return list.hasValue() ? list.value().length : '';
+    private getValue<T>(list: ResourceState<T[]>): string | number {
+        return list.hasValue() ? (list.value()?.length ?? 0) : '';
     }
 }

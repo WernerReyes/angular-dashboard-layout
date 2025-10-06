@@ -1,5 +1,13 @@
-<p-dialog header="Crear nuevo enlace" class="!overflow-hidden" [visible]="display()" (visibleChange)="closeDialog.emit()" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '40rem' }" [modal]="true">
-    <div class="flex flex-col gap-4" [formGroup]="form">
+<p-dialog
+    [header]="selectedLink() ? 'Editar enlace' : 'Crear nuevo enlace'"
+    class="!overflow-hidden"
+    [visible]="display()"
+    (visibleChange)="onCloseDialog.emit()"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    [style]="{ width: '25rem' }"
+    [modal]="true"
+>
+    <form id="link-form" class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="saveChanges()">
         <div class="flex flex-col gap-2">
             <label for="title">Titulo</label>
             <!-- <p-select id="title" formControlName="type" [options]="linkTypes()" optionLabel="label" optionValue="value" placeholder="Selecciona el tipo de enlace"></p-select> -->
@@ -21,28 +29,40 @@
             } @else if (form.controls['type'].value === LinkType.PAGE) {
 
             <label for="page">Página</label>
-            @if (pagesList.isLoading()) {
-            <p-skeleton width="100%" height="2.5rem" />
-            } @else { @if (pagesList.error()) {
-            <app-fall-back [loading]="pagesList.isLoading()" message="Ocurrió un error cargando las páginas." (retry)="pagesList.reload()"> </app-fall-back>
-            } @else {
-            <p-select id="page" formControlName="pageId" [options]="pagesList.value()" [checkmark]="true" optionLabel="title" optionValue="id" placeholder="Selecciona una página">
-                <ng-template #selectedItem let-selectedLink>
-                    @if (selectedLink) {
-                    <div class="flex flex-col justify-center">
-                        {{ selectedLink.title }}
-                        <small>(/{{ selectedLink.slug }})</small>
-                    </div>
-                    }
+
+            <app-error-boundary skeletonHeight="2.5rem" [resource]="pagesList" errorMessage="Ocurrió un error cargando las páginas.">
+                <ng-template #content let-pages>
+                    <p-select
+                        [overlayOptions]="{
+                    mode: 'modal'
+                    }"
+                        class="w-full"
+                        id="page"
+                        formControlName="pageId"
+                        [options]="pages"
+                        [checkmark]="true"
+                        optionLabel="title"
+                        optionValue="id"
+                        placeholder="Selecciona una página"
+                    >
+                        <ng-template #selectedItem let-selectedLink>
+                            @if (selectedLink) {
+                            <div class="flex flex-col justify-center">
+                                {{ selectedLink.title }}
+                                <small>(/{{ selectedLink.slug }})</small>
+                            </div>
+                            }
+                        </ng-template>
+                        <ng-template let-link #item>
+                            <div class="flex flex-col justify-center">
+                                {{ link.title }}
+                                <small>(/{{ link.slug }})</small>
+                            </div>
+                        </ng-template>
+                    </p-select>
                 </ng-template>
-                <ng-template let-link #item>
-                    <div class="flex flex-col justify-center">
-                        {{ link.title }}
-                        <small>(/{{ link.slug }})</small>
-                    </div>
-                </ng-template>
-            </p-select>
-            } } }
+            </app-error-boundary>
+            }
         </div>
 
         <div class="flex flex-col gap-2">
@@ -52,49 +72,9 @@
             <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'openInNewTab') }} </p-message>
             }
         </div>
-    </div>
+    </form>
 
     <ng-template #footer>
-        <p-button [disabled]="form.invalid" label="Guardar" (click)="createLink()" />
+        <button pButton icon="pi pi-save" type="submit" form="link-form" [disabled]="form.invalid" label="Guardar"></button>
     </ng-template>
 </p-dialog>
-
-
-
-<!-- TODO: dialog-form.html -->
-<!-- <div class="flex flex-col gap-2">
-    @if (form.controls['type'].value === LinkType.PAGE) {
-        <label for="page">Página</label>
-        <app-async-container 
-            [resource]="pagesList" 
-            errorMessage="Ocurrió un error cargando las páginas."
-            emptyMessage="No hay páginas disponibles">
-            
-            <p-select 
-                id="page" 
-                formControlName="pageId" 
-                [options]="pagesList.value()" 
-                [checkmark]="true" 
-                optionLabel="title" 
-                optionValue="id" 
-                placeholder="Selecciona una página">
-                
-                <ng-template #selectedItem let-selectedLink>
-                    @if (selectedLink) {
-                    <div class="flex flex-col justify-center">
-                        {{ selectedLink.title }}
-                        <small>(/{{ selectedLink.slug }})</small>
-                    </div>
-                    }
-                </ng-template>
-                
-                <ng-template let-link #item>
-                    <div class="flex flex-col justify-center">
-                        {{ link.title }}
-                        <small>(/{{ link.slug }})</small>
-                    </div>
-                </ng-template>
-            </p-select>
-        </app-async-container>
-    }
-</div> -->

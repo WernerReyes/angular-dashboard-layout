@@ -1,28 +1,21 @@
 import type { Page } from '@/shared/interfaces/page';
+import { mapPageEntityToPage, PageEntity } from '@/shared/mappers/page.mapper';
 import { HttpClient, httpResource } from '@angular/common/http';
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { catchError, map, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ApiResponse } from '../../shared/interfaces/api-response';
-import { map, tap } from 'rxjs';
-import { mapPageEntityToPage, PageEntity } from '@/shared/mappers/page.mapper';
+import type { CreatePage } from '../interfaces/page';
+import { MessageService } from '@/shared/services/message.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PageService {
     private readonly http = inject(HttpClient);
+    private readonly messageService = inject(MessageService);
 
     private readonly prefix = `${environment.apiUrl}/page`;
-
-    pagesList = signal<Page[]>([]);
-
-    pageIdsActived = signal<number[] | null>(null);
-
-    freePagesOnlyList = computed(() => []);
-
-    constructor() {
-        this.getAll().subscribe();
-    }
 
     pagesListResource = httpResource<Page[]>(
         () => ({
@@ -34,21 +27,63 @@ export class PageService {
         {
             parse: (value) => {
                 const data = value as ApiResponse<PageEntity[]>;
-                return data.data.map(mapPageEntityToPage);
+                return data.data.map((entity) => mapPageEntityToPage(entity));
             }
         }
     );
 
-    getAll() {
+    createPage(create: CreatePage) {
         return this.http
-            .get<ApiResponse<PageEntity[]>>(this.prefix, {
+            .post<ApiResponse<PageEntity>>(this.prefix, create, {
                 withCredentials: true
             })
             .pipe(
-                map(({ data }) => data.map(mapPageEntityToPage)),
-                tap((pages) => {
-                    console.log('Fetched pages:', pages);
-                    this.pagesList.set(pages);
+                map(({ data, message }) => ({
+                    page: mapPageEntityToPage(data),
+                    message
+                })),
+                tap(({ page, message }) => {
+                    this.messageService.setSuccess(message);
+                    this.pagesListResource.update((pages) => {
+                        if (pages) {
+                            return [page, ...pages];
+                        }
+                        return [page];
+                    });
+                }),
+                catchError((error) => {
+                    this.messageService.setError(error.error?.message);
+                    return throwError(() => error);
+                })
+            );
+    }
+
+    updatePage(pageId: number, update: Partial<CreatePage>) {
+        return this.http
+            .put<ApiResponse<PageEntity>>(`${this.prefix}/${pageId}`, update, {
+                withCredentials: true
+            })
+            .pipe(
+                map(({ data, message }) => ({
+                    page: mapPageEntityToPage(data),
+                    message
+                })),
+                tap(({ page, message }) => {
+                    this.messageService.setSuccess(message);
+                    this.pagesListResource.update((pages) => {
+                        if (pages) {
+                            const index = pages.findIndex((p) => p.id === page.id);
+                            if (index !== -1) {
+                                pages[index] = page;
+                            }
+                            return [...pages];
+                        }
+                        return [page];
+                    });
+                }),
+                catchError((error) => {
+                    this.messageService.setError(error.error?.message);
+                    return throwError(() => error);
                 })
             );
     }

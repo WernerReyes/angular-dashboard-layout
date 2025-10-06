@@ -1,49 +1,25 @@
-import { PageService } from '@/dashboard/services/page.service';
-import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
-import { BadgeModule } from 'primeng/badge';
+import { Component, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { DataViewModule } from 'primeng/dataview';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputGroupModule } from 'primeng/inputgroup';
-import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
-import { Router } from '@angular/router';
+import { PagesList } from './components/pages-list/pages-list';
+import type { Page } from '@/shared/interfaces/page';
+import { DialogForm } from './components/dialog-form/dialog-form';
 
 @Component({
-    selector: 'app-pages.page',
-    imports: [DatePipe, ButtonModule, CommonModule, DataViewModule, BadgeModule, InputTextModule, InputGroupModule, InputGroupAddonModule],
+    selector: 'app-pages-page',
+    imports: [PagesList, DialogForm, ButtonModule],
     templateUrl: './pages.page.html'
 })
 export default class PagesPage {
-    private readonly router = inject(Router);
-    readonly pageService = inject(PageService);
+    //  private readonly linkFormService = inject(LinkFormService);
 
-    showActions = signal<{
-        [key: string]: boolean;
-    }>({});
+    selectedPage = signal<Page | null>(null);
 
-    searchTerm = signal<string>('');
+    display = signal<boolean>(false);
 
-    pages = computed(() => {
-        const term = this.searchTerm().toLowerCase();
-        if (!term) {
-            return this.pageService.pagesList();
-        }
-
-        return this.pageService.pagesList().filter((page) => page.title.toLowerCase().includes(term));
-    });
-
-    navigateToNewPage() {
-        this.router.navigate(['/dashboard/pages/new']);
-    }
-
-    // constructor(private productService: ProductService) {}
-
-    setShowAction(id: number, value: boolean) {
-        if (this.showActions()[id] === value) return;
-        this.showActions.update((current) => ({
-            ...current,
-            [id]: value
-        }));
+    closeDialog() {
+        this.display.set(false);
+        // this.linkFormService.reset();
+        // this.linkFormService.clearTemporalValidators();
+        this.selectedPage.set(null);
     }
 }

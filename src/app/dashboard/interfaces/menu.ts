@@ -9,15 +9,17 @@ export enum MenuTypes {
     DROPDOWN = 'dropdown'
 }
 
-
 export interface CreateMenu {
     readonly title: string;
-    readonly order: number;
-    readonly menuType: MenuTypes;
-    readonly pageId: number | null;
-    readonly url: string | null;
-    readonly dropdownArray: DropdownMenu[] | null;
+    readonly linkId: number;
+    readonly parentId: number | null;
     readonly active: boolean;
+}
+
+export interface UpdateMenuOrder {
+    readonly id: number;
+    readonly order: number;
+    readonly parentId: number | null;
 }
 
 export interface DropdownMenu {
@@ -28,7 +30,6 @@ export interface DropdownMenu {
     readonly pageId: number | null;
     readonly url: string | null;
 }
-
 
 //  parentId: [null, [Validators.required]],
 //             title: ['', [Validators.required, Validators.minLength(3)]],

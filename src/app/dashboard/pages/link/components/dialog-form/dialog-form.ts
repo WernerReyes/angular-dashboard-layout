@@ -1,13 +1,11 @@
 import { CreateLink } from '@/dashboard/interfaces/link';
 import { LinkService } from '@/dashboard/services/link.service';
 import { PageService } from '@/dashboard/services/page.service';
-import { FallBack } from '@/shared/components/error/fall-back/fall-back';
-import { linkTypeOptions } from '@/shared/interfaces/menu';
+import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
+import { linkTypeOptions, type Link } from '@/shared/interfaces/link';
 import { LinkType } from '@/shared/mappers/link.mapper';
-import { MessageService } from '@/shared/services/message.service';
 import { FormUtils } from '@/utils/form-utils';
-import { JsonPipe } from '@angular/common';
-import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -17,22 +15,21 @@ import { SelectModule } from 'primeng/select';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { SkeletonModule } from 'primeng/skeleton';
 import { LinkFormService } from '../../services/link-form.service';
-import type { Link } from '@/shared/interfaces/link';
 
 @Component({
     selector: 'link-dialog-form',
-    imports: [DialogModule, FallBack, ReactiveFormsModule, JsonPipe, InputTextModule, MessageModule, SkeletonModule, SelectModule, SelectButtonModule, ButtonModule],
+    imports: [DialogModule, ErrorBoundary, ReactiveFormsModule, InputTextModule, MessageModule, SkeletonModule, SelectModule, SelectButtonModule, ButtonModule],
     templateUrl: './dialog-form.html'
 })
 export class DialogForm {
     private readonly pageService = inject(PageService);
     private readonly linkService = inject(LinkService);
     private readonly linkFormService = inject(LinkFormService);
-    private readonly messageService = inject(MessageService);
+  
 
-    selectedLink = input.required<Link | null>();
+    selectedLink = input<Link | null>();
 
-    closeDialog = output<void>();
+    onCloseDialog = output<void>();
 
     form = this.linkFormService.form;
 
@@ -51,32 +48,7 @@ export class DialogForm {
         { label: 'Nueva pestaña', value: true }
     ]);
 
-    isEditMode = false;
-
-    // private populateForm = effect(() => {
-    //     const link = this.selectedLink();
-    //     console.log('Selected Link changed:', link);
-    //     if (link) {
-    //         this.linkFormService.populateForm(link);
-    //     }
-    // });
-
-    constructor() {
-      if (this.isEditMode) return;
-        // Effect que solo se ejecuta al abrir el diálogo
-        effect(() => {
-            // const isVisible = this.display();
-            const link = this.selectedLink();
-
-            if (link) {
-                console.log('Dialog opened with link, populating form');
-                this.linkFormService.populateForm(link);
-                this.isEditMode = true;
-            }
-        });
-    }
-
-    createLink() {
+    saveChanges() {
         const formValue = this.form.value;
         if (this.form.valid && formValue) {
             const createLinkData: CreateLink = {
@@ -86,12 +58,25 @@ export class DialogForm {
                 pageId: formValue.type === LinkType.PAGE ? formValue.pageId! : null,
                 openInNewTab: formValue.openInNewTab || false
             };
+
+            if (this.selectedLink()) {
+                this.linkService.updateLink(this.selectedLink()!.id, createLinkData).subscribe({
+                    next: () => {
+                     
+                        this.linkFormService.form.reset();
+                        this.linkFormService.clearTemporalValidators();
+                        this.onCloseDialog.emit();
+                    }
+                });
+                return;
+            }
+
             this.linkService.createLink(createLinkData).subscribe({
                 next: () => {
-                    this.messageService.setSuccess('Enlace creado con éxito');
+                 
                     this.linkFormService.form.reset();
                     this.linkFormService.clearTemporalValidators();
-                    this.closeDialog.emit();
+                    this.onCloseDialog.emit();
                 }
             });
         }

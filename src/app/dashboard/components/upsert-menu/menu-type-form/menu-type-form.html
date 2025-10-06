@@ -1,9 +1,0 @@
-@if (selectedMenuType() === undefined) {
-<p class="text-center">Seleccione un tipo de menú</p>
-} @else { @if (selectedMenuType()?.code === "internal-page") {
-<menu-type-internal-page [form]="menuFormService.form"></menu-type-internal-page>
-} @else if (selectedMenuType()?.code === "external-link") {
-<menu-type-external-link [form]="menuFormService.form"></menu-type-external-link>
-} @else {
-<menu-type-dropdown></menu-type-dropdown>
-} }

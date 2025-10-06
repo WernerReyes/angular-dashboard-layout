@@ -1,0 +1,119 @@
+<p-dialog
+    [header]="selectedSectionItem () ? 'Editar item' : `Agregar item a la sección '${selectedSection()?.title}'`"
+    class="!overflow-hidden"
+    [visible]="display()"
+    (visibleChange)="onCloseDialog.emit()"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    [style]="{
+        with: '20rem'
+    }"
+    [modal]="true"
+    [maximizable]="true"
+>
+    <form class="flex flex-col gap-4" [formGroup]="form" id="menu-form" (ngSubmit)="saveChanges()">
+        <div class="flex flex-col gap-2 w-full">
+            <div class="flex flex-col gap-2 w-full">
+                <label for="title">Titulo</label>
+                <input id="title" type="text" pInputText formControlName="title" placeholder="Título de la sección" />
+                @if (form.controls['title']?.errors) {
+                <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'title') }} </p-message>
+                }
+            </div>
+
+            <div class="flex flex-col gap-2 w-full">
+                <label for="subtitle">Subtítulo (opcional)</label>
+                <input id="subtitle" type="text" pInputText formControlName="subtitle" placeholder="Subtítulo de la sección" />
+                @if (form.controls['subtitle']?.errors) {
+                <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'subtitle') }} </p-message>
+                }
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <label for="content">Contenido (opcional)</label>
+                <textarea pTextarea id="content" [autoResize]="true" formControlName="content" placeholder="Contenido de la sección"></textarea>
+                @if (form.controls['content']?.errors) {
+                <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'content') }} </p-message>
+                }
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <p-selectbutton [options]="imagesTypeOptions" formControlName="imageType" optionLabel="label" optionValue="value" aria-labelledby="imageType" />
+            </div>
+
+            @if (form.controls['imageType'].value) { @if (form.controls['imageType'].value === ImageType.LOCAL) {
+
+            <p-fileupload 
+            [chooseLabel]="'Seleccionar imagen'"
+            [showUploadButton]="false" (onSelect)="onFileSelect($event)" [showCancelButton]="false" [multiple]="false" accept="image/*" maxFileSize="1000000" mode="advanced">
+                <ng-template #empty>
+                    <div class="flex items-center justify-center w-full">
+                        <label
+                            for="dropzone-file"
+                            class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500"
+                        >
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                    <path
+                                        stroke="currentColor"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                                    />
+                                </svg>
+                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Drag and drop</span> your image here</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                            </div>
+                        </label>
+                    </div>
+                </ng-template>
+            </p-fileupload>
+            } @else {
+            <div class="flex flex-col gap-2 w-full mb-5">
+                <label for="imageUrl">URL de la imagen</label>
+                <input id="imageUrl" type="text" pInputText formControlName="imageUrl" placeholder="URL de la imagen" />
+                @if (form.controls['imageUrl']?.errors) {
+                <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'imageUrl') }} </p-message>
+                }
+            </div>
+            } }
+
+            <div class="flex gap-2 items-center">
+                <p-toggleswitch inputId="link" formControlName="showLink" onLabel="Sí" offLabel="No" />
+                <label for="link">¿Incluir enlace?</label>
+            </div>
+
+            @if (form.controls['showLink'].value) {
+            <div class="flex gap-4">
+                <div class="flex flex-col w-full gap-2">
+                    <label for="parent">Texto del enlace</label>
+                    <input id="textButton" type="text" class="w-full" pInputText formControlName="textButton" placeholder="Texto del enlace" />
+                    @if (form.controls['textButton']?.errors) {
+                    <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'textButton') }} </p-message>
+                    }
+                </div>
+                <p-togglebutton formControlName="typeLink" onLabel="Interno" offLabel="Externo" onIcon="pi pi-file" offIcon="pi pi-external-link" class="w-36" ariaLabel="Do you confirm" />
+            </div>
+
+            <app-error-boundary [resource]="linksList" [errorMessage]="'No se pudieron cargar los enlaces.'" [emptyMessage]="'No hay enlaces disponibles.'">
+                <ng-template #content let-links>
+                    @let typeLink = form.controls['typeLink'].value;
+                    <div class="flex flex-col gap-2">
+                        <label for="linkId">Enlace a página</label>
+                        <p-select id="linkId" formControlName="linkId" [options]="links | filterLinksByType:typeLink" optionLabel="title" optionValue="id" placeholder="Selecciona un enlace"></p-select>
+                        @if (form.controls['linkId']?.errors) {
+                        <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'linkId') }} </p-message>
+                        }
+                    </div>
+                </ng-template>
+            </app-error-boundary>
+            }
+        </div>
+    </form>
+
+    {{ form.value | json }}
+
+    <ng-template #footer>
+        <button pButton type="submit" form="menu-form" icon="pi pi-save" [disabled]="form.invalid" label="Guardar"></button>
+    </ng-template>
+</p-dialog>

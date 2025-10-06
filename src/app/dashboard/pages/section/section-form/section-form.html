@@ -1,0 +1,100 @@
+<p-dialog
+    [header]="selectedSection() ? 'Editar sección' : 'Crear nueva sección'"
+    class="!overflow-hidden"
+    [visible]="display()"
+    (visibleChange)="onCloseDialog.emit()"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    [style]="getDialogWidth()"
+    [modal]="true"
+    [maximizable]="true"
+>
+    <form class="flex flex-col gap-4" [formGroup]="form" id="menu-form" (ngSubmit)="saveChanges()">
+        @let type = form.controls['type'].value;
+        <div class="flex flex-col gap-2">
+            <label for="type">Tipo</label>
+            <p-select
+                id="type"
+                [overlayOptions]="{
+                    mode: 'modal'
+                }"
+                formControlName="type"
+                [options]="sectionTypes"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Selecciona el tipo de sección"
+            ></p-select>
+            @if (form.controls['type']?.errors) {
+            <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'type') }} </p-message>
+            }
+        </div>
+
+        <div
+            class="flex flex-col gap-2 w-full"
+            [class]="{
+            'lg:flex-row': type !== SectionType.HERO, 
+         }"
+        >
+            <div class="flex flex-col gap-2 w-full">
+                <label for="title">Titulo</label>
+                <input id="title" type="text" pInputText formControlName="title" placeholder="Título de la sección" />
+                @if (form.controls['title']?.errors) {
+                <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'title') }} </p-message>
+                }
+            </div>
+            @if (type !== SectionType.HERO) {
+            <div class="flex flex-col gap-2 w-full">
+                <label for="subtitle">Subtítulo (opcional)</label>
+                <input id="subtitle" type="text" pInputText formControlName="subtitle" placeholder="Subtítulo de la sección" />
+                @if (form.controls['subtitle']?.errors) {
+                <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'subtitle') }} </p-message>
+                }
+            </div>
+            }
+        </div>
+
+        <!-- <div class="flex flex-col gap-2">
+            <label for="content">Contenido (opcional)</label>
+            <textarea pTextarea id="content" [autoResize]="true" formControlName="content" placeholder="Contenido de la sección"></textarea>
+            @if (form.controls['content']?.errors) {
+            <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'content') }} </p-message>
+            }
+        </div>
+
+        <div class="flex gap-2 items-center">
+            <p-toggleswitch inputId="link" formControlName="showLink" onLabel="Sí" offLabel="No" />
+            <label for="link">¿Incluir enlace?</label>
+        </div>
+
+        @if (form.controls['showLink'].value) {
+        <div class="flex gap-4">
+            <div class="flex flex-col w-full gap-2">
+                <label for="parent">Texto del enlace</label>
+                <input id="textButton" type="text" class="w-full" pInputText formControlName="textButton" placeholder="Texto del enlace" />
+                @if (form.controls['textButton']?.errors) {
+                <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'textButton') }} </p-message>
+                }
+            </div>
+            <p-togglebutton formControlName="typeLink" onLabel="Interno" offLabel="Externo" onIcon="pi pi-file" offIcon="pi pi-external-link" class="w-36" ariaLabel="Do you confirm" />
+        </div>
+
+        <app-error-boundary [resource]="linksList" [errorMessage]="'No se pudieron cargar los enlaces.'" [emptyMessage]="'No hay enlaces disponibles.'">
+            <ng-template #content let-links>
+                @let typeLink = form.controls['typeLink'].value;
+                <div class="flex flex-col gap-2">
+                    <label for="linkId">Enlace a página</label>
+                    <p-select id="linkId" formControlName="linkId" [options]="links | filterLinksByType:typeLink" optionLabel="title" optionValue="id" placeholder="Selecciona un enlace"></p-select>
+                    @if (form.controls['linkId']?.errors) {
+                    <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'linkId') }} </p-message>
+                    }
+                </div>
+            </ng-template>
+        </app-error-boundary>
+        } -->
+
+        <p-togglebutton formControlName="active" onLabel="Activo" offLabel="Inactivo" onIcon="pi pi-check" offIcon="pi pi-times" onIcon="pi pi-lock-open" offIcon="pi pi-lock" class="w-36" ariaLabel="Do you confirm" />
+    </form>
+
+    <ng-template #footer>
+        <button pButton type="submit" form="menu-form" icon="pi pi-save" [disabled]="form.invalid" label="Guardar"></button>
+    </ng-template>
+</p-dialog>

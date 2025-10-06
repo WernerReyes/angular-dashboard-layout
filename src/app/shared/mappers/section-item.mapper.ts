@@ -1,0 +1,31 @@
+import { SectionItem } from '../interfaces/section-item';
+
+export interface SectionItemEntity {
+    id_section_item: number;
+    title: string | null;
+    subtitle: string | null;
+    description: string | null;
+    image: string | null;
+    background_image: string | null;
+    icon: string | null;
+    text_button: string | null;
+    link_id: number | null;
+    order_num: number;
+    section_id: number;
+    category_id: number | null;
+}
+
+export const mapSectionItemEntityToSectionItem = (entity: SectionItemEntity): SectionItem => ({
+    id: entity.id_section_item,
+    title: entity.title,
+    subtitle: entity.subtitle,
+    description: entity.description,
+    image: entity.image,
+    backgroundImage: entity.background_image,
+    icon: entity.icon,
+    textButton: entity.text_button,
+    linkId: entity.link_id,
+    order: entity.order_num,
+    sectionId: entity.section_id,
+    categoryId: entity.category_id
+});

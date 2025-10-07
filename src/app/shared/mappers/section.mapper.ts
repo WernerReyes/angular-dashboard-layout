@@ -28,6 +28,7 @@ export interface SectionEntity {
 }
 
 export const mapSectionEntityToSection = (entity: SectionEntity): Section => {
+    console.log(entity.section_items)
     return {
         id: entity.id_section,
         orderNum: entity.order_num,
@@ -39,6 +40,6 @@ export const mapSectionEntityToSection = (entity: SectionEntity): Section => {
         linkId: entity.link_id,
         active: Boolean(entity.active),
         pageId: entity.page_id,
-        items: entity.section_items.length === 0 ? [] : entity.section_items.map((item) => mapSectionItemEntityToSectionItem(item))
+        items: entity?.section_items && entity.section_items.length > 0 ? entity.section_items.map((item) => mapSectionItemEntityToSectionItem(item)) : []
     };
 };

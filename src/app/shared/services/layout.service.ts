@@ -30,7 +30,7 @@ export class LayoutService {
         preset: 'Aura',
         primary: 'emerald',
         surface: null,
-        darkTheme: false,
+        darkTheme: localStorage.getItem('darkMode') ? JSON.parse(localStorage.getItem('darkMode')!) : false,
         menuMode: 'static'
     };
 
@@ -127,6 +127,11 @@ export class LayoutService {
             document.documentElement.classList.remove('app-dark');
         }
     }
+
+    private darkModeLocalStorage = effect(() => {
+        const isDarkMode = this.layoutConfig().darkTheme;
+        localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
+    });
 
     private onTransitionEnd() {
         this.transitionComplete.set(true);

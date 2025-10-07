@@ -5,15 +5,17 @@ import { Page } from '@/shared/interfaces/page';
 import { Component, inject, input, output, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { FilterSectionsByPagePipe } from '../pipes/filter-sections-by-page-pipe';
-import { Section, sectionStatusOptions } from '@/shared/interfaces/section';
+import { Section, sectionStatusOptions, sectionTypesOptions } from '@/shared/interfaces/section';
 import { TagModule } from 'primeng/tag';
 import { SectionFormService } from '../services/section-form.service';
 import { SectionItemForm } from './section-item-form/section-item-form';
 import { SectionItem } from './section-item/section-item';
+import { FieldsetModule } from 'primeng/fieldset';
+import { Badge } from "primeng/badge";
 
 @Component({
     selector: 'sections-list',
-    imports: [SectionItem, SectionItemForm, ErrorBoundary, FilterSectionsByPagePipe, DataViewSkeleton, TagModule, ButtonModule],
+    imports: [SectionItem, SectionItemForm, ErrorBoundary, FilterSectionsByPagePipe, DataViewSkeleton, FieldsetModule, TagModule, ButtonModule, Badge],
     templateUrl: './sections-list.html'
 })
 export class SectionsList {
@@ -25,6 +27,8 @@ export class SectionsList {
     onSelectedSection = output<Section>();
 
     sectionStatusOptions = sectionStatusOptions;
+
+    sectionTypesOptions = sectionTypesOptions;
 
     sectionList = this.sectionService.sectionListResource;
 

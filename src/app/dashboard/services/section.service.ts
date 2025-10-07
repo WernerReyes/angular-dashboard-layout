@@ -6,7 +6,7 @@ import { HttpClient, httpResource } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { CreateSection } from '../interfaces/section';
-import { catchError, map, tap } from 'rxjs';
+import { catchError, map, tap, throwError } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -33,12 +33,14 @@ export class SectionService {
     );
 
     createSection(section: CreateSection) {
+        console.log('Creating Section:', section);
         return this.http.post<ApiResponse<SectionEntity>>(this.prefix, section, { withCredentials: true }).pipe(
             map(({ message, data }) => ({
                 section: mapSectionEntityToSection(data),
                 message
             })),
             tap(({ section, message }) => {
+                console.log('Created Section:', section, message);
                 this.messageService.setSuccess(message);
                 this.sectionListResource.update((sections) => {
                     if (!sections) return [section];
@@ -46,8 +48,9 @@ export class SectionService {
                 });
             }),
             catchError((error) => {
+                console.log('Error creating section:', error);
                 this.messageService.setError(error?.error?.message);
-                throw error;
+                return throwError(() => error);
             })
         );
     }

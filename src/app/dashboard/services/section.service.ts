@@ -7,6 +7,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { CreateSection } from '../interfaces/section';
 import { catchError, map, tap, throwError } from 'rxjs';
+import { UpdateOrder } from '../interfaces/common';
 
 @Injectable({
     providedIn: 'root'
@@ -65,12 +66,32 @@ export class SectionService {
                 this.messageService.setSuccess(message);
                 this.sectionListResource.update((sections) => {
                     if (!sections) return [section];
-                    return sections.map((s) => (s.id === section.id ? section : s));
+                    return sections.map((s) =>
+                        s.id === section.id
+                            ? {
+                                  ...section,
+                                  items: s.items
+                              }
+                            : s
+                    );
                 });
             }),
             catchError((error) => {
                 this.messageService.setError(error?.error?.message);
                 throw error;
+            })
+        );
+    }
+
+    updateSectionsOrder(order: UpdateOrder) {
+        return this.http.put<ApiResponse<null>>(`${this.prefix}/order`, order, { withCredentials: true }).pipe(
+            tap(({ message }) => {
+                this.messageService.setSuccess(message);
+                // this.sectionListResource.refresh();
+            }),
+            catchError((error) => {
+                this.messageService.setError(error?.error?.message);
+                return throwError(() => error);
             })
         );
     }

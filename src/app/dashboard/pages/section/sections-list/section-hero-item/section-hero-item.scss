@@ -1,0 +1,25 @@
+.hero-section {
+    background-color: #1f2937; // Fallback para dark mode
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    
+    // Overlay oscuro cuando hay imagen de fondo
+    &.has-background::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5); // 50% de oscuridad
+        z-index: 1;
+    }
+    
+    // Contenido por encima del overlay
+    .grid {
+        position: relative;
+        z-index: 2;
+    }
+}

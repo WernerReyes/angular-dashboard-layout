@@ -13,20 +13,42 @@ export class SectionItemFormService {
     form = this.fb.nonNullable.group({
         title: ['', [Validators.required, FormUtils.noWhitespace(), Validators.maxLength(100)]],
         subtitle: ['', [Validators.maxLength(150)]],
-        content: ['', [Validators.maxLength(255)]],
+        content: ['', [Validators.minLength(10), Validators.maxLength(255)]],
         textButton: ['', [Validators.maxLength(50)]],
+
         imageType: [ImageType.NONE], // null = none, true = local, false = url
         imageFile: [null, [Validators.maxLength(255)]],
         imageUrl: ['', [Validators.maxLength(255)]],
+
+         imageBackType: [ImageType.NONE], // null = none, true = local, false = url
+        imageBackFile: [null, [Validators.maxLength(255)]],
+        imageBackUrl: ['', [Validators.maxLength(255)]],
+
         showLink: [false],
         typeLink: [true], // true = internal, false = external
-        linkId: [null],
+        linkId: [null]
+    });
+
+    form2 = this.fb.nonNullable.group({
+        title: ['', [Validators.required, FormUtils.noWhitespace(), Validators.maxLength(100)]],
+        subtitle: ['', [Validators.maxLength(150)]],
+        content: ['', [Validators.minLength(10), Validators.maxLength(255)]],
+        textButton: ['', [Validators.maxLength(50)]],
+
+        imageType: [ImageType.NONE], // null = none, true = local, false = url
+        imageFile: [null, [Validators.maxLength(255)]],
+        imageUrl: ['', [Validators.maxLength(255)]],
+
+        imageBackType: [ImageType.NONE], // null = none, true = local, false = url
+        imageBackFile: [null, [Validators.maxLength(255)]],
+        imageBackUrl: ['', [Validators.maxLength(255)]],
+
+        showLink: [false],
+        typeLink: [true], // true = internal, false = external
+        linkId: [null]
     });
 
     constructor() {
-        
-
-
         this.form.get('showLink')?.valueChanges.subscribe((showLink) => {
             const linkIdControl = this.form.get('linkId');
             const textButtonControl = this.form.get('textButton');
@@ -34,6 +56,8 @@ export class SectionItemFormService {
                 linkIdControl?.setValidators([Validators.required, FormUtils.noWhitespace()]);
                 textButtonControl?.setValidators([Validators.required, FormUtils.noWhitespace()]);
             } else {
+                // linkIdControl?.setValue(null);
+                // textButtonControl?.setValue('');
                 linkIdControl?.clearValidators();
                 textButtonControl?.clearValidators();
             }
@@ -45,17 +69,22 @@ export class SectionItemFormService {
 
     populateForm(section: SectionItem) {
         this.form.setValue({
-           
             title: section.title!,
             subtitle: section.subtitle!,
             content: section.description!,
             showLink: !!section.linkId,
             textButton: section.textButton!,
             typeLink: !!section.linkId,
-            linkId: section.linkId as any,
+            linkId: section.linkId ?? (null as any),
+
             imageFile: null,
-            imageUrl: section.image || '',
-            imageType: (section.image ? true : section.image ? false : null) as any // TODO: Check this
+            imageUrl: '',
+            imageType: ImageType.NONE,
+
+            imageBackFile: null,
+            imageBackUrl: '',
+            imageBackType: ImageType.NONE
+
             
         });
     }

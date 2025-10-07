@@ -24,8 +24,8 @@ export const mapSectionItemEntityToSectionItem = (entity: SectionItemEntity): Se
     backgroundImage: entity.background_image,
     icon: entity.icon,
     textButton: entity.text_button,
-    linkId: entity.link_id,
+    linkId: entity.link_id ? Number(entity.link_id) : null,
     order: entity.order_num,
-    sectionId: entity.section_id,
-    categoryId: entity.category_id
+    sectionId: Number(entity.section_id),
+    categoryId: entity.category_id ? Number(entity.category_id) : null
 });

@@ -3,15 +3,18 @@
         @if (sectionItem().image) {
         <img [attr.alt]="sectionItem().title" class="w-full h-48 object-cover" [src]="sectionItem().image" (error)="sectionItem().image = null" />
         } @else {
-        <div class="w-full h-48 bg-gray-200 dark:bg-gray-800 border border-dashed border-gray-400 dark:border-gray-600 flex items-center justify-center text-gray-500">
-            <svg class="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-5 5a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-        </div>
-
+        <app-image-error></app-image-error>
         }
     </ng-template>
-    <ng-template #title> {{sectionItem().title}} </ng-template>
+    <ng-template #title>
+        <div class="flex justify-between items-start">
+            {{sectionItem().title}}
+            <div>
+                <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-rounded p-button-text p-button-plain" (click)="menu.toggle($event)"></button>
+                <p-menu #menu [popup]="true" [model]="items"></p-menu>
+            </div>
+        </div>
+    </ng-template>
     <ng-template #subtitle>
         @if (sectionItem().subtitle) { {{sectionItem().subtitle}} } @else {
         <span class="text-surface-400 italic text-sm">Sin subtítulo</span>

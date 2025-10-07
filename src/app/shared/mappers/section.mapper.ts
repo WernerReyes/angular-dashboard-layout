@@ -28,7 +28,6 @@ export interface SectionEntity {
 }
 
 export const mapSectionEntityToSection = (entity: SectionEntity): Section => {
-    console.log(entity.section_items)
     return {
         id: entity.id_section,
         orderNum: entity.order_num,

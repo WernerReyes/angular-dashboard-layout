@@ -1,0 +1,49 @@
+<div [formGroup]="form()">
+    <div class="flex flex-col mb-4">
+        <p-selectbutton [options]="imagesTypeOptions" [formControlName]="imageTypeName()" optionLabel="label" optionValue="value" aria-labelledby="imageType" />
+    </div>
+
+    @if (imageType() !== ImageType.NONE) { @if (imageType() === ImageType.LOCAL) {
+
+    <p-fileupload [chooseLabel]="'Seleccionar imagen'" [showUploadButton]="false" (onSelect)="onFileSelect($event)" [showCancelButton]="false" [multiple]="false" accept="image/*" maxFileSize="10000000" mode="advanced">
+        <ng-template #empty>
+            <div class="flex items-center justify-center w-full">
+                <label
+                    for="dropzone-file"
+                    class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500"
+                >
+                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                        <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                            <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                            />
+                        </svg>
+                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Arrastrar</span> tu imagen aquí</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG o GIF (MAX. 800x400px)</p>
+                    </div>
+                </label>
+            </div>
+        </ng-template>
+    </p-fileupload>
+    } @else {
+    <div class="flex flex-col gap-2 w-full mb-5">
+        <label [for]="imageURLName()">{{ label() }}</label>
+        <input [id]="imageURLName()" type="text" pInputText [formControlName]="imageURLName()" placeholder="URL de la imagen" />
+        @if (form().controls[imageURLName()].errors) {
+        <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form(), imageURLName()) }} </p-message>
+        }
+    </div>
+    } } @else { @if (selectedSectionItem()) {
+        @let image = selectedSectionItem()?.[imageSelector()];
+        @if (image) {
+    <div class="flex flex-col gap-2 w-full mb-5">
+        <p-image (onImageError)="selectedSectionItem()![imageSelector()] = null" [src]="image ?? undefined" class="mx-auto" imageClass="w-full sm:w-96  h-auto rounded-md" alt="Imagen actual" [preview]="true" />
+    </div>
+    } @else {
+    <app-image-error containerClass="mx-auto" iconClass="w-24 h-24"></app-image-error>
+    } } }
+</div>

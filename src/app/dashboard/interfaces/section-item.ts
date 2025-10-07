@@ -10,25 +10,8 @@ export interface CreateSectionItem {
     linkId: number | null;
     linkTexted: string | null;
     sectionId: number;
+    backgroundFileImage: File | null;
+    backgroundImageUrl: string | null;
     // categoryId: number | null;
 }
 
-
-
-// public $sectionType;
-
-//     public $sectionId;
-
-//     public $title;
-
-//     public $subtitle;
-
-//     public $content;
-
-//     public $fileImage;
-
-//     public $imageUrl;
-
-//     public $linkId;
-
-//     public $linkTexted;

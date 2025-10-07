@@ -1,27 +1,33 @@
 import { PageService } from '@/dashboard/services/page.service';
+import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
 import type { Page } from '@/shared/interfaces/page';
-import { Component, inject, signal } from '@angular/core';
+import type { Section } from '@/shared/interfaces/section';
+import { Component, inject, linkedSignal, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
-import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
-import { SectionsList } from './sections-list/sections-list';
 import { SectionForm } from './section-form/section-form';
-import type { Section } from '@/shared/interfaces/section';
+import { SectionsList } from './sections-list/sections-list';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
     selector: 'app-section-page',
-    imports: [ErrorBoundary, SectionsList, SectionForm, FormsModule, SelectModule, ButtonModule],
-    templateUrl: './section.page.html'
+    imports: [ErrorBoundary, SectionsList, SectionForm, FormsModule, SelectModule, ButtonModule, ConfirmDialogModule],
+    templateUrl: './section.page.html',
+    providers: [ConfirmationService]
 })
 export default class SectionPage {
     private readonly pageService = inject(PageService);
 
-    selectedPage = signal<Page | null>(null);
-
+    
     selectedSection = signal<Section | null>(null);
-
+    
     display = signal<boolean>(false);
-
+    
     pageList = this.pageService.pagesListResource;
+    
+    selectedPage = linkedSignal<Page | null>(() =>  {
+        return this.pageList.hasValue() ? this.pageList.value()![0] : null;
+    });
 }

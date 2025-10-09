@@ -20,10 +20,12 @@ import { SectionFormService } from '../services/section-form.service';
 import { FilterLinksByTypePipe } from '@/dashboard/pipes/filter-links-by-type-pipe';
 import { JsonPipe, KeyValuePipe } from '@angular/common';
 import { WhyUsForm } from './why-us-form/why-us-form';
+import { CommonInputs } from '../components/common-inputs/common-inputs';
+import { ShowLinkSwitch } from '../components/show-link-switch/show-link-switch';
 
 @Component({
     selector: 'section-form',
-    imports: [WhyUsForm, ReactiveFormsModule, InputTextModule, KeyValuePipe, JsonPipe, ToggleSwitchModule, TextareaModule, SelectModule, DialogModule, MessageModule, ButtonModule, ToggleButtonModule],
+    imports: [CommonInputs, ShowLinkSwitch, WhyUsForm, ReactiveFormsModule, InputTextModule, KeyValuePipe, JsonPipe, ToggleSwitchModule, TextareaModule, SelectModule, DialogModule, MessageModule, ButtonModule, ToggleButtonModule],
     templateUrl: './section-form.html'
 })
 export class SectionForm {
@@ -47,17 +49,6 @@ export class SectionForm {
 
     LinkType = LinkType;
 
-    getDialogWidth(): {
-        width: string;
-    } {
-        let width = '20rem';
-        const type = this.form.get('type')?.value;
-        if (type === SectionType.HERO) width = '20rem';
-        return {
-            width
-        };
-    }
-
     saveChanges() {
         if (this.form.valid) {
             const formValue = this.form.value;
@@ -66,7 +57,7 @@ export class SectionForm {
                 title: formValue.title!,
                 subtitle: formValue.subtitle || null,
                 description: formValue.content || null,
-                textButton: formValue.textButton || null,
+                textButton: formValue.showLink ? formValue.textButton || null : null,
                 linkId: formValue.showLink ? (formValue.linkId as any) : null,
                 active: formValue.active!,
                 pageId: this.selectedPageId()

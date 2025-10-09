@@ -7,21 +7,22 @@ import { CarouselModule } from 'primeng/carousel';
 import { MenuModule } from 'primeng/menu';
 import { TagModule } from 'primeng/tag';
 import { HeroItem } from './hero-item/hero-item';
+import { DeleteSectionItemFunction } from '../sections-list';
 
 @Component({
     selector: 'section-hero-items',
     imports: [HeroItem, CarouselModule, ButtonModule, TagModule, MenuModule],
     templateUrl: './section-hero-items.html',
-    styleUrl: './section-hero-items.scss'
 })
 export class SectionHeroItems {
-    private readonly sectionItemService = inject(SectionItemService);
-    private readonly confirmationService = inject(ConfirmationService);
+    // private readonly sectionItemService = inject(SectionItemService);
+    // private readonly confirmationService = inject(ConfirmationService);
+
     sectionItems = input.required<SectionItem[]>();
-
-    selectedItem = signal<SectionItem | null>(null);
-
+    deleteItemConfirmation = input.required<DeleteSectionItemFunction>();
     onSelectSectionItem = output<SectionItem>();
+    
+    selectedItem = signal<SectionItem | null>(null);
 
     onPageChange(event: any) {
         this.selectedItem.set(this.sectionItems()[event.page]);
@@ -52,33 +53,43 @@ export class SectionHeroItems {
             label: 'Eliminar',
             icon: 'pi pi-fw pi-trash',
             command: (event: MenuItemCommandEvent) => {
-                this.deleteSectionItem(event.originalEvent!);
+                // this.deleteSectionItem(event.originalEvent!);
+                this.deleteItemConfirmation()(
+                    event.originalEvent!,
+                    {
+                        id: this.selectedItem()!.id,
+                        sectionId: this.selectedItem()!.sectionId
+                    },
+                    () => {
+                        this.selectedItem.set(null);
+                    }
+                );
             }
         }
     ];
 
-    deleteSectionItem(event: Event) {
-        this.confirmationService.confirm({
-            target: event.target as EventTarget,
-            message: 'Estás seguro de que deseas eliminar este elemento de la sección?',
-            header: 'Confirmación',
-            closable: true,
-            closeOnEscape: true,
-            icon: 'pi pi-exclamation-triangle',
-            rejectButtonProps: {
-                label: 'Cancelar',
-                severity: 'secondary',
-                outlined: true
-            },
-            acceptButtonProps: {
-                label: 'Eliminar'
-            },
-            accept: () => {
-                if (this.selectedItem()) {
-                    this.sectionItemService.delete(this.selectedItem()!.id, this.selectedItem()!.sectionId).subscribe();
-                    this.selectedItem.set(null);
-                }
-            }
-        });
-    }
+    // deleteSectionItem(event: Event) {
+    //     this.confirmationService.confirm({
+    //         target: event.target as EventTarget,
+    //         message: 'Estás seguro de que deseas eliminar este elemento de la sección?',
+    //         header: 'Confirmación',
+    //         closable: true,
+    //         closeOnEscape: true,
+    //         icon: 'pi pi-exclamation-triangle',
+    //         rejectButtonProps: {
+    //             label: 'Cancelar',
+    //             severity: 'secondary',
+    //             outlined: true
+    //         },
+    //         acceptButtonProps: {
+    //             label: 'Eliminar'
+    //         },
+    //         accept: () => {
+    //             if (this.selectedItem()) {
+    //                 this.sectionItemService.delete(this.selectedItem()!.id, this.selectedItem()!.sectionId).subscribe();
+    //                 this.selectedItem.set(null);
+    //             }
+    //         }
+    //     });
+    // }
 }

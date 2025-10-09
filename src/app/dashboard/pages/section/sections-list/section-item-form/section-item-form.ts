@@ -1,57 +1,34 @@
-import { Component, inject, input, model, output } from '@angular/core';
-import { DialogModule } from 'primeng/dialog';
-import { MessageModule } from 'primeng/message';
-import { SectionItemFormService } from '../../services/section-item-form.service';
-import { ReactiveFormsModule } from '@angular/forms';
-import { ImageType, imageTypeOptions, SectionItem } from '@/shared/interfaces/section-item';
-import { FormUtils } from '@/utils/form-utils';
-import { InputTextModule } from 'primeng/inputtext';
-import { TextareaModule } from 'primeng/textarea';
-import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
-import { SelectModule } from 'primeng/select';
+import { CreateSectionItem } from '@/dashboard/interfaces/section-item';
 import { LinkService } from '@/dashboard/services/link.service';
+import { SectionItemService } from '@/dashboard/services/section-item.service';
+import { Section } from '@/shared/interfaces/section';
+import { ImageType, imageTypeOptions, SectionItem } from '@/shared/interfaces/section-item';
+import { SectionType } from '@/shared/mappers/section.mapper';
+import { FormUtils } from '@/utils/form-utils';
+import { JsonPipe } from '@angular/common';
+import { Component, inject, input, model, output } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { type FileSelectEvent, FileUploadModule } from 'primeng/fileupload';
+import { ImageModule } from 'primeng/image';
+import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
+import { SelectModule } from 'primeng/select';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { TextareaModule } from 'primeng/textarea';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { ButtonModule } from 'primeng/button';
-import { type FileSelectEvent, FileUploadModule } from 'primeng/fileupload';
-import { Section } from '@/shared/interfaces/section';
-import { SelectButtonModule } from 'primeng/selectbutton';
-import { JsonPipe } from '@angular/common';
-import { CreateSectionItem } from '@/dashboard/interfaces/section-item';
-import { SectionItemService } from '@/dashboard/services/section-item.service';
-import { ImageModule } from 'primeng/image';
-import { ImageError } from '@/shared/components/error/image/image';
-import { FileUpload } from '../file-upload/file-upload';
-import { FilterLinksByTypePipe } from '@/dashboard/pipes/filter-links-by-type-pipe';
-import { CommonInputs } from './common-inputs/common-inputs';
-import { SectionType } from '@/shared/mappers/section.mapper';
+import { CommonInputs } from '../../components/common-inputs/common-inputs';
+import { IconUpload } from '../../components/icon-upload/icon-upload';
+import { ShowLinkSwitch } from '../../components/show-link-switch/show-link-switch';
+import { SectionItemFormService } from '../../services/section-item-form.service';
 import { HeroForm } from './hero-form/hero-form';
-import { WhyUsForm } from './why-us-form/why-us-form';
+import { FileUpload } from '../file-upload/file-upload';
 
 @Component({
     selector: 'section-item-form',
-    imports: [
-        JsonPipe,
-        HeroForm,
-        WhyUsForm,
-        ImageError,
-        CommonInputs,
-        FileUpload,
-        ErrorBoundary,
-        FilterLinksByTypePipe,
-        ReactiveFormsModule,
-        FileUploadModule,
-        DialogModule,
-        InputTextModule,
-        SelectButtonModule,
-        SelectModule,
-        ToggleSwitchModule,
-        ButtonModule,
-        ToggleButtonModule,
-        TextareaModule,
-        ImageModule,
-        MessageModule
-    ],
+    imports: [JsonPipe, CommonInputs, IconUpload, ShowLinkSwitch, HeroForm, FileUpload, ReactiveFormsModule, FileUploadModule, DialogModule, InputTextModule, SelectButtonModule, SelectModule, ToggleSwitchModule, ButtonModule, ToggleButtonModule, TextareaModule, ImageModule, MessageModule],
     templateUrl: './section-item-form.html'
 })
 export class SectionItemForm {
@@ -77,7 +54,7 @@ export class SectionItemForm {
                 subtitle: formValue.subtitle || null,
                 content: formValue.content || null,
                 linkTexted: formValue.showLink ? formValue.textButton || null : null,
-                linkId: formValue.showLink  ? formValue.linkId || null : null,
+                linkId: formValue.showLink ? formValue.linkId || null : null,
                 sectionId: this.selectedSection()?.id || 0,
                 fileImage: formValue.imageType === ImageType.LOCAL ? (formValue.imageFile as any) : null,
                 backgroundFileImage: formValue.imageBackType === ImageType.LOCAL ? (formValue.imageBackFile as any) : null,
@@ -143,6 +120,4 @@ export class SectionItemForm {
             this.form.get('imageFile')?.markAsTouched();
         }
     }
-
-    
 }

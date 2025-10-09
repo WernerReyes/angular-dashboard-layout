@@ -4,10 +4,12 @@ import { mapSectionItemEntityToSectionItem, SectionItemEntity } from './section-
 export enum SectionType {
     HERO = 'HERO',
     WHY_US = 'WHY_US',
+    CASH_PROCESSING_EQUIPMENT = 'CASH_PROCESSING_EQUIPMENT',
+    VALUE_PROPOSITION = 'VALUE_PROPOSITION',
+    
     BENEFIT = 'BENEFIT',
     MACHINE_TYPE = 'MACHINE_TYPE',
     BILL_MACHINE = 'BILL_MACHINE',
-    VALUE_PROPOSITION = 'VALUE_PROPOSITION',
     COIN_MACHINE = 'COIN_MACHINE',
     CLIENT = 'CLIENT',
     CONTACT = 'CONTACT',

@@ -1,7 +1,5 @@
-<div class="flex flex-col gap-x-2 gap-y-4 w-full" [formGroup]="form">
-    @let icon = form.controls['currentIconUrl'].value;
-
-    <common-inputs [form]="form" [includeFields]="['title', 'content']"></common-inputs>
+<div class="flex flex-col gap-x-2 gap-y-4 w-full" [formGroup]="form()">
+    @let icon = form().controls[currentIconUrlName()].value;
 
     <p-fileupload chooseLabel="Seleccionar icono" [showUploadButton]="false" (onSelect)="onFileSelect($event)" [showCancelButton]="false" [multiple]="false" accept="image/svg+xml" maxFileSize="10000000" mode="advanced">
         <ng-template #empty>

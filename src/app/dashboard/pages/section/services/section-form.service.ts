@@ -14,7 +14,7 @@ export class SectionFormService {
 
     form = this.fb.nonNullable.group({
         type: [SectionType.HERO, [Validators.required]],
-        title: ['', [Validators.required, FormUtils.noWhitespace(), Validators.maxLength(100)]],
+        title: ['', [Validators.required, FormUtils.noWhitespace(), Validators.maxLength(200)]],
         subtitle: ['', [Validators.maxLength(150)]],
         content: ['', [Validators.maxLength(255)]],
         textButton: ['', [Validators.maxLength(50)]],

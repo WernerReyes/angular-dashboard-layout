@@ -3,12 +3,12 @@ import { ImageType, imageTypeOptions, SectionItem } from '@/shared/interfaces/se
 import { FormUtils } from '@/utils/form-utils';
 import { Component, input } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ButtonModule } from "primeng/button";
 import { FileSelectEvent, FileUploadModule } from 'primeng/fileupload';
 import { ImageModule } from 'primeng/image';
 import { InputTextModule } from 'primeng/inputtext';
 import { Message } from 'primeng/message';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { Button, ButtonModule } from "primeng/button";
 
 export type ImageSelector = keyof Pick<SectionItem, 'image' | 'backgroundImage'>;
 

@@ -35,14 +35,14 @@
                             <!-- Drag handle -->
                             <i class="pi pi-bars text-surface-600 dark:text-surface-400 cursor-move" aria-label="Drag Handle" cdkDragHandle></i>
                             <div class="flex flex-col">
-                                <h6 class="!text-xl !m-0">{{ section.title }}</h6>
+                                <h6 class="!text-xl !m-0 max-w-3xl">{{ section.title }}</h6>
                                 <div class="flex items-center gap-2 flex-wrap">
                                     <p-badge value="{{ typeOption.label }}" [severity]="typeOption.severity" class="text-sm mb-1 w-fit"></p-badge>
                                     <span class="text-muted-color text-sm">{{ section.items.length }} item{{ section.items.length === 1 ? '' : 's' }} • </span>
                                 </div>
                             </div>
                         </div>
-                        <div class="flex items-center gap-2 flex-wrap">
+                        <div class="flex items-center gap-2 flex-wrap ml-auto">
                             <p-tag [severity]="status.severity" class="text-sm">{{ status.label }}</p-tag>
                             <p-button icon="pi pi-plus" label="Agregar item" (click)="openDialogItem(section)"></p-button>
                             <p-button icon="pi pi-pencil" text (click)="openDialogAndEdit(section)"></p-button>
@@ -60,10 +60,10 @@
                             </div>
                         </ng-template>
 
-                        @if(section.type === SectionType.HERO) {
-                        <section-hero-items [sectionItems]="section.items" (onSelectSectionItem)="openDialogItem(section, $event)"></section-hero-items>
+                        <!-- @if(section.type === SectionType.HERO) {
+                        <section-hero-items [deleteItemConfirmation]="deleteSectionItemConfirmation.bind(this)" [sectionItems]="section.items" (onSelectSectionItem)="openDialogItem(section, $event)"></section-hero-items>
                         } @else if (section.type === SectionType.WHY_US) {
-                        <section-why-us-items [section]="section"> </section-why-us-items>
+                        <section-why-us-items [deleteItemConfirmation]="deleteSectionItemConfirmation.bind(this)" [section]="section" (onSelectSectionItem)="openDialogItem(section, $event)"></section-why-us-items>
                         } @else {
 
                         <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-12">
@@ -71,7 +71,29 @@
                             <section-item [sectionItem]="item" (onSelectSectionItem)="openDialogItem(section, item)"></section-item>
                             }
                         </div>
-                        }
+                        } -->
+
+                        @switch (section.type) { @case (SectionType.HERO) {
+                        <section-hero-items [deleteItemConfirmation]="deleteSectionItemConfirmation.bind(this)" [sectionItems]="section.items" (onSelectSectionItem)="openDialogItem(section, $event)"></section-hero-items>
+                        } @case (SectionType.WHY_US) {
+                        <section-why-us-items [deleteItemConfirmation]="deleteSectionItemConfirmation.bind(this)" [section]="section" (onSelectSectionItem)="openDialogItem(section, $event)"></section-why-us-items>
+                        } @case (SectionType.CASH_PROCESSING_EQUIPMENT) {
+                        <section-cash-processing-equipment-items
+                            [section]="section"
+                            [deleteItemConfirmation]="deleteSectionItemConfirmation.bind(this)"
+                            (onSelectSectionItem)="openDialogItem(section, $event)"
+                        ></section-cash-processing-equipment-items>
+                        } @case (SectionType.VALUE_PROPOSITION) {
+                        <section-value-proposition-items [deleteItemConfirmation]="deleteSectionItemConfirmation.bind(this)" [section]="section" (onSelectSectionItem)="openDialogItem(section, $event)"></section-value-proposition-items>
+                        } @case (SectionType.CLIENT) {
+                        <section-client-items [section]="section" [deleteItemConfirmation]="deleteSectionItemConfirmation.bind(this)" (onSelectSectionItem)="openDialogItem(section, $event)"></section-client-items>
+                        } @default {
+                        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-12">
+                            @for (item of section.items; track item.id) {
+                            <section-item [sectionItem]="item" (onSelectSectionItem)="openDialogItem(section, item)"></section-item>
+                            }
+                        </div>
+                        } }
                     </p-panel>
 
                     <!-- } -->

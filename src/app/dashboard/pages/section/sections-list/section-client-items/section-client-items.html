@@ -1,0 +1,55 @@
+<section class="bg-gradient-to-br from-gray-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 py-20 transition-all duration-300">
+    <div class="container mx-auto px-4">
+        <!-- Header Section -->
+        <div class="text-center mb-12">
+            <h2 class="!text-3xl md:!text-4xl !font-bold text-primary-600 dark:text-primary-400 mb-4">{{ section().title }}</h2>
+
+            @if (section().subtitle) {
+            <p class="!text-lg text-surface-600 dark:text-surface-300 mx-auto text-center leading-relaxed">{{ section().subtitle }}</p>
+            } @else {
+            <empty-field-message className="max-w-lg mx-auto" textContent="Sin subtítulo"></empty-field-message>
+            }
+        </div>
+
+        <div>
+            <button [disabled]="!!selectedItem()" pButton type="button" icon="pi pi-ellipsis-v" class="p-button-rounded p-button-text p-button-plain" (click)="menu.toggle($event)"></button>
+            <p-menu #menu [popup]="true" [model]="items"></p-menu>
+        </div>
+
+        @if (section().items.length === 0) {
+        <empty-field-message className="max-w-lg mx-auto" textContent="No hay elementos disponibles"></empty-field-message>
+        } @else {
+        <p-carousel
+            [value]="section().items"
+            [ngClass]="{
+            'md:max-w-[40rem] mx-auto': section().items.length < 3,
+                     }"
+            [numVisible]="3"
+            [showIndicators]="false"
+            [showNavigators]="false"
+            [numScroll]="1"
+            [circular]="true"
+            [responsiveOptions]="responsiveOptions"
+            autoplayInterval="3000"
+        >
+            <ng-template let-item #item>
+                <div (click)="selectedItem.set(item)"
+                    class="m-2 p-4 cursor-pointer transition-all duration-300 rounded-lg"
+                    
+                >
+                    <div class="mb-4">
+                        <div class="relative mx-auto">
+                            @if (!item.image) {
+                            <app-image-error></app-image-error>
+                            } @else {
+                            <img [src]="item.image" [alt]="item.name" (error)="item.image = null" class="w-full h-48 object-cover rounded-border" />
+                            }
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </p-carousel>
+
+        }
+    </div>
+</section>

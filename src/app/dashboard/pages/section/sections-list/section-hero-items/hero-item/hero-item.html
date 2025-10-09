@@ -1,7 +1,7 @@
 <div
     [class.has-background]="item().backgroundImage"
     [style.background-image]="item().backgroundImage ? 'url(' + item().backgroundImage + ')' : null"
-    class="hero-section h-full bg-gray-100 dark:bg-gray-800 overflow-hidden relative flex flex-col md:flex-row items-center max-md:text-center justify-between px-6 sm:px-10 md:px-24 max-w-7xl mx-auto w-full min-h-[400px] py-8"
+    class="hero-section bg-gradient-to-br from-gray-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 py-20 transition-all duration-300 h-full overflow-hidden relative flex flex-col md:flex-row items-center max-md:text-center justify-between px-6 sm:px-10 md:px-24 max-w-7xl mx-auto w-full min-h-[400px]"
 >
     <!-- Indicador de fondo faltante -->
     @if (!item().backgroundImage) {
@@ -26,7 +26,7 @@
         @if (item().subtitle) {
         <span class="dark:text-white text-2xl block mt-2" [class.text-white]="item().backgroundImage"> {{item().subtitle}} </span>
         } @else {
-        <empty-field-message  textContent="Sin subtítulo"></empty-field-message>
+        <empty-field-message textContent="Sin subtítulo"></empty-field-message>
         }
 
         <!-- Descripción -->

@@ -35,12 +35,14 @@ export const sectionStatusOptions: Record<string, SectionStatusOption> = {
 export const sectionTypesOptions: Record<SectionType, SectionTypeOption> = {
     HERO: { label: 'Hero', value: SectionType.HERO, severity: 'info' },
     WHY_US: { label: '¿Por qué nosotros?', value: SectionType.WHY_US, severity: 'info' },
+    CASH_PROCESSING_EQUIPMENT: { label: 'Equipos para Procesamiento de Efectivo', value: SectionType.CASH_PROCESSING_EQUIPMENT, severity: 'warn' },
+    VALUE_PROPOSITION: { label: 'Propuesta de Valor', value: SectionType.VALUE_PROPOSITION, severity: 'contrast' },
+    CLIENT: { label: 'Cliente', value: SectionType.CLIENT, severity: 'info' },
+
     BENEFIT: { label: 'Beneficios', value: SectionType.BENEFIT, severity: 'success' },
     MACHINE_TYPE: { label: 'Tipo de Máquina', value: SectionType.MACHINE_TYPE, severity: 'warn' },
     BILL_MACHINE: { label: 'Tipo de Factura', value: SectionType.BILL_MACHINE, severity: 'danger' },
-    VALUE_PROPOSITION: { label: 'Propuesta de Valor', value: SectionType.VALUE_PROPOSITION, severity: 'secondary' },
     COIN_MACHINE: { label: 'Máquina de Monedas', value: SectionType.COIN_MACHINE, severity: 'contrast' },
-    CLIENT: { label: 'Cliente', value: SectionType.CLIENT, severity: 'info' },
     CONTACT: { label: 'Contacto', value: SectionType.CONTACT, severity: 'danger' },
     FOOTER: { label: 'Footer', value: SectionType.FOOTER, severity: 'warn' }
 };

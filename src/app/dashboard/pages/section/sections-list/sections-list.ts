@@ -22,16 +22,30 @@ import { SectionHeroItems } from './section-hero-items/section-hero-items';
 import { SectionItemForm } from './section-item-form/section-item-form';
 import { SectionItem } from './section-item/section-item';
 import { SectionWhyUsItems } from './section-why-us-items/section-why-us-items';
+import { ConfirmationService } from 'primeng/api';
+import { SectionItemService } from '@/dashboard/services/section-item.service';
+import { SectionCashProcessingEquipmentItems } from './section-cash-processing-equipment-items/section-cash-processing-equipment-items';
+import { SectionValuePropositionItems } from './section-value-proposition-items/section-value-proposition-items';
+import { SectionClientItems } from './section-client-items/section-client-items';
 
+
+type DeleteSectionItemParams = {
+    id: number;
+    sectionId: number;
+};
+
+export type DeleteSectionItemFunction = (event: Event, params: DeleteSectionItemParams, accept?: () => void, reject?: () => void) => void;
 @Component({
     selector: 'sections-list',
-    imports: [SectionItem, SectionHeroItems, SectionWhyUsItems, SectionItemForm, ErrorBoundary, PanelModule, CarouselModule, DragDropModule, FilterSectionsByPagePipe, MessageModule, DataViewSkeleton, FieldsetModule, TagModule, ButtonModule, Badge],
+    imports: [SectionItem, SectionHeroItems, SectionWhyUsItems, SectionCashProcessingEquipmentItems, SectionValuePropositionItems,  SectionClientItems, SectionItemForm, ErrorBoundary, PanelModule, CarouselModule, DragDropModule, FilterSectionsByPagePipe, MessageModule, DataViewSkeleton, FieldsetModule, TagModule, ButtonModule, Badge],
     templateUrl: './sections-list.html'
 })
 export class SectionsList {
     private readonly sectionService = inject(SectionService);
+    private readonly sectionItemService = inject(SectionItemService);
     private readonly sectionFormService = inject(SectionFormService);
     private readonly sectionItemFormService = inject(SectionItemFormService);
+    private readonly confirmationService = inject(ConfirmationService);
     private readonly messageService = inject(MessageService);
 
     selectedPage = model<Page | null>(null);
@@ -132,5 +146,31 @@ export class SectionsList {
         }
 
         return false;
+    }
+
+    deleteSectionItemConfirmation(event: Event, { id, sectionId }: DeleteSectionItemParams, accept?: () => void, reject?: () => void) {
+        this.confirmationService.confirm({
+            target: event.target as EventTarget,
+            message: 'Estás seguro de que deseas eliminar este elemento de la sección?',
+            header: 'Confirmación',
+            closable: true,
+            closeOnEscape: true,
+            icon: 'pi pi-exclamation-triangle',
+            rejectButtonProps: {
+                label: 'Cancelar',
+                severity: 'secondary',
+                outlined: true
+            },
+            acceptButtonProps: {
+                label: 'Eliminar'
+            },
+            accept: () => {
+                this.sectionItemService.delete(id, sectionId).subscribe();
+                if (accept) accept();
+            },
+            reject: () => {
+                if (reject) reject();
+            }
+        });
     }
 }

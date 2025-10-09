@@ -63,6 +63,23 @@ export class SectionItemFormService {
 
             case SectionType.WHY_US:
                 this.disableFields(['imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'subtitle', 'textButton', 'showLink', 'linkId', 'typeLink']);
+                break;
+
+            case SectionType.CASH_PROCESSING_EQUIPMENT:
+                this.disableFields(['subtitle', 'content', 'imageFile', 'currentImage', 'imageBackFile', 'currentImageBack']);
+                break;
+
+            case SectionType.VALUE_PROPOSITION:
+                this.disableFields(['imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'textButton', 'showLink', 'linkId', 'typeLink', 'iconFile', 'currentIconUrl']);
+
+                break;
+
+            case SectionType.CLIENT:
+                const image = this.form.get('imageFile');
+                image?.setValidators([Validators.required]);
+                image?.updateValueAndValidity();
+                this.disableFields(['title', 'subtitle', 'content', 'imageBackFile', 'currentImageBack', 'imageBackUrl', 'imageBackType', 'textButton', 'showLink', 'linkId', 'typeLink', 'iconFile', 'currentIconUrl']);
+                break;
         }
     }
 

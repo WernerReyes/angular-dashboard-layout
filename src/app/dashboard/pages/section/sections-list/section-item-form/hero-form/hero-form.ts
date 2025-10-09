@@ -1,21 +1,21 @@
+import { LinkService } from '@/dashboard/services/link.service';
+import type { SectionItem } from '@/shared/interfaces/section-item';
+import { FormUtils } from '@/utils/form-utils';
 import { Component, inject, input } from '@angular/core';
-import { CommonInputs } from '../common-inputs/common-inputs';
-import { FileUpload } from '../../file-upload/file-upload';
-import { ToggleButtonModule } from 'primeng/togglebutton';
+import { ReactiveFormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { SelectModule } from 'primeng/select';
-import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
-import { SectionItemFormService } from '../../../services/section-item-form.service';
-import type { SectionItem } from '@/shared/interfaces/section-item';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FilterLinksByTypePipe } from '@/dashboard/pipes/filter-links-by-type-pipe';
-import { FormUtils } from '@/utils/form-utils';
-import { LinkService } from '@/dashboard/services/link.service';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { ShowLinkSwitch } from '../../../components/show-link-switch/show-link-switch';
+import { SectionItemFormService } from '../../../services/section-item-form.service';
+import { FileUpload } from '../../file-upload/file-upload';
+import { CommonInputs } from '../../../components/common-inputs/common-inputs';
 
 @Component({
     selector: 'hero-form',
-    imports: [CommonInputs, FileUpload, FilterLinksByTypePipe, ToggleSwitchModule, ReactiveFormsModule, ErrorBoundary, ToggleButtonModule, MessageModule, SelectModule],
+    imports: [CommonInputs, FileUpload, ShowLinkSwitch,  ToggleSwitchModule, ReactiveFormsModule, InputTextModule, ToggleButtonModule, MessageModule, SelectModule],
     templateUrl: './hero-form.html'
 })
 export class HeroForm {

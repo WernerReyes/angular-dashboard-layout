@@ -1,8 +1,8 @@
-<div class="why-us-section py-8 px-4 bg-gray-100 dark:bg-gray-800">
-    <div class="max-w-7xl mx-auto">
+<section class="bg-gradient-to-br from-gray-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 py-20 transition-all duration-300">
+    <div class="container mx-auto px-4">
         <!-- Header Section -->
         <div class="text-center mb-12">
-            <h2 class="!text-3xl md:text-4xl font-bold text-primary-600 dark:text-primary-400 mb-4">{{ section().title }}</h2>
+            <h2 class="!text-3xl md:!text-4xl !font-bold text-primary-600 dark:text-primary-400 mb-4">{{ section().title }}</h2>
 
             @if (section().subtitle) {
             <h3 class="!text-2xl md:text-3xl font-semibold text-surface-800 dark:text-surface-100 mb-6">{{ section().subtitle }}</h3>
@@ -20,28 +20,32 @@
         } @else {
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
             @for (item of section().items; track item.id) {
-            <div class="feature-item flex flex-col items-center text-center p-6 bg-white dark:bg-surface-800 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 h-full">
+            <p-card class="feature-item flex flex-col items-center text-center p-6 transition-shadow duration-300 h-full">
+                <div class="flex justify-end w-full">
+                    <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-rounded p-button-text p-button-plain" (click)="menu.toggle($event); this.selectedItem.set(item)"></button>
+                    <p-menu #menu [popup]="true" [model]="items"></p-menu>
+                </div>
+
                 @if (item.icon) {
-                <!-- <div class="icon-container mb-4 w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
-                    <img *ngIf="item.iconFile; else existingIcon" [src]="item.iconFile" alt="{{ item.title }} icon" class="w-8 h-8" />
-                    <ng-template #existingIcon>
-                        <img [src]="item.icon" alt="{{ item.title }} icon" class="w-8 h-8" />
-                    </ng-template>
-                </div> -->
+
+                <img [src]="item.icon" alt="{{ item.title }} icon" class="size-16 mx-auto dark:!text-red-500" />
+
                 } @else {
-                <empty-field-message className="mb-4 w-16 h-16 flex items-center justify-center" textContent="Sin ícono"></empty-field-message>
+                <empty-field-message className="flex items-center justify-center" textContent="Sin ícono"></empty-field-message>
                 }
 
-                <h4 class="text-xl font-semibold text-surface-800 dark:text-surface-100 mb-2">{{ item.title }}</h4>
+                <h4 class="!text-xl font-semibold text-surface-800 dark:text-surface-100 mb-2">{{ item.title }}</h4>
 
                 @if (item.description) {
                 <p class="text-surface-600 dark:text-surface-300 leading-relaxed">{{ item.description }}</p>
                 } @else {
                 <empty-field-message className="w-full" textContent="Contenido pendiente"></empty-field-message>
                 }
-            </div>
-            } 
+            </p-card>
+            }
         </div>
-    }
+        }
     </div>
-</div>
+</section>
+
+

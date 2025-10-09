@@ -13,7 +13,7 @@ export class LinkFormService {
     form = this.fb.nonNullable.group({
         title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
         type: [LinkType.PAGE, [Validators.required]],
-        pageId: [null],
+        pageId: [null, [Validators.required, Validators.min(1)]],
         url: [null],
         openInNewTab: [false, [Validators.required]]
     });
@@ -23,6 +23,7 @@ export class LinkFormService {
             if (type === LinkType.PAGE) {
                 this.form.get('pageId')?.setValidators([Validators.required, Validators.min(1)]);
                 this.form.get('url')?.clearValidators();
+                console.log('pageId validators set');
                 // this.form.get('url')?.setValue(null);
             } else if (type === LinkType.EXTERNAL) {
                 this.form.get('url')?.setValidators([Validators.required, Validators.pattern(PatternsConst.URL)]);

@@ -15,10 +15,11 @@ import { SelectModule } from 'primeng/select';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { SkeletonModule } from 'primeng/skeleton';
 import { LinkFormService } from '../../services/link-form.service';
+import { JsonPipe } from '@angular/common';
 
 @Component({
     selector: 'link-dialog-form',
-    imports: [DialogModule, ErrorBoundary, ReactiveFormsModule, InputTextModule, MessageModule, SkeletonModule, SelectModule, SelectButtonModule, ButtonModule],
+    imports: [JsonPipe, DialogModule, ErrorBoundary, ReactiveFormsModule, InputTextModule, MessageModule, SkeletonModule, SelectModule, SelectButtonModule, ButtonModule],
     templateUrl: './dialog-form.html'
 })
 export class DialogForm {

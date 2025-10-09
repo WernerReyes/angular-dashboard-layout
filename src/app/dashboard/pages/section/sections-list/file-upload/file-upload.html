@@ -37,13 +37,24 @@
         <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form(), imageURLName()) }} </p-message>
         }
     </div>
-    } } @else { @if (selectedSectionItem()) {
-        @let image = selectedSectionItem()?.[imageSelector()];
-        @if (image) {
-    <div class="flex flex-col gap-2 w-full mb-5">
+    } } @else { @let currentImage = form().controls[currentImageName()].value; @if (currentImage) {
+    <div class="flex flex-col gap-2 w-full relative mb-5">
+        <p-button icon="pi pi-times" text class="p-button-rounded p-button-text p-button-plain absolute z-10 cursor-pointer self-end" (click)="form().controls[currentImageName()].setValue('')" title="Eliminar imagen"></p-button>
+        <p-image (onImageError)="form().controls[currentImageName()].setValue('')" [src]="currentImage ?? undefined" class="mx-auto" imageClass="w-full sm:w-96  h-auto rounded-md" alt="Imagen actual" [preview]="true" />
+    </div>
+
+    }@else {
+    <app-image-error containerClass="mx-auto" iconClass="w-24 h-24"></app-image-error>
+    }
+    <!-- @if (selectedSectionItem()) { @let image = selectedSectionItem()?.[imageSelector()]; @if (image) {
+    <div class="flex flex-col gap-2 w-full relative mb-5">
+      
+        <p-button icon="pi pi-times" text class="p-button-rounded p-button-text p-button-plain absolute z-10 cursor-pointer self-end" (click)="selectedSectionItem()![imageSelector()] = null" title="Eliminar imagen"></p-button>
         <p-image (onImageError)="selectedSectionItem()![imageSelector()] = null" [src]="image ?? undefined" class="mx-auto" imageClass="w-full sm:w-96  h-auto rounded-md" alt="Imagen actual" [preview]="true" />
     </div>
     } @else {
     <app-image-error containerClass="mx-auto" iconClass="w-24 h-24"></app-image-error>
-    } } }
+    } }  -->
+
+    }
 </div>

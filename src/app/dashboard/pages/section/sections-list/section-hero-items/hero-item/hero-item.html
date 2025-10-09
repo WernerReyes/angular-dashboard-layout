@@ -1,0 +1,69 @@
+<div
+    [class.has-background]="item().backgroundImage"
+    [style.background-image]="item().backgroundImage ? 'url(' + item().backgroundImage + ')' : null"
+    class="hero-section h-full bg-gray-100 dark:bg-gray-800 overflow-hidden relative flex flex-col md:flex-row items-center max-md:text-center justify-between px-6 sm:px-10 md:px-24 max-w-7xl mx-auto w-full min-h-[400px] py-8"
+>
+    <!-- Indicador de fondo faltante -->
+    @if (!item().backgroundImage) {
+    <div class="absolute top-4 right-4 z-10">
+        <div class="flex items-center gap-2 border-gray-400 dark:border-gray-600 bg-gray-100 text-gray-500 dark:text-gray-400 dark:bg-gray-800 px-3 py-1 rounded-full text-xs border">
+            <i class="pi pi-image text-xs"></i>
+            <span>Sin imagen de fondo</span>
+        </div>
+    </div>
+    }
+
+    <div
+        class="relative z-10 flex flex-col items-center md:items-start"
+        [ngClass]="{
+                'mt-10 sm:mt-0': !item().backgroundImage
+             }"
+    >
+        <!-- Título -->
+        <h6 class="dark:!text-white font-semibold !text-3xl sm:!text-4xl md:!text-5xl max-w-xl" [class.!text-white]="item().backgroundImage">{{item().title}}</h6>
+
+        <!-- Subtítulo -->
+        @if (item().subtitle) {
+        <span class="dark:text-white text-2xl block mt-2" [class.text-white]="item().backgroundImage"> {{item().subtitle}} </span>
+        } @else {
+        <empty-field-message  textContent="Sin subtítulo"></empty-field-message>
+        }
+
+        <!-- Descripción -->
+        @if (item().description) {
+        <p class="mt-4 dark:text-white max-w-md text-sm sm:text-base leading-relaxed" [class.text-white]="item().backgroundImage">{{item().description}}</p>
+        } @else {
+
+        <empty-field-message className="mt-4 max-w-md" textContent="Descripción pendiente"></empty-field-message>
+
+        }
+
+        <!-- Botón -->
+        @if (item().textButton) {
+        <div class="flex flex-col md:flex-row items-center my-8 gap-3">
+            <p-button [label]="item().textButton ?? undefined" styleClass="p-button-success"> </p-button>
+        </div>
+        } @else {
+
+        <empty-field-message className="mt-8" textContent="Sin botón de acción"></empty-field-message>
+        }
+    </div>
+
+    <!-- Imagen principal -->
+    @if (item().image) {
+    <div class="relative my-auto z-10" aria-label="Hero image">
+        <img class="w-64 h-auto" [src]="item().image" [alt]="item().title || 'Hero image'" />
+    </div>
+    } @else {
+    <empty-field-message className="relative z-10 w-64 my-auto h-full md:h-64">
+        <ng-template #content>
+            <div class="text-center text-gray-500 dark:text-gray-400 mx-auto">
+                <svg class="w-16 h-16 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <div class="text-sm font-medium">Sin imagen principal</div>
+            </div>
+        </ng-template>
+    </empty-field-message>
+    }
+</div>

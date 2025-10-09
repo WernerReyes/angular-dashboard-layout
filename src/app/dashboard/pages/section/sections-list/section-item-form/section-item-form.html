@@ -13,8 +13,25 @@
     <form class="flex flex-col gap-4" [formGroup]="form" id="menu-form" (ngSubmit)="saveChanges()">
         @let imageType = form.controls['imageType'].value; @let imageBackType = form.controls['imageBackType'].value;
 
+        @let sectionType = selectedSection()?.type;
+
         <div class="flex flex-col gap-x-2 gap-y-4 w-full">
-            <div class="flex flex-col gap-2 w-full">
+            <!-- @if (selectedSection()?.type === SectionType.HERO) {
+            <hero-form [selectedSectionItem]="selectedSectionItem()"></hero-form>
+            } -->
+            @switch (sectionType) {
+                @case (SectionType.HERO) {
+                    <hero-form [selectedSectionItem]="selectedSectionItem()"></hero-form>
+                }
+
+                @case (SectionType.WHY_US) {
+                    <why-us-form></why-us-form>
+                }
+            }
+
+
+
+            <!-- <div class="flex flex-col gap-2 w-full">
                 <label for="title">Titulo</label>
                 <input id="title" type="text" pInputText formControlName="title" placeholder="Título de la sección" />
                 @if (form.controls['title'].errors) {
@@ -36,11 +53,21 @@
                 @if (form.controls['content'].errors) {
                 <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'content') }} </p-message>
                 }
-            </div>
+            </div> -->
 
-            <div class="flex flex-col gap-2">
+            <!-- <div class="flex flex-col gap-2">
                 <label>Imagen (opcional)</label>
-                <file-upload imageSelector="image" [selectedSectionItem]="selectedSectionItem()" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl">
+                <file-upload
+                    currentImageName="currentImage"
+                    imageSelector="image"
+                    [selectedSectionItem]="selectedSectionItem()"
+                    [form]="form"
+                    label="URL de la imagen"
+                    imageTypeName="imageType"
+                    [imageType]="imageType"
+                    imageFieldName="imageFile"
+                    imageURLName="imageUrl"
+                >
                 </file-upload>
             </div>
 
@@ -48,6 +75,7 @@
                 <label>Imagen de fondo</label>
                 <file-upload
                     imageSelector="backgroundImage"
+                    currentImageName="currentImageBack"
                     [selectedSectionItem]="selectedSectionItem()"
                     [form]="form"
                     label="URL de la imagen"
@@ -98,11 +126,11 @@
                     </div>
                 </ng-template>
             </app-error-boundary>
-            }
+            } -->
         </div>
     </form>
 
-    <!-- {{ form.value | json }} -->
+    TODO <pre>{{ form.value | json }}</pre>
 
     <ng-template #footer>
         <button pButton type="submit" form="menu-form" icon="pi pi-save" [disabled]="form.invalid" label="Guardar"></button>

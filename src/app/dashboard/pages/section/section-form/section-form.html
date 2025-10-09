@@ -18,37 +18,28 @@
                     mode: 'modal'
                 }"
                 formControlName="type"
-                [options]="sectionTypes"
-                optionLabel="label"
-                optionValue="value"
+                [options]="sectionTypesOptions | keyvalue"
+                optionLabel="value.label"
+                optionValue="value.value"
                 placeholder="Selecciona el tipo de sección"
             ></p-select>
-            @if (form.controls['type']?.errors) {
+            @if (form.controls['type'].errors) {
             <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'type') }} </p-message>
             }
         </div>
 
-        <div
-            class="flex flex-col gap-2 w-full"
-            [class]="{
-            'lg:flex-row': type !== SectionType.HERO, 
-         }"
-        >
+        <div class="flex flex-col gap-2 w-full">
             <div class="flex flex-col gap-2 w-full">
                 <label for="title">Titulo</label>
                 <input id="title" type="text" pInputText formControlName="title" placeholder="Título de la sección" />
-                @if (form.controls['title']?.errors) {
+                @if (form.controls['title'].errors) {
                 <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'title') }} </p-message>
                 }
             </div>
-            @if (type !== SectionType.HERO) {
-            <div class="flex flex-col gap-2 w-full">
-                <label for="subtitle">Subtítulo (opcional)</label>
-                <input id="subtitle" type="text" pInputText formControlName="subtitle" placeholder="Subtítulo de la sección" />
-                @if (form.controls['subtitle']?.errors) {
-                <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'subtitle') }} </p-message>
-                }
-            </div>
+
+            @if (type === SectionType.WHY_US) {
+            <why-us-form [form]="form"></why-us-form>
+
             }
         </div>
 
@@ -93,6 +84,8 @@
 
         <p-togglebutton formControlName="active" onLabel="Activo" offLabel="Inactivo" onIcon="pi pi-check" offIcon="pi pi-times" onIcon="pi pi-lock-open" offIcon="pi pi-lock" class="w-36" ariaLabel="Do you confirm" />
     </form>
+
+    <pre>{{ form.value | json }}</pre>
 
     <ng-template #footer>
         <button pButton type="submit" form="menu-form" icon="pi pi-save" [disabled]="form.invalid" label="Guardar"></button>

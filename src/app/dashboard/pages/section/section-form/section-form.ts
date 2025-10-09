@@ -16,12 +16,14 @@ import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { FilterLinksByTypePipe } from '../pipes/filter-links-by-type-pipe';
 import { SectionFormService } from '../services/section-form.service';
+import { FilterLinksByTypePipe } from '@/dashboard/pipes/filter-links-by-type-pipe';
+import { JsonPipe, KeyValuePipe } from '@angular/common';
+import { WhyUsForm } from './why-us-form/why-us-form';
 
 @Component({
     selector: 'section-form',
-    imports: [ErrorBoundary, FilterLinksByTypePipe, ReactiveFormsModule, InputTextModule, ToggleSwitchModule, TextareaModule, SelectModule, DialogModule, MessageModule, ButtonModule, ToggleButtonModule],
+    imports: [WhyUsForm, ReactiveFormsModule, InputTextModule, KeyValuePipe, JsonPipe, ToggleSwitchModule, TextareaModule, SelectModule, DialogModule, MessageModule, ButtonModule, ToggleButtonModule],
     templateUrl: './section-form.html'
 })
 export class SectionForm {
@@ -38,7 +40,7 @@ export class SectionForm {
 
     linksList = this.linkService.linksListResource;
 
-    sectionTypes = Object.values(sectionTypesOptions);
+    sectionTypesOptions = sectionTypesOptions;
 
     FormUtils = FormUtils;
     SectionType = SectionType;

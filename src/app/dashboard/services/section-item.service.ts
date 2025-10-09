@@ -5,7 +5,7 @@ import { inject, Injectable } from '@angular/core';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { mapSectionItemEntityToSectionItem, SectionItemEntity } from '../../shared/mappers/section-item.mapper';
-import { CreateSectionItem } from '../interfaces/section-item';
+import { CreateSectionItem, UpdateSectionItem } from '../interfaces/section-item';
 import { SectionService } from './section.service';
 import { SectionUtils } from '../utils/section.utils';
 
@@ -51,7 +51,7 @@ export class SectionItemService {
         );
     }
 
-    updateSection(id: number, section: Partial<CreateSectionItem>) {
+    updateSection(id: number, section: UpdateSectionItem) {
         const formData = new FormData();
         Object.entries(section).forEach(([key, value]) => {
             if (value !== null && value !== undefined) {

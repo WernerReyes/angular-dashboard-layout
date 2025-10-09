@@ -1,4 +1,5 @@
 import type { Menu } from '@/shared/interfaces/menu';
+import { LinkType } from '@/shared/mappers/link.mapper';
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
@@ -12,6 +13,7 @@ export class MenuFormService {
         title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
         linkId: [null, [Validators.required, Validators.min(1)]],
         parentId: [null],
+        isInternal: [true, [Validators.required]], // true = internal, false = external
         active: [true, [Validators.required]]
     });
 
@@ -37,7 +39,9 @@ export class MenuFormService {
         this.form.patchValue({
             title: menu.title,
             linkId: menu.linkId as any,
-            parentId: menu.parentId as any
+            parentId: menu.parentId as any,
+            isInternal: menu.link?.type === LinkType.PAGE,
+            active: menu.active
         });
     }
 

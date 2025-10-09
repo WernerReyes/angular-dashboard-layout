@@ -12,6 +12,13 @@ export interface CreateSectionItem {
     sectionId: number;
     backgroundFileImage: File | null;
     backgroundImageUrl: string | null;
+    fileIcon: File | null;
+    fileIconUrl: string | null;
+
     // categoryId: number | null;
 }
 
+export interface UpdateSectionItem extends Partial<CreateSectionItem> {
+    currentImageUrl: string | null;
+    currentBackgroundImageUrl: string | null;
+}

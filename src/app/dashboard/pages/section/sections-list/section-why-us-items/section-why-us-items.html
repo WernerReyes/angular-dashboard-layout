@@ -1,0 +1,47 @@
+<div class="why-us-section py-8 px-4 bg-gray-100 dark:bg-gray-800">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header Section -->
+        <div class="text-center mb-12">
+            <h2 class="!text-3xl md:text-4xl font-bold text-primary-600 dark:text-primary-400 mb-4">{{ section().title }}</h2>
+
+            @if (section().subtitle) {
+            <h3 class="!text-2xl md:text-3xl font-semibold text-surface-800 dark:text-surface-100 mb-6">{{ section().subtitle }}</h3>
+            } @else {
+            <empty-field-message className="max-w-lg mx-auto mb-4" textContent="Sin subtítulo"></empty-field-message>
+            } @if (section().description) {
+            <p class="!text-lg text-surface-600 dark:text-surface-300 mx-auto text-center leading-relaxed">{{ section().description }}</p>
+            } @else {
+            <empty-field-message className="max-w-lg mx-auto" textContent="Descripción pendiente"></empty-field-message>
+            }
+        </div>
+
+        @if (section().items.length === 0) {
+        <empty-field-message className="max-w-lg mx-auto" textContent="No hay elementos disponibles"></empty-field-message>
+        } @else {
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
+            @for (item of section().items; track item.id) {
+            <div class="feature-item flex flex-col items-center text-center p-6 bg-white dark:bg-surface-800 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 h-full">
+                @if (item.icon) {
+                <!-- <div class="icon-container mb-4 w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
+                    <img *ngIf="item.iconFile; else existingIcon" [src]="item.iconFile" alt="{{ item.title }} icon" class="w-8 h-8" />
+                    <ng-template #existingIcon>
+                        <img [src]="item.icon" alt="{{ item.title }} icon" class="w-8 h-8" />
+                    </ng-template>
+                </div> -->
+                } @else {
+                <empty-field-message className="mb-4 w-16 h-16 flex items-center justify-center" textContent="Sin ícono"></empty-field-message>
+                }
+
+                <h4 class="text-xl font-semibold text-surface-800 dark:text-surface-100 mb-2">{{ item.title }}</h4>
+
+                @if (item.description) {
+                <p class="text-surface-600 dark:text-surface-300 leading-relaxed">{{ item.description }}</p>
+                } @else {
+                <empty-field-message className="w-full" textContent="Contenido pendiente"></empty-field-message>
+                }
+            </div>
+            } 
+        </div>
+    }
+    </div>
+</div>

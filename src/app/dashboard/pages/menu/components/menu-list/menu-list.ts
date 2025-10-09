@@ -4,23 +4,23 @@ import { DataViewSkeleton } from '@/shared/components/skeleton/data-view-skeleto
 import { linkTypeOptions } from '@/shared/interfaces/link';
 import { menuActiveStatusOptions, type Menu } from '@/shared/interfaces/menu';
 import { LinkType } from '@/shared/mappers/link.mapper';
+import { MessageService } from '@/shared/services/message.service';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, computed, inject, linkedSignal, output, signal } from '@angular/core';
+import { Component, inject, linkedSignal, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DividerModule } from 'primeng/divider';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
+import { MessageModule } from 'primeng/message';
+import { TagModule } from 'primeng/tag';
 import { MenuUtils } from '../../../../utils/menu.utils';
 import { MenuFormService } from '../../services/menu-form.service';
-import { ConfirmOrderChanges } from './confirm-order-changes/confirm-order-changes';
-import { DividerModule } from 'primeng/divider';
-import { PaginatorModule } from 'primeng/paginator';
-import { TagModule } from 'primeng/tag';
 
 type MenuComponent = Menu & {
     expanded?: boolean;
@@ -28,13 +28,14 @@ type MenuComponent = Menu & {
 
 @Component({
     selector: 'menu-list',
-    imports: [ConfirmOrderChanges, ErrorBoundary, DataViewSkeleton, ConfirmDialogModule,  DragDropModule, FormsModule,  TagModule, DividerModule, BadgeModule, MenuModule, InputTextModule, InputGroupModule, InputGroupAddonModule, ButtonModule],
+    imports: [ErrorBoundary, DataViewSkeleton, ConfirmDialogModule, MessageModule, DragDropModule, FormsModule,  TagModule, DividerModule, BadgeModule, MenuModule, InputTextModule, InputGroupModule, InputGroupAddonModule, ButtonModule],
     templateUrl: './menu-list.html',
     providers: [ConfirmationService]
 })
 export class MenuList {
     private readonly menuService = inject(MenuService);
     private readonly menuFormService = inject(MenuFormService);
+    private readonly messageService = inject(MessageService);
 
     menuList = this.menuService.menuListResource;
 
@@ -50,7 +51,7 @@ export class MenuList {
     searchQuery = signal<string>('');
 
 
-    originMenuList = computed<MenuComponent[]>(() => {
+    originMenuList = linkedSignal<MenuComponent[]>(() => {
         const menus = this.menuList.hasValue() ? this.menuList.value() : [];
         return structuredClone(menus).map((menu) => ({ ...menu, expanded: false })) as MenuComponent[];
     });
@@ -68,9 +69,12 @@ export class MenuList {
         return menuComponents.filter((menu) => menu.title.toLowerCase().includes(term) || (menu.children && menu.children.some((child) => child.title.toLowerCase().includes(term))));
     });
 
-    hasChanges = signal(false);
+        targetList = signal<MenuComponent[]>([]);
 
-    lastChangeTime = signal<number | null>(null);
+
+
+    hasPositionChanged = signal(false);
+
 
     openDialogAndEdit(menu: Menu) {
         this.onDisplay.emit(true);
@@ -97,20 +101,45 @@ export class MenuList {
             }
         }
 
-        // ✅ Recalcular orden y jerarquía completa
-        MenuUtils.updateMenuHierarchy(this.filteredMenuList());
+     
+
+        this.targetList.set(structuredClone(targetList));
 
         // Verifica si hubo cambios
-        this.hasChanges.set(this.hasOrderChanged());
+        this.hasPositionChanged.set(this.hasOrderChanged());
 
-        // Actualiza el tiempo del último cambio
-        this.lastChangeTime.set(Date.now());
+       
+    }
+
+
+     savePositionChanges() {
+        const newOrder = this.targetList().map((section, index) => ({ id: section.id, order: index + 1, parentId: section.parentId }));
+        this.menuService.updateOrder(newOrder).subscribe({
+            next: () => {
+                this.menuList.update((menus) => {
+                    if (!menus) return [];
+                    return structuredClone(this.targetList());
+                });
+                this.originMenuList.set(structuredClone(this.targetList()));
+                this.hasPositionChanged.set(false);
+            }
+        });
+    }
+
+    cancelChanges() {
+        this.filteredMenuList.update((menus) => {
+            if (!menus) return [];
+            const original = this.originMenuList();
+            return structuredClone(original);
+        });
+        this.hasPositionChanged.set(false);
+
+        this.messageService.setSuccess('Los cambios han sido descartados correctamente.');
     }
 
     hasOrderChanged(): boolean {
         const current = MenuUtils.flattenMenu(this.filteredMenuList());
         const original = MenuUtils.flattenMenu(this.originMenuList());
-        console.log('Current Flattened:', current, 'Original Flattened:', original);
 
         // Si ambos están vacíos, no hay cambios
         if (current.length === 0 && original.length === 0) return false;

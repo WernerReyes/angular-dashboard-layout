@@ -3,8 +3,8 @@ import { MenuService } from '@/dashboard/services/menu.service';
 import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
 import type { Menu } from '@/shared/interfaces/menu';
 import { FormUtils } from '@/utils/form-utils';
-import { Component, computed, inject, input, output } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
@@ -14,10 +14,12 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { MenuFormService } from '../../services/menu-form.service';
 import { CreateMenu } from '@/dashboard/interfaces/menu';
+import { LinkType } from '@/shared/mappers/link.mapper';
+import { FilterLinksByTypePipe } from '@/dashboard/pipes/filter-links-by-type-pipe';
 
 @Component({
     selector: 'link-dialog-form',
-    imports: [DialogModule, ErrorBoundary, ReactiveFormsModule, ToggleButtonModule, InputTextModule, MessageModule, SelectModule, SelectButtonModule, ButtonModule],
+    imports: [FilterLinksByTypePipe, DialogModule, ErrorBoundary, FormsModule, ReactiveFormsModule,  ToggleButtonModule, InputTextModule, MessageModule, SelectModule, SelectButtonModule, ButtonModule],
     templateUrl: './dialog-form.html'
 })
 export class DialogForm {
@@ -41,6 +43,10 @@ export class DialogForm {
     FormUtils = FormUtils;
 
     selectedMenu = input<Menu | null>();
+
+     checked = signal<boolean>(false);
+
+ 
 
     saveChanges() {
         if (this.form.valid) {

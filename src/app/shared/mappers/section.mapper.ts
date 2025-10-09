@@ -3,6 +3,7 @@ import { mapSectionItemEntityToSectionItem, SectionItemEntity } from './section-
 
 export enum SectionType {
     HERO = 'HERO',
+    WHY_US = 'WHY_US',
     BENEFIT = 'BENEFIT',
     MACHINE_TYPE = 'MACHINE_TYPE',
     BILL_MACHINE = 'BILL_MACHINE',

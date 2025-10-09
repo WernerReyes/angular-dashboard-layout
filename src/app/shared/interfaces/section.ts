@@ -34,6 +34,7 @@ export const sectionStatusOptions: Record<string, SectionStatusOption> = {
 };
 export const sectionTypesOptions: Record<SectionType, SectionTypeOption> = {
     HERO: { label: 'Hero', value: SectionType.HERO, severity: 'info' },
+    WHY_US: { label: '¿Por qué nosotros?', value: SectionType.WHY_US, severity: 'info' },
     BENEFIT: { label: 'Beneficios', value: SectionType.BENEFIT, severity: 'success' },
     MACHINE_TYPE: { label: 'Tipo de Máquina', value: SectionType.MACHINE_TYPE, severity: 'warn' },
     BILL_MACHINE: { label: 'Tipo de Factura', value: SectionType.BILL_MACHINE, severity: 'danger' },

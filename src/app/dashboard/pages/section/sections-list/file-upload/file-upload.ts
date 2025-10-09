@@ -8,12 +8,13 @@ import { ImageModule } from 'primeng/image';
 import { InputTextModule } from 'primeng/inputtext';
 import { Message } from 'primeng/message';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { Button, ButtonModule } from "primeng/button";
 
 export type ImageSelector = keyof Pick<SectionItem, 'image' | 'backgroundImage'>;
 
 @Component({
     selector: 'file-upload',
-    imports: [ImageError, FileUploadModule, Message, ImageModule, InputTextModule, ReactiveFormsModule, SelectButtonModule],
+    imports: [ImageError, FileUploadModule, Message, ImageModule, InputTextModule, ButtonModule, ReactiveFormsModule, SelectButtonModule],
     templateUrl: './file-upload.html'
 })
 export class FileUpload {
@@ -22,7 +23,8 @@ export class FileUpload {
     imageTypeName = input.required<string>();
     imageFieldName = input.required<string>();
     imageURLName = input.required<string>();
-    imageSelector = input.required<ImageSelector>();
+    // imageSelector = input.required<ImageSelector>();
+    currentImageName = input.required<'currentImage' | 'currentImageBack'>();
     label = input<string>();
 
     selectedSectionItem = input<SectionItem | null>(null);

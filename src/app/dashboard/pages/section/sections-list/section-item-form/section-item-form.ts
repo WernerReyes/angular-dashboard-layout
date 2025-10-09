@@ -10,7 +10,6 @@ import { TextareaModule } from 'primeng/textarea';
 import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
 import { SelectModule } from 'primeng/select';
 import { LinkService } from '@/dashboard/services/link.service';
-import { FilterLinksByTypePipe } from '../../pipes/filter-links-by-type-pipe';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ButtonModule } from 'primeng/button';
@@ -23,12 +22,20 @@ import { SectionItemService } from '@/dashboard/services/section-item.service';
 import { ImageModule } from 'primeng/image';
 import { ImageError } from '@/shared/components/error/image/image';
 import { FileUpload } from '../file-upload/file-upload';
+import { FilterLinksByTypePipe } from '@/dashboard/pipes/filter-links-by-type-pipe';
+import { CommonInputs } from './common-inputs/common-inputs';
+import { SectionType } from '@/shared/mappers/section.mapper';
+import { HeroForm } from './hero-form/hero-form';
+import { WhyUsForm } from './why-us-form/why-us-form';
 
 @Component({
     selector: 'section-item-form',
     imports: [
         JsonPipe,
+        HeroForm,
+        WhyUsForm,
         ImageError,
+        CommonInputs,
         FileUpload,
         ErrorBoundary,
         FilterLinksByTypePipe,
@@ -60,6 +67,7 @@ export class SectionItemForm {
     selectedSection = input<Section | null>(null);
 
     FormUtils = FormUtils;
+    SectionType = SectionType;
 
     saveChanges() {
         if (this.form.valid) {
@@ -67,30 +75,42 @@ export class SectionItemForm {
             const sectionItemData: CreateSectionItem = {
                 title: formValue.title!,
                 subtitle: formValue.subtitle || null,
-                content:  formValue.content || null,
+                content: formValue.content || null,
                 linkTexted: formValue.showLink ? formValue.textButton || null : null,
-                linkId: formValue.showLink && formValue.typeLink ? formValue.linkId || null : null,
+                linkId: formValue.showLink  ? formValue.linkId || null : null,
                 sectionId: this.selectedSection()?.id || 0,
                 fileImage: formValue.imageType === ImageType.LOCAL ? (formValue.imageFile as any) : null,
                 backgroundFileImage: formValue.imageBackType === ImageType.LOCAL ? (formValue.imageBackFile as any) : null,
                 imageUrl: formValue.imageType === ImageType.URL ? formValue.imageUrl || null : null,
                 backgroundImageUrl: formValue.imageBackType === ImageType.URL ? formValue.imageBackUrl || null : null,
+                fileIcon: formValue.iconFile as any,
+                fileIconUrl: formValue.currentIconUrl || null,
+
                 sectionType: this.selectedSection()!.type
             };
 
-            console.log('Submitting section item data:', sectionItemData);
+            console.log('Submitting section item data:', {
+                data: sectionItemData,
+                isUpdate: !!this.selectedSectionItem()
+            });
 
             if (this.selectedSectionItem()) {
-                this.sectionItemService.updateSection(this.selectedSectionItem()!.id!, sectionItemData).subscribe({
-                    next: () => {
-                        this.onCloseDialog.emit();
-                        this.sectionItemFormService.reset();
-                        this.selectedSectionItem.set(null);
-                    },
-                    error: (error) => {
-                        console.error('Error updating section item:', error);
-                    }
-                });
+                this.sectionItemService
+                    .updateSection(this.selectedSectionItem()!.id, {
+                        ...sectionItemData,
+                        currentImageUrl: formValue.currentImage || null,
+                        currentBackgroundImageUrl: formValue.currentImageBack || null
+                    })
+                    .subscribe({
+                        next: () => {
+                            this.onCloseDialog.emit();
+                            this.sectionItemFormService.reset();
+                            this.selectedSectionItem.set(null);
+                        },
+                        error: (error) => {
+                            console.error('Error updating section item:', error);
+                        }
+                    });
                 return;
             }
 
@@ -123,4 +143,6 @@ export class SectionItemForm {
             this.form.get('imageFile')?.markAsTouched();
         }
     }
+
+    
 }

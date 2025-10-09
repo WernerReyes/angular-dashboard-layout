@@ -1,28 +1,31 @@
+import { FilterSectionsByPagePipe } from '@/dashboard/pipes/filter-sections-by-page-pipe';
 import { SectionService } from '@/dashboard/services/section.service';
 import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
 import { DataViewSkeleton } from '@/shared/components/skeleton/data-view-skeleton/data-view-skeleton';
 import { Page } from '@/shared/interfaces/page';
 import { Section, sectionStatusOptions, sectionTypesOptions } from '@/shared/interfaces/section';
 import type { SectionItem as ISectionItem } from '@/shared/interfaces/section-item';
+import { SectionType } from '@/shared/mappers/section.mapper';
 import { MessageService } from '@/shared/services/message.service';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, inject, linkedSignal, model, output, signal } from '@angular/core';
 import { Badge } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
+import { CarouselModule } from 'primeng/carousel';
 import { FieldsetModule } from 'primeng/fieldset';
 import { MessageModule } from 'primeng/message';
+import { PanelModule } from 'primeng/panel';
 import { TagModule } from 'primeng/tag';
-import { FilterSectionsByPagePipe } from '../pipes/filter-sections-by-page-pipe';
 import { SectionFormService } from '../services/section-form.service';
 import { SectionItemFormService } from '../services/section-item-form.service';
+import { SectionHeroItems } from './section-hero-items/section-hero-items';
 import { SectionItemForm } from './section-item-form/section-item-form';
 import { SectionItem } from './section-item/section-item';
-import { SectionHeroItem } from './section-hero-item/section-hero-item';
-import { SectionType } from '@/shared/mappers/section.mapper';
+import { SectionWhyUsItems } from './section-why-us-items/section-why-us-items';
 
 @Component({
     selector: 'sections-list',
-    imports: [SectionItem, SectionHeroItem, SectionItemForm, ErrorBoundary, DragDropModule, FilterSectionsByPagePipe, MessageModule, DataViewSkeleton, FieldsetModule, TagModule, ButtonModule, Badge],
+    imports: [SectionItem, SectionHeroItems, SectionWhyUsItems, SectionItemForm, ErrorBoundary, PanelModule, CarouselModule, DragDropModule, FilterSectionsByPagePipe, MessageModule, DataViewSkeleton, FieldsetModule, TagModule, ButtonModule, Badge],
     templateUrl: './sections-list.html'
 })
 export class SectionsList {
@@ -68,7 +71,9 @@ export class SectionsList {
     openDialogItem(section: Section, item?: ISectionItem) {
         this.displayItemDialog.set(true);
         this.currentSection.set(section);
+        // console.log('recikbiendo item:', item);
         this.selectedSectionItem.set(item || null);
+        this.sectionItemFormService.setSectionType(section.type);
         if (item) {
             this.sectionItemFormService.populateForm(item);
         }
@@ -93,6 +98,10 @@ export class SectionsList {
         const newOrder = this.targetList().map((section, index) => ({ id: section.id, order: index + 1 }));
         this.sectionService.updateSectionsOrder({ orderArray: newOrder }).subscribe({
             next: () => {
+                this.sectionList.update((sections) => {
+                    if (!sections) return [];
+                    return structuredClone(this.targetList());
+                });
                 this.orginalSectionList.set(structuredClone(this.targetList()));
                 this.hasPositionChanged.set(false);
             }

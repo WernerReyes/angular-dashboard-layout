@@ -1,4 +1,5 @@
 import { ImageType, SectionItem } from '@/shared/interfaces/section-item';
+import { SectionType } from '@/shared/mappers/section.mapper';
 
 import { FormUtils } from '@/utils/form-utils';
 import { inject, Injectable } from '@angular/core';
@@ -17,31 +18,17 @@ export class SectionItemFormService {
         textButton: ['', [Validators.maxLength(50)]],
 
         imageType: [ImageType.NONE], // null = none, true = local, false = url
-        imageFile: [null, [Validators.maxLength(255)]],
-        imageUrl: ['', [Validators.maxLength(255)]],
-
-         imageBackType: [ImageType.NONE], // null = none, true = local, false = url
-        imageBackFile: [null, [Validators.maxLength(255)]],
-        imageBackUrl: ['', [Validators.maxLength(255)]],
-
-        showLink: [false],
-        typeLink: [true], // true = internal, false = external
-        linkId: [null]
-    });
-
-    form2 = this.fb.nonNullable.group({
-        title: ['', [Validators.required, FormUtils.noWhitespace(), Validators.maxLength(100)]],
-        subtitle: ['', [Validators.maxLength(150)]],
-        content: ['', [Validators.minLength(10), Validators.maxLength(255)]],
-        textButton: ['', [Validators.maxLength(50)]],
-
-        imageType: [ImageType.NONE], // null = none, true = local, false = url
+        currentImage: [''],
         imageFile: [null, [Validators.maxLength(255)]],
         imageUrl: ['', [Validators.maxLength(255)]],
 
         imageBackType: [ImageType.NONE], // null = none, true = local, false = url
+        currentImageBack: [''],
         imageBackFile: [null, [Validators.maxLength(255)]],
         imageBackUrl: ['', [Validators.maxLength(255)]],
+
+        iconFile: ['', [Validators.maxLength(100)]],
+        currentIconUrl: [''],
 
         showLink: [false],
         typeLink: [true], // true = internal, false = external
@@ -67,7 +54,31 @@ export class SectionItemFormService {
         });
     }
 
+    setSectionType(type: SectionType) {
+        switch (type) {
+            case SectionType.HERO:
+                this.disableFields(['iconFile', 'currentIconUrl']);
+                // this.disableFields(['icon']);
+                break;
+
+            case SectionType.WHY_US:
+                this.disableFields(['imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'subtitle', 'textButton', 'showLink', 'linkId', 'typeLink']);
+        }
+    }
+
+    private disableFields(fields: string[]) {
+        Object.keys(this.form.controls).forEach((key) => {
+            const control = this.form.get(key);
+            if (fields.includes(key)) {
+                control?.disable();
+            } else {
+                control?.enable();
+            }
+        });
+    }
+
     populateForm(section: SectionItem) {
+        console.log('Populating form with section:', section);
         this.form.setValue({
             title: section.title!,
             subtitle: section.subtitle!,
@@ -78,14 +89,17 @@ export class SectionItemFormService {
             linkId: section.linkId ?? (null as any),
 
             imageFile: null,
+            currentImage: section.image || '',
             imageUrl: '',
             imageType: ImageType.NONE,
 
+            iconFile: '',
+            currentIconUrl: section.icon || '',
+
             imageBackFile: null,
+            currentImageBack: section.backgroundImage || '',
             imageBackUrl: '',
             imageBackType: ImageType.NONE
-
-            
         });
     }
 

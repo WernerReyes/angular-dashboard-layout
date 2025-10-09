@@ -50,11 +50,20 @@
                         </div>
                     </div>
 
-                    @if (section.items.length > 0) {
-                    <p-fieldset styleClass="dark:!bg-surface-800 dark:!border-surface-700" legend="Contenido" [toggleable]="true">
-                        @if(section.type === SectionType.HERO) {
-                        <section-hero-item [sectionItems]="section.items" (onSelectSectionItem)="openDialogItem(section, $event)"></section-hero-item>
+                    <!-- @if (section.items.length > 0) { -->
 
+                    <p-panel class="dark:!bg-surface-800 dark:!border-surface-700" [toggleable]="true">
+                        <ng-template #header>
+                            <div class="flex items-center gap-3">
+                                <i class="pi pi-folder-open text-surface-600 dark:text-surface-400"></i>
+                                <span>Contenido</span>
+                            </div>
+                        </ng-template>
+
+                        @if(section.type === SectionType.HERO) {
+                        <section-hero-items [sectionItems]="section.items" (onSelectSectionItem)="openDialogItem(section, $event)"></section-hero-items>
+                        } @else if (section.type === SectionType.WHY_US) {
+                        <section-why-us-items [section]="section"> </section-why-us-items>
                         } @else {
 
                         <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-12">
@@ -63,16 +72,16 @@
                             }
                         </div>
                         }
-                    </p-fieldset>
+                    </p-panel>
 
-                    }
+                    <!-- } -->
                 </div>
                 }
             </div>
             }
         </div>
 
-        <section-item-form [display]="displayItemDialog()" (onCloseDialog)="displayItemDialog.set(false)" [selectedSectionItem]="selectedSectionItem()" [selectedSection]="currentSection()"></section-item-form>
+        <section-item-form [display]="displayItemDialog()" (onCloseDialog)="displayItemDialog.set(false)" [(selectedSectionItem)]="selectedSectionItem" [selectedSection]="currentSection()"></section-item-form>
     </ng-template>
 </app-error-boundary>
 

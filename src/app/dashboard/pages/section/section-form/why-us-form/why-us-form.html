@@ -1,0 +1,17 @@
+<div class="flex flex-col gap-2 w-full" [formGroup]="form()">
+    <div class="flex flex-col gap-2 w-full">
+        <label for="subtitle">Subtítulo (opcional)</label>
+        <input id="subtitle" type="text" pInputText formControlName="subtitle" placeholder="Subtítulo de la sección" />
+        @if (form().controls['subtitle'].errors) {
+        <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form(), 'subtitle') }} </p-message>
+        }
+    </div>
+
+    <div class="flex flex-col gap-2">
+        <label for="content">Contenido (opcional)</label>
+        <textarea pTextarea id="content" [autoResize]="true" formControlName="content" placeholder="Contenido de la sección"></textarea>
+        @if (form().controls['content'].errors) {
+        <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form(), 'content') }} </p-message>
+        }
+    </div>
+</div>

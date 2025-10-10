@@ -1,0 +1,35 @@
+<div class="flex flex-col gap-2" [formGroup]="form">
+    @let imageType = form.controls['imageType'].value;
+    <div class="flex flex-col gap-2">
+        <label>Selecciona una categoría</label>
+        <!-- [selectedSectionItem]="selectedSectionItem()" -->
+        <app-error-boundary [resource]="categoriesList" errorMessage="Ocurrió un error cargando las categorías." emptyMessage="No hay categorías disponibles. Por favor, crea una categoría primero.">
+            <ng-template #content let-categories>
+                <p-select id="category" class="w-full" formControlName="categoryId" [options]="categories" optionLabel="title" optionValue="id" placeholder="Selecciona una categoría"></p-select>
+            </ng-template>
+        </app-error-boundary>
+    </div>
+
+    <common-inputs
+        [form]="form"
+        [includeFields]="[{
+                type: 'title',
+                label: 'Título',
+                placeholder: 'Título del item',
+                isTextarea: false
+            },
+            {
+                type: 'content',
+                label: 'Descripción',
+                placeholder: 'Descripción del item',
+                isTextarea: true
+            }]"
+    ></common-inputs>
+    <div class="flex flex-col gap-2">
+        <label>Imagen</label>
+        <!-- [selectedSectionItem]="selectedSectionItem()" -->
+        <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+    </div>
+
+    <show-link-switch [form]="form"></show-link-switch>
+</div>

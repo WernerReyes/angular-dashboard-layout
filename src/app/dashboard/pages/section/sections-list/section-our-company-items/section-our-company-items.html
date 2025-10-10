@@ -1,0 +1,104 @@
+<!-- section-our-company-items.html -->
+<section class="bg-gradient-to-br from-gray-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 py-20 transition-all duration-300">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
+            <!-- Contenido de texto -->
+            <div class="space-y-8 order-1">
+                <!-- Título principal -->
+                <div class="space-y-6">
+                    <h2 class="text-4xl md:text-5xl font-bold text-blue-700 dark:text-blue-400 transition-colors duration-300">{{ section().title }}</h2>
+
+                    <!-- Texto descriptivo -->
+                    @if (section().description) {
+
+                    <p class="text-lg text-slate-700 dark:text-slate-300 leading-relaxed text-center md:text-start">{{ section().description }}</p>
+                    } @else {
+                    <empty-field-message textContent="No hay descripción para mostrar"></empty-field-message>
+                    }
+                </div>
+
+                <!-- Lista de items dinámicos si existen -->
+                @if (section().items && section().items.length > 0) { @for (item of section().items; track item.id) {
+                <div class="space-y-6">
+                    <div class="flex flex-col items-center space-x-4">
+                        <div class="flex items-center justify-between w-full py-3 px-4">
+                            <!-- Espacio para balance visual -->
+                            <div class="w-8"></div>
+
+                            <!-- Título centrado con mejor estilo -->
+                            <div class="flex items-center space-x-2 text-primary">
+                                <i class="pi pi-angle-double-right text-sm"></i>
+                                <span class="text-lg font-bold tracking-wider uppercase">{{item.title}}</span>
+                                <i class="pi pi-angle-double-left text-sm"></i>
+                            </div>
+
+                            <!-- Botón al final -->
+                            <div class="flex">
+                                <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-rounded p-button-text p-button-plain" (click)="menu.toggle($event); this.selectedItem.set(item)"></button>
+                                <p-menu #menu [popup]="true" [model]="items"></p-menu>
+                            </div>
+                        </div>
+
+                        <div class="md:me-auto">
+                            @if (item.subtitle) {
+                            <p class="text-lg font-bold mb-1 text-start">{{item.subtitle}}</p>
+                            } @else {
+                            <empty-field-message className="mt-3" textContent="No hay subtítulo para mostrar"></empty-field-message>
+                            }
+                        </div>
+
+                        <div class="w-full">
+                            @if (item.description) {
+                            <p class="text-lg text-slate-700 dark:text-slate-300 leading-relaxed text-center md:text-start">{{item.description}}</p>
+                            } @else {
+                            <empty-field-message className="mt-3" textContent="No hay descripción para mostrar"></empty-field-message>
+                            }
+                        </div>
+                    </div>
+                </div>
+                } } @else {
+                <empty-field-message textContent="No hay características para mostrar"></empty-field-message>
+                }
+            </div>
+
+            <!-- Imagen -->
+            <div class="order-2 h-full">
+                <div class="relative group h-full">
+                    <!-- Imagen principal -->
+                    @if (section().image) {
+                    <img [src]="section().image" [alt]="section().title" class="w-full max-h-96 md:max-h-full h-full object-cover rounded-2xl shadow-2xl group-hover:scale-105 transition-all duration-500" />
+                    } @else {
+                    <empty-field-message className="w-full h-full">
+                        <ng-template #content>
+                            <div class="text-center my-auto text-gray-500 dark:text-gray-400 mx-auto">
+                                <svg class="w-16 h-16 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                    />
+                                </svg>
+                                <div class="text-sm font-medium">Sin referencial de la empresa</div>
+                            </div>
+                        </ng-template>
+                    </empty-field-message>
+                    }
+
+                    <!-- Overlay decorativo -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                    <!-- Elementos decorativos -->
+                    <div class="absolute -top-4 -left-4 w-16 h-16 bg-blue-600/20 dark:bg-blue-400/20 rounded-full blur-xl"></div>
+                    <div class="absolute -bottom-4 -right-4 w-20 h-20 bg-purple-600/20 dark:bg-purple-400/20 rounded-full blur-xl"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Elementos decorativos de fondo -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-1/4 left-10 w-32 h-32 bg-blue-200/10 dark:bg-blue-600/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-1/4 right-10 w-40 h-40 bg-purple-200/10 dark:bg-purple-600/10 rounded-full blur-3xl"></div>
+    </div>
+</section>

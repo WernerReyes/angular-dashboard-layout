@@ -34,8 +34,13 @@ export class SectionService {
     );
 
     createSection(section: CreateSection) {
-        console.log('Creating Section:', section);
-        return this.http.post<ApiResponse<SectionEntity>>(this.prefix, section, { withCredentials: true }).pipe(
+        const formData = new FormData();
+        Object.entries(section).forEach(([key, value]) => {
+            if (value !== null && value !== undefined) {
+                formData.append(key, value as string | Blob);
+            }
+        });
+        return this.http.post<ApiResponse<SectionEntity>>(this.prefix, formData, { withCredentials: true }).pipe(
             map(({ message, data }) => ({
                 section: mapSectionEntityToSection(data),
                 message

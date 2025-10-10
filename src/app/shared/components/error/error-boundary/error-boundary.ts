@@ -1,13 +1,13 @@
 import type { ResourceState } from '@/shared/interfaces/resource';
-import { NgTemplateOutlet } from '@angular/common';
-import { Component, ContentChild, input, type TemplateRef } from '@angular/core';
+import { NgTemplateOutlet, } from '@angular/common';
+import { Component, ContentChild, input, TemplateRef } from '@angular/core';
 import { SkeletonModule } from 'primeng/skeleton';
 import { FallBack } from '../fall-back/fall-back';
 
 
 @Component({
     selector: 'app-error-boundary',
-    imports: [SkeletonModule, FallBack, NgTemplateOutlet  ],
+    imports: [SkeletonModule, FallBack, NgTemplateOutlet ],
     templateUrl: './error-boundary.html',
 })
 export class ErrorBoundary<T> {
@@ -29,4 +29,5 @@ export class ErrorBoundary<T> {
     @ContentChild('error') errorTemplate?: TemplateRef<any>;
     @ContentChild('empty') emptyTemplate?: TemplateRef<any>;
     @ContentChild('content') contentTemplate?: TemplateRef<any>;
+      @ContentChild(TemplateRef) content!: TemplateRef<T>;
 }

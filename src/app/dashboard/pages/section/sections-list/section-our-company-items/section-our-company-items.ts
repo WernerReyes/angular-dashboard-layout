@@ -1,21 +1,18 @@
-import { ImageError } from '@/shared/components/error/image/image';
-import type { Section } from '@/shared/interfaces/section';
-import type { SectionItem } from '@/shared/interfaces/section-item';
-import { NgClass } from '@angular/common';
 import { Component, input, output, signal } from '@angular/core';
-import type { MenuItem, MenuItemCommandEvent } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
-import { CarouselModule } from 'primeng/carousel';
-import { MenuModule } from 'primeng/menu';
+import type { Section } from '@/shared/interfaces/section';
 import { EmptyFieldMessage } from '../../components/empty-field-message/empty-field-message';
 import type { DeleteSectionItemFunction } from '../sections-list';
+import { MenuItem, MenuItemCommandEvent } from 'primeng/api';
+import type { SectionItem } from '@/shared/interfaces/section-item';
+import { MenuModule } from 'primeng/menu';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
-    selector: 'section-client-items',
-    imports: [NgClass, CarouselModule, ImageError, EmptyFieldMessage, MenuModule, ButtonModule],
-    templateUrl: './section-client-items.html'
+    selector: 'section-our-company-items',
+    imports: [EmptyFieldMessage, MenuModule, ButtonModule],
+    templateUrl: './section-our-company-items.html'
 })
-export class SectionClientItems {
+export class SectionOurCompanyItems {
     section = input.required<Section>();
     deleteItemConfirmation = input.required<DeleteSectionItemFunction>();
     onSelectSectionItem = output<SectionItem>();
@@ -48,37 +45,6 @@ export class SectionClientItems {
                     }
                 );
             }
-        }
-    ];
-
-    onSelectItem(item: SectionItem) {
-        if (this.selectedItem() && this.selectedItem()!.id === item.id) {
-            this.selectedItem.set(null);
-            return;
-        }
-        this.selectedItem.set(item);
-    }
-
-    responsiveOptions = [
-        {
-            breakpoint: '1400px',
-            numVisible: 2,
-            numScroll: 1
-        },
-        {
-            breakpoint: '1199px',
-            numVisible: 3,
-            numScroll: 1
-        },
-        {
-            breakpoint: '767px',
-            numVisible: 2,
-            numScroll: 1
-        },
-        {
-            breakpoint: '575px',
-            numVisible: 1,
-            numScroll: 1
         }
     ];
 }

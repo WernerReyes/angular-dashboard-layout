@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-x-2 gap-y-4 w-full" [formGroup]="form()">
-    @if (includeFields().includes('title')) {
+    <!-- @if (includeFields().includes('title')) {
     <div class="flex flex-col gap-2 w-full">
         <label for="title">Titulo</label>
         <input id="title" type="text" pInputText formControlName="title" placeholder="Título de la sección" />
@@ -23,6 +23,24 @@
         <textarea pTextarea id="content" [autoResize]="true" formControlName="content" placeholder="Contenido de la sección"></textarea>
         @if (form().controls['content'].errors) {
         <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form(), 'content') }} </p-message>
+        }
+    </div>
+    } -->
+
+    <!-- @for (field of includeFields2()) {
+
+    } -->
+
+    @for (field of includeFields(); track field.type) {
+    <div class="flex flex-col gap-2 w-full">
+        <label [for]="field.type">{{ field.label }}</label>
+
+        @if (!field.isTextarea) {
+        <input [id]="field.type" [type]="field.inputType || 'text'" pInputText [formControlName]="field.type" [placeholder]="field.placeholder" />
+        } @else {
+        <textarea pTextarea [id]="field.type" [autoResize]="true" [formControlName]="field.type" [placeholder]="field.placeholder"></textarea>
+        } @if (form().controls[field.type].errors) {
+        <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form(), field.type) }} </p-message>
         }
     </div>
     }

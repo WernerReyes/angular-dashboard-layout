@@ -1,0 +1,54 @@
+<app-error-boundary [resource]="categoriesList" errorMessage="Ocurrió un error cargando las categorias recientes." emptyMessage="No hay categorias recientes">
+    <ng-template #loading>
+        <app-data-view-skeleton></app-data-view-skeleton>
+    </ng-template>
+
+    <ng-template #content let-categories>
+        @let categoriesFiltered = categories | filterByTerm:'title': searchTerm();
+        <p-dataview [paginator]="true" [totalRecords]="categoriesFiltered.length" [rowsPerPageOptions]="[5, 10, 20]" [rows]="5" [value]="categoriesFiltered" layout="list">
+            <ng-template #header>
+                <p-inputgroup>
+                    <p-inputgroup-addon>
+                        <i class="pi pi-search cursor-pointer"></i>
+                    </p-inputgroup-addon>
+                    <input pInputText placeholder="Buscar categoria..." [(ngModel)]="searchTerm" />
+                </p-inputgroup>
+            </ng-template>
+
+            <ng-template #emptymessage>
+                <div class="flex flex-col items-center justify-center py-8 text-surface-500">
+                    <i class="pi pi-inbox text-4xl mb-3"></i>
+                    <div class="font-semibold text-lg mb-1">No se encontraron categorias</div>
+                    <div class="text-sm">Intenta ajustar tu búsqueda o crea una nueva categoria para comenzar.</div>
+                </div>
+            </ng-template>
+
+            <ng-template #list let-items>
+                <div class="flex flex-col">
+                    @for (item of items; let i = $index; track item.id) {
+                    <div class="flex flex-col sm:flex-row sm:items-center p-6 gap-4" [ngClass]="{ 'border-t border-surface': i !== 0 }">
+                        <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
+                            <div class="flex flex-row md:flex-col justify-between items-start gap-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="text-lg font-medium">
+                                        {{item.title}}
+                                        <small class="text-sm pt-2 text-muted-color block">Creado el {{ item.createdAt | date: 'mediumDate' }}</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col md:items-end gap-8">
+                                <div class="flex flex-row-reverse md:flex-row gap-2">
+                                    <p-button label="Editar" text icon="pi pi-pencil"></p-button>
+                                    <p-button label="Eliminar" text icon="pi pi-trash" severity="danger"></p-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    }
+                </div>
+            </ng-template>
+        </p-dataview>
+    </ng-template>
+</app-error-boundary>

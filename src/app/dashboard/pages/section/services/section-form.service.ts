@@ -1,5 +1,6 @@
 import type { Menu } from '@/shared/interfaces/menu';
 import { Section } from '@/shared/interfaces/section';
+import { ImageType } from '@/shared/interfaces/section-item';
 import { LinkType } from '@/shared/mappers/link.mapper';
 import { SectionType } from '@/shared/mappers/section.mapper';
 import { FormUtils } from '@/utils/form-utils';
@@ -16,8 +17,14 @@ export class SectionFormService {
         type: [SectionType.HERO, [Validators.required]],
         title: ['', [Validators.required, FormUtils.noWhitespace(), Validators.maxLength(200)]],
         subtitle: ['', [Validators.maxLength(150)]],
-        content: ['', [Validators.maxLength(255)]],
+        content: [''],
         textButton: ['', [Validators.maxLength(50)]],
+
+         imageType: [ImageType.NONE], // null = none, true = local, false = url
+                currentImage: [''],
+                imageFile: [null, [Validators.maxLength(255)]],
+                imageUrl: ['', [Validators.maxLength(255)]],
+        
         showLink: [false],
         typeLink: [true], // true = internal, false = external
         linkId: [null],
@@ -59,9 +66,14 @@ export class SectionFormService {
             content: section.description!,
             showLink: !!section.linkId,
             textButton: section.textButton!,
-            typeLink: !!section.linkId,
+            typeLink: section.link ? (section.link.type === LinkType.PAGE ? true : false) : true,
             linkId: section.linkId as any,
-            active: section.active
+            active: section.active,
+
+            imageFile: null,
+            currentImage: section.image || '',
+            imageUrl: '',
+            imageType: ImageType.NONE,
         });
     }
 

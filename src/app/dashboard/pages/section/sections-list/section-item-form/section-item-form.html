@@ -15,32 +15,87 @@
             @switch (sectionType) { @case (SectionType.HERO) {
             <hero-form [selectedSectionItem]="selectedSectionItem()"></hero-form>
             } @case (SectionType.WHY_US) {
-            <common-inputs [form]="form" [includeFields]="['title', 'content']"></common-inputs>
+            <common-inputs
+                [form]="form"
+                [includeFields]="[{
+                type: 'title',
+                label: 'Título',
+                placeholder: 'Título del item',
+                isTextarea: false
+            },
+            {
+                type: 'content',
+                label: 'Descripción',
+                placeholder: 'Descripción del item',
+                isTextarea: true
+            }]"
+            ></common-inputs>
             <icon-upload [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
 
             } @case (SectionType.CASH_PROCESSING_EQUIPMENT) {
-            <common-inputs [form]="form" [includeFields]="['title']"></common-inputs>
+            <common-inputs
+                [form]="form"
+                [includeFields]="[{
+                type: 'title',
+                label: 'Título',
+                placeholder: 'Título del item',
+                isTextarea: false
+            }]"
+            ></common-inputs>
             <icon-upload [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
             <show-link-switch [form]="form"></show-link-switch>
             } @case (SectionType.VALUE_PROPOSITION) {
-            <common-inputs [form]="form"></common-inputs>
+            <common-inputs
+                [form]="form"
+                [includeFields]="[{
+                type: 'title',
+                label: 'Título',
+                placeholder: 'Título del item',
+                isTextarea: false
+            },
+            {
+                type: 'content',
+                label: 'Descripción',
+                placeholder: 'Descripción del item',
+                isTextarea: true
+            }, {
+                type: 'subtitle',
+                label: 'Extra info',
+                placeholder: 'Información extra del item',
+                isTextarea: false
+            }]"
+            ></common-inputs>
             } @case (SectionType.CLIENT) { @let imageType = form.controls['imageType'].value;
             <div class="flex flex-col gap-2">
                 <label>Imagen</label>
-                <file-upload
-                    currentImageName="currentImage"
-                    imageSelector="image"
-                    [selectedSectionItem]="selectedSectionItem()"
-                    [form]="form"
-                    label="URL de la imagen"
-                    imageTypeName="imageType"
-                    [imageType]="imageType"
-                    imageFieldName="imageFile"
-                    imageURLName="imageUrl"
-                >
-                </file-upload>
+                <!-- [selectedSectionItem]="selectedSectionItem()" -->
+                <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
             </div>
-            } }
+            } @case (SectionType.OUR_COMPANY) {
+            <common-inputs
+                [form]="form"
+                [includeFields]="[{
+                type: 'title',
+                label: 'Título',
+                placeholder: 'Título del item',
+                isTextarea: false
+            },
+            {
+                type: 'subtitle',
+                label: 'Subtítulo',
+                placeholder: 'Subtítulo del item',
+                isTextarea: false
+            },
+            {
+                type: 'content',
+                label: 'Descripción',
+                placeholder: 'Descripción del item',
+                isTextarea: true
+            }]"
+            ></common-inputs>
+            } @case (SectionType.MACHINE) {
+            <machine-form></machine-form>
+            } @default { } }
         </div>
     </form>
 

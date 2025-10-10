@@ -1,0 +1,73 @@
+<p-splitter [panelSizes]="[25, 75]" [style]="{ height: '300px' }" class="mb-8">
+    <ng-template #panel>
+        <!-- <div class="flex items-center justify-center h-full">Panel 1</div> -->
+        <app-error-boundary [resource]="categoryList" errorMessage="Ocurrió un error cargando las categorias recientes." emptyMessage="No hay categorias recientes">
+            <ng-template #content let-categories>
+                <!-- {{ categoriesIds() }} -->
+                @let categoriesFiltered = categories | filterByIdsPipe : categoriesIds() : 'id';
+
+                <div class="p-3">
+                    <p-listbox [options]="categoriesFiltered" [(ngModel)]="selectedCategoryId" optionLabel="title" optionValue="id" class="w-full" />
+                </div>
+            </ng-template>
+        </app-error-boundary>
+    </ng-template>
+    <ng-template #panel>
+        @let itemsByCategory = section().items | filterByIdsPipe : selectedCategoryId() : 'categoryId';
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-3 h-full overflow-y-auto">
+            @for (item of itemsByCategory; track item.id) {
+            <p-card class="h-full">
+                <ng-template #header>
+                    <img alt="Card" class="w-full" src="https://primefaces.org/cdn/primeng/images/card-ng.jpg" />
+                </ng-template>
+                <ng-template #title> {{ item.title }} </ng-template>
+                <p>{{ item.description }}</p>
+
+                @if (item.textButton) {
+
+                <ng-template #footer>
+                    <div class="flex gap-4 mt-1">
+                        <p-button [label]="item.textButton" class="w-full" styleClass="w-full" />
+                    </div>
+                </ng-template>
+                }
+            </p-card>
+            }
+
+            <!-- <p-card >
+                <ng-template #header>
+                    <img alt="Card" class="w-full" src="https://primefaces.org/cdn/primeng/images/card-ng.jpg" />
+                </ng-template>
+                <ng-template #title> Advanced Card </ng-template>
+                <ng-template #subtitle> Card subtitle </ng-template>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque
+                    quas!
+                </p>
+                <ng-template #footer>
+                    <div class="flex gap-4 mt-1">
+                        <p-button label="Cancel" severity="secondary" class="w-full" [outlined]="true" styleClass="w-full" />
+                        <p-button label="Save" class="w-full" styleClass="w-full" />
+                    </div>
+                </ng-template>
+            </p-card>
+            <p-card >
+                <ng-template #header>
+                    <img alt="Card" class="w-full" src="https://primefaces.org/cdn/primeng/images/card-ng.jpg" />
+                </ng-template>
+                <ng-template #title> Advanced Card </ng-template>
+                <ng-template #subtitle> Card subtitle </ng-template>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque
+                    quas!
+                </p>
+                <ng-template #footer>
+                    <div class="flex gap-4 mt-1">
+                        <p-button label="Cancel" severity="secondary" class="w-full" [outlined]="true" styleClass="w-full" />
+                        <p-button label="Save" class="w-full" styleClass="w-full" />
+                    </div>
+                </ng-template>
+            </p-card> -->
+        </div>
+    </ng-template>
+</p-splitter>

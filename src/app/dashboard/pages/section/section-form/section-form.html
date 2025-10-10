@@ -7,6 +7,7 @@
     [style]="{ width: '30vw' }"
     [modal]="true"
     [maximizable]="true"
+    (onHide)="closeDialog()"
 >
     <form class="flex flex-col gap-4" [formGroup]="form" id="menu-form" (ngSubmit)="saveChanges()">
         @let type = form.controls['type'].value;
@@ -29,22 +30,7 @@
         </div>
 
         <div class="flex flex-col gap-2 w-full">
-            <!-- <div class="flex flex-col gap-2 w-full">
-                <label for="title">Titulo</label>
-                <input id="title" type="text" pInputText formControlName="title" placeholder="Título de la sección" />
-                @if (form.controls['title'].errors) {
-                <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'title') }} </p-message>
-                }
-            </div> -->
-            <common-inputs [form]="form" [includeFields]="['title']"></common-inputs>
-
-            <!-- @if (type === SectionType.WHY_US) {
-            <why-us-form [form]="form"></why-us-form>
-            } @if (type === SectionType.CASH_PROCESSING_EQUIPMENT) {
-                <div class="mt-3">
-                    <show-link-switch [form]="form"></show-link-switch>
-                </div>
-            } -->
+            <common-inputs [form]="form" [includeFields]="[{ type: 'title', label: 'Título', placeholder: 'Título de la sección' }]"></common-inputs>
 
             @switch (type) { @case (SectionType.WHY_US) { <why-us-form [form]="form"></why-us-form>
             } @case (SectionType.CASH_PROCESSING_EQUIPMENT) {
@@ -52,8 +38,42 @@
                 <show-link-switch [form]="form"></show-link-switch>
             </div>
             } @case (SectionType.CLIENT) {
-            <common-inputs [form]="form" [includeFields]="['subtitle']"></common-inputs>
-            } }
+            <common-inputs
+                [form]="form"
+                [includeFields]="[{
+                type: 'subtitle',
+                label: 'Subtítulo',
+                placeholder: 'Subtítulo de la sección',
+            }]"
+            ></common-inputs>
+            } @case (SectionType.OUR_COMPANY) {
+                @let imageType = form.controls['imageType'].value;
+            <common-inputs
+                [form]="form"
+                [includeFields]="[{
+                    type: 'content',
+                    label: 'Historia',
+                    placeholder: 'Breve historia de la empresa',
+                    isTextarea: true,
+                    }]"
+            ></common-inputs>
+            <div class="flex flex-col gap-2">
+                <label>Imagen referencial</label>
+                <file-upload
+                    currentImageName="currentImage"
+                    imageSelector="image"
+                    [form]="form"
+                    label="URL de la imagen"
+                    imageTypeName="imageType"
+                    [imageType]="imageType"
+                    imageFieldName="imageFile"
+                    imageURLName="imageUrl"
+                >
+                </file-upload>
+            </div>
+            }}
+                    
+            
         </div>
 
         <p-togglebutton formControlName="active" onLabel="Activo" offLabel="Inactivo" onIcon="pi pi-check" offIcon="pi pi-times" onIcon="pi pi-lock-open" offIcon="pi pi-lock" class="w-36" ariaLabel="Do you confirm" />

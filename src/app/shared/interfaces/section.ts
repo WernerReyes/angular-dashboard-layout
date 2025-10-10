@@ -1,4 +1,5 @@
 import { SectionType } from '../mappers/section.mapper';
+import { Link } from './link';
 import { SectionItem } from './section-item';
 import { Severity } from './severity';
 
@@ -11,9 +12,11 @@ export interface Section {
     description: string | null;
     textButton: string | null;
     linkId: number | null;
+    image: string | null;
     active: boolean;
     pageId: number;
     items: SectionItem[];
+    link: Link | null;
 }
 
 type SectionStatusOption = {
@@ -38,6 +41,8 @@ export const sectionTypesOptions: Record<SectionType, SectionTypeOption> = {
     CASH_PROCESSING_EQUIPMENT: { label: 'Equipos para Procesamiento de Efectivo', value: SectionType.CASH_PROCESSING_EQUIPMENT, severity: 'warn' },
     VALUE_PROPOSITION: { label: 'Propuesta de Valor', value: SectionType.VALUE_PROPOSITION, severity: 'contrast' },
     CLIENT: { label: 'Cliente', value: SectionType.CLIENT, severity: 'info' },
+    OUR_COMPANY: { label: 'Nuestra Empresa', value: SectionType.OUR_COMPANY, severity: 'success' },
+    MACHINE: { label: 'Máquina', value: SectionType.MACHINE, severity: 'warn' },
 
     BENEFIT: { label: 'Beneficios', value: SectionType.BENEFIT, severity: 'success' },
     MACHINE_TYPE: { label: 'Tipo de Máquina', value: SectionType.MACHINE_TYPE, severity: 'warn' },

@@ -1,7 +1,7 @@
 <section class="bg-gradient-to-br from-gray-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 py-20 transition-all duration-300">
     <div class="container mx-auto px-4">
         <!-- Header Section -->
-        <div class="text-center mb-12">
+        <div class="text-center">
             <h2 class="!text-3xl md:!text-4xl !font-bold text-primary-600 dark:text-primary-400 mb-4">{{ section().title }}</h2>
 
             @if (section().subtitle) {
@@ -12,7 +12,7 @@
         </div>
 
         <div>
-            <button [disabled]="!!selectedItem()" pButton type="button" icon="pi pi-ellipsis-v" class="p-button-rounded p-button-text p-button-plain" (click)="menu.toggle($event)"></button>
+            <button [disabled]="!selectedItem()" pButton type="button" icon="pi pi-ellipsis-v" class="p-button-rounded p-button-text p-button-plain" (click)="menu.toggle($event)"></button>
             <p-menu #menu [popup]="true" [model]="items"></p-menu>
         </div>
 
@@ -26,16 +26,20 @@
                      }"
             [numVisible]="3"
             [showIndicators]="false"
-            [showNavigators]="false"
+            [showNavigators]="true"
             [numScroll]="1"
             [circular]="true"
             [responsiveOptions]="responsiveOptions"
-            autoplayInterval="3000"
+            autoplayInterval="6000"
         >
             <ng-template let-item #item>
-                <div (click)="selectedItem.set(item)"
-                    class="m-2 p-4 cursor-pointer transition-all duration-300 rounded-lg"
-                    
+                <div
+                    (click)="onSelectItem(item)"
+                    class="m-6 p-4 cursor-pointer transition-all duration-300 rounded-lg"
+                    [ngClass]="{
+    'ring-4 ring-primary ring-opacity-50 bg-white dark:bg-slate-700 shadow-2xl transform scale-105 -translate-y-2': selectedItem()?.id === item.id,
+    'bg-white/70 dark:bg-slate-800/70 hover:bg-white hover:dark:bg-slate-800 hover:shadow-lg hover:-translate-y-1': selectedItem()?.id !== item.id
+}"
                 >
                     <div class="mb-4">
                         <div class="relative mx-auto">

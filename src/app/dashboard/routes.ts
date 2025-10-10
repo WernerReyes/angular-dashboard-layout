@@ -21,6 +21,11 @@ const dashboardRoutes: Route[] = [
         path: 'sections',
         loadComponent: () => import('./pages/section/section.page')
     },
+
+    {
+        path: 'categories',
+        loadComponent: () => import('./pages/category/category.page')
+    },
     {
         path: '**',
         redirectTo: ''

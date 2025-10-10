@@ -19,6 +19,6 @@
         </div>
 
         <sections-list [selectedPage]="selectedPage()" (onDisplay)="display.set($event)" (onSelectedSection)="selectedSection.set($event)"></sections-list>
-        <section-form [display]="display()" (onCloseDialog)="display.set(false)" [selectedPageId]="selectedPage()?.id!" [selectedSection]="selectedSection()"></section-form>
+        <section-form [display]="display()" (onCloseDialog)="display.set(false)" [selectedPageId]="selectedPage()?.id!" [(selectedSection)]="selectedSection"></section-form>
     </div>
 </div>

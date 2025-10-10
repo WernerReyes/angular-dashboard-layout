@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 @Component({
     selector: 'dashboard-menu',
     imports: [MenuItem, RouterModule],
-    templateUrl: './menu.html',
+    templateUrl: './menu.html'
 })
 export class Menu {
     model: IMenuItem[] = [];
@@ -36,6 +36,11 @@ export class Menu {
                         label: 'Secciones',
                         icon: 'pi pi-th-large',
                         routerLink: ['/dashboard/sections']
+                    },
+                    {
+                        label: 'Categorías',
+                        icon: 'pi pi-tags',
+                        routerLink: ['/dashboard/categories']
                     }
                 ]
             }

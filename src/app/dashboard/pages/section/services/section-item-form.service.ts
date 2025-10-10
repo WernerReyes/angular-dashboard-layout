@@ -30,6 +30,8 @@ export class SectionItemFormService {
         iconFile: ['', [Validators.maxLength(100)]],
         currentIconUrl: [''],
 
+        categoryId: [null],
+
         showLink: [false],
         typeLink: [true], // true = internal, false = external
         linkId: [null]
@@ -62,24 +64,33 @@ export class SectionItemFormService {
                 break;
 
             case SectionType.WHY_US:
-                this.disableFields(['imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'subtitle', 'textButton', 'showLink', 'linkId', 'typeLink']);
+                this.disableFields(['imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'subtitle', 'textButton', 'showLink', 'linkId', 'typeLink', 'categoryId']);
                 break;
 
             case SectionType.CASH_PROCESSING_EQUIPMENT:
-                this.disableFields(['subtitle', 'content', 'imageFile', 'currentImage', 'imageBackFile', 'currentImageBack']);
+                this.disableFields(['subtitle', 'content', 'imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'categoryId']);
                 break;
 
             case SectionType.VALUE_PROPOSITION:
-                this.disableFields(['imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'textButton', 'showLink', 'linkId', 'typeLink', 'iconFile', 'currentIconUrl']);
-
+                this.disableFields(['imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'textButton', 'showLink', 'linkId', 'typeLink', 'iconFile', 'currentIconUrl', 'categoryId']);
                 break;
 
             case SectionType.CLIENT:
                 const image = this.form.get('imageFile');
                 image?.setValidators([Validators.required]);
                 image?.updateValueAndValidity();
-                this.disableFields(['title', 'subtitle', 'content', 'imageBackFile', 'currentImageBack', 'imageBackUrl', 'imageBackType', 'textButton', 'showLink', 'linkId', 'typeLink', 'iconFile', 'currentIconUrl']);
+                this.disableFields(['title', 'subtitle', 'content', 'imageBackFile', 'currentImageBack', 'imageBackUrl', 'imageBackType', 'textButton', 'showLink', 'linkId', 'typeLink', 'iconFile', 'currentIconUrl', 'categoryId']);
                 break;
+
+            case SectionType.OUR_COMPANY:
+                this.disableFields(['imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'textButton', 'showLink', 'linkId', 'typeLink', 'iconFile', 'currentIconUrl', 'categoryId']);
+                break;
+
+            case SectionType.MACHINE:
+                const sectionId = this.form.get('categoryId');
+                sectionId?.setValidators([Validators.required]);
+                sectionId?.updateValueAndValidity();
+                this.disableFields(['subtitle', 'imageBackFile', 'currentImageBack', 'iconFile', 'currentIconUrl']);
         }
     }
 
@@ -95,7 +106,6 @@ export class SectionItemFormService {
     }
 
     populateForm(section: SectionItem) {
-        console.log('Populating form with section:', section);
         this.form.setValue({
             title: section.title!,
             subtitle: section.subtitle!,
@@ -104,6 +114,8 @@ export class SectionItemFormService {
             textButton: section.textButton!,
             typeLink: !!section.linkId,
             linkId: section.linkId ?? (null as any),
+
+            categoryId: section.categoryId ?? (null as any),
 
             imageFile: null,
             currentImage: section.image || '',

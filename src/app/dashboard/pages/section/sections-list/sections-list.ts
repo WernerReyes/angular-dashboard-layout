@@ -1,4 +1,5 @@
 import { FilterSectionsByPagePipe } from '@/dashboard/pipes/filter-sections-by-page-pipe';
+import { SectionItemService } from '@/dashboard/services/section-item.service';
 import { SectionService } from '@/dashboard/services/section.service';
 import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
 import { DataViewSkeleton } from '@/shared/components/skeleton/data-view-skeleton/data-view-skeleton';
@@ -9,6 +10,7 @@ import { SectionType } from '@/shared/mappers/section.mapper';
 import { MessageService } from '@/shared/services/message.service';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, inject, linkedSignal, model, output, signal } from '@angular/core';
+import { ConfirmationService } from 'primeng/api';
 import { Badge } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
 import { CarouselModule } from 'primeng/carousel';
@@ -18,15 +20,15 @@ import { PanelModule } from 'primeng/panel';
 import { TagModule } from 'primeng/tag';
 import { SectionFormService } from '../services/section-form.service';
 import { SectionItemFormService } from '../services/section-item-form.service';
+import { SectionCashProcessingEquipmentItems } from './section-cash-processing-equipment-items/section-cash-processing-equipment-items';
+import { SectionClientItems } from './section-client-items/section-client-items';
 import { SectionHeroItems } from './section-hero-items/section-hero-items';
 import { SectionItemForm } from './section-item-form/section-item-form';
 import { SectionItem } from './section-item/section-item';
-import { SectionWhyUsItems } from './section-why-us-items/section-why-us-items';
-import { ConfirmationService } from 'primeng/api';
-import { SectionItemService } from '@/dashboard/services/section-item.service';
-import { SectionCashProcessingEquipmentItems } from './section-cash-processing-equipment-items/section-cash-processing-equipment-items';
+import { SectionMachineItems } from './section-machine-items/section-machine-items';
+import { SectionOurCompanyItems } from './section-our-company-items/section-our-company-items';
 import { SectionValuePropositionItems } from './section-value-proposition-items/section-value-proposition-items';
-import { SectionClientItems } from './section-client-items/section-client-items';
+import { SectionWhyUsItems } from './section-why-us-items/section-why-us-items';
 
 
 type DeleteSectionItemParams = {
@@ -37,7 +39,7 @@ type DeleteSectionItemParams = {
 export type DeleteSectionItemFunction = (event: Event, params: DeleteSectionItemParams, accept?: () => void, reject?: () => void) => void;
 @Component({
     selector: 'sections-list',
-    imports: [SectionItem, SectionHeroItems, SectionWhyUsItems, SectionCashProcessingEquipmentItems, SectionValuePropositionItems,  SectionClientItems, SectionItemForm, ErrorBoundary, PanelModule, CarouselModule, DragDropModule, FilterSectionsByPagePipe, MessageModule, DataViewSkeleton, FieldsetModule, TagModule, ButtonModule, Badge],
+    imports: [SectionItem, SectionHeroItems, SectionWhyUsItems, SectionCashProcessingEquipmentItems, SectionValuePropositionItems,  SectionClientItems, SectionOurCompanyItems,SectionMachineItems,  SectionItemForm, ErrorBoundary, PanelModule, CarouselModule, DragDropModule, FilterSectionsByPagePipe, MessageModule, DataViewSkeleton, FieldsetModule, TagModule, ButtonModule, Badge],
     templateUrl: './sections-list.html'
 })
 export class SectionsList {

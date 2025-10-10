@@ -24,11 +24,12 @@ import { IconUpload } from '../../components/icon-upload/icon-upload';
 import { ShowLinkSwitch } from '../../components/show-link-switch/show-link-switch';
 import { SectionItemFormService } from '../../services/section-item-form.service';
 import { HeroForm } from './hero-form/hero-form';
-import { FileUpload } from '../file-upload/file-upload';
+import { FileUpload } from '../../components/file-upload/file-upload';
+import { MachineForm } from './machine-form/machine-form';
 
 @Component({
     selector: 'section-item-form',
-    imports: [JsonPipe, CommonInputs, IconUpload, ShowLinkSwitch, HeroForm, FileUpload, ReactiveFormsModule, FileUploadModule, DialogModule, InputTextModule, SelectButtonModule, SelectModule, ToggleSwitchModule, ButtonModule, ToggleButtonModule, TextareaModule, ImageModule, MessageModule],
+    imports: [JsonPipe, MachineForm, CommonInputs, IconUpload, ShowLinkSwitch, ShowLinkSwitch, HeroForm, FileUpload, ReactiveFormsModule, FileUploadModule, DialogModule, InputTextModule, SelectButtonModule, SelectModule, ToggleSwitchModule, ButtonModule, ToggleButtonModule, TextareaModule, ImageModule, MessageModule],
     templateUrl: './section-item-form.html'
 })
 export class SectionItemForm {
@@ -57,11 +58,13 @@ export class SectionItemForm {
                 linkId: formValue.showLink ? formValue.linkId || null : null,
                 sectionId: this.selectedSection()?.id || 0,
                 fileImage: formValue.imageType === ImageType.LOCAL ? (formValue.imageFile as any) : null,
-                backgroundFileImage: formValue.imageBackType === ImageType.LOCAL ? (formValue.imageBackFile as any) : null,
                 imageUrl: formValue.imageType === ImageType.URL ? formValue.imageUrl || null : null,
+                backgroundFileImage: formValue.imageBackType === ImageType.LOCAL ? (formValue.imageBackFile as any) : null,
                 backgroundImageUrl: formValue.imageBackType === ImageType.URL ? formValue.imageBackUrl || null : null,
                 fileIcon: formValue.iconFile as any,
                 fileIconUrl: formValue.currentIconUrl || null,
+                categoryId: formValue.categoryId || null,
+
 
                 sectionType: this.selectedSection()!.type
             };

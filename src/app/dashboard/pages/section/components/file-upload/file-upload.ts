@@ -27,7 +27,7 @@ export class FileUpload {
     currentImageName = input.required<'currentImage' | 'currentImageBack'>();
     label = input<string>();
 
-    selectedSectionItem = input<SectionItem | null>(null);
+    // selectedSectionItem = input<SectionItem | null>(null);
 
     ImageType = ImageType;
 

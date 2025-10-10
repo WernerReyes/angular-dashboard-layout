@@ -10,7 +10,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ShowLinkSwitch } from '../../../components/show-link-switch/show-link-switch';
 import { SectionItemFormService } from '../../../services/section-item-form.service';
-import { FileUpload } from '../../file-upload/file-upload';
+import { FileUpload } from '../../../components/file-upload/file-upload';
 import { CommonInputs } from '../../../components/common-inputs/common-inputs';
 
 @Component({

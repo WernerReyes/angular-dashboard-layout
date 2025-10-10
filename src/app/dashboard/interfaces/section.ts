@@ -9,4 +9,7 @@ export interface CreateSection {
     textButton: string | null;
     linkId: number | null;
     pageId: number;
+    fileImage?: File | null;
+    imageUrl?: string | null;
+
 }

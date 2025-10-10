@@ -1,14 +1,31 @@
 <div class="flex flex-col gap-x-2 gap-y-4 w-full" [formGroup]="form">
     @let imageType = form.controls['imageType'].value; @let imageBackType = form.controls['imageBackType'].value;
 
-    <common-inputs [form]="form"></common-inputs>
+    <common-inputs [form]="form"
+        [includeFields]="[{
+        type: 'title',
+        label: 'Título',
+        placeholder: 'Título del item',
+        isTextarea: false
+    }, {
+        type: 'subtitle',
+        label: 'Subtítulo (opcional)',
+        placeholder: 'Subtítulo del item',
+        isTextarea: false
+    }, {
+        type: 'content',
+        label: 'Descripción (opcional)',
+        placeholder: 'Descripción del item',
+        isTextarea: true
+    }]"
+    ></common-inputs>
 
     <div class="flex flex-col gap-2">
         <label>Imagen (opcional)</label>
+        <!-- [selectedSectionItem]="selectedSectionItem()" -->
         <file-upload
             currentImageName="currentImage"
             imageSelector="image"
-            [selectedSectionItem]="selectedSectionItem()"
             [form]="form"
             label="URL de la imagen"
             imageTypeName="imageType"
@@ -21,10 +38,10 @@
 
     <div class="flex flex-col gap-2">
         <label>Imagen de fondo</label>
+        <!-- [selectedSectionItem]="selectedSectionItem()" -->
         <file-upload
             imageSelector="backgroundImage"
             currentImageName="currentImageBack"
-            [selectedSectionItem]="selectedSectionItem()"
             [form]="form"
             label="URL de la imagen"
             imageTypeName="imageBackType"

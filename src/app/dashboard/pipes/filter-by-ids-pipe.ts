@@ -4,7 +4,6 @@ import { Pipe, PipeTransform } from '@angular/core';
     name: 'filterByIdsPipe'
 })
 export class FilterByIdsPipe implements PipeTransform {
-    // TODO: It has to accept field name as parameter
     transform(array: { [key: string]: any }[], ids: null | number[] | number, field: string): any[] {
         if (!ids || (ids instanceof Array && ids.length === 0)) return array;
         console.log({ ids, array })

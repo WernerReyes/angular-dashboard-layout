@@ -95,6 +95,17 @@
             ></common-inputs>
             } @case (SectionType.MACHINE) {
             <machine-form></machine-form>
+            } @case (SectionType.CONTACT_TOP_BAR) {
+            <common-inputs
+                [form]="form"
+                [includeFields]="[{
+                type: 'title',
+                label: 'Título',
+                placeholder: 'Título del item',
+                isTextarea: false
+            }]"
+            ></common-inputs>
+            <icon-upload [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
             } @default { } }
         </div>
     </form>

@@ -22,10 +22,11 @@ import { SectionFormService } from '../services/section-form.service';
 import { WhyUsForm } from './why-us-form/why-us-form';
 import { FileUpload } from '../components/file-upload/file-upload';
 import { ImageType } from '@/shared/interfaces/section-item';
+import { MainNavigationMenuForm } from './main-navigation-menu-form/main-navigation-menu-form';
 
 @Component({
     selector: 'section-form',
-    imports: [CommonInputs, ShowLinkSwitch, FileUpload, WhyUsForm, ReactiveFormsModule, InputTextModule, KeyValuePipe, JsonPipe, ToggleSwitchModule, TextareaModule, SelectModule, DialogModule, MessageModule, ButtonModule, ToggleButtonModule],
+    imports: [CommonInputs, ShowLinkSwitch, FileUpload, WhyUsForm, MainNavigationMenuForm, ReactiveFormsModule, InputTextModule, KeyValuePipe, JsonPipe, ToggleSwitchModule, TextareaModule, SelectModule, DialogModule, MessageModule, ButtonModule, ToggleButtonModule],
     templateUrl: './section-form.html'
 })
 export class SectionForm {
@@ -68,8 +69,11 @@ export class SectionForm {
                 active: formValue.active!,
                 pageId: this.selectedPageId(),
                 fileImage: formValue.imageType === ImageType.LOCAL ? (formValue.imageFile as any) : null,
-                imageUrl: formValue.imageType === ImageType.URL ? formValue.imageUrl || null : null
+                imageUrl: formValue.imageType === ImageType.URL ? formValue.imageUrl || null : null,
+                menusIds: formValue.menusIds as any || null
             };
+
+            console.log(typeof formValue.menusIds, formValue.menusIds);
 
             if (this.selectedSection()) {
                 this.sectionService.updateSection(this.selectedSection()!.id, sectionData).subscribe({

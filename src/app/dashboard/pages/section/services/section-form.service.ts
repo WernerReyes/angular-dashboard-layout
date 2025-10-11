@@ -20,27 +20,34 @@ export class SectionFormService {
         content: [''],
         textButton: ['', [Validators.maxLength(50)]],
 
-         imageType: [ImageType.NONE], // null = none, true = local, false = url
-                currentImage: [''],
-                imageFile: [null, [Validators.maxLength(255)]],
-                imageUrl: ['', [Validators.maxLength(255)]],
-        
+        imageType: [ImageType.NONE], // null = none, true = local, false = url
+        currentImage: [''],
+        imageFile: [null, [Validators.maxLength(255)]],
+        imageUrl: ['', [Validators.maxLength(255)]],
+
         showLink: [false],
         typeLink: [true], // true = internal, false = external
         linkId: [null],
-        active: [true, [Validators.required]]
+        active: [true, [Validators.required]],
+
+        menusIds: ['']
     });
 
     constructor() {
         this.form.get('type')?.valueChanges.subscribe((type) => {
-            const titleControl = this.form.get('title');
-            const subtitleControl = this.form.get('subtitle');
-            const contentControl = this.form.get('content');
-            if (type === SectionType.HERO) {
-                
+            const menusIdsControl = this.form.get('menusIds');
+            const imageFile = this.form.get('imageFile');
+            if (type === SectionType.MAIN_NAVIGATION_MENU) {
+                menusIdsControl?.setValidators([Validators.required]);
+              
+                imageFile?.setValidators([Validators.required])
+            } else {
+                menusIdsControl?.clearValidators();
+                imageFile?.clearValidators();
             }
+            imageFile?.updateValueAndValidity();
+            menusIdsControl?.updateValueAndValidity();
         });
-
 
         this.form.get('showLink')?.valueChanges.subscribe((showLink) => {
             const linkIdControl = this.form.get('linkId');
@@ -74,6 +81,8 @@ export class SectionFormService {
             currentImage: section.image || '',
             imageUrl: '',
             imageType: ImageType.NONE,
+
+            menusIds: (section.menus.map((menu) => menu.id) || []) as any
         });
     }
 

@@ -1,0 +1,35 @@
+<div class="flex flex-col gap-2" [formGroup]="form">
+    @let imageType = form.controls['imageType'].value;
+    <common-inputs
+        [form]="form"
+        [includeFields]="[{
+                    type: 'content',
+                    label: 'Historia',
+                    placeholder: 'Breve historia de la empresa',
+                    isTextarea: true,
+                    }]"
+    ></common-inputs>
+    <div class="flex flex-col gap-2">
+        <label>Imagen referencial</label>
+        <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+    </div>
+
+    <app-error-boundary [resource]="menuList">
+        <ng-template #content let-menus>
+            <div class="flex flex-col gap-2">
+                <label>Menú de navegación principal</label>
+                <p-multiSelect
+                    [options]="menusListSelect()"
+                    formControlName="menusIds"
+                    optionLabel="label"
+                    optionValue="value"
+                    class="w-full"
+                    placeholder="Selecciona los menús para esta sección"
+                    display="chip"
+                    [filter]="true"
+                    [showToggleAll]="true"
+                ></p-multiSelect>
+            </div>
+        </ng-template>
+    </app-error-boundary>
+</div>

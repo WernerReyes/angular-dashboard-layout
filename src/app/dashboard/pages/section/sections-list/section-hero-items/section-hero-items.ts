@@ -9,10 +9,11 @@ import { TagModule } from 'primeng/tag';
 import { HeroItem } from './hero-item/hero-item';
 import { DeleteSectionItemFunction } from '../sections-list';
 
+// TODO: Use Gallery component from primeng instead of Carousel
 @Component({
     selector: 'section-hero-items',
     imports: [HeroItem, CarouselModule, ButtonModule, TagModule, MenuModule],
-    templateUrl: './section-hero-items.html',
+    templateUrl: './section-hero-items.html'
 })
 export class SectionHeroItems {
     // private readonly sectionItemService = inject(SectionItemService);
@@ -21,7 +22,7 @@ export class SectionHeroItems {
     sectionItems = input.required<SectionItem[]>();
     deleteItemConfirmation = input.required<DeleteSectionItemFunction>();
     onSelectSectionItem = output<SectionItem>();
-    
+
     selectedItem = signal<SectionItem | null>(null);
 
     onPageChange(event: any) {
@@ -67,29 +68,4 @@ export class SectionHeroItems {
             }
         }
     ];
-
-    // deleteSectionItem(event: Event) {
-    //     this.confirmationService.confirm({
-    //         target: event.target as EventTarget,
-    //         message: 'Estás seguro de que deseas eliminar este elemento de la sección?',
-    //         header: 'Confirmación',
-    //         closable: true,
-    //         closeOnEscape: true,
-    //         icon: 'pi pi-exclamation-triangle',
-    //         rejectButtonProps: {
-    //             label: 'Cancelar',
-    //             severity: 'secondary',
-    //             outlined: true
-    //         },
-    //         acceptButtonProps: {
-    //             label: 'Eliminar'
-    //         },
-    //         accept: () => {
-    //             if (this.selectedItem()) {
-    //                 this.sectionItemService.delete(this.selectedItem()!.id, this.selectedItem()!.sectionId).subscribe();
-    //                 this.selectedItem.set(null);
-    //             }
-    //         }
-    //     });
-    // }
 }

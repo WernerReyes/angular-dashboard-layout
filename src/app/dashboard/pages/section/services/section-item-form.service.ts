@@ -91,6 +91,11 @@ export class SectionItemFormService {
                 sectionId?.setValidators([Validators.required]);
                 sectionId?.updateValueAndValidity();
                 this.disableFields(['subtitle', 'imageBackFile', 'currentImageBack', 'iconFile', 'currentIconUrl']);
+                break;
+
+            case SectionType.CONTACT_TOP_BAR:
+                this.disableFields(['subtitle', 'content', 'imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'textButton', 'showLink', 'linkId', 'typeLink',  'categoryId']);
+            
         }
     }
 

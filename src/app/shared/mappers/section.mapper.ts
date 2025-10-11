@@ -1,5 +1,6 @@
 import { Section } from '../interfaces/section';
 import { LinkEntity, mapLinkEntityToLink } from './link.mapper';
+import { mapMenuEntityToMenu, MenuEntity } from './menu.mapper';
 import { mapSectionItemEntityToSectionItem, SectionItemEntity } from './section-item.mapper';
 
 export enum SectionType {
@@ -9,6 +10,8 @@ export enum SectionType {
     VALUE_PROPOSITION = 'VALUE_PROPOSITION',
     OUR_COMPANY = 'OUR_COMPANY',
     MACHINE = 'MACHINE',
+    CONTACT_TOP_BAR = 'CONTACT_TOP_BAR',
+    MAIN_NAVIGATION_MENU = 'MAIN_NAVIGATION_MENU',
 
     BENEFIT = 'BENEFIT',
     MACHINE_TYPE = 'MACHINE_TYPE',
@@ -33,6 +36,7 @@ export interface SectionEntity {
     page_id: number;
     section_items: SectionItemEntity[];
     link: LinkEntity | null;
+    menus: MenuEntity[] | null;
 }
 
 export const mapSectionEntityToSection = (entity: SectionEntity): Section => {
@@ -49,6 +53,7 @@ export const mapSectionEntityToSection = (entity: SectionEntity): Section => {
         active: Boolean(entity.active),
         pageId: Number(entity.page_id),
         link: entity.link ? mapLinkEntityToLink(entity.link) : null,
-        items: entity?.section_items && entity.section_items.length > 0 ? entity.section_items.map((item) => mapSectionItemEntityToSectionItem(item)) : []
+        items: entity?.section_items && entity.section_items.length > 0 ? entity.section_items.map((item) => mapSectionItemEntityToSectionItem(item)) : [],
+        menus: entity?.menus && entity.menus.length > 0 ? entity.menus.map(mapMenuEntityToMenu) : []
     };
 };

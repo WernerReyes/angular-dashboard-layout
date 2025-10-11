@@ -1,5 +1,7 @@
+
 import { SectionType } from '../mappers/section.mapper';
 import { Link } from './link';
+import { Menu } from './menu';
 import { SectionItem } from './section-item';
 import { Severity } from './severity';
 
@@ -17,6 +19,7 @@ export interface Section {
     pageId: number;
     items: SectionItem[];
     link: Link | null;
+    menus: Menu[];
 }
 
 type SectionStatusOption = {
@@ -43,6 +46,8 @@ export const sectionTypesOptions: Record<SectionType, SectionTypeOption> = {
     CLIENT: { label: 'Cliente', value: SectionType.CLIENT, severity: 'info' },
     OUR_COMPANY: { label: 'Nuestra Empresa', value: SectionType.OUR_COMPANY, severity: 'success' },
     MACHINE: { label: 'Máquina', value: SectionType.MACHINE, severity: 'warn' },
+    CONTACT_TOP_BAR: { label: 'Barra de Contacto', value: SectionType.CONTACT_TOP_BAR, severity: 'danger' },
+    MAIN_NAVIGATION_MENU: { label: 'Menú de Navegación Principal', value: SectionType.MAIN_NAVIGATION_MENU, severity: 'info' },
 
     BENEFIT: { label: 'Beneficios', value: SectionType.BENEFIT, severity: 'success' },
     MACHINE_TYPE: { label: 'Tipo de Máquina', value: SectionType.MACHINE_TYPE, severity: 'warn' },

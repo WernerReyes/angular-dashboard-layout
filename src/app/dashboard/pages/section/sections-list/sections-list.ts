@@ -29,6 +29,7 @@ import { SectionMachineItems } from './section-machine-items/section-machine-ite
 import { SectionOurCompanyItems } from './section-our-company-items/section-our-company-items';
 import { SectionValuePropositionItems } from './section-value-proposition-items/section-value-proposition-items';
 import { SectionWhyUsItems } from './section-why-us-items/section-why-us-items';
+import { SectionContactTopBarItems } from './section-contact-top-bar-items/section-contact-top-bar-items';
 
 
 type DeleteSectionItemParams = {
@@ -39,7 +40,7 @@ type DeleteSectionItemParams = {
 export type DeleteSectionItemFunction = (event: Event, params: DeleteSectionItemParams, accept?: () => void, reject?: () => void) => void;
 @Component({
     selector: 'sections-list',
-    imports: [SectionItem, SectionHeroItems, SectionWhyUsItems, SectionCashProcessingEquipmentItems, SectionValuePropositionItems,  SectionClientItems, SectionOurCompanyItems,SectionMachineItems,  SectionItemForm, ErrorBoundary, PanelModule, CarouselModule, DragDropModule, FilterSectionsByPagePipe, MessageModule, DataViewSkeleton, FieldsetModule, TagModule, ButtonModule, Badge],
+    imports: [SectionItem, SectionHeroItems, SectionWhyUsItems, SectionCashProcessingEquipmentItems, SectionValuePropositionItems,  SectionClientItems, SectionOurCompanyItems,SectionMachineItems, SectionContactTopBarItems, SectionItemForm, ErrorBoundary, PanelModule, CarouselModule, DragDropModule, FilterSectionsByPagePipe, MessageModule, DataViewSkeleton, FieldsetModule, TagModule, ButtonModule, Badge],
     templateUrl: './sections-list.html'
 })
 export class SectionsList {

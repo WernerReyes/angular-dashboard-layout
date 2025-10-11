@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 
-import { RecentSalesWidget } from './components/recentsaleswidget';
 import { StatsWidget } from './components/stats-widget/stats-widget';
 import { RecentPages } from './components/recent-pages/recent-pages';
 import { RecentCategories } from './components/recent-categories/recent-categories';

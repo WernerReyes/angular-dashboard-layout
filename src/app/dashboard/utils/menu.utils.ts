@@ -1,6 +1,12 @@
 import type { Menu } from '@/shared/interfaces/menu';
 import type { UpdateMenuOrder } from '../interfaces/menu';
 
+interface OrderedItem {
+    id: number;
+    order: number;
+    parentId: number | null;
+}
+
 export class MenuUtils {
     //*  To Service Methods *//
     static insertMenuItem(list: Menu[], newMenu: Menu): Menu[] {
@@ -158,6 +164,62 @@ export class MenuUtils {
         };
 
         traverse(list);
+        return result;
+    }
+
+    static orderHierarchically(items: Menu[]): Menu[] {
+        // Separate parents and children
+        const parents = items.filter((i) => i.parentId === null);
+        const children = items.filter((i) => i.parentId !== null);
+
+        // Final ordered list
+        const result: Menu[] = [];
+
+        // Loop through each parent and its children
+        parents.forEach((parent, parentIndex) => {
+            // Assign order to parent
+            result.push({
+                ...parent,
+                order: parentIndex + 1
+            });
+
+            // Get all children of the current parent
+            const childrenOfParent = children.filter((c) => c.parentId === parent.id);
+
+            // Assign order to each child relative to its parent
+            childrenOfParent.forEach((child, childIndex) => {
+                result.push({
+                    ...child,
+                    order: childIndex + 1 // local order within the parent
+                });
+            });
+        });
+
+        return result;
+    }
+
+    static orderChildrenOnly(items: Menu[]): Menu[] {
+        // Group by parentId
+        const groupedByParent: Record<number, Menu[]> = {};
+
+        items.forEach((item) => {
+            if (item.parentId == null) return; // ignore items without parent
+            if (!groupedByParent[item.parentId]) groupedByParent[item.parentId] = [];
+            groupedByParent[item.parentId].push(item);
+        });
+
+        const result: Menu[] = [];
+
+        // Assign local order within each parent group
+        Object.entries(groupedByParent).forEach(([parentId, children]) => {
+            children.forEach((child, index) => {
+                result.push({
+                    ...child,
+                    order: index + 1 // local order within that parent
+                });
+            });
+        });
+
         return result;
     }
 }

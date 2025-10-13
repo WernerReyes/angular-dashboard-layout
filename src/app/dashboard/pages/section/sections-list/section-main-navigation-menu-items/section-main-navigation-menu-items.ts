@@ -24,6 +24,8 @@ export class SectionMainNavigationMenuItems {
 
         const menus = this.buildMenuTree(sectionData.menus);
 
+        console.log('Built Menu Tree:', menus, sectionData.menus);
+
         return menus.map((menu) => ({
             label: menu.title,
             items: menu.children?.length
@@ -67,6 +69,6 @@ export class SectionMainNavigationMenuItems {
         // Agregamos los padres al árbol final
         tree.push(...parentsMap.values());
 
-        return tree;
+        return tree.sort((a, b) => a.order - b.order);
     }
 }

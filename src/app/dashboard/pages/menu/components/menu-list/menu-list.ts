@@ -28,7 +28,7 @@ type MenuComponent = Menu & {
 
 @Component({
     selector: 'menu-list',
-    imports: [ErrorBoundary, DataViewSkeleton, ConfirmDialogModule, MessageModule, DragDropModule, FormsModule,  TagModule, DividerModule, BadgeModule, MenuModule, InputTextModule, InputGroupModule, InputGroupAddonModule, ButtonModule],
+    imports: [ErrorBoundary, DataViewSkeleton, ConfirmDialogModule, MessageModule, DragDropModule, FormsModule, TagModule, DividerModule, BadgeModule, MenuModule, InputTextModule, InputGroupModule, InputGroupAddonModule, ButtonModule],
     templateUrl: './menu-list.html',
     providers: [ConfirmationService]
 })
@@ -50,7 +50,6 @@ export class MenuList {
 
     searchQuery = signal<string>('');
 
-
     originMenuList = linkedSignal<MenuComponent[]>(() => {
         const menus = this.menuList.hasValue() ? this.menuList.value() : [];
         return structuredClone(menus).map((menu) => ({ ...menu, expanded: false })) as MenuComponent[];
@@ -69,12 +68,9 @@ export class MenuList {
         return menuComponents.filter((menu) => menu.title.toLowerCase().includes(term) || (menu.children && menu.children.some((child) => child.title.toLowerCase().includes(term))));
     });
 
-        targetList = signal<MenuComponent[]>([]);
-
-
+    targetList = signal<MenuComponent[]>([]);
 
     hasPositionChanged = signal(false);
-
 
     openDialogAndEdit(menu: Menu) {
         this.onDisplay.emit(true);
@@ -82,8 +78,6 @@ export class MenuList {
 
         this.menuFormService.populateForm(menu);
     }
-
-    
 
     drop(event: CdkDragDrop<Menu[]>, targetList: Menu[], parentList?: Menu[]) {
         // Si se reordenó dentro del mismo contenedor
@@ -101,25 +95,29 @@ export class MenuList {
             }
         }
 
-     
+        this.targetList.update((menus) => {
+            return [...menus, ...targetList];
+        });
 
-        this.targetList.set(structuredClone(targetList));
-
-        // Verifica si hubo cambios
         this.hasPositionChanged.set(this.hasOrderChanged());
-
-       
     }
 
+    savePositionChanges() {
+        let menuListOrdered: Menu[] = [];
+        const hasChildren = this.targetList().every((item) => item.parentId !== null);
+        const onlyRoots = this.targetList().every((item) => item.parentId === null);
 
-     savePositionChanges() {
-        const newOrder = this.targetList().map((section, index) => ({ id: section.id, order: index + 1, parentId: section.parentId }));
-        this.menuService.updateOrder(newOrder).subscribe({
+        if (hasChildren) {
+            menuListOrdered = MenuUtils.orderChildrenOnly(this.targetList());
+        } else if (onlyRoots) {
+            menuListOrdered = this.targetList().map((menu, index) => ({ ...menu, order: index + 1 }));
+        } else {
+            menuListOrdered = MenuUtils.orderHierarchically(this.targetList());
+        }
+
+        const uniqueMenus = Array.from(new Map(menuListOrdered.map((item) => [item.id, item])).values());
+        this.menuService.updateOrder(uniqueMenus.map((item) => ({ id: item.id, order: item.order, parentId: item.parentId }))).subscribe({
             next: () => {
-                this.menuList.update((menus) => {
-                    if (!menus) return [];
-                    return structuredClone(this.targetList());
-                });
                 this.originMenuList.set(structuredClone(this.targetList()));
                 this.hasPositionChanged.set(false);
             }

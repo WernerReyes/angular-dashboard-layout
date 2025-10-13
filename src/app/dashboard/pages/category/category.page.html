@@ -8,7 +8,7 @@
             <p-button label="Nueva Categoria" icon="pi pi-plus" class="p-button-sm p-button-outlined" (click)="display.set(true)"></p-button>
         </div>
 
-        <categories-list></categories-list>
-        <dialog-form [display]="display()" [(selectedCategory)]="selectedCategory" [form]="form" (onCloseDialog)="closeDialog()"></dialog-form>
+        <categories-list [form]="form" [(display)]="display"></categories-list>
+        <dialog-form [display]="display()" [form]="form" (onCloseDialog)="closeDialog()"></dialog-form>
     </div>
 </div>

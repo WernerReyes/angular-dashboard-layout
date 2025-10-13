@@ -24,7 +24,6 @@ export class MainNavigationMenuForm {
 
     menusListSelect = computed<TreeNode[]>(() => {
         const menus = this.menuList.hasValue() ? this.menuList.value() : [];
-        console.log(menus);
         return menus.map((menu) => ({
             label: menu.title,
             data: menu.id,

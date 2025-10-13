@@ -6,10 +6,12 @@
     <!-- Indicador de fondo faltante -->
     @if (!item().backgroundImage) {
     <div class="absolute top-4 right-4 z-10">
-        <div class="flex items-center gap-2 border-gray-400 dark:border-gray-600 bg-gray-100 text-gray-500 dark:text-gray-400 dark:bg-gray-800 px-3 py-1 rounded-full text-xs border">
-            <i class="pi pi-image text-xs"></i>
-            <span>Sin imagen de fondo</span>
-        </div>
+        <empty-field-message className="max-w-md text-xs  !py-2 !rounded-full">
+            <ng-template #content>
+                <i class="pi pi-image text-xs"></i>
+                <span>Sin imagen de fondo</span>
+            </ng-template>
+        </empty-field-message>
     </div>
     }
 

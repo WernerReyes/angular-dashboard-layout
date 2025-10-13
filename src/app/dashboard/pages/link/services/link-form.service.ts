@@ -23,7 +23,6 @@ export class LinkFormService {
             if (type === LinkType.PAGE) {
                 this.form.get('pageId')?.setValidators([Validators.required, Validators.min(1)]);
                 this.form.get('url')?.clearValidators();
-                console.log('pageId validators set');
                 // this.form.get('url')?.setValue(null);
             } else if (type === LinkType.EXTERNAL) {
                 this.form.get('url')?.setValidators([Validators.required, Validators.pattern(PatternsConst.URL)]);

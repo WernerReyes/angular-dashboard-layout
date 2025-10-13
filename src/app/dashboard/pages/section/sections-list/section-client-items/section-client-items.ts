@@ -28,7 +28,6 @@ export class SectionClientItems {
             icon: 'pi pi-fw pi-pencil',
 
             command: () => {
-                console.log('emitiendo item:', this.selectedItem());
                 this.onSelectSectionItem.emit(this.selectedItem()!);
             }
         },

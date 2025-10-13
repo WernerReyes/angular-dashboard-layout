@@ -17,7 +17,6 @@ export class DialogForm {
     private readonly categoryService = inject(CategoryService);
 
     form = input.required<FormGroup<any>>();
-    selectedCategory = model<Category | null>();
     display = input.required<boolean>();
     onCloseDialog = output<void>();
 
@@ -25,16 +24,15 @@ export class DialogForm {
 
     saveChanges() {
         if (this.form().valid) {
-            const newTitle = this.form().value.title;
-            if (this.selectedCategory()) {
-                if (newTitle === this.selectedCategory()!.title) {
+            const { id, title: newTitle, oldTitle } = this.form().value;
+            if (id) {
+                if (newTitle === oldTitle) {
                     return;
                 }
-                this.categoryService.updateCategory(this.selectedCategory()!.id, newTitle).subscribe({
+                this.categoryService.updateCategory(id, newTitle).subscribe({
                     next: () => {
                         this.onCloseDialog.emit();
                         this.form().reset();
-                        this.selectedCategory.set(null);
                     }
                 });
             } else {

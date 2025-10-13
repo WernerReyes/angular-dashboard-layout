@@ -1,5 +1,5 @@
 <p-dialog
-    [header]="selectedCategory() ? 'Editar categoria' : 'Crear nueva categoria'"
+    [header]="form().value.id ? 'Editar categoria' : 'Crear nueva categoria'"
     class="!overflow-hidden"
     [visible]="display()"
     (visibleChange)="onCloseDialog.emit()"
@@ -19,6 +19,6 @@
     </form>
 
     <ng-template #footer>
-        <button pButton icon="pi pi-save" type="submit" form="link-form" [disabled]="form().invalid" label="Guardar"></button>
+        <button pButton icon="pi pi-save" type="submit" form="link-form" [disabled]="form().invalid || form().pristine" label="Guardar"></button>
     </ng-template>
 </p-dialog>

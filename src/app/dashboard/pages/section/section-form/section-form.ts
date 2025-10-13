@@ -26,7 +26,24 @@ import { MainNavigationMenuForm } from './main-navigation-menu-form/main-navigat
 
 @Component({
     selector: 'section-form',
-    imports: [CommonInputs, ShowLinkSwitch, FileUpload, WhyUsForm, MainNavigationMenuForm, ReactiveFormsModule, InputTextModule, KeyValuePipe, JsonPipe, ToggleSwitchModule, TextareaModule, SelectModule, DialogModule, MessageModule, ButtonModule, ToggleButtonModule],
+    imports: [
+        CommonInputs,
+        ShowLinkSwitch,
+        FileUpload,
+        WhyUsForm,
+        MainNavigationMenuForm,
+        ReactiveFormsModule,
+        InputTextModule,
+        KeyValuePipe,
+        JsonPipe,
+        ToggleSwitchModule,
+        TextareaModule,
+        SelectModule,
+        DialogModule,
+        MessageModule,
+        ButtonModule,
+        ToggleButtonModule
+    ],
     templateUrl: './section-form.html'
 })
 export class SectionForm {
@@ -56,10 +73,6 @@ export class SectionForm {
         this.selectedSection.set(null);
     }
 
-    private formChangeEffect = effect(() => {
-        console.log('Form changes:', this.form.value);
-    });
-
     saveChanges() {
         if (this.form.valid) {
             const formValue = this.form.value;
@@ -77,16 +90,17 @@ export class SectionForm {
                 menusIds: formValue.menusIds ? formValue.menusIds.map(({ data }) => Number(data)) : []
             };
 
-           
             if (this.selectedSection()) {
-                this.sectionService.updateSection(this.selectedSection()!.id, {
-                    ...sectionData,
-                    currentImageUrl: formValue.currentImage || null
-                }).subscribe({
-                    next: () => {
-                        this.closeDialog();
-                    }
-                });
+                this.sectionService
+                    .updateSection(this.selectedSection()!.id, {
+                        ...sectionData,
+                        currentImageUrl: formValue.currentImage || null
+                    })
+                    .subscribe({
+                        next: () => {
+                            this.closeDialog();
+                        }
+                    });
                 return;
             }
 

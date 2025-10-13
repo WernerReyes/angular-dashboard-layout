@@ -54,6 +54,12 @@ export class FormUtils {
                     if (errors['pattern'].requiredPattern === PatternsConst.SLUG.toString()) {
                         return 'El valor ingresado no luce como un slug válido (solo letras minúsculas, números y guiones)';
                     }
+
+                    if (errors['pattern'].requiredPattern === PatternsConst.EMAIL.toString()) {
+                        return 'El valor ingresado no luce como un correo electrónico';
+                    }
+
+
                     return 'Error de patrón contra expresión regular';
 
                 case 'whitespace':
@@ -68,7 +74,6 @@ export class FormUtils {
     }
 
     static isInvalidField(form: FormGroup, fieldName: string): boolean | null {
-        console.log(form.controls[fieldName]?.errors);
         return !!form.controls[fieldName]?.errors && form.controls[fieldName]?.touched;
     }
 
@@ -115,7 +120,6 @@ export class FormUtils {
     }
 
     static async checkingServerResponse(control: AbstractControl): Promise<ValidationErrors | null> {
-        console.log('Validando contra servidor');
 
         await sleep(); // 2 segundos y medio
 

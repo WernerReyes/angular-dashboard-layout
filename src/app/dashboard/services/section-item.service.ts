@@ -44,7 +44,6 @@ export class SectionItemService {
                     this.messageService.setError(array[0]);
                     return throwError(() => error);
                 }
-                console.log('Error creating section item:', error);
                 this.messageService.setError(error?.error?.message);
                 return throwError(() => error);
             })
@@ -71,7 +70,6 @@ export class SectionItemService {
                 });
             }),
             catchError((error) => {
-                console.log('Error updating section item:', error);
                 this.messageService.setError(error?.error?.message);
                 return throwError(() => error);
             })

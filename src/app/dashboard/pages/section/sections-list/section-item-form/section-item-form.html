@@ -106,6 +106,37 @@
             }]"
             ></common-inputs>
             <icon-upload [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
+            } @case (SectionType.SOLUTIONS_OVERVIEW) {
+            <common-inputs
+                [form]="form"
+                [includeFields]="[{
+                type: 'title',
+                label: 'Título',
+                placeholder: 'Título',
+            }, {
+                type: 'content',
+                label: 'Descripción',
+                placeholder: 'Descripción del item',
+                isTextarea: true
+            }]"
+            ></common-inputs>
+            <icon-upload [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
+            } @case (SectionType.MISSION_VISION) {
+            <common-inputs
+                [form]="form"
+                [includeFields]="[{
+                type: 'title',
+                label: 'Título',
+                placeholder: 'Título del item',
+                isTextarea: false
+            },
+            {
+                type: 'content',
+                label: 'Descripción',
+                placeholder: 'Descripción del item',
+                isTextarea: true
+            }]"
+            ></common-inputs>
             } @default { } }
         </div>
     </form>

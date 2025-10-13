@@ -10,8 +10,6 @@ export const authGuard: CanMatchFn = async (route: Route, segments: UrlSegment[]
 
     const isAuthenticated = await firstValueFrom(authService.me());
 
-    console.log({ isAuthenticated });
-
     if (!isAuthenticated) {
         router.navigateByUrl('/auth/login');
         return false;

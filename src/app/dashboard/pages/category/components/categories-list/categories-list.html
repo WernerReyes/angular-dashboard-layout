@@ -4,6 +4,7 @@
     </ng-template>
 
     <ng-template #content let-categories>
+        <p-confirmdialog />
         @let categoriesFiltered = categories | filterByTerm:'title': searchTerm();
         <p-dataview [paginator]="true" [totalRecords]="categoriesFiltered.length" [rowsPerPageOptions]="[5, 10, 20]" [rows]="5" [value]="categoriesFiltered" layout="list">
             <ng-template #header>
@@ -39,8 +40,8 @@
 
                             <div class="flex flex-col md:items-end gap-8">
                                 <div class="flex flex-row-reverse md:flex-row gap-2">
-                                    <p-button label="Editar" text icon="pi pi-pencil"></p-button>
-                                    <p-button label="Eliminar" text icon="pi pi-trash" severity="danger"></p-button>
+                                    <p-button label="Editar" text icon="pi pi-pencil" (click)="populateForm(item)"></p-button>
+                                    <p-button label="Eliminar" text icon="pi pi-trash" severity="danger" (click)="deleteCategory($event, item)"></p-button>
                                 </div>
                             </div>
                         </div>

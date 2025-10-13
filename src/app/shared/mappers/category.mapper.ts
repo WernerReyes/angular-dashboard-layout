@@ -7,9 +7,11 @@ export interface CategoryEntity {
     readonly updated_at: string;
 }
 
-export const mapCategoryEntityToCategory = (entity: CategoryEntity): Category => ({
-    id: entity.id_category,
-    title: entity.title,
-    createdAt: new Date(entity.created_at),
-    updatedAt: new Date(entity.updated_at)
-});
+export const mapCategoryEntityToCategory = (entity: CategoryEntity): Category => {
+    return {
+        id: entity.id_category,
+        title: entity.title,
+        createdAt: new Date(entity.created_at),
+        updatedAt: new Date(entity.updated_at)
+    };
+};

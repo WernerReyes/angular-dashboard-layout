@@ -1,4 +1,3 @@
-
 import { SectionType } from '../mappers/section.mapper';
 import { Link } from './link';
 import { Menu } from './menu';
@@ -48,6 +47,13 @@ export const sectionTypesOptions: Record<SectionType, SectionTypeOption> = {
     MACHINE: { label: 'Máquina', value: SectionType.MACHINE, severity: 'warn' },
     CONTACT_TOP_BAR: { label: 'Barra de Contacto', value: SectionType.CONTACT_TOP_BAR, severity: 'danger' },
     MAIN_NAVIGATION_MENU: { label: 'Menú de Navegación Principal', value: SectionType.MAIN_NAVIGATION_MENU, severity: 'info' },
+    CTA_BANNER: { label: 'Banner Informativo', value: SectionType.CTA_BANNER, severity: 'info' },
+    SOLUTIONS_OVERVIEW: {
+        label: 'Resumen de Soluciones',
+        value: SectionType.SOLUTIONS_OVERVIEW,
+        severity: 'info'
+    },
+    MISSION_VISION: { label: 'Misión y Visión', value: SectionType.MISSION_VISION, severity: 'success' },
 
     BENEFIT: { label: 'Beneficios', value: SectionType.BENEFIT, severity: 'success' },
     MACHINE_TYPE: { label: 'Tipo de Máquina', value: SectionType.MACHINE_TYPE, severity: 'warn' },

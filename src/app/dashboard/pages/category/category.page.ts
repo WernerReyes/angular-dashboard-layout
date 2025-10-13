@@ -1,8 +1,7 @@
 import { Component, signal } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CategoriesList } from './components/categories-list/categories-list';
-import { Category } from '@/shared/interfaces/category';
-import { FormBuilder, Validators } from '@angular/forms';
 import { DialogForm } from './components/dialog-form/dialog-form';
 
 @Component({
@@ -13,15 +12,15 @@ import { DialogForm } from './components/dialog-form/dialog-form';
 export default class CategoryPage {
     private readonly fb = new FormBuilder();
     form = this.fb.group({
-        title: ['', [Validators.required, Validators.minLength(3)]]
+        id: [null],
+        title: ['', [Validators.required, Validators.minLength(3)]],
+        oldTitle: ['']
     });
 
-    selectedCategory = signal<Category | null>(null);
     display = signal<boolean>(false);
 
     closeDialog() {
         this.display.set(false);
         this.form.reset();
-        this.selectedCategory.set(null);
     }
 }

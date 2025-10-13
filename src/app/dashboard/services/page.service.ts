@@ -87,4 +87,21 @@ export class PageService {
                 })
             );
     }
+
+    deletePage(pageId: number) {
+        return this.http.delete<ApiResponse<null>>(`${this.prefix}/${pageId}`).pipe(
+            tap(() => {
+                this.pagesListResource.update((pages) => {
+                    if (pages) {
+                        return pages.filter((p) => p.id !== pageId);
+                    }
+                    return [];
+                });
+            }),
+            catchError((error) => {
+                this.messageService.setError(error.error?.message);
+                return throwError(() => error);
+            })
+        );
+    }
 }

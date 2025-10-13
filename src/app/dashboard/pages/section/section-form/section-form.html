@@ -10,7 +10,7 @@
     (onHide)="closeDialog()"
 >
     <form class="flex flex-col gap-4" [formGroup]="form" id="menu-form" (ngSubmit)="saveChanges()">
-        @let type = form.controls['type'].value;
+        @let type = form.controls['type'].value; @let imageType = form.controls['imageType'].value;
         <div class="flex flex-col gap-2">
             <label for="type">Tipo</label>
             <p-select
@@ -47,7 +47,6 @@
             }]"
             ></common-inputs>
             } @case (SectionType.OUR_COMPANY) {
-                @let imageType = form.controls['imageType'].value;
             <common-inputs
                 [form]="form"
                 [includeFields]="[{
@@ -59,25 +58,61 @@
             ></common-inputs>
             <div class="flex flex-col gap-2">
                 <label>Imagen referencial</label>
-                <file-upload
-                    currentImageName="currentImage"
-                    imageSelector="image"
-                    [form]="form"
-                    label="URL de la imagen"
-                    imageTypeName="imageType"
-                    [imageType]="imageType"
-                    imageFieldName="imageFile"
-                    imageURLName="imageUrl"
-                >
-                </file-upload>
+                <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
             </div>
             } @case(SectionType.MAIN_NAVIGATION_MENU) {
-              <main-navigation-menu-form></main-navigation-menu-form>
-            }
-        
-        }
+            <main-navigation-menu-form></main-navigation-menu-form>
+            } @case(SectionType.CTA_BANNER) {
+            <common-inputs
+                [form]="form"
+                [includeFields]="[
+                  
+                    {
+                type: 'subtitle',
+                label: 'Subtítulo',
+                placeholder: 'Subtítulo de la sección',
+            }, {
+                type: 'content',
+                label: 'Contenido',
+                placeholder: 'Contenido de la sección',
+                isTextarea: true,
+            }]"
+            ></common-inputs>
+
+            <div class="flex flex-col gap-2">
+                <label>Imagen de Fondo</label>
+                <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+            </div>
+
+            <show-link-switch [form]="form"></show-link-switch>
+            } @case (SectionType.SOLUTIONS_OVERVIEW) {
+            <common-inputs
+                [form]="form"
+                [includeFields]="[{
+                    type: 'subtitle',
+                    label: 'Subtítulo',
+                    placeholder: 'Subtítulo de la sección',
+                }]"
+            ></common-inputs>
+            } @case (SectionType.MISSION_VISION) {
+            <common-inputs
+                [form]="form"
+                [includeFields]="[
                     
-            
+                    {
+                        type: 'content',
+                        label: 'Contenido',
+                        placeholder: 'Contenido de la sección',
+                        isTextarea: true,
+                    }
+                ]"
+            ></common-inputs>
+            <div class="flex flex-col gap-2">
+                <label>Imagen</label>
+                <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+            </div>
+
+            } }
         </div>
 
         <p-togglebutton formControlName="active" onLabel="Activo" offLabel="Inactivo" onIcon="pi pi-check" offIcon="pi pi-times" onIcon="pi pi-lock-open" offIcon="pi pi-lock" class="w-36" ariaLabel="Do you confirm" />

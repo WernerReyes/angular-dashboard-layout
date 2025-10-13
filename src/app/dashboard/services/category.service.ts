@@ -61,7 +61,25 @@ export class CategoryService {
                 this.messageService.setSuccess(message);
                 this.categoryListResource.update((categories) => {
                     if (!categories) return [category];
+                    console.log(category);
                     return categories.map((cat) => (cat.id === category.id ? category : cat));
+                });
+            }),
+            catchError((error) => {
+                this.messageService.setError(error.error.message);
+                return throwError(() => error);
+            })
+        );
+    }
+
+    deleteCategory(id: number) {
+        return this.http.delete<ApiResponse<null>>(`${this.prefix}/${id}`, { withCredentials: true }).pipe(
+            map((res) => res.message),
+            tap((message) => {
+                this.messageService.setSuccess(message);
+                this.categoryListResource.update((categories) => {
+                    if (!categories) return [];
+                    return categories.filter((cat) => cat.id !== id);
                 });
             }),
             catchError((error) => {

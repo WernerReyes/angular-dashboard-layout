@@ -1,0 +1,7 @@
+
+<p-menu #menu [model]="items" [popup]="true" />
+<!-- <button type="button" class="layout-topbar-action" (click)="menu.toggle($event)">
+    <i class="pi pi-user"></i>
+    <span>Profile</span>
+</button> -->
+<p-avatar class="cursor-pointer" (click)="menu.toggle($event)" [label]="(fullName() | initials)" shape="circle"></p-avatar>

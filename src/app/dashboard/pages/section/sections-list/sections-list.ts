@@ -31,6 +31,9 @@ import { SectionValuePropositionItems } from './section-value-proposition-items/
 import { SectionWhyUsItems } from './section-why-us-items/section-why-us-items';
 import { SectionContactTopBarItems } from './section-contact-top-bar-items/section-contact-top-bar-items';
 import { SectionMainNavigationMenuItems } from './section-main-navigation-menu-items/section-main-navigation-menu-items';
+import { SectionCtaBannerItems } from './section-cta-banner-items/section-cta-banner-items';
+import { SectionSolutionsOverviewItems } from './section-solutions-overview-items/section-solutions-overview-items';
+import { SectionMissionVisionItems } from './section-mission-vision-items/section-mission-vision-items';
 
 type DeleteSectionItemParams = {
     id: number;
@@ -51,6 +54,9 @@ export type DeleteSectionItemFunction = (event: Event, params: DeleteSectionItem
         SectionMachineItems,
         SectionContactTopBarItems,
         SectionMainNavigationMenuItems,
+        SectionCtaBannerItems,
+        SectionSolutionsOverviewItems,
+        SectionMissionVisionItems,
         SectionItemForm,
         ErrorBoundary,
         PanelModule,
@@ -111,7 +117,6 @@ export class SectionsList {
     openDialogItem(section: Section, item?: ISectionItem) {
         this.displayItemDialog.set(true);
         this.currentSection.set(section);
-        // console.log('recikbiendo item:', item);
         this.selectedSectionItem.set(item || null);
         this.sectionItemFormService.setSectionType(section.type);
         if (item) {
@@ -174,11 +179,39 @@ export class SectionsList {
         return false;
     }
 
+    deleteSection($event: Event, section: Section) {
+        const message = section.items && section.items.length > 0 ? 'Esta sección tiene ítems asociados. ¿Seguro que deseas eliminarla?' : '¿Seguro que deseas eliminar esta sección?';
+        this.confirmationDialog(
+            $event,
+            message,
+            'Eliminar sección',
+            () => {
+                this.sectionService.deleteSection(section.id).subscribe();
+            },
+            () => {}
+        );
+    }
+
     deleteSectionItemConfirmation(event: Event, { id, sectionId }: DeleteSectionItemParams, accept?: () => void, reject?: () => void) {
+        this.confirmationDialog(
+            event,
+            '¿Estás seguro de que deseas eliminar este ítem de sección? Esta acción no se puede deshacer.',
+            'Eliminar ítem de sección',
+            () => {
+                this.sectionItemService.delete(id, sectionId).subscribe();
+                if (accept) accept();
+            },
+            () => {
+                if (reject) reject();
+            }
+        );
+    }
+
+    private confirmationDialog = (event: Event, message: string, header: string, accept: () => void, reject: () => void) => {
         this.confirmationService.confirm({
             target: event.target as EventTarget,
-            message: 'Estás seguro de que deseas eliminar este elemento de la sección?',
-            header: 'Confirmación',
+            message: message,
+            header: header,
             closable: true,
             closeOnEscape: true,
             icon: 'pi pi-exclamation-triangle',
@@ -190,13 +223,8 @@ export class SectionsList {
             acceptButtonProps: {
                 label: 'Eliminar'
             },
-            accept: () => {
-                this.sectionItemService.delete(id, sectionId).subscribe();
-                if (accept) accept();
-            },
-            reject: () => {
-                if (reject) reject();
-            }
+            accept,
+            reject
         });
-    }
+    };
 }

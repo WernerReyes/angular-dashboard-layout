@@ -1,0 +1,55 @@
+<div
+    [class.has-background]="section().image"
+    [style.background-image]="section().image ? 'url(' + section().image + ')' : null"
+    class="hero-section bg-gradient-to-br from-gray-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 py-20 transition-all duration-300 h-full overflow-hidden relative flex flex-col items-center max-md:text-center justify-between px-6 sm:px-10 md:px-24 mx-auto w-full min-h-[400px]"
+>
+    <!-- Indicador de fondo faltante -->
+    @if (!section().image) {
+    <div class="absolute top-4 right-4 z-10">
+        <empty-field-message className="max-w-md text-xs  !py-2 !rounded-full">
+            <ng-template #content>
+                <i class="pi pi-image text-xs"></i>
+                <span>Sin imagen de fondo</span>
+            </ng-template>
+        </empty-field-message>
+    </div>
+    }
+
+    <div
+        class="relative z-10 flex flex-col items-center text-center max-w-2xl"
+        [ngClass]="{
+                'mt-10 sm:mt-0': !section().image
+             }"
+    >
+        <!-- Título -->
+        <h6 class="dark:!text-white font-semibold !text-2xl md:!text-3xl max-w-xl" [class.!text-white]="section().image">{{section().title}}</h6>
+
+        <!-- Subtítulo -->
+        @if (section().subtitle) {
+        <span class="dark:text-white text-xl md:text-2xl block my-2" [class.text-white]="section().image"> {{section().subtitle}} </span>
+        } @else {
+        <empty-field-message textContent="Sin subtítulo"></empty-field-message>
+        }
+
+        <!-- Descripción -->
+        @if (section().description) {
+        <p class="mt-4 dark:text-white w-fit text-sm sm:text-base leading-relaxed" [class.text-white]="section().image">{{section().description}}</p>
+        } @else {
+
+        <empty-field-message className="mt-4 max-w-md" textContent="Descripción pendiente"></empty-field-message>
+
+        }
+
+        <!-- Botón -->
+        @if (section().textButton) {
+        <div class="flex flex-col md:flex-row items-center gap-3">
+            <p-button [label]="section().textButton ?? undefined" styleClass="p-button-success"> </p-button>
+        </div>
+        } @else {
+        <div class="w-full">
+            <empty-field-message className="max-w-56 mx-auto" textContent="Sin botón de acción"></empty-field-message>
+        </div>
+
+        }
+    </div>
+</div>

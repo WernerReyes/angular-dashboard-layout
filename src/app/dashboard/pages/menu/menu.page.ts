@@ -8,7 +8,7 @@ import type { Menu } from '@/shared/interfaces/menu';
 @Component({
     selector: 'app-menu.page',
     imports: [MenuList, DialogForm, ButtonModule],
-    templateUrl: './menu.page.html'
+    templateUrl: './menu.page.html',
 })
 export default class MenuPage {
     private readonly menuFormService = inject(MenuFormService);

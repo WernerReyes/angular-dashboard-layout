@@ -55,7 +55,6 @@ export class SectionService {
                 message
             })),
             tap(({ section, message }) => {
-                console.log('Created Section:', section, message);
                 this.messageService.setSuccess(message);
                 this.sectionListResource.update((sections) => {
                     if (!sections) return [section];
@@ -63,7 +62,6 @@ export class SectionService {
                 });
             }),
             catchError((error) => {
-                console.log('Error creating section:', error);
                 this.messageService.setError(error?.error?.message);
                 return throwError(() => error);
             })
@@ -105,8 +103,14 @@ export class SectionService {
                 });
             }),
             catchError((error) => {
+                if (error.error?.code === 422) {
+                    const details = error.error?.details;
+                    const array = Object.values(details).flat() as string[];
+                    this.messageService.setError(array[0]);
+                    return throwError(() => error);
+                }
                 this.messageService.setError(error?.error?.message);
-                throw error;
+                return throwError(() => error);
             })
         );
     }
@@ -116,6 +120,19 @@ export class SectionService {
             tap(({ message }) => {
                 this.messageService.setSuccess(message);
                 // this.sectionListResource.refresh();
+            }),
+            catchError((error) => {
+                this.messageService.setError(error?.error?.message);
+                return throwError(() => error);
+            })
+        );
+    }
+
+    deleteSection(id: number) {
+        return this.http.delete<ApiResponse<null>>(`${this.prefix}/${id}`).pipe(
+            tap(({ message }) => {
+                this.messageService.setSuccess(message);
+                this.sectionListResource.update((sections) => sections?.filter((s) => s.id !== id) || []);
             }),
             catchError((error) => {
                 this.messageService.setError(error?.error?.message);

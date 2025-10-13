@@ -24,8 +24,6 @@ export class SectionMainNavigationMenuItems {
 
         const menus = this.buildMenuTree(sectionData.menus);
 
-        console.log('Built Menu Tree:', menus, sectionData.menus);
-
         return menus.map((menu) => ({
             label: menu.title,
             items: menu.children?.length

@@ -82,7 +82,6 @@ export class SectionFormService {
     }
 
     populateForm(section: Section) {
-        console.log({ section });
         this.form.setValue({
             type: section.type,
             title: section.title!,
@@ -96,7 +95,7 @@ export class SectionFormService {
 
             imageFile: null,
             currentImage: section.image || '',
-            imageUrl: section.image || '',
+            imageUrl: '',
             imageType: ImageType.NONE,
 
             menusIds: section.menus

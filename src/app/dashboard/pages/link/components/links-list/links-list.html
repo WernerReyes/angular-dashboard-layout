@@ -3,6 +3,8 @@
         <app-data-view-skeleton></app-data-view-skeleton>
     </ng-template>
 
+      <p-confirmdialog />
+
     <p-dataview [paginator]="true" [totalRecords]="filteredLinksList().length" [rowsPerPageOptions]="[5, 10, 20]" [rows]="5" [value]="filteredLinksList()" layout="list">
         <ng-template #header>
             <p-inputgroup>
@@ -55,7 +57,7 @@
                         <div class="flex flex-col md:items-end gap-8">
                             <div class="flex flex-row-reverse md:flex-row gap-2">
                                 <p-button label="Editar" text icon="pi pi-pencil" (click)="openDialogAndEdit(item)"></p-button>
-                                <p-button label="Eliminar" text icon="pi pi-trash" severity="danger"></p-button>
+                                <p-button label="Eliminar" text icon="pi pi-trash" severity="danger" (click)="deleteLink($event, item)"></p-button>
                             </div>
                         </div>
                     </div>

@@ -18,7 +18,6 @@ export class MenuService {
 
     private readonly prefix = `${environment.apiUrl}/menu`;
 
-
     menuList = signal<Menu[]>([]);
 
     menuCreated = signal<Menu | null>(null);
@@ -52,6 +51,7 @@ export class MenuService {
     }
 
     createMenu(create: CreateMenu) {
+        console.log(create);
         return this.http
             .post<ApiResponse<MenuEntity>>(`${this.prefix}`, create, {
                 withCredentials: true
@@ -120,21 +120,30 @@ export class MenuService {
         );
     }
 
-    deleteMenu(id: number, type: MenuTypes) {
-        return this.http
-            .delete<ApiResponse<null>>(`${this.prefix}/${id}`, {
-                withCredentials: true,
-                params: { type }
+    deleteMenu(id: number, parentId: number | null) {
+        return this.http.delete<ApiResponse<null>>(`${this.prefix}/${id}`).pipe(
+            tap(({ message }) => {
+                this.menuListResource.update((menus) => {
+                    if (!menus) return [];
+                    const newMenus = menus.map((m) => {
+                        if (parentId && m.id === parentId) {
+                            return {
+                                ...m,
+                                children: m.children?.filter((child) => child.id !== id) ?? []
+                            };
+                        }
+
+                        return m;
+                    });
+
+                    return parentId ? newMenus : newMenus.filter((m) => m.id !== id);
+                });
+                this.messageService.setSuccess(message);
+            }),
+            catchError((error) => {
+                this.errorMessage.set(error.error?.message);
+                return throwError(() => error);
             })
-            .pipe(
-                tap(() => {
-                    this.menuList.update((menus) => menus.filter((m) => m.id !== id));
-                    // this.successMessage.set('Menu deleted successfully');
-                }),
-                catchError((error) => {
-                    this.errorMessage.set(error.error?.message);
-                    return throwError(() => error);
-                })
-            );
+        );
     }
 }

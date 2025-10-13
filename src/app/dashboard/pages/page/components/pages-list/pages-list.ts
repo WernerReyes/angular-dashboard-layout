@@ -11,13 +11,18 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
 import { PageFormService } from '../../services/page-form.service';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { FilterByTermPipe } from '@/dashboard/pipes/filter-by-term-pipe';
 
 @Component({
     selector: 'pages-list',
-    imports: [ErrorBoundary, DataViewSkeleton, NgClass, DatePipe, FormsModule, InputTextModule, InputGroupModule, InputGroupAddonModule, DataViewModule, ButtonModule],
-    templateUrl: './pages-list.html'
+    imports: [ErrorBoundary, DataViewSkeleton, FilterByTermPipe, NgClass, DatePipe, FormsModule, InputTextModule, ConfirmDialogModule, InputGroupModule, InputGroupAddonModule, DataViewModule, ButtonModule],
+    templateUrl: './pages-list.html',
+    providers: [ConfirmationService]
 })
 export class PagesList {
+    private readonly confirmationService = inject(ConfirmationService);
     private readonly pagesService = inject(PageService);
     private readonly pageFormService = inject(PageFormService);
 
@@ -28,17 +33,42 @@ export class PagesList {
 
     searchQuery = signal<string>('');
 
-    filteredPagesList = computed(() => {
-        const query = this.searchQuery().toLowerCase();
-        const pages = this.pagesList.hasValue() ? this.pagesList.value() : [];
-        if (!query) return pages;
-        return pages.filter((link) => link.title.toLowerCase().includes(query));
-    });
-
     openDialogAndEdit(page: Page) {
         this.onDisplay.emit(true);
         this.onSelectedPage.emit(page);
 
         this.pageFormService.populateForm(page);
+    }
+
+    deletePage(event: Event, page: Page) {
+ this.confirmationService.confirm({
+            target: event.target as EventTarget,
+            message: 'Estás seguro de que deseas eliminar esta página?',
+            header: 'Eliminar página',
+            closable: true,
+            closeOnEscape: true,
+            icon: 'pi pi-exclamation-triangle',
+            rejectButtonProps: {
+                label: 'Cancelar',
+                severity: 'secondary',
+                outlined: true
+            },
+            acceptButtonProps: {
+                label: 'Eliminar'
+            },
+            accept: () => {
+                this.pagesService.deletePage(page.id).subscribe({
+                    next: () => {
+                        this.confirmationService.close();
+                    },
+                    error: () => {
+                        this.confirmationService.close();
+                    }
+                });
+            },
+            reject: () => {
+                this.confirmationService.close();
+            }
+        });
     }
 }

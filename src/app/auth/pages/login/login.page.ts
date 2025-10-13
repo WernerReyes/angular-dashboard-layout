@@ -41,10 +41,7 @@ export default class LoginPage {
                 // Navigate to the dashboard or home page after successful login
                 this.router.navigateByUrl('/dashboard');
                 localStorage.setItem('session_refresh', Date.now().toString());
-                console.log('Login successful');
-            } else {
-                console.log('Login failed');
-            }
+            } 
         });
     }
 }

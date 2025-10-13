@@ -5,6 +5,10 @@
         <app-data-view-skeleton></app-data-view-skeleton>
     </ng-template>
 
+    <p-confirmdialog />
+
+
+
     <p-inputgroup>
         <p-inputgroup-addon>
             <i class="pi pi-search cursor-pointer"></i>
@@ -75,7 +79,7 @@
                     <div class="flex items-center space-x-2">
                         <p-tag [value]="activeStatus.label" [severity]="activeStatus.severity" class="text-sm" />
                         <p-button icon="pi pi-pencil" text aria-label="Edit Menu Item" (click)="openDialogAndEdit(menuItem)"></p-button>
-                        <p-button icon="pi pi-trash" text severity="danger" aria-label="Delete Menu Item"></p-button>
+                        <p-button icon="pi pi-trash" text severity="danger" aria-label="Delete Menu Item" (click)="confirmDeleteMenu($event, menuItem)"></p-button>
                     </div>
                 </div>
             </div>
@@ -106,7 +110,7 @@
                         <div class="flex items-center space-x-2">
                             <p-tag [value]="activeStatus.label" [severity]="activeStatus.severity" class="text-sm" />
                             <p-button icon="pi pi-pencil" text aria-label="Edit Menu Item" (click)="openDialogAndEdit(child)"></p-button>
-                            <p-button icon="pi pi-trash" text severity="danger" aria-label="Delete Menu Item"></p-button>
+                            <p-button icon="pi pi-trash" text severity="danger" aria-label="Delete Menu Item" (click)="confirmDeleteMenu($event, child)"></p-button>
                         </div>
                     </div>
                 </div>

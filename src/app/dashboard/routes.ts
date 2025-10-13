@@ -1,13 +1,13 @@
 import { Route } from '@angular/router';
 
 const dashboardRoutes: Route[] = [
-    {  
+    {
         path: '',
         loadComponent: () => import('./pages/home/home.page')
     },
     {
         path: 'menus',
-        loadComponent: () => import('./pages/menu/menu.page'),
+        loadComponent: () => import('./pages/menu/menu.page')
     },
     {
         path: 'pages',
@@ -25,6 +25,10 @@ const dashboardRoutes: Route[] = [
     {
         path: 'categories',
         loadComponent: () => import('./pages/category/category.page')
+    },
+    {
+        path: 'settings',
+        loadComponent: () => import('./pages/setting/setting.page')
     },
     {
         path: '**',

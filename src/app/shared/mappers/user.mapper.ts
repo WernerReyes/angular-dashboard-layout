@@ -1,11 +1,16 @@
 import type { User } from "../interfaces/user";
 
+
+export enum UserRole {
+    USER = 'USER',
+}
+
 export interface UserEntity {
     readonly id_user: number;
     readonly name: string;
     readonly lastname: string;
     readonly email: string;
-    readonly role: string;
+    readonly role: UserRole;
     readonly created_at: string;
     readonly updated_at: string;
 }

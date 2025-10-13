@@ -39,7 +39,6 @@ export class DashboardLayout implements OnInit, OnDestroy {
 
     @ViewChild(Topbar) topBar!: Topbar;
 
-    private checkInterval: any;
 
     constructor() {
         this.overlayMenuOpenSubscription = this.layoutService.overlayOpen$.subscribe(() => {

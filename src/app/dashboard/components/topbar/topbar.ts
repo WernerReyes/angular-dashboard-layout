@@ -5,10 +5,11 @@ import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { StyleClassModule } from 'primeng/styleclass';
+import { Profile } from './profile/profile';
 
 @Component({
     selector: 'dashboard-topbar',
-    imports: [RouterModule, StyleClassModule, AppConfigurator],
+    imports: [Profile, RouterModule, StyleClassModule, AppConfigurator],
     templateUrl: './topbar.html'
 })
 export class Topbar {

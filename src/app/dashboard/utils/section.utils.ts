@@ -15,7 +15,6 @@ export class SectionUtils {
     }
 
     static updateSectionItemInSectionList(sectionList: Section[], sectionItem: SectionItem): Section[] {
-        console.log('Updating section item in section list:', sectionItem);
         return sectionList.map((section) => {
             if (section.id === sectionItem.sectionId) {
                 const updatedItems = section.items.map((item) => (item.id === sectionItem.id ? { ...sectionItem } : { ...item }));

@@ -33,6 +33,7 @@ type MenuComponent = Menu & {
     providers: [ConfirmationService]
 })
 export class MenuList {
+    private readonly confirmationService = inject(ConfirmationService);
     private readonly menuService = inject(MenuService);
     private readonly menuFormService = inject(MenuFormService);
     private readonly messageService = inject(MessageService);
@@ -58,6 +59,7 @@ export class MenuList {
     filteredMenuList = linkedSignal<MenuComponent[]>(() => {
         const term = this.searchQuery().toLowerCase();
         const menus = this.menuList.hasValue() ? this.menuList.value() : [];
+        console.log({ menus })
         const menuComponents = structuredClone(menus).map((menu) => ({
             ...menu,
             expanded: false
@@ -148,6 +150,39 @@ export class MenuList {
         return current.some((item, i) => {
             const origin = original[i];
             return item.id !== origin.id || item.order !== origin.order || item.parentId !== origin.parentId;
+        });
+    }
+
+    confirmDeleteMenu(event: Event, menu: Menu) {
+        const message = menu.children && menu.children.length > 0 ? 'Esta acción eliminará el menú seleccionado y todos sus submenús. ¿Deseas continuar?' : 'Estás seguro de que deseas eliminar este menú?';
+        this.confirmationService.confirm({
+            target: event.target as EventTarget,
+            message,
+            header: 'Eliminar categoría',
+            closable: true,
+            closeOnEscape: true,
+            icon: 'pi pi-exclamation-triangle',
+            rejectButtonProps: {
+                label: 'Cancelar',
+                severity: 'secondary',
+                outlined: true
+            },
+            acceptButtonProps: {
+                label: 'Eliminar'
+            },
+            accept: () => {
+                this.menuService.deleteMenu(menu.id, menu.parentId).subscribe({
+                    next: () => {
+                        this.confirmationService.close();
+                    },
+                    error: () => {
+                        this.confirmationService.close();
+                    }
+                });
+            },
+            reject: () => {
+                this.confirmationService.close();
+            }
         });
     }
 }

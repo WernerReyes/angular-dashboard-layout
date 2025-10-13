@@ -1,7 +1,7 @@
 <div
     [class.has-background]="item().backgroundImage"
     [style.background-image]="item().backgroundImage ? 'url(' + item().backgroundImage + ')' : null"
-    class="hero-section bg-gradient-to-br from-gray-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 py-20 transition-all duration-300 h-full overflow-hidden relative flex flex-col md:flex-row items-center max-md:text-center justify-between px-6 sm:px-10 md:px-24 max-w-7xl mx-auto w-full min-h-[400px]"
+    class="hero-section bg-gradient-to-br from-gray-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 py-20 transition-all duration-300 h-full overflow-hidden relative flex flex-col md:flex-row items-center max-md:text-center justify-between px-6 sm:px-10 md:px-24 mx-auto w-full min-h-[400px]"
 >
     <!-- Indicador de fondo faltante -->
     @if (!item().backgroundImage) {
@@ -51,7 +51,7 @@
 
     <!-- Imagen principal -->
     @if (item().image) {
-    <div class="relative my-auto z-10" aria-label="Hero image">
+    <div class="relative my-auto z-10 max-sm:mt-4" aria-label="Hero image">
         <img class="w-64 h-auto" [src]="item().image" [alt]="item().title || 'Hero image'" />
     </div>
     } @else {

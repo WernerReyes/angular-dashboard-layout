@@ -1,0 +1,44 @@
+<!-- Versión alternativa con más estilos -->
+<p-dialog [visible]="visible()" [modal]="true" [closable]="false" [draggable]="false" [resizable]="false" styleClass="session-expired-dialog" [style]="{ width: '28rem' }">
+    <div class="flex flex-col items-center gap-6 py-6 text-center">
+        <!-- Icon -->
+        <div class="w-16 h-16 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center">
+            <i class="pi pi-exclamation-triangle text-yellow-600 dark:text-yellow-400 text-2xl"></i>
+        </div>
+
+        <!-- Title -->
+        <div>
+            <h3 class="text-xl font-bold text-surface-900 dark:text-surface-100 mb-2">La sesión ha expirado</h3>
+            <p class="text-surface-600 dark:text-surface-400">Serás redirigido a la página de inicio de sesión en breve.</p>
+        </div>
+
+        <!-- Countdown Circle (alternativa visual) -->
+        <div class="relative w-24 h-24">
+            <svg class="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
+                <!-- Background circle -->
+                <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="6" fill="none" class="text-surface-200 dark:text-surface-700" />
+                <!-- Progress circle -->
+                <circle
+                    cx="50"
+                    cy="50"
+                    r="45"
+                    stroke="currentColor"
+                    stroke-width="6"
+                    fill="none"
+                    class="text-surface-900 dark:text-surface-100"
+                    [style.stroke-dasharray]="283"
+                    [style.stroke-dashoffset]="283 - (progressPercentage() * 283 / 100)"
+                    style="transition: stroke-dashoffset 1s linear"
+                />
+            </svg>
+            <div class="absolute inset-0 flex items-center justify-center">
+                <span class="text-lg font-bold text-surface-900 dark:text-surface-100"> {{remainingTime()}} </span>
+            </div>
+        </div>
+
+        <p class="text-sm text-surface-500 dark:text-surface-400">Redirigiendo en {{remainingTime()}} segundos</p>
+
+        <!-- Action Button -->
+        <p-button label="Iniciar sesión ahora" icon="pi pi-sign-in" [style]="{ width: '100%' }" styleClass="p-button-lg" (onClick)="authTimerService.relogin()"> </p-button>
+    </div>
+</p-dialog>

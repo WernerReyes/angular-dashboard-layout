@@ -1,4 +1,3 @@
-import type { Menu } from '@/shared/interfaces/menu';
 import { Section } from '@/shared/interfaces/section';
 import { ImageType } from '@/shared/interfaces/section-item';
 import { LinkType } from '@/shared/mappers/link.mapper';
@@ -6,6 +5,7 @@ import { SectionType } from '@/shared/mappers/section.mapper';
 import { FormUtils } from '@/utils/form-utils';
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { TreeNode } from 'primeng/api';
 
 @Injectable({
     providedIn: 'root'
@@ -30,7 +30,7 @@ export class SectionFormService {
         linkId: [null],
         active: [true, [Validators.required]],
 
-        menusIds: ['']
+        menusIds: [[] as TreeNode[]]
     });
 
     constructor() {
@@ -39,8 +39,8 @@ export class SectionFormService {
             const imageFile = this.form.get('imageFile');
             if (type === SectionType.MAIN_NAVIGATION_MENU) {
                 menusIdsControl?.setValidators([Validators.required]);
-              
-                imageFile?.setValidators([Validators.required])
+
+                imageFile?.setValidators([Validators.required]);
             } else {
                 menusIdsControl?.clearValidators();
                 imageFile?.clearValidators();
@@ -63,9 +63,26 @@ export class SectionFormService {
             linkIdControl?.updateValueAndValidity();
             textButtonControl?.updateValueAndValidity();
         });
+
+        this.form.get('currentImage')?.valueChanges.subscribe((currentImage) => {
+            const imageFile = this.form.get('imageFile');
+            if (!currentImage) {
+                imageFile?.setValidators([Validators.required]);
+            } else {
+                imageFile?.clearValidators();
+            }
+            imageFile?.updateValueAndValidity();
+        });
+
+        this.form.get('menusIds')?.valueChanges.subscribe((menus) => {
+            const menusIdsControl = this.form.get('menusIds');
+            const menusWithoutChildren = (menus as TreeNode[]).filter((menu) => !menu.children || menu.children.length === 0);
+            menusIdsControl?.setValue(menusWithoutChildren, { emitEvent: false });
+        });
     }
 
     populateForm(section: Section) {
+        console.log({ section });
         this.form.setValue({
             type: section.type,
             title: section.title!,
@@ -79,10 +96,25 @@ export class SectionFormService {
 
             imageFile: null,
             currentImage: section.image || '',
-            imageUrl: '',
+            imageUrl: section.image || '',
             imageType: ImageType.NONE,
 
-            menusIds: (section.menus.map((menu) => menu.id) || []) as any
+            menusIds: section.menus
+                ? section.menus.map((menu) => {
+                      return {
+                          key: menu.id.toString(),
+                          label: menu.title,
+                          data: menu.id,
+                          parent: menu.parent
+                              ? {
+                                    key: menu.parent.id.toString(),
+                                    label: menu.parent.title,
+                                    data: menu.parent.id
+                                }
+                              : undefined
+                      };
+                  })
+                : ([] as TreeNode[])
         });
     }
 

@@ -5,7 +5,7 @@ import { MessageService } from '@/shared/services/message.service';
 import { HttpClient, httpResource } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { CreateSection } from '../interfaces/section';
+import { CreateSection, UpdateSection } from '../interfaces/section';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { UpdateOrder } from '../interfaces/common';
 
@@ -35,11 +35,20 @@ export class SectionService {
 
     createSection(section: CreateSection) {
         const formData = new FormData();
+
         Object.entries(section).forEach(([key, value]) => {
-            if (value !== null && value !== undefined) {
+            if (value === null || value === undefined) return;
+
+            if (Array.isArray(value)) {
+                // ✅ Enviar cada valor del array con sufijo []
+                value.forEach((v) => {
+                    formData.append(`${key}[]`, v.toString());
+                });
+            } else {
                 formData.append(key, value as string | Blob);
             }
         });
+
         return this.http.post<ApiResponse<SectionEntity>>(this.prefix, formData, { withCredentials: true }).pipe(
             map(({ message, data }) => ({
                 section: mapSectionEntityToSection(data),
@@ -61,8 +70,22 @@ export class SectionService {
         );
     }
 
-    updateSection(id: number, section: Partial<CreateSection>) {
-        return this.http.put<ApiResponse<SectionEntity>>(`${this.prefix}/${id}`, section, { withCredentials: true }).pipe(
+    updateSection(id: number, section: UpdateSection) {
+        const formData = new FormData();
+
+        Object.entries(section).forEach(([key, value]) => {
+            if (value === null || value === undefined) return;
+
+            if (Array.isArray(value)) {
+                // ✅ Enviar cada valor del array con sufijo []
+                value.forEach((v) => {
+                    formData.append(`${key}[]`, v.toString());
+                });
+            } else {
+                formData.append(key, value as string | Blob);
+            }
+        });
+        return this.http.post<ApiResponse<SectionEntity>>(`${this.prefix}/${id}`, formData, { withCredentials: true }).pipe(
             map(({ message, data }) => ({
                 section: mapSectionEntityToSection(data),
                 message

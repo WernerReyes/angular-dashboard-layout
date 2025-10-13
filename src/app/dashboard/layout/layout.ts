@@ -1,27 +1,35 @@
+
 import { LayoutService } from '@/shared/services/layout.service';
+import { MessageService } from '@/shared/services/message.service';
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject, Renderer2, ViewChild } from '@angular/core';
+import { Component, effect, inject, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { MessageService as MessageServicePrime } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { filter, Subscription } from 'rxjs';
+// import { SessionExpiredDialog } from '../components/session-expired-dialog/session-expired-dialog';
 import { Sidebar } from '../components/sidebar/sidebar';
 import { Topbar } from '../components/topbar/topbar';
-import { MessageService } from '@/shared/services/message.service';
+import { SessionExpiredDialog } from '@/auth/components/session-expired-dialog/session-expired-dialog';
+import { SessionExpiredService } from '@/shared/services/session-expired.service';
+import { AuthTimerService } from '@/shared/services/auth-timer.service';
+
 
 @Component({
     selector: 'app-layout',
     standalone: true,
-    imports: [CommonModule, Topbar, Sidebar, RouterModule, ToastModule],
+    imports: [CommonModule, SessionExpiredDialog, Topbar, Sidebar, RouterModule, ToastModule],
     templateUrl: './layout.html',
     providers: [MessageServicePrime]
 })
-export class DashboardLayout {
+export class DashboardLayout implements OnInit, OnDestroy {
     private readonly messageServicePrime = inject(MessageServicePrime);
+    private readonly dialog = inject(SessionExpiredService);
     private readonly messageService = inject(MessageService);
     private readonly layoutService = inject(LayoutService);
     private readonly router = inject(Router);
     private readonly renderer = inject(Renderer2);
+    private readonly authTimerService = inject(AuthTimerService);
 
     overlayMenuOpenSubscription: Subscription;
 
@@ -30,6 +38,8 @@ export class DashboardLayout {
     @ViewChild(Sidebar) sidebar!: Sidebar;
 
     @ViewChild(Topbar) topBar!: Topbar;
+
+    private checkInterval: any;
 
     constructor() {
         this.overlayMenuOpenSubscription = this.layoutService.overlayOpen$.subscribe(() => {
@@ -49,6 +59,17 @@ export class DashboardLayout {
         this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
             this.hideMenu();
         });
+
+        window.addEventListener('storage', (event) => {
+            if (event.key === 'session_refresh') {
+                // 🔹 Otro tab detectó que hubo un relogin
+                this.authTimerService.onSessionRefresh();
+            }
+        });
+    }
+
+    ngOnInit() {
+        this.authTimerService.startMonitoring();
     }
 
     private showSuccess = effect(() => {
@@ -111,6 +132,7 @@ export class DashboardLayout {
     }
 
     ngOnDestroy() {
+        this.authTimerService.stopMonitoring();
         if (this.overlayMenuOpenSubscription) {
             this.overlayMenuOpenSubscription.unsubscribe();
         }

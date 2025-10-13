@@ -1,0 +1,13 @@
+<div class="card">
+    <p-menubar [model]="items()">
+        <ng-template #start>
+            @if (section().image) {
+
+            <img [src]="section().image" (error)="section().image = null" class="mr-2 size-12 object-cover" />
+            } @else {
+            <app-image-error containerClass="!size-12" iconClass="!size-8"></app-image-error>
+            }
+        </ng-template>
+       
+    </p-menubar>
+</div>

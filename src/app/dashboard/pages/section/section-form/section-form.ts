@@ -6,7 +6,7 @@ import { LinkType } from '@/shared/mappers/link.mapper';
 import { SectionType } from '@/shared/mappers/section.mapper';
 import { FormUtils } from '@/utils/form-utils';
 import { JsonPipe, KeyValuePipe } from '@angular/common';
-import { Component, inject, input, model, output } from '@angular/core';
+import { Component, effect, inject, input, model, output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -56,6 +56,10 @@ export class SectionForm {
         this.selectedSection.set(null);
     }
 
+    private formChangeEffect = effect(() => {
+        console.log('Form changes:', this.form.value);
+    });
+
     saveChanges() {
         if (this.form.valid) {
             const formValue = this.form.value;
@@ -70,13 +74,15 @@ export class SectionForm {
                 pageId: this.selectedPageId(),
                 fileImage: formValue.imageType === ImageType.LOCAL ? (formValue.imageFile as any) : null,
                 imageUrl: formValue.imageType === ImageType.URL ? formValue.imageUrl || null : null,
-                menusIds: formValue.menusIds as any || null
+                menusIds: formValue.menusIds ? formValue.menusIds.map(({ data }) => Number(data)) : []
             };
 
-            console.log(typeof formValue.menusIds, formValue.menusIds);
-
+           
             if (this.selectedSection()) {
-                this.sectionService.updateSection(this.selectedSection()!.id, sectionData).subscribe({
+                this.sectionService.updateSection(this.selectedSection()!.id, {
+                    ...sectionData,
+                    currentImageUrl: formValue.currentImage || null
+                }).subscribe({
                     next: () => {
                         this.closeDialog();
                     }

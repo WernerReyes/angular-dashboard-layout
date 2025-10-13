@@ -30,7 +30,7 @@ import { SectionOurCompanyItems } from './section-our-company-items/section-our-
 import { SectionValuePropositionItems } from './section-value-proposition-items/section-value-proposition-items';
 import { SectionWhyUsItems } from './section-why-us-items/section-why-us-items';
 import { SectionContactTopBarItems } from './section-contact-top-bar-items/section-contact-top-bar-items';
-
+import { SectionMainNavigationMenuItems } from './section-main-navigation-menu-items/section-main-navigation-menu-items';
 
 type DeleteSectionItemParams = {
     id: number;
@@ -40,7 +40,30 @@ type DeleteSectionItemParams = {
 export type DeleteSectionItemFunction = (event: Event, params: DeleteSectionItemParams, accept?: () => void, reject?: () => void) => void;
 @Component({
     selector: 'sections-list',
-    imports: [SectionItem, SectionHeroItems, SectionWhyUsItems, SectionCashProcessingEquipmentItems, SectionValuePropositionItems,  SectionClientItems, SectionOurCompanyItems,SectionMachineItems, SectionContactTopBarItems, SectionItemForm, ErrorBoundary, PanelModule, CarouselModule, DragDropModule, FilterSectionsByPagePipe, MessageModule, DataViewSkeleton, FieldsetModule, TagModule, ButtonModule, Badge],
+    imports: [
+        SectionItem,
+        SectionHeroItems,
+        SectionWhyUsItems,
+        SectionCashProcessingEquipmentItems,
+        SectionValuePropositionItems,
+        SectionClientItems,
+        SectionOurCompanyItems,
+        SectionMachineItems,
+        SectionContactTopBarItems,
+        SectionMainNavigationMenuItems,
+        SectionItemForm,
+        ErrorBoundary,
+        PanelModule,
+        CarouselModule,
+        DragDropModule,
+        FilterSectionsByPagePipe,
+        MessageModule,
+        DataViewSkeleton,
+        FieldsetModule,
+        TagModule,
+        ButtonModule,
+        Badge
+    ],
     templateUrl: './sections-list.html'
 })
 export class SectionsList {

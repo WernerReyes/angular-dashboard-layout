@@ -14,3 +14,7 @@ export interface CreateSection {
     menusIds?: number[] | null;
 
 }
+
+export interface UpdateSection extends Partial<CreateSection> {
+    currentImageUrl: string | null;
+}

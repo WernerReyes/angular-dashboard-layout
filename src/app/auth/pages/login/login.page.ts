@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
@@ -11,7 +11,6 @@ import type { LoginRequest } from '@/auth/interfaces/login';
 
 @Component({
     selector: 'app-login-page',
-        standalone: true,
     imports: [
         ButtonModule,
         CheckboxModule,
@@ -29,6 +28,7 @@ import type { LoginRequest } from '@/auth/interfaces/login';
 })
 export default class LoginPage {
     private readonly authService = inject(AuthService);
+    private readonly router = inject(Router);
 
     loginForm = new FormGroup({
         email: new FormControl('werner7@gmail.com', { nonNullable: true, validators: [Validators.required, Validators.email] }),
@@ -36,6 +36,15 @@ export default class LoginPage {
     });
 
     login() {
-        this.authService.login(this.loginForm.value as LoginRequest);
+        this.authService.login(this.loginForm.value as LoginRequest).subscribe((isAuthenticated) => {
+            if (isAuthenticated) {
+                // Navigate to the dashboard or home page after successful login
+                this.router.navigateByUrl('/dashboard');
+                localStorage.setItem('session_refresh', Date.now().toString());
+                console.log('Login successful');
+            } else {
+                console.log('Login failed');
+            }
+        });
     }
 }

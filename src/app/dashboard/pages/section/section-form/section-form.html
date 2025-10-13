@@ -83,7 +83,7 @@
         <p-togglebutton formControlName="active" onLabel="Activo" offLabel="Inactivo" onIcon="pi pi-check" offIcon="pi pi-times" onIcon="pi pi-lock-open" offIcon="pi pi-lock" class="w-36" ariaLabel="Do you confirm" />
     </form>
 
-    <pre>{{ form.value | json }}</pre>
+    <!-- TODO: <pre>{{ form.value | json }}</pre> -->
 
     <ng-template #footer>
         <button pButton type="submit" form="menu-form" icon="pi pi-save" [disabled]="form.invalid" label="Guardar"></button>

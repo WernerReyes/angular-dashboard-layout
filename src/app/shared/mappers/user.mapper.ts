@@ -10,7 +10,8 @@ export interface UserEntity {
     readonly updated_at: string;
 }
 
-export const mapUserEntityToUser = (entity: UserEntity): User => ({
+export const mapUserEntityToUser = (entity: UserEntity): User => {
+    return {
     id: entity.id_user,
     name: entity.name,
     lastname: entity.lastname,
@@ -20,4 +21,4 @@ export const mapUserEntityToUser = (entity: UserEntity): User => ({
     updatedAt: new Date(entity.updated_at),
     createdAtString: entity.created_at,
     updatedAtString: entity.updated_at
-});
+}};

@@ -11,9 +11,30 @@
 <hero-item [item]="sectionItems()[0]"></hero-item>
 } @else {
 
-<p-carousel class="w-auto !-z-20" (onPage)="onPageChange($event)" [showNavigators]="false" [autoplayInterval]="5000" [circular]="false" [value]="sectionItems()" [numVisible]="1" [numScroll]="1">
+<!-- <p-carousel class="w-auto !-z-20" (onPage)="onPageChange($event)" [showNavigators]="false" [autoplayInterval]="5000" [circular]="false" [value]="sectionItems()" [numVisible]="1" [numScroll]="1">
     <ng-template let-item #item>
         <hero-item [item]="item"></hero-item>
     </ng-template>
-</p-carousel>
+</p-carousel> -->
+
+<p-galleria 
+ (activeIndexChange)="onActiveIndexChange($event)"
+[changeItemOnIndicatorHover]="true"
+
+ [responsiveOptions]="responsiveOptions"
+[value]="sectionItems()" [numVisible]="3" [circular]="true" [showThumbnailNavigators]="false" [autoPlay]="true" [shouldStopAutoplayByClick]="true" [transitionInterval]="5000">
+    <ng-template #item let-item>
+        <!-- <img [src]="item.image" style="width: 100%" /> -->
+        <div class="w-full">
+            <hero-item [item]="item"></hero-item>
+        </div>
+    </ng-template>
+    <ng-template #thumbnail let-item>
+        @if (!item.backgroundImage) {
+        <app-image-error containerClass="!size-20" iconClass="!size-8"></app-image-error>
+        } @else {
+        <img [src]="item.backgroundImage" class="size-20 object-cover" />
+        }
+    </ng-template>
+</p-galleria>
 } }

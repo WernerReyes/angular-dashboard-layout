@@ -10,6 +10,7 @@ export interface MenuEntity {
     readonly link_id: number | null;
     readonly children?: MenuEntity[] | null;
     readonly link: LinkEntity | null;
+    readonly parent?: MenuEntity | null;
 }
 
 export const mapMenuEntityToMenu = (entity: MenuEntity): Menu => {
@@ -21,6 +22,7 @@ export const mapMenuEntityToMenu = (entity: MenuEntity): Menu => {
         parentId: entity.parent_id,
         children: entity.children ? entity.children.map((child) => mapMenuEntityToMenu(child)) : null,
         linkId: entity.link_id,
-        link: entity.link ? mapLinkEntityToLink(entity.link) : null
+        link: entity.link ? mapLinkEntityToLink(entity.link) : null,
+        parent: entity.parent ? mapMenuEntityToMenu(entity.parent) : null
     };
 };

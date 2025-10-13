@@ -9,6 +9,7 @@ export interface Menu {
     linkId: number | null;
     children: Menu[] | null;
     link: Link | null;
+    parent: Menu | null;
 }
 
 type MenuActiveStatus = {

@@ -98,6 +98,8 @@ export class SectionFormService {
             imageUrl: '',
             imageType: ImageType.NONE,
 
+          
+
             menusIds: section.menus
                 ? section.menus.map((menu) => {
                       return {

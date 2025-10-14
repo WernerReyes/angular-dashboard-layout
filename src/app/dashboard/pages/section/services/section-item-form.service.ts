@@ -111,7 +111,7 @@ export class SectionItemFormService {
     }
 
     populateForm(section: SectionItem) {
-        console.log(section);
+        // TODO: CHECK console.log(section);
         this.form.setValue({
             title: section.title!,
             subtitle: section.subtitle!,

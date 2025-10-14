@@ -18,6 +18,7 @@
                 [overlayOptions]="{
                     mode: 'modal'
                 }"
+                [disabled]="!!selectedSection()"
                 formControlName="type"
                 [options]="sectionTypesOptions | keyvalue"
                 optionLabel="value.label"

@@ -11,6 +11,7 @@ export interface UserEntity {
     readonly lastname: string;
     readonly email: string;
     readonly role: UserRole;
+    readonly profile: string | null;
     readonly created_at: string;
     readonly updated_at: string;
 }
@@ -22,8 +23,8 @@ export const mapUserEntityToUser = (entity: UserEntity): User => {
     lastname: entity.lastname,
     email: entity.email,
     role: entity.role,
+    profile: entity.profile,
     createdAt: new Date(entity.created_at),
     updatedAt: new Date(entity.updated_at),
-    createdAtString: entity.created_at,
-    updatedAtString: entity.updated_at
+    
 }};

@@ -54,6 +54,7 @@ export const sectionTypesOptions: Record<SectionType, SectionTypeOption> = {
         severity: 'info'
     },
     MISSION_VISION: { label: 'Misión y Visión', value: SectionType.MISSION_VISION, severity: 'success' },
+    CONTACT_US: { label: 'Contáctanos', value: SectionType.CONTACT_US, severity: 'danger' },
 
     BENEFIT: { label: 'Beneficios', value: SectionType.BENEFIT, severity: 'success' },
     MACHINE_TYPE: { label: 'Tipo de Máquina', value: SectionType.MACHINE_TYPE, severity: 'warn' },

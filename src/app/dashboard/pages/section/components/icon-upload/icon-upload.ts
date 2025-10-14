@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, effect, input, ViewChild } from '@angular/core';
 import { ReactiveFormsModule, type FormGroup } from '@angular/forms';
 import { FileSelectEvent, FileUpload } from 'primeng/fileupload';
 
@@ -8,11 +8,19 @@ import { FileSelectEvent, FileUpload } from 'primeng/fileupload';
   templateUrl: './icon-upload.html',
 })
 export class IconUpload {
+  @ViewChild('uploader') uploader!: FileUpload;
 
   form = input.required<FormGroup<any>>();
   iconFileName =  input.required<string>();
   currentIconUrlName =  input.required<string>();
 
+  display = input.required<boolean>();
+
+  private closeDialog = effect(() => {
+    if (!this.display() && this.uploader?.files?.length) {
+      this.uploader.clear();
+    }
+  });
 
   onFileSelect(event: FileSelectEvent) {
         const file = event.files[0];

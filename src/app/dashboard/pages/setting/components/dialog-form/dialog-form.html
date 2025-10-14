@@ -1,12 +1,13 @@
 <p-dialog header="Formulario de Configuración" [(visible)]="display" [modal]="true" [closable]="true" (visibleChange)="display.set(false)">
-    <form class="p-fluid flex flex-col gap-4" id="user-form" [formGroup]="form()">
+    <form class="p-fluid flex flex-col gap-4" id="user-form" [formGroup]="form()" novalidate (ngSubmit)="onSubmit()">
         @let profile = form().controls['currentProfile'].value;
 
-        <p-fileupload chooseLabel="Seleccionar icono" [showUploadButton]="false" (onSelect)="onFileSelect($event)" [showCancelButton]="false" [multiple]="false" accept="image/*" maxFileSize="5000000" mode="advanced">
+        <p-fileupload #uploader chooseLabel="Seleccionar icono" [showUploadButton]="false" (onSelect)="onFileSelect($event)" [showCancelButton]="false" [multiple]="false" accept="image/*" maxFileSize="5000000" mode="advanced">
             <ng-template #empty>
                 @if (profile) {
                 <div class="flex items-center justify-center w-full">
-                    <img [src]="profile" alt="Current Icon" class="size-16" />
+                    <p-button icon="pi pi-times" text class="p-button-rounded p-button-text p-button-plain absolute z-10 cursor-pointer self-end" (click)="deleteImage()" title="Eliminar imagen"></p-button>
+                    <img [src]="profile" alt="Current Icon" class="size-48" />
                 </div>
                 } @else {
                 <div class="flex items-center justify-center w-full">
@@ -55,7 +56,8 @@
             }
         </div>
     </form>
+
     <ng-template pTemplate="footer">
-        <button [disabled]="form().invalid || form().pristine" form="user-form" pButton type="button" label="Guardar" icon="pi pi-check" (click)="display.set(false)"></button>
+        <button [disabled]="form().invalid || form().pristine" form="user-form" pButton type="submit" label="Guardar" icon="pi pi-check"></button>
     </ng-template>
 </p-dialog>

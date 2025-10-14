@@ -1,5 +1,5 @@
 import { AuthService } from '@/auth/services/auth.service';
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import type { MenuItem } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
@@ -9,15 +9,19 @@ import { InitialsPipe } from '@/pipes/initials-pipe';
 @Component({
     selector: 'profile',
     imports: [InitialsPipe, MenuModule, AvatarModule],
-    templateUrl: './profile.html'
+    templateUrl: './profile.html',
+    
 })
 export class Profile {
     private readonly authService = inject(AuthService);
     private readonly router = inject(Router);
 
+    showMenu = signal(false);
+
+    user = this.authService.user;
+
     fullName = computed(() => {
-        const user = this.authService.user();
-        return user ? `${user.name} ${user.lastname}` : '';
+        return this.user() ? `${this.user()!.name} ${this.user()!.lastname}` : '';
     })
 
     items: MenuItem[] = [

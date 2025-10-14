@@ -1,7 +1,4 @@
-
-<p-menu #menu [model]="items" [popup]="true" />
-<!-- <button type="button" class="layout-topbar-action" (click)="menu.toggle($event)">
-    <i class="pi pi-user"></i>
-    <span>Profile</span>
-</button> -->
-<p-avatar class="cursor-pointer" (click)="menu.toggle($event)" [label]="(fullName() | initials)" shape="circle"></p-avatar>
+<div class="relative">
+    <p-avatar (onImageError)="user()!.profile = null" [label]="!user()?.profile ? (fullName() | initials) : undefined" [image]="user()?.profile ?? undefined" class="cursor-pointer" shape="circle" (click)="showMenu.set(!showMenu())"></p-avatar>
+    <p-menu #menu [model]="items" class="absolute top-10 right-0" [style.display]="showMenu() ? 'block' : 'none'" />
+</div>

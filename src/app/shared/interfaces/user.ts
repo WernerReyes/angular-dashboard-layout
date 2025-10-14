@@ -7,10 +7,9 @@ export interface User {
     readonly lastname: string;
     readonly email: string;
     readonly role: UserRole;
+    profile: string | null;
     readonly createdAt: Date;
     readonly updatedAt: Date;
-    readonly createdAtString: string;
-    readonly updatedAtString: string;
 }
 
 type UserRoleOption = {

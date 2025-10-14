@@ -1,31 +1,21 @@
-
 import { LayoutService } from '@/shared/services/layout.service';
-import { MessageService } from '@/shared/services/message.service';
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
-import { MessageService as MessageServicePrime } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { filter, Subscription } from 'rxjs';
 // import { SessionExpiredDialog } from '../components/session-expired-dialog/session-expired-dialog';
+import { SessionExpiredDialog } from '@/auth/components/session-expired-dialog/session-expired-dialog';
+import { AuthTimerService } from '@/shared/services/auth-timer.service';
 import { Sidebar } from '../components/sidebar/sidebar';
 import { Topbar } from '../components/topbar/topbar';
-import { SessionExpiredDialog } from '@/auth/components/session-expired-dialog/session-expired-dialog';
-import { SessionExpiredService } from '@/shared/services/session-expired.service';
-import { AuthTimerService } from '@/shared/services/auth-timer.service';
-
 
 @Component({
     selector: 'app-layout',
-    standalone: true,
     imports: [CommonModule, SessionExpiredDialog, Topbar, Sidebar, RouterModule, ToastModule],
-    templateUrl: './layout.html',
-    providers: [MessageServicePrime]
+    templateUrl: './layout.html'
 })
 export class DashboardLayout implements OnInit, OnDestroy {
-    private readonly messageServicePrime = inject(MessageServicePrime);
-    private readonly dialog = inject(SessionExpiredService);
-    private readonly messageService = inject(MessageService);
     private readonly layoutService = inject(LayoutService);
     private readonly router = inject(Router);
     private readonly renderer = inject(Renderer2);
@@ -38,7 +28,6 @@ export class DashboardLayout implements OnInit, OnDestroy {
     @ViewChild(Sidebar) sidebar!: Sidebar;
 
     @ViewChild(Topbar) topBar!: Topbar;
-
 
     constructor() {
         this.overlayMenuOpenSubscription = this.layoutService.overlayOpen$.subscribe(() => {
@@ -70,22 +59,6 @@ export class DashboardLayout implements OnInit, OnDestroy {
     ngOnInit() {
         this.authTimerService.startMonitoring();
     }
-
-    private showSuccess = effect(() => {
-        const { message, summary } = this.messageService.success();
-        if (message) {
-            this.messageServicePrime.add({ severity: 'success', summary, detail: message, life: 3000 });
-            this.messageService.clearSuccess();
-        }
-    });
-
-    private showError = effect(() => {
-        const { message, summary } = this.messageService.error();
-        if (message) {
-            this.messageServicePrime.add({ severity: 'error', summary, detail: message, life: 3000 });
-            this.messageService.clearError();
-        }
-    });
 
     isOutsideClicked(event: MouseEvent) {
         const sidebarEl = document.querySelector('.layout-sidebar');

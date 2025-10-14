@@ -1,11 +1,14 @@
 import type { User } from '@/shared/interfaces/user';
-import { mapUserEntityToUser } from '@/shared/mappers/user.mapper';
+import { mapUserEntityToUser, UserEntity } from '@/shared/mappers/user.mapper';
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { catchError, map, of, tap } from 'rxjs';
+import { catchError, map, of, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ApiResponse } from '../../shared/interfaces/api-response';
 import type { LoginRequest, LoginResponse } from '../interfaces/login';
+import { UpdatePassword, UpdateProfile } from '../interfaces/user';
+import { TransformUtils } from '@/utils/transform-utils';
+import { MessageService } from '@/shared/services/message.service';
 
 type AuthStatus = 'checking' | 'authenticated' | 'not-authenticated';
 
@@ -14,7 +17,8 @@ type AuthStatus = 'checking' | 'authenticated' | 'not-authenticated';
 })
 export class AuthService {
     private readonly http = inject(HttpClient);
-    private readonly prefix = '/auth';
+    private readonly messageService = inject(MessageService);
+    private readonly prefix = `${environment.apiUrl}/auth`;
 
     private _authStatus = signal<AuthStatus>('checking');
     authStatus = computed<AuthStatus>(() => {
@@ -44,7 +48,7 @@ export class AuthService {
 
     login(loginRequest: LoginRequest) {
         return this.http
-            .post<ApiResponse<LoginResponse>>(`${environment.apiUrl}${this.prefix}/login`, loginRequest, {
+            .post<ApiResponse<LoginResponse>>(`${this.prefix}/login`, loginRequest, {
                 withCredentials: true
             })
             .pipe(
@@ -53,13 +57,17 @@ export class AuthService {
                     token: data.accessToken
                 })),
                 tap((res) => this.handleAuthSuccess(res.user, res.token)),
-                catchError((error) => this.handleAuthError(error))
+                catchError((error) => {
+                    console.error('Login error:', error.error);
+                    this.messageService.setError(error.error?.message || 'Ocurrio un error al iniciar sesión');
+                    return this.handleAuthError(error);
+                })
             );
     }
 
     relogin() {
         return this.http
-            .post<ApiResponse<LoginResponse>>(`${environment.apiUrl}${this.prefix}/relogin`, null, {
+            .post<ApiResponse<LoginResponse>>(`${this.prefix}/relogin`, null, {
                 withCredentials: true
             })
             .pipe(
@@ -76,7 +84,7 @@ export class AuthService {
 
     me() {
         return this.http
-            .get<ApiResponse<LoginResponse>>(`${environment.apiUrl}${this.prefix}/me`, {
+            .get<ApiResponse<LoginResponse>>(`${this.prefix}/me`, {
                 withCredentials: true
             })
             .pipe(
@@ -92,7 +100,7 @@ export class AuthService {
     logout() {
         // this.userResource.update(() => null);
         return this.http
-            .post(`${environment.apiUrl}${this.prefix}/logout`, null, {
+            .post(`${this.prefix}/logout`, null, {
                 withCredentials: true
             })
             .pipe(
@@ -101,6 +109,36 @@ export class AuthService {
                     this._authStatus.set('not-authenticated');
                 })
             );
+    }
+
+    updateProfile(update: UpdateProfile) {
+        const formData = TransformUtils.toFormData(update);
+        return this.http.post<ApiResponse<UserEntity>>(`${this.prefix}/update-profile`, formData).pipe(
+            map(({ data, message }) => ({
+                user: mapUserEntityToUser(data),
+                message
+            })),
+            tap(({ user, message }) => {
+                this.user.set(user);
+                this.messageService.setSuccess(message);
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
+
+    updatePassword(update: UpdatePassword) {
+        return this.http.put<ApiResponse<null>>(`${this.prefix}/update-password`, update).pipe(
+            map(({ message }) => message),
+            tap((message) => {
+                this.messageService.setSuccess(message);
+            }),
+            catchError((error) => {
+                this.messageService.setError(error.error?.message || 'Ocurrio un error al editar la contraseña');
+                return throwError(() => error);
+            })
+        );
     }
 
     private handleAuthSuccess(user: User, token: string): boolean {

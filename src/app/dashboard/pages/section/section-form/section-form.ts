@@ -106,8 +106,7 @@ export class SectionForm {
 
             this.sectionService.createSection(sectionData).subscribe({
                 next: () => {
-                    this.onCloseDialog.emit();
-                    this.sectionFormService.reset();
+                    this.closeDialog();
                 }
             });
         }

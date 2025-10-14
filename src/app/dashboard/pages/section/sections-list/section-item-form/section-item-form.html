@@ -30,7 +30,7 @@
                 isTextarea: true
             }]"
             ></common-inputs>
-            <icon-upload [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
+            <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
 
             } @case (SectionType.CASH_PROCESSING_EQUIPMENT) {
             <common-inputs
@@ -42,7 +42,7 @@
                 isTextarea: false
             }]"
             ></common-inputs>
-            <icon-upload [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
+            <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
             <show-link-switch [form]="form"></show-link-switch>
             } @case (SectionType.VALUE_PROPOSITION) {
             <common-inputs
@@ -105,7 +105,7 @@
                 isTextarea: false
             }]"
             ></common-inputs>
-            <icon-upload [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
+            <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
             } @case (SectionType.SOLUTIONS_OVERVIEW) {
             <common-inputs
                 [form]="form"
@@ -120,7 +120,7 @@
                 isTextarea: true
             }]"
             ></common-inputs>
-            <icon-upload [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
+            <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
             } @case (SectionType.MISSION_VISION) {
             <common-inputs
                 [form]="form"

@@ -116,11 +116,5 @@ export class SectionItemForm {
         this.selectedSectionItem.set(null);
     }
 
-    onFileSelect(event: FileSelectEvent) {
-        const file = event.files[0];
-        if (file) {
-            this.form.patchValue({ imageFile: file as any });
-            this.form.get('imageFile')?.markAsTouched();
-        }
-    }
+   
 }

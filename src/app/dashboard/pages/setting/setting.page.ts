@@ -1,18 +1,19 @@
 import { AuthService } from '@/auth/services/auth.service';
+import { InitialsPipe } from '@/pipes/initials-pipe';
+import { PatternsConst } from '@/shared/constants/patterns';
 import { userRoleOptions } from '@/shared/interfaces/user';
 import { Component, inject, signal } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { AvatarModule } from 'primeng/avatar';
 import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
-import { TagModule } from 'primeng/tag';
-import { InitialsPipe } from '@/pipes/initials-pipe';
-import { FormBuilder, Validators } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
 import { DialogForm } from './components/dialog-form/dialog-form';
-import { PatternsConst } from '@/shared/constants/patterns';
+import { UpdatePassword } from './components/update-password/update-password';
 
 @Component({
     selector: 'app-setting-page',
-    imports: [DialogForm, InitialsPipe, BadgeModule, ButtonModule, AvatarModule],
+    imports: [DialogForm, UpdatePassword, InitialsPipe, BadgeModule, ButtonModule, AvatarModule, InputTextModule],
     templateUrl: './setting.page.html'
 })
 export default class SettingPage {
@@ -38,7 +39,8 @@ export default class SettingPage {
         this.form.patchValue({
             name: this.user()!.name,
             email: this.user()!.email,
-            lastname: this.user()!.lastname
+            lastname: this.user()!.lastname,
+            currentProfile: this.user()!.profile
 
         });
     }

@@ -52,46 +52,9 @@
         </file-upload>
     </div>
 
-    <!-- <div class="flex gap-2 items-center">
-        <p-toggleswitch inputId="link" formControlName="showLink" onLabel="Sí" offLabel="No" />
-        <label for="link">¿Incluir enlace?</label>
-    </div> -->
+  
 
     <show-link-switch [form]="form"></show-link-switch>
 
-    <!-- @if (form.controls['showLink'].value) {
-    <div class="flex gap-4">
-        <div class="flex flex-col w-full gap-2">
-            <label for="parent">Texto del enlace</label>
-            <input id="textButton" type="text" class="w-full" pInputText formControlName="textButton" placeholder="Texto del enlace" />
-            @if (form.controls['textButton'].errors) {
-            <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'textButton') }} </p-message>
-            }
-        </div>
-        <p-togglebutton formControlName="typeLink" onLabel="Interno" offLabel="Externo" onIcon="pi pi-file" offIcon="pi pi-external-link" class="w-36" ariaLabel="Do you confirm" />
-    </div>
-
-    <app-error-boundary [resource]="linksList" [errorMessage]="'No se pudieron cargar los enlaces.'" [emptyMessage]="'No hay enlaces disponibles.'">
-        <ng-template #content let-links>
-            @let typeLink = form.controls['typeLink'].value;
-            <div class="flex flex-col gap-2">
-                <label for="linkId">Enlace a página</label>
-                <p-select
-                    [overlayOptions]="{
-                    mode: 'modal'
-                }"
-                    id="linkId"
-                    formControlName="linkId"
-                    [options]="links | filterLinksByType:typeLink"
-                    optionLabel="title"
-                    optionValue="id"
-                    placeholder="Selecciona un enlace"
-                ></p-select>
-                @if (form.controls['linkId'].errors) {
-                <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'linkId') }} </p-message>
-                }
-            </div>
-        </ng-template>
-    </app-error-boundary>
-    } -->
+   
 </div>

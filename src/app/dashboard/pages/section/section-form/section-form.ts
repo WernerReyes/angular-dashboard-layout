@@ -22,7 +22,7 @@ import { SectionFormService } from '../services/section-form.service';
 import { WhyUsForm } from './why-us-form/why-us-form';
 import { FileUpload } from '../components/file-upload/file-upload';
 import { ImageType } from '@/shared/interfaces/section-item';
-import { MainNavigationMenuForm } from './main-navigation-menu-form/main-navigation-menu-form';
+import { NavigationMenuForm } from './navigation-menu-form/navigation-menu-form';
 
 @Component({
     selector: 'section-form',
@@ -31,7 +31,7 @@ import { MainNavigationMenuForm } from './main-navigation-menu-form/main-navigat
         ShowLinkSwitch,
         FileUpload,
         WhyUsForm,
-        MainNavigationMenuForm,
+        NavigationMenuForm,
         ReactiveFormsModule,
         InputTextModule,
         KeyValuePipe,
@@ -71,11 +71,18 @@ export class SectionForm {
         this.onCloseDialog.emit();
         this.sectionFormService.reset();
         this.selectedSection.set(null);
+        const type = this.form.controls['type'];
+        if (type.disabled) {
+            type.enable();
+        }
     }
 
     saveChanges() {
         if (this.form.valid) {
             const formValue = this.form.value;
+
+            console.log({ formValue });
+
             const sectionData: CreateSection = {
                 type: formValue.type!,
                 title: formValue.title!,
@@ -94,6 +101,7 @@ export class SectionForm {
                 this.sectionService
                     .updateSection(this.selectedSection()!.id, {
                         ...sectionData,
+                        type: this.selectedSection()!.type,
                         currentImageUrl: formValue.currentImage || null
                     })
                     .subscribe({

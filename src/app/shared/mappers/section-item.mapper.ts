@@ -1,5 +1,10 @@
-import { SectionItem } from '../interfaces/section-item';
+import type { SectionItem } from '../interfaces/section-item';
 
+export enum InputType {
+    TEXT = 'TEXT',
+    EMAIL = 'EMAIL',
+    TEXTAREA = 'TEXTAREA'
+}
 export interface SectionItemEntity {
     id_section_item: number;
     title: string | null;
@@ -13,6 +18,7 @@ export interface SectionItemEntity {
     order_num: number;
     section_id: number;
     category_id: number | null;
+    input_type: InputType | null;
 }
 
 export const mapSectionItemEntityToSectionItem = (entity: SectionItemEntity): SectionItem => ({
@@ -27,5 +33,6 @@ export const mapSectionItemEntityToSectionItem = (entity: SectionItemEntity): Se
     linkId: entity.link_id ? Number(entity.link_id) : null,
     order: entity.order_num,
     sectionId: Number(entity.section_id),
-    categoryId: entity.category_id ? Number(entity.category_id) : null
+    categoryId: entity.category_id ? Number(entity.category_id) : null,
+    inputType: entity.input_type
 });

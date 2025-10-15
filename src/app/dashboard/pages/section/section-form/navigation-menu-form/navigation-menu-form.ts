@@ -4,20 +4,21 @@ import { FormUtils } from '@/utils/form-utils';
 import { Component, computed, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import type { TreeNode } from 'primeng/api';
+import { MessageModule } from 'primeng/message';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TreeSelectModule } from 'primeng/treeselect';
 import { FileUpload } from '../../components/file-upload/file-upload';
 import { SectionFormService } from '../../services/section-form.service';
-import { MessageModule } from 'primeng/message';
 
 @Component({
-    selector: 'main-navigation-menu-form',
+    selector: 'navigation-menu-form',
     imports: [ErrorBoundary, FileUpload, ReactiveFormsModule, MultiSelectModule, TreeSelectModule, MessageModule],
-    templateUrl: './main-navigation-menu-form.html'
+    templateUrl: './navigation-menu-form.html'
 })
-export class MainNavigationMenuForm {
+export class NavigationMenuForm {
     private readonly menuService = inject(MenuService);
     private readonly sectionFormService = inject(SectionFormService);
+
     form = this.sectionFormService.form;
 
     menuList = this.menuService.menuListResource;
@@ -28,7 +29,7 @@ export class MainNavigationMenuForm {
             label: menu.title,
             data: menu.id,
             key: String(menu.id),
-            partialSelectable: !(menu.children && menu.children.length > 0),
+            // partialSelectable: !(menu.children && menu.children.length > 0),
             selectable: !(menu.children && menu.children.length > 0),
 
             children: menu.children?.map((child) => ({ label: child.title, key: String(child.id), data: child.id }))

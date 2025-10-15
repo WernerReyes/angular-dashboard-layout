@@ -2,30 +2,29 @@
 <span class="text-muted-color">No hay items en esta sección</span>
 } @else {
 
-<div>
+<!-- <div>
     <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-rounded p-button-text p-button-plain" (click)="menu.toggle($event)"></button>
     <p-menu #menu [popup]="true" [model]="items"></p-menu>
-</div>
+</div> -->
 
 @if (sectionItems().length === 1) {
 <hero-item [item]="sectionItems()[0]"></hero-item>
 } @else {
 
-<!-- <p-carousel class="w-auto !-z-20" (onPage)="onPageChange($event)" [showNavigators]="false" [autoplayInterval]="5000" [circular]="false" [value]="sectionItems()" [numVisible]="1" [numScroll]="1">
-    <ng-template let-item #item>
-        <hero-item [item]="item"></hero-item>
-    </ng-template>
-</p-carousel> -->
-
-<p-galleria 
- (activeIndexChange)="onActiveIndexChange($event)"
-[changeItemOnIndicatorHover]="true"
-
- [responsiveOptions]="responsiveOptions"
-[value]="sectionItems()" [numVisible]="3" [circular]="true" [showThumbnailNavigators]="false" [autoPlay]="true" [shouldStopAutoplayByClick]="true" [transitionInterval]="5000">
+<p-galleria
+    [changeItemOnIndicatorHover]="true"
+    [responsiveOptions]="responsiveOptions"
+    [value]="sectionItems()"
+    [numVisible]="3"
+    [circular]="true"
+    [showThumbnailNavigators]="false"
+    [autoPlay]="true"
+    [shouldStopAutoplayByClick]="true"
+    [transitionInterval]="5000"
+>
     <ng-template #item let-item>
         <!-- <img [src]="item.image" style="width: 100%" /> -->
-        <div class="w-full">
+        <div class="w-full" (contextmenu)="contextMenu.onContextMenu($event, item)">
             <hero-item [item]="item"></hero-item>
         </div>
     </ng-template>
@@ -37,4 +36,6 @@
         }
     </ng-template>
 </p-galleria>
+
+<context-menu-crud [editCommand]="edit" [deleteCommand]="delete" [(selectedItem)]="selectedItem"> </context-menu-crud>
 } }

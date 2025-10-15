@@ -10,7 +10,7 @@ import { Component, inject, input, model, output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-import { type FileSelectEvent, FileUploadModule } from 'primeng/fileupload';
+import { FileUploadModule } from 'primeng/fileupload';
 import { ImageModule } from 'primeng/image';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
@@ -20,16 +20,39 @@ import { TextareaModule } from 'primeng/textarea';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { CommonInputs } from '../../components/common-inputs/common-inputs';
+import { FileUpload } from '../../components/file-upload/file-upload';
 import { IconUpload } from '../../components/icon-upload/icon-upload';
 import { ShowLinkSwitch } from '../../components/show-link-switch/show-link-switch';
 import { SectionItemFormService } from '../../services/section-item-form.service';
+import { ContactUsForm } from './contact-us-form/contact-us-form';
 import { HeroForm } from './hero-form/hero-form';
-import { FileUpload } from '../../components/file-upload/file-upload';
 import { MachineForm } from './machine-form/machine-form';
 
 @Component({
     selector: 'section-item-form',
-    imports: [JsonPipe, MachineForm, CommonInputs, IconUpload, ShowLinkSwitch, ShowLinkSwitch, HeroForm, FileUpload, ReactiveFormsModule, FileUploadModule, DialogModule, InputTextModule, SelectButtonModule, SelectModule, ToggleSwitchModule, ButtonModule, ToggleButtonModule, TextareaModule, ImageModule, MessageModule],
+    imports: [
+        JsonPipe,
+        MachineForm,
+        ContactUsForm,
+        CommonInputs,
+        IconUpload,
+        ShowLinkSwitch,
+        ShowLinkSwitch,
+        HeroForm,
+        FileUpload,
+        ReactiveFormsModule,
+        FileUploadModule,
+        DialogModule,
+        InputTextModule,
+        SelectButtonModule,
+        SelectModule,
+        ToggleSwitchModule,
+        ButtonModule,
+        ToggleButtonModule,
+        TextareaModule,
+        ImageModule,
+        MessageModule
+    ],
     templateUrl: './section-item-form.html'
 })
 export class SectionItemForm {
@@ -64,13 +87,13 @@ export class SectionItemForm {
                 fileIcon: formValue.iconFile as any,
                 fileIconUrl: formValue.currentIconUrl || null,
                 categoryId: formValue.categoryId || null,
-
+                inputType: formValue.inputType || null,
 
                 sectionType: this.selectedSection()!.type
             };
 
             console.log('Submitting section item data:', {
-                data: sectionItemData,
+                data: formValue,
                 isUpdate: !!this.selectedSectionItem()
             });
 
@@ -115,6 +138,4 @@ export class SectionItemForm {
         this.sectionItemFormService.reset();
         this.selectedSectionItem.set(null);
     }
-
-   
 }

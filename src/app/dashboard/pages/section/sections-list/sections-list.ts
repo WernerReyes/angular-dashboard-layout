@@ -34,6 +34,8 @@ import { SectionMainNavigationMenuItems } from './section-main-navigation-menu-i
 import { SectionCtaBannerItems } from './section-cta-banner-items/section-cta-banner-items';
 import { SectionSolutionsOverviewItems } from './section-solutions-overview-items/section-solutions-overview-items';
 import { SectionMissionVisionItems } from './section-mission-vision-items/section-mission-vision-items';
+import { SectionContactUsItems } from './section-contact-us-items/section-contact-us-items';
+import { SectionFooterItems } from './section-footer-items/section-footer-items';
 
 type DeleteSectionItemParams = {
     id: number;
@@ -57,6 +59,8 @@ export type DeleteSectionItemFunction = (event: Event, params: DeleteSectionItem
         SectionCtaBannerItems,
         SectionSolutionsOverviewItems,
         SectionMissionVisionItems,
+        SectionContactUsItems,
+        SectionFooterItems,
         SectionItemForm,
         ErrorBoundary,
         PanelModule,

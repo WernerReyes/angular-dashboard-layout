@@ -222,4 +222,42 @@ export class MenuUtils {
 
         return result;
     }
+
+
+
+    static buildMenuTree(menus: Menu[]): Menu[] {
+        const tree: Menu[] = [];
+        const parentsMap = new Map<number, Menu>();
+
+        for (const menu of menus) {
+            if (menu.parent) {
+                const parentId = menu.parent.id;
+
+                // Si aún no existe el padre en el mapa, lo creamos
+                if (!parentsMap.has(parentId)) {
+                    parentsMap.set(parentId, {
+                        ...menu.parent,
+                        children: []
+                    });
+                }
+
+                // Agregamos el hijo al array de children del padre
+                parentsMap?.get(parentId)?.children?.push({
+                    ...menu,
+                    children: [] // Inicializamos el array de children para el hijo
+                });
+            } else {
+                // Si el menú no tiene padre, lo tratamos como raíz directamente
+                tree.push({
+                    ...menu,
+                    children: [] // Inicializamos el array de children para el menú raíz
+                });
+            }
+        }
+
+        // Agregamos los padres al árbol final
+        tree.push(...parentsMap.values());
+
+        return tree.sort((a, b) => a.order - b.order);
+    }
 }

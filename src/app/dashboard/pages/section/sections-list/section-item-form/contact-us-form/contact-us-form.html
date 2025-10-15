@@ -1,0 +1,24 @@
+<div class="flex flex-col gap-x-2 gap-y-4 w-full" [formGroup]="form">
+    <div class="flex flex-col gap-2">
+        <label>Tipo de input</label>
+        <p-select [options]="inputTypeOptions | keyvalue" formControlName="inputType" optionLabel="value.label" optionValue="value.value" placeholder="Selecciona el tipo de imagen"></p-select>
+        @if (form.controls['inputType'].errors) {
+        <p-message severity="error" variant="simple" size="small">{{FormUtils.getFieldError(form, 'inputType')}}</p-message>
+        }
+    </div>
+
+    <common-inputs
+        [form]="form"
+        [includeFields]="[{
+        type: 'title',
+        label: 'Título',
+        placeholder: 'Título del input',
+        isTextarea: false
+    }, {
+        type: 'subtitle',
+        label: 'Placeholder',
+        placeholder: 'Placeholder del input',
+        isTextarea: false
+    }]"
+    ></common-inputs>
+</div>

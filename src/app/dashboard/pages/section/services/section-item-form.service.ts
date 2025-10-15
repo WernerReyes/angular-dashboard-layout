@@ -1,4 +1,5 @@
 import { ImageType, SectionItem } from '@/shared/interfaces/section-item';
+import { InputType } from '@/shared/mappers/section-item.mapper';
 import { SectionType } from '@/shared/mappers/section.mapper';
 
 import { FormUtils } from '@/utils/form-utils';
@@ -34,7 +35,9 @@ export class SectionItemFormService {
 
         showLink: [false],
         typeLink: [true], // true = internal, false = external
-        linkId: [null]
+        linkId: [null],
+
+        inputType: [null as InputType | null]
     });
 
     constructor() {
@@ -59,43 +62,50 @@ export class SectionItemFormService {
     setSectionType(type: SectionType) {
         switch (type) {
             case SectionType.HERO:
-                this.disableFields(['iconFile', 'currentIconUrl']);
+                this.disableFields(['iconFile', 'currentIconUrl', 'inputType']);
                 // this.disableFields(['icon']);
                 break;
 
             case SectionType.WHY_US:
-                this.disableFields(['imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'subtitle', 'textButton', 'showLink', 'linkId', 'typeLink', 'categoryId']);
+                this.disableFields(['imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'subtitle', 'textButton', 'showLink', 'linkId', 'typeLink', 'categoryId', 'inputType']);
                 break;
 
             case SectionType.CASH_PROCESSING_EQUIPMENT:
-                this.disableFields(['subtitle', 'content', 'imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'categoryId']);
+                this.disableFields(['subtitle', 'content', 'imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'categoryId', 'inputType']);
                 break;
 
             case SectionType.VALUE_PROPOSITION:
-                this.disableFields(['imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'textButton', 'showLink', 'linkId', 'typeLink', 'iconFile', 'currentIconUrl', 'categoryId']);
+                this.disableFields(['imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'textButton', 'showLink', 'linkId', 'typeLink', 'iconFile', 'currentIconUrl', 'categoryId', 'inputType']);
                 break;
 
             case SectionType.CLIENT:
                 const image = this.form.get('imageFile');
                 image?.setValidators([Validators.required]);
                 image?.updateValueAndValidity();
-                this.disableFields(['title', 'subtitle', 'content', 'imageBackFile', 'currentImageBack', 'imageBackUrl', 'imageBackType', 'textButton', 'showLink', 'linkId', 'typeLink', 'iconFile', 'currentIconUrl', 'categoryId']);
+                this.disableFields(['title', 'subtitle', 'content', 'imageBackFile', 'currentImageBack', 'imageBackUrl', 'imageBackType', 'textButton', 'showLink', 'linkId', 'typeLink', 'iconFile', 'currentIconUrl', 'categoryId', 'inputType']);
                 break;
 
             case SectionType.OUR_COMPANY:
-                this.disableFields(['imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'textButton', 'showLink', 'linkId', 'typeLink', 'iconFile', 'currentIconUrl', 'categoryId']);
+                this.disableFields(['imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'textButton', 'showLink', 'linkId', 'typeLink', 'iconFile', 'currentIconUrl', 'categoryId', 'inputType']);
                 break;
 
             case SectionType.MACHINE:
                 const sectionId = this.form.get('categoryId');
                 sectionId?.setValidators([Validators.required]);
                 sectionId?.updateValueAndValidity();
-                this.disableFields(['subtitle', 'imageBackFile', 'currentImageBack', 'iconFile', 'currentIconUrl']);
+                this.disableFields(['subtitle', 'imageBackFile', 'currentImageBack', 'iconFile', 'currentIconUrl', 'inputType']);
                 break;
 
             case SectionType.CONTACT_TOP_BAR:
-                this.disableFields(['subtitle', 'content', 'imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'textButton', 'showLink', 'linkId', 'typeLink',  'categoryId']);
-            
+                this.disableFields(['subtitle', 'content', 'imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'textButton', 'showLink', 'linkId', 'typeLink', 'categoryId', 'inputType']);
+                break;
+                
+            case SectionType.CONTACT:
+                const inputType = this.form.get('inputType');
+                inputType?.setValidators([Validators.required]);
+                inputType?.updateValueAndValidity();
+                // this.disableFields(['subtitle', 'content', 'imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'textButton', 'showLink', 'linkId', 'typeLink', 'categoryId']);
+                break;
         }
     }
 
@@ -111,6 +121,8 @@ export class SectionItemFormService {
     }
 
     populateForm(section: SectionItem) {
+        this.form.markAsPristine();
+        this.form.markAsUntouched();
         // TODO: CHECK console.log(section);
         this.form.setValue({
             title: section.title!,
@@ -134,7 +146,9 @@ export class SectionItemFormService {
             imageBackFile: null,
             currentImageBack: section.backgroundImage || '',
             imageBackUrl: '',
-            imageBackType: ImageType.NONE
+            imageBackType: ImageType.NONE,
+
+            inputType: section.inputType || null
         });
     }
 

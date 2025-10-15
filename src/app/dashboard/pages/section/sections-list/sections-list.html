@@ -90,7 +90,13 @@
                         <section-solutions-overview-items [section]="section" [deleteItemConfirmation]="deleteSectionItemConfirmation.bind(this)" (onSelectSectionItem)="openDialogItem(section, $event)"></section-solutions-overview-items>
                         } @case (SectionType.MISSION_VISION) {
                         <section-mission-vision-items [section]="section" [deleteItemConfirmation]="deleteSectionItemConfirmation.bind(this)" (onSelectSectionItem)="openDialogItem(section, $event)"></section-mission-vision-items>
-                        } @default {
+                        } @case (SectionType.CONTACT_US) {
+                        <section-contact-us-items [section]="section" [deleteItemConfirmation]="deleteSectionItemConfirmation.bind(this)" (onSelectSectionItem)="openDialogItem(section, $event)"></section-contact-us-items>
+                        } @case (SectionType.FOOTER) {
+                        <section-footer-items [section]="section" ></section-footer-items>
+                        }
+                        
+                        @default {
                         <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-12">
                             @for (item of section.items; track item.id) {
                             <section-item [sectionItem]="item" (onSelectSectionItem)="openDialogItem(section, item)"></section-item>

@@ -6,7 +6,7 @@ import { EmptyFieldMessage } from '../../../components/empty-field-message/empty
 
 @Component({
   selector: 'hero-item',
-  imports: [ButtonModule, EmptyFieldMessage, NgClass],
+  imports: [ButtonModule, EmptyFieldMessage,  NgClass],
   templateUrl: './hero-item.html',
   styleUrl: './hero-item.scss'
 })

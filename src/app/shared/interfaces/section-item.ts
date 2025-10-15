@@ -1,3 +1,5 @@
+import { InputType } from '../mappers/section-item.mapper';
+
 export interface SectionItem {
     id: number;
     title: string | null;
@@ -11,6 +13,7 @@ export interface SectionItem {
     order: number;
     sectionId: number;
     categoryId: number | null;
+    inputType: InputType | null;
 }
 
 export enum ImageType {
@@ -24,8 +27,19 @@ type ImageTypeOption = {
     value: ImageType;
 };
 
+type InputTypeOption = {
+    label: string;
+    value: InputType;
+};
+
 export const imageTypeOptions: Record<ImageType, ImageTypeOption> = {
     NONE: { label: 'Ninguna', value: ImageType.NONE },
     LOCAL: { label: 'Subir imagen', value: ImageType.LOCAL },
     URL: { label: 'Usar URL', value: ImageType.URL }
+};
+
+export const inputTypeOptions: Record<InputType, InputTypeOption> = {
+    TEXT: { label: 'Texto', value: InputType.TEXT },
+    EMAIL: { label: 'Correo Electrónico', value: InputType.EMAIL },
+    TEXTAREA: { label: 'Área de Texto', value: InputType.TEXTAREA }
 };

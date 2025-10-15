@@ -1,0 +1,28 @@
+<footer class="bg-gray-100 dark:bg-gray-900">
+    <div class="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
+        <ul class="flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12 border-b border-gray-200 pb-8 dark:border-gray-700">
+            @for (menu of menus(); track menu.id) {
+            <li class="flex items-center">
+                @if (menu.items && menu.items.length > 0) {
+                <p-button link (click)="menuPrime.toggle($event)" [label]="menu.label" icon="pi pi-chevron-down" iconPos="right" styleClass="!text-gray-700 transition hover:!text-gray-700/75 dark:!text-white dark:hover:!text-primary"></p-button>
+                <p-menu #menuPrime [model]="menu.items" [popup]="true" />
+                } @else {
+                <p-button link [label]="menu.label" styleClass="!text-gray-700 transition hover:!text-gray-700/75 dark:!text-white dark:hover:!text-primary"></p-button>
+                }
+            </li>
+            }
+        </ul>
+
+        <div class="flex justify-center mt-12">
+            <img [src]="section().image" alt="Cechriza Logo" class="h-16 w-auto" />
+        </div>
+
+        <ul class="flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12 mt-6">
+            @for (item of section().items; track item.id) {
+            <li>{{item.title}}</li>
+            }
+        </ul>
+
+        <span class="mt-12 flex justify-center gap-6 md:gap-8 border-t border-gray-200 pt-4 w-fit mx-auto dark:border-gray-700"> Copyright &copy; {{ currentYear }} - Cechriza. {{ section().subtitle }} </span>
+    </div>
+</footer>

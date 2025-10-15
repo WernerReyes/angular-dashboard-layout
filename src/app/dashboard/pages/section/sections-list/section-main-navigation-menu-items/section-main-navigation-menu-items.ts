@@ -7,6 +7,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { Section } from '@/shared/interfaces/section';
 import { Menu } from '@/shared/interfaces/menu';
 import { ImageError } from '@/shared/components/error/image/image';
+import { MenuUtils } from '@/dashboard/utils/menu.utils';
 
 @Component({
     selector: 'section-main-navigation-menu-items',
@@ -22,51 +23,19 @@ export class SectionMainNavigationMenuItems {
             return [];
         }
 
-        const menus = this.buildMenuTree(sectionData.menus);
+        const menus = MenuUtils.buildMenuTree(sectionData.menus);
 
         return menus.map((menu) => ({
+            id: menu.id.toString(),
             label: menu.title,
             items: menu.children?.length
                 ? menu.children.map((child) => ({
+                      id: child.id.toString(),
                       label: child.title
                   }))
                 : undefined
         }));
     });
 
-    buildMenuTree(menus: Menu[]): Menu[] {
-        const tree: Menu[] = [];
-        const parentsMap = new Map<number, Menu>();
-
-        for (const menu of menus) {
-            if (menu.parent) {
-                const parentId = menu.parent.id;
-
-                // Si aún no existe el padre en el mapa, lo creamos
-                if (!parentsMap.has(parentId)) {
-                    parentsMap.set(parentId, {
-                        ...menu.parent,
-                        children: []
-                    });
-                }
-
-                // Agregamos el hijo al array de children del padre
-                parentsMap?.get(parentId)?.children?.push({
-                    ...menu,
-                    children: [] // Inicializamos el array de children para el hijo
-                });
-            } else {
-                // Si el menú no tiene padre, lo tratamos como raíz directamente
-                tree.push({
-                    ...menu,
-                    children: [] // Inicializamos el array de children para el menú raíz
-                });
-            }
-        }
-
-        // Agregamos los padres al árbol final
-        tree.push(...parentsMap.values());
-
-        return tree.sort((a, b) => a.order - b.order);
-    }
+   
 }

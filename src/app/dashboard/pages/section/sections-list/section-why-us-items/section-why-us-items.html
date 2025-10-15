@@ -20,12 +20,7 @@
         } @else {
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
             @for (item of section().items; track item.id) {
-            <p-card class="feature-item flex flex-col items-center text-center p-6 transition-shadow duration-300 h-full">
-                <div class="flex justify-end w-full">
-                    <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-rounded p-button-text p-button-plain" (click)="menu.toggle($event); this.selectedItem.set(item)"></button>
-                    <p-menu #menu [popup]="true" [model]="items"></p-menu>
-                </div>
-
+            <p-card (contextmenu)="contextMenu.onContextMenu($event, item)" class="feature-item flex flex-col items-center text-center p-6 transition-shadow duration-300 h-full">
                 @if (item.icon) {
 
                 <img [src]="item.icon" alt="{{ item.title }} icon" class="size-16 mx-auto dark:!text-red-500" />
@@ -42,10 +37,10 @@
                 <empty-field-message className="w-full" textContent="Contenido pendiente"></empty-field-message>
                 }
             </p-card>
+
+            <context-menu-crud [editCommand]="edit" [deleteCommand]="delete" [(selectedItem)]="selectedItem"> </context-menu-crud>
             }
         </div>
         }
     </div>
 </section>
-
-

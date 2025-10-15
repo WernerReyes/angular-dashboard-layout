@@ -137,6 +137,17 @@
                 isTextarea: true
             }]"
             ></common-inputs>
+            } @case (SectionType.CONTACT_US) {
+            <contact-us-form></contact-us-form>
+            } @case (SectionType.FOOTER) {
+            <common-inputs
+                [form]="form"
+                [includeFields]="[{
+                type: 'title',
+                label: 'Información extra',
+                placeholder: 'Información extra del footer',
+            }]"
+            ></common-inputs>
             } @default { } }
         </div>
     </form>

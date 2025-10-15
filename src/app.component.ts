@@ -4,6 +4,8 @@ import { RouterModule } from '@angular/router';
 import { MessageService as MessageServicePrime } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 
+// TODO: Check contextMenu component from primeng
+
 @Component({
     selector: 'app-root',
     standalone: true,

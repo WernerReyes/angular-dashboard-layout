@@ -1,3 +1,4 @@
+import type { InputType } from '@/shared/mappers/section-item.mapper';
 import type { SectionType } from '@/shared/mappers/section.mapper';
 
 export interface CreateSectionItem {
@@ -15,6 +16,7 @@ export interface CreateSectionItem {
     fileIcon: File | null;
     fileIconUrl: string | null;
     categoryId: number | null;
+    inputType: InputType | null;
 }
 
 export interface UpdateSectionItem extends Partial<CreateSectionItem> {

@@ -2,12 +2,11 @@
     [header]="selectedSection() ? 'Editar sección' : 'Crear nueva sección'"
     class="!overflow-hidden"
     [visible]="display()"
-    (visibleChange)="onCloseDialog.emit()"
+    (visibleChange)="closeDialog()"
     [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
     [style]="{ width: '30vw' }"
     [modal]="true"
     [maximizable]="true"
-    (onHide)="closeDialog()"
 >
     <form class="flex flex-col gap-4" [formGroup]="form" id="menu-form" (ngSubmit)="saveChanges()">
         @let type = form.controls['type'].value; @let imageType = form.controls['imageType'].value;
@@ -18,7 +17,6 @@
                 [overlayOptions]="{
                     mode: 'modal'
                 }"
-                [disabled]="!!selectedSection()"
                 formControlName="type"
                 [options]="sectionTypesOptions | keyvalue"
                 optionLabel="value.label"
@@ -62,7 +60,7 @@
                 <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
             </div>
             } @case(SectionType.MAIN_NAVIGATION_MENU) {
-            <main-navigation-menu-form></main-navigation-menu-form>
+            <navigation-menu-form></navigation-menu-form>
             } @case(SectionType.CTA_BANNER) {
             <common-inputs
                 [form]="form"
@@ -113,7 +111,35 @@
                 <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
             </div>
 
-            } }
+            } @case (SectionType.CONTACT_US) {
+            <common-inputs
+                [form]="form"
+                [includeFields]="[
+                    
+                    {
+                        type: 'content',
+                        label: 'Descripción',
+                        placeholder: 'Descripción de la sección',
+                        isTextarea: true,
+                    }
+                ]"
+            ></common-inputs>
+            <div class="flex flex-col gap-2">
+                <label>Imagen</label>
+                <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+            </div>
+            <show-link-switch [form]="form"></show-link-switch>
+            } @case (SectionType.FOOTER) {
+            <common-inputs
+                [form]="form"
+                [includeFields]="[{
+                    type: 'subtitle',
+                    label: 'Texto de copyright',
+                    placeholder: 'Texto de copyright',
+                }]"
+            ></common-inputs>
+            <navigation-menu-form></navigation-menu-form>
+            }}
         </div>
 
         <p-togglebutton formControlName="active" onLabel="Activo" offLabel="Inactivo" onIcon="pi pi-check" offIcon="pi pi-times" onIcon="pi pi-lock-open" offIcon="pi pi-lock" class="w-36" ariaLabel="Do you confirm" />

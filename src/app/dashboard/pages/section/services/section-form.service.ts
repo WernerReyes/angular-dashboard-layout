@@ -5,7 +5,7 @@ import { SectionType } from '@/shared/mappers/section.mapper';
 import { FormUtils } from '@/utils/form-utils';
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { TreeNode } from 'primeng/api';
+import type { TreeNode } from 'primeng/api';
 
 @Injectable({
     providedIn: 'root'
@@ -37,6 +37,7 @@ export class SectionFormService {
         this.form.get('type')?.valueChanges.subscribe((type) => {
             const menusIdsControl = this.form.get('menusIds');
             const imageFile = this.form.get('imageFile');
+            console.log(type);
             if (type === SectionType.MAIN_NAVIGATION_MENU) {
                 menusIdsControl?.setValidators([Validators.required]);
 
@@ -52,9 +53,14 @@ export class SectionFormService {
         this.form.get('showLink')?.valueChanges.subscribe((showLink) => {
             const linkIdControl = this.form.get('linkId');
             const textButtonControl = this.form.get('textButton');
+            const type = this.form.get('type');
             if (showLink) {
-                linkIdControl?.setValidators([Validators.required, FormUtils.noWhitespace()]);
                 textButtonControl?.setValidators([Validators.required, FormUtils.noWhitespace()]);
+                if (type?.value === SectionType.CONTACT_US) {
+                    return;
+                }
+
+                linkIdControl?.setValidators([Validators.required, FormUtils.noWhitespace()]);
             } else {
                 linkIdControl?.clearValidators();
                 textButtonControl?.clearValidators();
@@ -82,12 +88,16 @@ export class SectionFormService {
     }
 
     populateForm(section: Section) {
+        this.form.markAsPristine();
+        this.form.markAsUntouched();
+        this.form.get('type')?.disable();
+       
         this.form.setValue({
             type: section.type,
             title: section.title!,
             subtitle: section.subtitle!,
             content: section.description!,
-            showLink: !!section.linkId,
+            showLink: section.type === SectionType.CONTACT_US ? !!section.textButton : !!section.linkId,
             textButton: section.textButton!,
             typeLink: section.link ? (section.link.type === LinkType.PAGE ? true : false) : true,
             linkId: section.linkId as any,
@@ -97,8 +107,6 @@ export class SectionFormService {
             currentImage: section.image || '',
             imageUrl: '',
             imageType: ImageType.NONE,
-
-          
 
             menusIds: section.menus
                 ? section.menus.map((menu) => {

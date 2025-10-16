@@ -19,9 +19,11 @@
 
         <ul class="flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12 mt-6">
             @for (item of section().items; track item.id) {
-            <li>{{item.title}}</li>
+            <li class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition cursor-pointer" (contextmenu)="contextMenu.onContextMenu($event, item)">{{item.title}}</li>
             }
         </ul>
+
+        <context-menu-crud [editCommand]="edit" [deleteCommand]="delete" [(selectedItem)]="selectedItem"> </context-menu-crud>
 
         <span class="mt-12 flex justify-center gap-6 md:gap-8 border-t border-gray-200 pt-4 w-fit mx-auto dark:border-gray-700"> Copyright &copy; {{ currentYear }} - Cechriza. {{ section().subtitle }} </span>
     </div>

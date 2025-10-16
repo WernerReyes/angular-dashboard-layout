@@ -9,7 +9,7 @@
             } @else {
             <empty-field-message className="max-w-lg mx-auto mb-4" textContent="Sin subtítulo"></empty-field-message>
             } @if (section().description) {
-            <p class="!text-lg text-surface-600 dark:text-surface-300 mx-auto text-center leading-relaxed">{{ section().description }}</p>
+            <p class="text-lg text-surface-600 dark:text-surface-300 mx-auto text-center leading-relaxed">{{ section().description }}</p>
             } @else {
             <empty-field-message className="max-w-lg mx-auto" textContent="Descripción pendiente"></empty-field-message>
             }

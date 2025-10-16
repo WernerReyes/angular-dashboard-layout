@@ -1,16 +1,16 @@
-import type { SectionItem } from '@/shared/interfaces/section-item';
-import { Component, input, output, signal } from '@angular/core';
-import { CardModule } from 'primeng/card';
-import type { DeleteSectionItemFunction } from '../sections-list';
 import { Section } from '@/shared/interfaces/section';
-import { EmptyFieldMessage } from '../../components/empty-field-message/empty-field-message';
-import { MenuItem, MenuItemCommandEvent } from 'primeng/api';
-import { MenuModule } from 'primeng/menu';
+import type { SectionItem } from '@/shared/interfaces/section-item';
+import { Component, input, output, signal, ViewChild } from '@angular/core';
+import { MenuItemCommandEvent } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { ContextMenuCrud } from '../../components/context-menu-crud/context-menu-crud';
+import { EmptyFieldMessage } from '../../components/empty-field-message/empty-field-message';
+import type { DeleteSectionItemFunction } from '../sections-list';
 
 @Component({
     selector: 'section-value-proposition-items',
-    imports: [CardModule, EmptyFieldMessage, MenuModule, ButtonModule],
+    imports: [ContextMenuCrud, CardModule, EmptyFieldMessage, ButtonModule],
     templateUrl: './section-value-proposition-items.html'
 })
 export class SectionValuePropositionItems {
@@ -18,33 +18,24 @@ export class SectionValuePropositionItems {
     deleteItemConfirmation = input.required<DeleteSectionItemFunction>();
     onSelectSectionItem = output<SectionItem>();
 
-     selectedItem = signal<SectionItem | null>(null);
+    @ViewChild(ContextMenuCrud) contextMenu!: ContextMenuCrud;
 
-    items: MenuItem[] = [
-        {
-            label: 'Editar',
-            icon: 'pi pi-fw pi-pencil',
+    selectedItem = signal<SectionItem | null>(null);
 
-            command: () => {
-                this.onSelectSectionItem.emit(this.selectedItem()!);
+    edit = () => {
+        this.onSelectSectionItem.emit(this.selectedItem()!);
+    };
+
+    delete = (event: MenuItemCommandEvent) => {
+        this.deleteItemConfirmation()(
+            event.originalEvent!,
+            {
+                id: this.selectedItem()!.id,
+                sectionId: this.section().id
+            },
+            () => {
+                this.selectedItem.set(null);
             }
-        },
-        {
-            label: 'Eliminar',
-            icon: 'pi pi-fw pi-trash',
-            command: (event: MenuItemCommandEvent) => {
-                // this.deleteSectionItem(event.originalEvent!);
-                this.deleteItemConfirmation()(
-                    event.originalEvent!,
-                    {
-                        id: this.selectedItem()!.id,
-                        sectionId: this.selectedItem()!.sectionId
-                    },
-                    () => {
-                        this.selectedItem.set(null);
-                    }
-                );
-            }
-        }
-    ];
+        );
+    };
 }

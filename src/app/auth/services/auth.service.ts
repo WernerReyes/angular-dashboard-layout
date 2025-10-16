@@ -1,5 +1,6 @@
 import type { User } from '@/shared/interfaces/user';
 import { mapUserEntityToUser, UserEntity } from '@/shared/mappers/user.mapper';
+import { TransformUtils } from '@/utils/transform-utils';
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { catchError, map, of, tap, throwError } from 'rxjs';
@@ -7,8 +8,6 @@ import { environment } from 'src/environments/environment';
 import { ApiResponse } from '../../shared/interfaces/api-response';
 import type { LoginRequest, LoginResponse } from '../interfaces/login';
 import { UpdatePassword, UpdateProfile } from '../interfaces/user';
-import { TransformUtils } from '@/utils/transform-utils';
-import { MessageService } from '@/shared/services/message.service';
 
 type AuthStatus = 'checking' | 'authenticated' | 'not-authenticated';
 
@@ -17,7 +16,6 @@ type AuthStatus = 'checking' | 'authenticated' | 'not-authenticated';
 })
 export class AuthService {
     private readonly http = inject(HttpClient);
-    private readonly messageService = inject(MessageService);
     private readonly prefix = `${environment.apiUrl}/auth`;
 
     private _authStatus = signal<AuthStatus>('checking');
@@ -58,8 +56,6 @@ export class AuthService {
                 })),
                 tap((res) => this.handleAuthSuccess(res.user, res.token)),
                 catchError((error) => {
-                    console.error('Login error:', error.error);
-                    this.messageService.setError(error.error?.message || 'Ocurrio un error al iniciar sesión');
                     return this.handleAuthError(error);
                 })
             );
@@ -114,13 +110,9 @@ export class AuthService {
     updateProfile(update: UpdateProfile) {
         const formData = TransformUtils.toFormData(update);
         return this.http.post<ApiResponse<UserEntity>>(`${this.prefix}/update-profile`, formData).pipe(
-            map(({ data, message }) => ({
-                user: mapUserEntityToUser(data),
-                message
-            })),
-            tap(({ user, message }) => {
+            map(({ data }) => mapUserEntityToUser(data)),
+            tap((user) => {
                 this.user.set(user);
-                this.messageService.setSuccess(message);
             }),
             catchError((error) => {
                 return throwError(() => error);
@@ -129,16 +121,7 @@ export class AuthService {
     }
 
     updatePassword(update: UpdatePassword) {
-        return this.http.put<ApiResponse<null>>(`${this.prefix}/update-password`, update).pipe(
-            map(({ message }) => message),
-            tap((message) => {
-                this.messageService.setSuccess(message);
-            }),
-            catchError((error) => {
-                this.messageService.setError(error.error?.message || 'Ocurrio un error al editar la contraseña');
-                return throwError(() => error);
-            })
-        );
+        return this.http.put<ApiResponse<null>>(`${this.prefix}/update-password`, update);
     }
 
     private handleAuthSuccess(user: User, token: string): boolean {

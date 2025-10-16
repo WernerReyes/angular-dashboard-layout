@@ -36,9 +36,8 @@ export class SectionFormService {
     constructor() {
         this.form.get('type')?.valueChanges.subscribe((type) => {
             const menusIdsControl = this.form.get('menusIds');
-            const imageFile = this.form.get('imageFile');
-            console.log(type);
-            if (type === SectionType.MAIN_NAVIGATION_MENU) {
+            const imageFile = this.form.get('imageFile')
+            if (type === SectionType.MAIN_NAVIGATION_MENU || type === SectionType.FOOTER) {
                 menusIdsControl?.setValidators([Validators.required]);
 
                 imageFile?.setValidators([Validators.required]);
@@ -70,15 +69,15 @@ export class SectionFormService {
             textButtonControl?.updateValueAndValidity();
         });
 
-        this.form.get('currentImage')?.valueChanges.subscribe((currentImage) => {
-            const imageFile = this.form.get('imageFile');
-            if (!currentImage) {
-                imageFile?.setValidators([Validators.required]);
-            } else {
-                imageFile?.clearValidators();
-            }
-            imageFile?.updateValueAndValidity();
-        });
+        // this.form.get('currentImage')?.valueChanges.subscribe((currentImage) => {
+        //     const imageFile = this.form.get('imageFile');
+        //     if (!currentImage) {
+        //         imageFile?.setValidators([Validators.required]);
+        //     } else {
+        //         imageFile?.clearValidators();
+        //     }
+        //     imageFile?.updateValueAndValidity();
+        // });
 
         this.form.get('menusIds')?.valueChanges.subscribe((menus) => {
             const menusIdsControl = this.form.get('menusIds');
@@ -91,6 +90,7 @@ export class SectionFormService {
         this.form.markAsPristine();
         this.form.markAsUntouched();
         this.form.get('type')?.disable();
+
        
         this.form.setValue({
             type: section.type,

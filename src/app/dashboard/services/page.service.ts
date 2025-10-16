@@ -2,19 +2,17 @@ import type { Page } from '@/shared/interfaces/page';
 import { mapPageEntityToPage, PageEntity } from '@/shared/mappers/page.mapper';
 import { HttpClient, httpResource } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { catchError, map, tap, throwError } from 'rxjs';
+import { map, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ApiResponse } from '../../shared/interfaces/api-response';
 import type { CreatePage } from '../interfaces/page';
-import { MessageService } from '@/shared/services/message.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PageService {
     private readonly http = inject(HttpClient);
-    private readonly messageService = inject(MessageService);
-
+ 
     private readonly prefix = `${environment.apiUrl}/page`;
 
     pagesListResource = httpResource<Page[]>(
@@ -38,22 +36,14 @@ export class PageService {
                 withCredentials: true
             })
             .pipe(
-                map(({ data, message }) => ({
-                    page: mapPageEntityToPage(data),
-                    message
-                })),
-                tap(({ page, message }) => {
-                    this.messageService.setSuccess(message);
+                map(({ data }) => mapPageEntityToPage(data)),
+                tap((page) => {
                     this.pagesListResource.update((pages) => {
                         if (pages) {
                             return [page, ...pages];
                         }
                         return [page];
                     });
-                }),
-                catchError((error) => {
-                    this.messageService.setError(error.error?.message);
-                    return throwError(() => error);
                 })
             );
     }
@@ -64,12 +54,8 @@ export class PageService {
                 withCredentials: true
             })
             .pipe(
-                map(({ data, message }) => ({
-                    page: mapPageEntityToPage(data),
-                    message
-                })),
-                tap(({ page, message }) => {
-                    this.messageService.setSuccess(message);
+                map(({ data }) => mapPageEntityToPage(data)),
+                tap((page) => {
                     this.pagesListResource.update((pages) => {
                         if (pages) {
                             const index = pages.findIndex((p) => p.id === page.id);
@@ -81,10 +67,7 @@ export class PageService {
                         return [page];
                     });
                 }),
-                catchError((error) => {
-                    this.messageService.setError(error.error?.message);
-                    return throwError(() => error);
-                })
+                
             );
     }
 
@@ -98,10 +81,7 @@ export class PageService {
                     return [];
                 });
             }),
-            catchError((error) => {
-                this.messageService.setError(error.error?.message);
-                return throwError(() => error);
-            })
+           
         );
     }
 }

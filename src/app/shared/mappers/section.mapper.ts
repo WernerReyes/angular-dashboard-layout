@@ -19,11 +19,11 @@ export enum SectionType {
     CONTACT_US = 'CONTACT_US',
     FOOTER = 'FOOTER',
 
-    BENEFIT = 'BENEFIT',
-    MACHINE_TYPE = 'MACHINE_TYPE',
-    BILL_MACHINE = 'BILL_MACHINE',
-    COIN_MACHINE = 'COIN_MACHINE',
-    CONTACT = 'CONTACT',
+    // BENEFIT = 'BENEFIT',
+    // MACHINE_TYPE = 'MACHINE_TYPE',
+    // BILL_MACHINE = 'BILL_MACHINE',
+    // COIN_MACHINE = 'COIN_MACHINE',
+    // CONTACT = 'CONTACT',
 }
 
 export interface SectionEntity {

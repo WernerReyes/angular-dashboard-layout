@@ -1,0 +1,18 @@
+<p-confirmdialog />
+<div class="flex flex-col max-w-7xl mx-auto">
+    <div class="card">
+        <div class="flex justify-between items-center flex-wrap gap-4 mb-4">
+            <div class="flex flex-col gap-0">
+                <h5 class="!text-4xl !font-extrabold !m-0">Plantillas reutilizables</h5>
+                <span class="text-muted-color text-xl">Gestiona las secciones de tipo layout</span>
+            </div>
+
+            <div class="flex items-center- flex-wrap gap-2">
+                <p-button label="Nueva Sección" icon="pi pi-plus" (click)="display.set(true)"></p-button>
+            </div>
+        </div>
+
+        <sections-list [selectedPage]="selectedPage()" (onDisplay)="display.set($event)" (onSelectedSection)="selectedSection.set($event)"></sections-list>
+        <section-form [display]="display()" (onCloseDialog)="display.set(false)" [selectedPageId]="selectedPage()?.id!" [(selectedSection)]="selectedSection"></section-form>
+    </div>
+</div>

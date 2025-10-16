@@ -10,41 +10,42 @@
         <!-- Grid de soluciones -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
             @if (section().items && section().items.length > 0) { @for (item of section().items; track item.id) {
-            <div class="text-center group">
-                <p-card class="solution-card h-full">
-                    <ng-template #header>
-                        <div class="flex justify-center pt-5">
-                            <div class="w-24 h-24 md:w-28 md:h-28 bg-blue-600 dark:bg-blue-500 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-2xl group-hover:scale-110 transition-all duration-500">
-                                <img [src]="item.icon" alt="{{ item.title }} Icon" class="w-12 h-12 md:w-16 md:h-16 object-contain" />
-                            </div>
+
+            <p-card class="solution-card h-full" (contextmenu)="contextMenu.onContextMenu($event, item)">
+                <ng-template #header>
+                    <div class="flex justify-center pt-5">
+                        <div class="w-24 h-24 md:w-28 md:h-28 bg-blue-600 dark:bg-blue-500 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-2xl group-hover:scale-110 transition-all duration-500">
+                            <img [src]="item.icon" alt="{{ item.title }} Icon" class="w-12 h-12 md:w-16 md:h-16 object-contain" />
                         </div>
-                    </ng-template>
+                    </div>
+                </ng-template>
 
-                    <ng-template #title>
-                        <div class="flex items-center justify-between w-full">
-                            <!-- Elemento vacío para balance -->
-                            <div class="w-8"></div>
+                <ng-template #title>
+                    <span class="text-center block w-full">
+                        <!-- Elemento vacío para balance -->
+                        
+                        <!-- Título centrado -->
+                        {{ item.title }}
 
-                            <!-- Título centrado -->
-                            {{ item.title }}
+                        <!-- Botón al costado -->
+                        <!-- <div class="flex justify-end">
+                            <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-rounded p-button-text p-button-plain" (click)="menu.toggle($event); this.selectedItem.set(item)"></button>
+                            <p-menu #menu [popup]="true" [model]="items"></p-menu>
+                        </div> -->
+                    </span>
+                </ng-template>
 
-                            <!-- Botón al costado -->
-                            <div class="flex justify-end">
-                                <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-rounded p-button-text p-button-plain" (click)="menu.toggle($event); this.selectedItem.set(item)"></button>
-                                <p-menu #menu [popup]="true" [model]="items"></p-menu>
-                            </div>
-                        </div>
-                    </ng-template>
+                @if (item.description) {
 
-                    @if (item.description) {
+                <p>{{item.description }}</p>
+                } @else {
+                <empty-field-message className="mx-auto my-4 max-w-lg" textContent="Descripción pendiente"></empty-field-message>
+                }
+            </p-card>
 
-                    <p>{{item.description }}</p>
-                    } @else {
-                    <empty-field-message className="mx-auto my-4 max-w-lg" textContent="Descripción pendiente"></empty-field-message>
-                    }
-                </p-card>
-            </div>
-            } } @else {
+            }
+            <context-menu-crud [editCommand]="edit" [deleteCommand]="delete" [(selectedItem)]="selectedItem"></context-menu-crud>
+            } @else {
             <div class="w-fit mx-auto col-span-full">
                 <empty-field-message textContent="No hay soluciones disponibles"></empty-field-message>
             </div>

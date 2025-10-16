@@ -35,7 +35,11 @@ export class Menu {
                     {
                         label: 'Secciones',
                         icon: 'pi pi-th-large',
-                        routerLink: ['/dashboard/sections']
+                        // routerLink: ['/dashboard/sections'],
+                        items: [
+                            { label: 'Layouts', icon: 'pi pi-th-large', routerLink: ['/dashboard/sections/layouts'] },
+                            { label: 'Personalizadas', icon: 'pi pi-cog', routerLink: ['/dashboard/sections/personalized'] }
+                        ]
                     },
                     {
                         label: 'Categorías',

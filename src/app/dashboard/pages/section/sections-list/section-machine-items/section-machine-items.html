@@ -1,6 +1,9 @@
 <p-splitter
- [layout]="isMobile() ? 'vertical' : 'horizontal'"
-[panelSizes]="isMobile() ? [40, 60] : [25, 75]" [style]="{ height: '300px' }" panelStyleClass="bg-gradient-to-br from-gray-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 transition-all duration-300">
+    [layout]="isMobile() ? 'vertical' : 'horizontal'"
+    [panelSizes]="isMobile() ? [40, 60] : [25, 75]"
+    [style]="{ height: '300px' }"
+    panelStyleClass="bg-gradient-to-br from-gray-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 transition-all duration-300"
+>
     <ng-template #panel>
         <!-- <div class="flex items-center justify-center h-full">Panel 1</div> -->
         <app-error-boundary [resource]="categoryList" errorMessage="Ocurrió un error cargando las categorias recientes." emptyMessage="No hay categorias recientes">
@@ -8,9 +11,7 @@
                 @let categoriesFiltered = categories | filterByIdsPipe : categoriesIds() : 'id'; @if (categoriesFiltered.length > 0) {
 
                 <div class="p-3">
-                    <p-listbox  
-                    [scrollHeight]="isMobile() ? '100px' : ''"
-                    [options]="categoriesFiltered" [(ngModel)]="selectedCategoryId" optionLabel="title" optionValue="id" class="w-full" />
+                    <p-listbox [scrollHeight]="isMobile() ? '100px' : ''" [options]="categoriesFiltered" [(ngModel)]="selectedCategoryId" optionLabel="title" optionValue="id" class="w-full" />
                 </div>
                 } @else {
                 <div class="flex flex-col items-center text-center justify-center my-auto h-full py-8 text-surface-500">
@@ -32,7 +33,7 @@
                 <div class="text-sm">Intenta seleccionar otra categoría o agrega nuevos items a esta sección.</div>
             </div>
             } @else { @for (item of itemsByCategory; track item.id) {
-            <p-card class="h-full">
+            <p-card class="h-full" (contextmenu)="contextMenu.onContextMenu($event, item)">
                 <ng-template #header>
                     @if (item.image) {
                     <img alt="Card" class="w-full h-48 object-cover" (error)="item.image = null" [src]="item.image" />
@@ -42,14 +43,7 @@
                     }
                 </ng-template>
                 <ng-template #title>
-                    <div class="flex items-center gap-4">
-                        {{ item.title }}
-
-                        <div class="flex ml-auto">
-                            <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-rounded p-button-text p-button-plain" (click)="menu.toggle($event); this.selectedItem.set(item)"></button>
-                            <p-menu #menu [popup]="true" [model]="items"></p-menu>
-                        </div>
-                    </div>
+                    <div class="flex items-center gap-4">{{ item.title }}</div>
                 </ng-template>
                 <p>{{ item.description }}</p>
 
@@ -62,7 +56,10 @@
                 </ng-template>
                 }
             </p-card>
-            } }
+            }
+
+            <context-menu-crud [editCommand]="edit" [deleteCommand]="delete" [(selectedItem)]="selectedItem"></context-menu-crud>
+            }
         </div>
     </ng-template>
 </p-splitter>

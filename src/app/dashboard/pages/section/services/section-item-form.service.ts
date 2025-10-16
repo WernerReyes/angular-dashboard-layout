@@ -100,7 +100,7 @@ export class SectionItemFormService {
                 this.disableFields(['subtitle', 'content', 'imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'textButton', 'showLink', 'linkId', 'typeLink', 'categoryId', 'inputType']);
                 break;
                 
-            case SectionType.CONTACT:
+            case SectionType.CONTACT_US:
                 const inputType = this.form.get('inputType');
                 inputType?.setValidators([Validators.required]);
                 inputType?.updateValueAndValidity();

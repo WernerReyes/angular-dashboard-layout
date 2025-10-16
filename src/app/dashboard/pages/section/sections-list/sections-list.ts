@@ -9,7 +9,7 @@ import type { SectionItem as ISectionItem } from '@/shared/interfaces/section-it
 import { SectionType } from '@/shared/mappers/section.mapper';
 import { MessageService } from '@/shared/services/message.service';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, inject, linkedSignal, model, output, signal } from '@angular/core';
+import { Component, computed, inject, input, linkedSignal, model, output, signal } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { Badge } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
@@ -36,6 +36,7 @@ import { SectionSolutionsOverviewItems } from './section-solutions-overview-item
 import { SectionMissionVisionItems } from './section-mission-vision-items/section-mission-vision-items';
 import { SectionContactUsItems } from './section-contact-us-items/section-contact-us-items';
 import { SectionFooterItems } from './section-footer-items/section-footer-items';
+import { PageService } from '@/dashboard/services/page.service';
 
 type DeleteSectionItemParams = {
     id: number;
@@ -77,6 +78,7 @@ export type DeleteSectionItemFunction = (event: Event, params: DeleteSectionItem
     templateUrl: './sections-list.html'
 })
 export class SectionsList {
+    private readonly pagesService = inject(PageService);
     private readonly sectionService = inject(SectionService);
     private readonly sectionItemService = inject(SectionItemService);
     private readonly sectionFormService = inject(SectionFormService);
@@ -84,6 +86,7 @@ export class SectionsList {
     private readonly confirmationService = inject(ConfirmationService);
     private readonly messageService = inject(MessageService);
 
+    type = input<'layouts' | 'personalized'>('personalized');
     selectedPage = model<Page | null>(null);
     onDisplay = output<boolean>();
     onSelectedSection = output<Section>();

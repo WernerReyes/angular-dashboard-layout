@@ -58,9 +58,9 @@ export const sectionTypesOptions: Record<SectionType, SectionTypeOption> = {
     FOOTER: { label: 'Pie de Página', value: SectionType.FOOTER, severity: 'warn' },
     
 
-    BENEFIT: { label: 'Beneficios', value: SectionType.BENEFIT, severity: 'success' },
-    MACHINE_TYPE: { label: 'Tipo de Máquina', value: SectionType.MACHINE_TYPE, severity: 'warn' },
-    BILL_MACHINE: { label: 'Tipo de Factura', value: SectionType.BILL_MACHINE, severity: 'danger' },
-    COIN_MACHINE: { label: 'Máquina de Monedas', value: SectionType.COIN_MACHINE, severity: 'contrast' },
-    CONTACT: { label: 'Contacto', value: SectionType.CONTACT, severity: 'danger' },
+    // BENEFIT: { label: 'Beneficios', value: SectionType.BENEFIT, severity: 'success' },
+    // MACHINE_TYPE: { label: 'Tipo de Máquina', value: SectionType.MACHINE_TYPE, severity: 'warn' },
+    // BILL_MACHINE: { label: 'Tipo de Factura', value: SectionType.BILL_MACHINE, severity: 'danger' },
+    // COIN_MACHINE: { label: 'Máquina de Monedas', value: SectionType.COIN_MACHINE, severity: 'contrast' },
+    // CONTACT: { label: 'Contacto', value: SectionType.CONTACT, severity: 'danger' },
 };

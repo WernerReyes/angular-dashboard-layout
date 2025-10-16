@@ -19,7 +19,8 @@ const dashboardRoutes: Route[] = [
     },
     {
         path: 'sections',
-        loadComponent: () => import('./pages/section/section.page')
+        // loadComponent: () => import('./pages/section/section.page')
+        loadChildren: () => import('./pages/section/routes').then(m => m.sectionRoutes)
     },
 
     {

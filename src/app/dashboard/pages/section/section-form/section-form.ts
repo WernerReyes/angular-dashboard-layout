@@ -6,7 +6,7 @@ import { LinkType } from '@/shared/mappers/link.mapper';
 import { SectionType } from '@/shared/mappers/section.mapper';
 import { FormUtils } from '@/utils/form-utils';
 import { JsonPipe, KeyValuePipe } from '@angular/common';
-import { Component, effect, inject, input, model, output } from '@angular/core';
+import { Component, computed, effect, inject, input, model, output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -56,6 +56,8 @@ export class SectionForm {
     selectedSection = model<Section | null>();
     selectedPageId = input.required<number>();
 
+    loading = computed(() => this.sectionService.isCreating() || this.sectionService.isUpdating());
+
     form = this.sectionFormService.form;
 
     linksList = this.linkService.linksListResource;
@@ -78,6 +80,10 @@ export class SectionForm {
     }
 
     saveChanges() {
+        Object.keys(this.form.controls).forEach((key) => {
+            const control = this.form.get(key);
+            console.log(key, control?.errors);
+        });
         if (this.form.valid) {
             const formValue = this.form.value;
 

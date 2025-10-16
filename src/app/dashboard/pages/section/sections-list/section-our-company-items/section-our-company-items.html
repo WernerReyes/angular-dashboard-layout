@@ -19,23 +19,13 @@
 
                 <!-- Lista de items dinámicos si existen -->
                 @if (section().items && section().items.length > 0) { @for (item of section().items; track item.id) {
-                <div class="space-y-6">
+                <div class="space-y-6" (contextmenu)="contextMenu.onContextMenu($event, item)">
                     <div class="flex flex-col items-center space-x-4">
-                        <div class="flex items-center justify-between w-full py-3 px-4">
-                            <!-- Espacio para balance visual -->
-                            <div class="w-8"></div>
-
-                            <!-- Título centrado con mejor estilo -->
+                        <div class="flex items-center justify-center w-full py-3 px-4">
                             <div class="flex items-center space-x-2 text-primary">
                                 <i class="pi pi-angle-double-right text-sm"></i>
                                 <span class="text-lg font-bold tracking-wider uppercase">{{item.title}}</span>
                                 <i class="pi pi-angle-double-left text-sm"></i>
-                            </div>
-
-                            <!-- Botón al final -->
-                            <div class="flex">
-                                <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-rounded p-button-text p-button-plain" (click)="menu.toggle($event); this.selectedItem.set(item)"></button>
-                                <p-menu #menu [popup]="true" [model]="items"></p-menu>
                             </div>
                         </div>
 
@@ -56,6 +46,8 @@
                         </div>
                     </div>
                 </div>
+
+                <context-menu-crud [editCommand]="edit" [deleteCommand]="delete" [(selectedItem)]="selectedItem"> </context-menu-crud>
                 } } @else {
                 <empty-field-message textContent="No hay características para mostrar"></empty-field-message>
                 }

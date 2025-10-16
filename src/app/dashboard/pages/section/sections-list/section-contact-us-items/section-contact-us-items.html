@@ -8,23 +8,25 @@
         <p class="!text-lg text-surface-600 dark:text-surface-300 mx-auto text-center leading-relaxed">{{section().description}}</p>
 
         @if (section().items.length === 0) {
-        <empty-field-message message="No hay campos de contacto configurados."></empty-field-message>
+        <empty-field-message className="mb-5" textContent="No hay campos de contacto configurados."></empty-field-message>
         } @else { @for (input of section().items; track input.id) { @switch (input.inputType) { @case (InputType.TEXT) {
-        <div class="flex flex-col gap-2 w-full">
+        <div class="flex flex-col gap-2 w-full" (contextmenu)="contextMenu.onContextMenu($event, input)">
             <label for="name">{{input.title}}</label>
             <input pInputText type="text" placeholder="{{input.subtitle}}" fluid />
         </div>
         } @case (InputType.EMAIL) {
-        <div class="flex flex-col gap-2 w-full">
+        <div class="flex flex-col gap-2 w-full" (contextmenu)="contextMenu.onContextMenu($event, input)">
             <label for="email">{{input.title}}</label>
             <input pInputText type="email" placeholder="{{input.subtitle}}" fluid />
         </div>
         } @case (InputType.TEXTAREA) {
-        <div class="flex flex-col gap-2 w-full">
+        <div class="flex flex-col gap-2 w-full" (contextmenu)="contextMenu.onContextMenu($event, input)">
             <label for="message">{{input.title}}</label>
             <textarea pTextarea placeholder="{{input.subtitle}}" rows="3" [autoResize]="true" fluid></textarea>
         </div>
         } } } }
+
+        <context-menu-crud [editCommand]="edit" [deleteCommand]="delete" [(selectedItem)]="selectedItem"> </context-menu-crud>
 
         <!-- <button type="button" class="text-white bg-slate-900 hover:bg-slate-800 tracking-wide rounded-md text-sm font-medium px-4 py-3 w-full cursor-pointer !mt-2 border-0">Send message</button> -->
         @if (section().textButton) {

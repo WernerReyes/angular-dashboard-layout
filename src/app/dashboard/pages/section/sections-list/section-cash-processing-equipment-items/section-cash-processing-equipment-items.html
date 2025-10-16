@@ -20,7 +20,7 @@
         <!-- Grid de equipos -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-5xl mx-auto">
             @for (item of section().items; track item.id) {
-            <div class="flex flex-col items-center text-center group">
+            <div class="flex flex-col items-center text-center group" (contextmenu)="contextMenu.onContextMenu($event, item)">
                 <!-- Icono -->
                 <div class="flex">
                     @if (item.icon) {
@@ -36,10 +36,10 @@
                     } @else {
                     <empty-field-message className="flex items-center justify-center mb-8" textContent="Sin ícono"></empty-field-message>
                     }
-                    <div>
+                    <!-- <div>
                         <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-rounded p-button-text p-button-plain" (click)="menu.toggle($event); selectedItem.set(item)"></button>
                         <p-menu #menu [popup]="true" [model]="items"></p-menu>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- Contenido -->
@@ -55,6 +55,8 @@
             </div>
 
             }
+
+            <context-menu-crud [editCommand]="edit"  [deleteCommand]="delete" [(selectedItem)]="selectedItem"></context-menu-crud>
         </div>
 
         }

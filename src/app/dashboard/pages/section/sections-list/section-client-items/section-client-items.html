@@ -4,17 +4,13 @@
         <div class="text-center">
             <h2 class="!text-3xl md:!text-4xl !font-bold text-primary-600 dark:text-primary-400 mb-4">{{ section().title }}</h2>
 
-            @if (section().subtitle) {
-            <p class="!text-lg text-surface-600 dark:text-surface-300 mx-auto text-center leading-relaxed">{{ section().subtitle }}</p>
+            @if (section().description) {
+            <p class="text-lg text-surface-600 dark:text-surface-300 mx-auto text-center leading-relaxed">{{ section().description }}</p>
             } @else {
-            <empty-field-message className="max-w-lg mx-auto" textContent="Sin subtítulo"></empty-field-message>
+            <empty-field-message className="max-w-lg mx-auto" textContent="Sin descripción"></empty-field-message>
             }
         </div>
 
-        <div>
-            <button [disabled]="!selectedItem()" pButton type="button" icon="pi pi-ellipsis-v" class="p-button-rounded p-button-text p-button-plain" (click)="menu.toggle($event)"></button>
-            <p-menu #menu [popup]="true" [model]="items"></p-menu>
-        </div>
 
         @if (section().items.length === 0) {
         <empty-field-message className="max-w-lg mx-auto" textContent="No hay elementos disponibles"></empty-field-message>
@@ -32,14 +28,12 @@
             [responsiveOptions]="responsiveOptions"
             autoplayInterval="6000"
         >
+            <!-- 'ring-4 ring-primary ring-opacity-50 bg-white dark:bg-slate-700 shadow-2xl transform scale-105 -translate-y-2': selectedItem()?.id === item.id, -->
+            <!-- (click)="onSelectItem(item)" -->
             <ng-template let-item #item>
                 <div
-                    (click)="onSelectItem(item)"
-                    class="m-6 p-4 cursor-pointer transition-all duration-300 rounded-lg"
-                    [ngClass]="{
-    'ring-4 ring-primary ring-opacity-50 bg-white dark:bg-slate-700 shadow-2xl transform scale-105 -translate-y-2': selectedItem()?.id === item.id,
-    'bg-white/70 dark:bg-slate-800/70 hover:bg-white hover:dark:bg-slate-800 hover:shadow-lg hover:-translate-y-1': selectedItem()?.id !== item.id
-}"
+                    (contextmenu)="contextMenu.onContextMenu($event, item)"
+                    class="m-6 p-4 cursor-pointer transition-all duration-300 rounded-lg bg-white/70 dark:bg-slate-800/70 hover:bg-white hover:dark:bg-slate-800 hover:shadow-lg hover:-translate-y-1"
                 >
                     <div class="mb-4">
                         <div class="relative mx-auto">
@@ -53,6 +47,8 @@
                 </div>
             </ng-template>
         </p-carousel>
+
+        <context-menu-crud [editCommand]="edit" [deleteCommand]="delete" [(selectedItem)]="selectedItem"> </context-menu-crud>
 
         }
     </div>

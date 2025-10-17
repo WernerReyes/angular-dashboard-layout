@@ -6,6 +6,7 @@ import { inject, Injectable } from '@angular/core';
 import { map, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { CreateLink } from '../interfaces/link';
+import { TransformUtils } from '@/utils/transform-utils';
 
 @Injectable({
     providedIn: 'root'
@@ -30,7 +31,8 @@ export class LinkService {
     );
 
     createLink(create: CreateLink) {
-        return this.http.post<ApiResponse<LinkEntity>>(this.prefix, create).pipe(
+        const formData = TransformUtils.toFormData(create);
+        return this.http.post<ApiResponse<LinkEntity>>(this.prefix, formData).pipe(
             map(({ data }) => mapLinkEntityToLink(data)),
             tap((link) => {
                 this.linksListResource.update((links) => [link, ...links!]);
@@ -39,7 +41,8 @@ export class LinkService {
     }
 
     updateLink(id: number, update: Partial<CreateLink>) {
-        return this.http.put<ApiResponse<LinkEntity>>(`${this.prefix}/${id}`, update).pipe(
+        const formData = TransformUtils.toFormData(update);
+        return this.http.post<ApiResponse<LinkEntity>>(`${this.prefix}/${id}`, formData).pipe(
             map(({ data }) => mapLinkEntityToLink(data)),
             tap((link) => {
                 this.linksListResource.update((links) => links!.map((l) => (l.id === link.id ? link : l)));

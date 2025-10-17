@@ -13,21 +13,29 @@ export interface Link {
     readonly updatedAt: Date;
     readonly openInNewTab?: boolean;
     readonly page?: PageLink | null;
+    readonly fileUrl?: string | null;
 }
-
 
 type Options = {
     label: string;
     value: LinkType;
+    icon: string;
 };
 
 export const linkTypeOptions: Record<LinkType, Options> = {
     [LinkType.EXTERNAL]: {
         label: 'URL Externa',
+        icon: 'pi pi-globe',
         value: LinkType.EXTERNAL
     },
     [LinkType.PAGE]: {
         label: 'Página Interna',
+        icon: 'pi pi-file',
         value: LinkType.PAGE
+    },
+    [LinkType.FILE]: {
+        label: 'Archivo',
+        icon: 'pi pi-cloud-download',
+        value: LinkType.FILE
     }
 };

@@ -1,4 +1,5 @@
 import { ImageType, SectionItem } from '@/shared/interfaces/section-item';
+import { LinkType } from '@/shared/mappers/link.mapper';
 import { InputType } from '@/shared/mappers/section-item.mapper';
 import { SectionType } from '@/shared/mappers/section.mapper';
 
@@ -34,7 +35,7 @@ export class SectionItemFormService {
         categoryId: [null],
 
         showLink: [false],
-        typeLink: [true], // true = internal, false = external
+        typeLink: [LinkType.PAGE as LinkType | null], // true = internal, false = external
         linkId: [null],
 
         inputType: [null as InputType | null]
@@ -121,6 +122,7 @@ export class SectionItemFormService {
     }
 
     populateForm(section: SectionItem) {
+        console.log('POPULATE SECTION ITEM FORM', section);
         this.form.markAsPristine();
         this.form.markAsUntouched();
         // TODO: CHECK console.log(section);
@@ -130,7 +132,7 @@ export class SectionItemFormService {
             content: section.description!,
             showLink: !!section.linkId,
             textButton: section.textButton!,
-            typeLink: !!section.linkId,
+            typeLink: section.link?.type ?? null,
             linkId: section.linkId ?? (null as any),
 
             categoryId: section.categoryId ?? (null as any),

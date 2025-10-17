@@ -1,4 +1,5 @@
 import type { SectionItem } from '../interfaces/section-item';
+import { LinkEntity, mapLinkEntityToLink } from './link.mapper';
 
 export enum InputType {
     TEXT = 'TEXT',
@@ -19,6 +20,7 @@ export interface SectionItemEntity {
     section_id: number;
     category_id: number | null;
     input_type: InputType | null;
+    link: LinkEntity | null;
 }
 
 export const mapSectionItemEntityToSectionItem = (entity: SectionItemEntity): SectionItem => ({
@@ -34,5 +36,6 @@ export const mapSectionItemEntityToSectionItem = (entity: SectionItemEntity): Se
     order: entity.order_num,
     sectionId: Number(entity.section_id),
     categoryId: entity.category_id ? Number(entity.category_id) : null,
-    inputType: entity.input_type
+    inputType: entity.input_type,
+    link: entity.link ? mapLinkEntityToLink(entity.link) : null
 });

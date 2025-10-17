@@ -6,9 +6,8 @@ import { Pipe, PipeTransform } from '@angular/core';
     name: 'filterLinksByType'
 })
 export class FilterLinksByTypePipe implements PipeTransform {
-    transform(value: Link[], type: boolean): Link[] {
-        let linkType = type ? LinkType.PAGE : LinkType.EXTERNAL;
+    transform(value: Link[], type: LinkType): Link[] {
         if (!value) return [];
-        return value.filter((link) => link.type === linkType);
+        return value.filter((link) => link.type === type);
     }
 }

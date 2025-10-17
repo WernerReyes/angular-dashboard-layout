@@ -9,9 +9,9 @@ import type { SectionItem as ISectionItem } from '@/shared/interfaces/section-it
 import { SectionType } from '@/shared/mappers/section.mapper';
 import { MessageService } from '@/shared/services/message.service';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, computed, inject, input, linkedSignal, model, output, signal } from '@angular/core';
-import { ConfirmationService } from 'primeng/api';
-import { Badge } from 'primeng/badge';
+import { Component, computed, inject, input, linkedSignal, model, output, signal, ViewChild } from '@angular/core';
+import { ConfirmationService, MenuItemCommandEvent } from 'primeng/api';
+import { Badge, BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
 import { CarouselModule } from 'primeng/carousel';
 import { FieldsetModule } from 'primeng/fieldset';
@@ -37,6 +37,8 @@ import { SectionMissionVisionItems } from './section-mission-vision-items/sectio
 import { SectionContactUsItems } from './section-contact-us-items/section-contact-us-items';
 import { SectionFooterItems } from './section-footer-items/section-footer-items';
 import { PageService } from '@/dashboard/services/page.service';
+import { ContextMenu, ContextMenuModule } from 'primeng/contextmenu';
+import { ContextMenuCrud } from '../components/context-menu-crud/context-menu-crud';
 
 type DeleteSectionItemParams = {
     id: number;
@@ -73,7 +75,8 @@ export type DeleteSectionItemFunction = (event: Event, params: DeleteSectionItem
         FieldsetModule,
         TagModule,
         ButtonModule,
-        Badge
+        ContextMenuCrud,
+        BadgeModule
     ],
     templateUrl: './sections-list.html'
 })
@@ -89,7 +92,9 @@ export class SectionsList {
     type = input<'layouts' | 'personalized'>('personalized');
     selectedPage = model<Page | null>(null);
     onDisplay = output<boolean>();
-    onSelectedSection = output<Section>();
+    onSelectedSection = output<Section | null>();
+
+     @ViewChild(ContextMenuCrud) contextMenu!: ContextMenuCrud;
 
     sectionStatusOptions = sectionStatusOptions;
 
@@ -100,8 +105,9 @@ export class SectionsList {
     sectionList = this.sectionService.sectionListResource;
 
     displayItemDialog = signal<boolean>(false);
-    currentSection = signal<Section | null>(null);
+    currentSection = signal<any | null>(null);
     selectedSectionItem = signal<ISectionItem | null>(null);
+    
 
     orginalSectionList = linkedSignal<Section[]>(() => {
         const sectionList = this.sectionList.hasValue() ? this.sectionList.value() : [];
@@ -130,6 +136,32 @@ export class SectionsList {
             this.sectionItemFormService.populateForm(item);
         }
     }
+
+    edit = () => {
+        const section = this.currentSection();
+        this.onDisplay.emit(true);
+        this.onSelectedSection.emit(section);
+
+        this.sectionFormService.populateForm(section!);
+    }
+
+
+    delete = ($event: MenuItemCommandEvent) => {
+        const section = this.currentSection();
+        if (!section) return;
+        const message = section.items && section.items.length > 0 ? 'Esta sección tiene ítems asociados. ¿Seguro que deseas eliminarla?' : '¿Seguro que deseas eliminar esta sección?';
+        this.confirmationDialog(
+            $event.originalEvent!,
+            message,
+            'Eliminar sección',
+            () => {
+                this.sectionService.deleteSection(section.id).subscribe();
+            },
+            () => {}
+        );
+    }
+
+
 
     drop(event: CdkDragDrop<Section[]>, targetList: Section[]) {
         // Si se reordenó dentro del mismo contenedor
@@ -234,4 +266,8 @@ export class SectionsList {
             reject
         });
     };
+
+    
+
+    
 }

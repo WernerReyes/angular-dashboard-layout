@@ -3,7 +3,7 @@
         <app-data-view-skeleton></app-data-view-skeleton>
     </ng-template>
 
-      <p-confirmdialog />
+    <p-confirmdialog />
 
     <p-dataview [paginator]="true" [totalRecords]="filteredLinksList().length" [rowsPerPageOptions]="[5, 10, 20]" [rows]="5" [value]="filteredLinksList()" layout="list">
         <ng-template #header>
@@ -35,18 +35,23 @@
                                     [class]="{
                                         'pi-external-link': item.type === LinkType.EXTERNAL,
                                         'pi-link': item.type === LinkType.PAGE,
+                                        'pi-file': item.type === LinkType.FILE
                                         
                                     }"
                                 ></i>
                                 <div class="text-lg font-medium">
-                                    {{item.title}}
+                                    {{ item.title }}
                                     <div class="bg-surface-100 truncate text-ellipsis max-w-72 xl:max-w-full px-3 w-fit" style="border-radius: 30px">
-                                        @if(page) {
+                                        @if(item.type === LinkType.PAGE && page) {
                                         <i class="pi pi-file !text-[12px] text-secondary dark:text-black mr-2"></i>
                                         <span class="text-secondary dark:text-black font-medium text-sm">/{{ page.slug }}</span>
-                                        } @else {
+                                        } @else if (item.type === LinkType.EXTERNAL) {
                                         <i class="pi pi-globe !text-[12px] text-secondary dark:text-black mr-2"></i>
                                         <a href="{{ item.url }}" target="_blank" class="dark:text-black text-sm font-medium hover:underline"> {{ item.url }} </a>
+                                        } @else if (item.type === LinkType.FILE) {
+                                        <a href="{{ item.fileUrl }}" target="_blank" class="dark:text-black">
+                                            <i class="pi pi-cloud-download !text-[12px] mx-auto text-secondary dark:text-black"></i>
+                                        </a>
                                         }
                                     </div>
                                     <small class="text-sm pt-2 text-muted-color">Creado el {{ item.createdAt | date: 'mediumDate' }}</small>

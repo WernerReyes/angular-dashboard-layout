@@ -1,4 +1,5 @@
 import { InputType } from '../mappers/section-item.mapper';
+import { Link } from './link';
 
 export interface SectionItem {
     id: number;
@@ -14,6 +15,7 @@ export interface SectionItem {
     sectionId: number;
     categoryId: number | null;
     inputType: InputType | null;
+    link?: Link | null;
 }
 
 export enum ImageType {

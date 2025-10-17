@@ -27,7 +27,9 @@
                         <div></div>
                     </div>
                 </p-message>
-                } @for (section of filteredSections; track section.id) { @let status = sectionStatusOptions[`${section.active}`]; @let typeOption = sectionTypesOptions[section.type];
+                } @for (section of filteredSections; track section.id) { 
+                    @let status = sectionStatusOptions[`${section.active}`]; 
+                    @let typeOption = sectionTypesOptions[section.type];
                 <div class="bg-white dark:bg-surface-800 rounded-lg border border-surface-200 dark:border-surface-700 p-5" cdkDrag>
                     <div class="flex items-center justify-between mb-5 flex-wrap gap-3">
                         <div class="flex items-center gap-3">
@@ -53,7 +55,10 @@
 
                     <!-- @if (section.items.length > 0) { -->
 
-                    <p-panel class="dark:!bg-surface-800 dark:!border-surface-700" [toggleable]="true">
+                    <p-panel class="dark:!bg-surface-800 dark:!border-surface-700" [toggleable]="true"
+                     (contextmenu)="contextMenu.onContextMenu($event, section)"
+                   
+                    >
                         <ng-template #header>
                             <div class="flex items-center gap-3">
                                 <i class="pi pi-folder-open text-surface-600 dark:text-surface-400"></i>
@@ -108,6 +113,11 @@
                 }
             </div>
             }
+            <context-menu-crud
+                [(selectedItem)]="currentSection"
+                [editCommand]="edit"
+                [deleteCommand]="delete"
+            ></context-menu-crud>
         </div>
 
         <section-item-form [display]="displayItemDialog()" (onCloseDialog)="displayItemDialog.set(false)" [(selectedSectionItem)]="selectedSectionItem" [selectedSection]="currentSection()"></section-item-form>

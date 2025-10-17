@@ -3,7 +3,8 @@ import { mapPageEntityToPage, PageEntity } from './page.mapper';
 
 export enum LinkType {
     PAGE = 'PAGE',
-    EXTERNAL = 'EXTERNAL'
+    EXTERNAL = 'EXTERNAL',
+    FILE = 'FILE'
 }
 
 export interface LinkEntity {
@@ -16,9 +17,11 @@ export interface LinkEntity {
     readonly updated_at: string;
     readonly new_tab: number; // 1 or 0
     readonly page?: PageEntity | null;
+    readonly file_url?: string | null;
 }
 
 export const mapLinkEntityToLink = (entity: LinkEntity): Link => {
+    
     return {
         id: entity.id_link,
         title: entity.title,
@@ -28,6 +31,7 @@ export const mapLinkEntityToLink = (entity: LinkEntity): Link => {
         createdAt: new Date(entity.created_at),
         updatedAt: new Date(entity.updated_at),
         openInNewTab: entity.new_tab === 1,
-        page: entity.page ? mapPageEntityToPage(entity.page) : null
+        page: entity.page ? mapPageEntityToPage(entity.page) : null,
+        fileUrl: entity.file_url || null
     };
 };

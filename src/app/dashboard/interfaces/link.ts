@@ -6,4 +6,5 @@ export interface CreateLink {
     readonly url: string | null;
     readonly pageId: number | null;
     readonly openInNewTab?: boolean;
+    readonly file?: File | null;
 }

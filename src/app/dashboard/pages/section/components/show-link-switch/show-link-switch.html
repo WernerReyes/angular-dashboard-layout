@@ -5,7 +5,7 @@
     </div>
 
     @if (form().controls['showLink'].value) {
-    <div class="flex gap-4">
+    <div class="flex flex-wrap md:flex-nowrap gap-4">
         <div class="flex flex-col w-full gap-2">
             <label for="parent">Texto del enlace</label>
             <input id="textButton" type="text" class="w-full" pInputText formControlName="textButton" placeholder="Texto del enlace" />
@@ -13,7 +13,12 @@
             <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form(), 'textButton') }} </p-message>
             }
         </div>
-        <p-togglebutton formControlName="typeLink" onLabel="Interno" offLabel="Externo" onIcon="pi pi-file" offIcon="pi pi-external-link" class="w-36" ariaLabel="Do you confirm" />
+
+        <p-selectbutton [options]="linkTypeOptions | keyvalue" formControlName="typeLink" optionLabel="value.label" optionValue="key" aria-labelledby="basic">
+            <ng-template #item let-option>
+                <i [class]="option.value.icon"></i>
+            </ng-template>
+        </p-selectbutton>
     </div>
 
     <app-error-boundary [resource]="linksList" [errorMessage]="'No se pudieron cargar los enlaces.'" [emptyMessage]="'No hay enlaces disponibles.'">

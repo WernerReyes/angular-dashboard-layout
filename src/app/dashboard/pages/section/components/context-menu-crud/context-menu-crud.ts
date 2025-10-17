@@ -36,7 +36,7 @@ export class ContextMenuCrud {
         }
     ];
 
-    onContextMenu(event: any, item: SectionItem) {
+    onContextMenu(event: any, item: any) {
         this.cm.target = event.currentTarget;
         this.cm.show(event);
         this.selectedItem.set(item);

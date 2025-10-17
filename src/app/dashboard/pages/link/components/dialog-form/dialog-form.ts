@@ -16,10 +16,11 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { SkeletonModule } from 'primeng/skeleton';
 import { LinkFormService } from '../../services/link-form.service';
 import { JsonPipe } from '@angular/common';
+import { FileSelectEvent, FileUpload } from 'primeng/fileupload';
 
 @Component({
     selector: 'link-dialog-form',
-    imports: [JsonPipe, DialogModule, ErrorBoundary, ReactiveFormsModule, InputTextModule, MessageModule, SkeletonModule, SelectModule, SelectButtonModule, ButtonModule],
+    imports: [JsonPipe, DialogModule, ErrorBoundary, ReactiveFormsModule, FileUpload,  InputTextModule, MessageModule, SkeletonModule, SelectModule, SelectButtonModule, ButtonModule],
     templateUrl: './dialog-form.html'
 })
 export class DialogForm {
@@ -49,15 +50,31 @@ export class DialogForm {
         { label: 'Nueva pestaña', value: true }
     ]);
 
+    onFileSelect(event: FileSelectEvent) {
+        console.log(event);
+        const file = event.currentFiles[0];
+
+        if (file) {
+            this.form.patchValue({ file: file as any });
+            this.form.get('file')?.markAsTouched();
+            }
+        }
+
     saveChanges() {
+       
         const formValue = this.form.value;
+        Object.keys(this.form.controls).forEach((key) => {
+            const control = this.form.get(key);
+            console.log(key, control?.errors);
+        });
         if (this.form.valid && formValue) {
             const createLinkData: CreateLink = {
                 title: formValue.title!,
                 type: formValue.type!,
                 url: formValue.type === LinkType.EXTERNAL ? formValue.url! : null,
                 pageId: formValue.type === LinkType.PAGE ? formValue.pageId! : null,
-                openInNewTab: formValue.openInNewTab || false
+                openInNewTab: formValue.openInNewTab || false,
+                file: formValue.type === LinkType.FILE ? formValue.file! : null
             };
 
             if (this.selectedLink()) {

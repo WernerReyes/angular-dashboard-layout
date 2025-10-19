@@ -16,10 +16,12 @@ import { MenuFormService } from '../../services/menu-form.service';
 import { CreateMenu } from '@/dashboard/interfaces/menu';
 import { LinkType } from '@/shared/mappers/link.mapper';
 import { FilterLinksByTypePipe } from '@/dashboard/pipes/filter-links-by-type-pipe';
+import { linkTypeOptions } from '@/shared/interfaces/link';
+import { KeyValuePipe } from '@angular/common';
 
 @Component({
     selector: 'link-dialog-form',
-    imports: [FilterLinksByTypePipe, DialogModule, ErrorBoundary, FormsModule, ReactiveFormsModule,  ToggleButtonModule, InputTextModule, MessageModule, SelectModule, SelectButtonModule, ButtonModule],
+    imports: [FilterLinksByTypePipe, DialogModule, ErrorBoundary, KeyValuePipe, FormsModule, ReactiveFormsModule,  ToggleButtonModule, InputTextModule, MessageModule, SelectModule, SelectButtonModule, ButtonModule],
     templateUrl: './dialog-form.html'
 })
 export class DialogForm {
@@ -31,6 +33,8 @@ export class DialogForm {
     menusList = this.menuService.menuListResource;
 
     form = this.menuFormService.form;
+
+    linkTypeOptions = linkTypeOptions;
 
     menuParentsList = computed(() => {
         const parents = (this.menusList.value() || []).filter((menu) => menu.parentId === null);

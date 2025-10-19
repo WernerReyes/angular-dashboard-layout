@@ -79,6 +79,7 @@ export class AuthService {
     }
 
     me() {
+      
         return this.http
             .get<ApiResponse<LoginResponse>>(`${this.prefix}/me`, {
                 withCredentials: true

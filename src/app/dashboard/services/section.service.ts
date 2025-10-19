@@ -8,12 +8,14 @@ import { catchError, map, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UpdateOrder } from '../interfaces/common';
 import { CreateSection, UpdateSection } from '../interfaces/section';
+import { PageService } from './page.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class SectionService {
     private readonly http = inject(HttpClient);
+    private readonly pageService = inject(PageService);
     private readonly prefix = `${environment.apiUrl}/section`;
 
     isCreating = signal(false);
@@ -40,18 +42,28 @@ export class SectionService {
 
         return this.http.post<ApiResponse<SectionEntity>>(this.prefix, formData).pipe(
             map(({ data }) => mapSectionEntityToSection(data)),
-            tap((section) => {
+            tap((createdSection) => {
+
+                // this.pageService.getPageByIdRs.update((page) => {
+                //     if (!page) return null;
+                //     const updatedPage = {
+                //         ...page,
+                //         sections: page.sections ? [...page.sections, createdSection] : [createdSection]
+                //     };
+                //     return updatedPage;
+                // });
+
                 this.sectionListResource.update((sections) => {
-                    if (!sections) return [section];
-                    return [...sections, section];
+                    if (!sections) return [createdSection];
+                    return [...sections, createdSection];
                 });
+
                 this.isCreating.set(false);
             }),
             catchError((error) => {
                 this.isCreating.set(false);
                 return throwError(() => error);
             })
-
         );
     }
 
@@ -74,17 +86,20 @@ export class SectionService {
         return this.http.post<ApiResponse<SectionEntity>>(`${this.prefix}/${id}`, formData).pipe(
             map(({ data }) => mapSectionEntityToSection(data)),
             tap((section) => {
+                // this.pageService.getPageByIdRs.update((page) => {
+                //     if (!page) return null;
+                //     const updatedPage = {
+                //         ...page,
+                //         sections: page.sections ? page.sections.map((s) => (s.id === section.id ? { ...section, items: s.items } : s)) : []
+                //     };
+                //     return updatedPage;
+                // });
+
                 this.sectionListResource.update((sections) => {
-                    if (!sections) return [section];
-                    return sections.map((s) =>
-                        s.id === section.id
-                            ? {
-                                  ...section,
-                                  items: s.items
-                              }
-                            : s
-                    );
+                    if (!sections) return [];
+                    return sections.map((s) => (s.id === section.id ? { ...section, items: s.items } : s));
                 });
+
                 this.isUpdating.set(false);
             }),
             catchError((error) => {
@@ -102,6 +117,14 @@ export class SectionService {
         return this.http.delete<ApiResponse<null>>(`${this.prefix}/${id}`).pipe(
             tap(() => {
                 this.sectionListResource.update((sections) => sections?.filter((s) => s.id !== id) || []);
+                // this.pageService.getPageByIdRs.update((page) => {
+                //     if (!page) return null;
+                //     const updatedPage = {
+                //         ...page,
+                //         sections: page.sections ? page.sections.filter((s) => s.id !== id) : []
+                //     };
+                //     return updatedPage;
+                // });
             })
         );
     }

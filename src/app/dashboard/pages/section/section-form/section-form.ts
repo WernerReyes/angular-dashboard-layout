@@ -3,7 +3,7 @@ import { LinkService } from '@/dashboard/services/link.service';
 import { SectionService } from '@/dashboard/services/section.service';
 import { sectionTypesOptions, type Section } from '@/shared/interfaces/section';
 import { LinkType } from '@/shared/mappers/link.mapper';
-import { SectionType } from '@/shared/mappers/section.mapper';
+import { SectionMode, SectionType } from '@/shared/mappers/section.mapper';
 import { FormUtils } from '@/utils/form-utils';
 import { JsonPipe, KeyValuePipe } from '@angular/common';
 import { Component, computed, effect, inject, input, model, output } from '@angular/core';
@@ -35,7 +35,7 @@ import { NavigationMenuForm } from './navigation-menu-form/navigation-menu-form'
         ReactiveFormsModule,
         InputTextModule,
         KeyValuePipe,
-        JsonPipe,
+        // JsonPipe,
         ToggleSwitchModule,
         TextareaModule,
         SelectModule,
@@ -55,6 +55,8 @@ export class SectionForm {
     display = input.required<boolean>();
     selectedSection = model<Section | null>();
     selectedPageId = input.required<number>();
+    mode = input.required<SectionMode>();
+    
 
     loading = computed(() => this.sectionService.isCreating() || this.sectionService.isUpdating());
 
@@ -80,15 +82,14 @@ export class SectionForm {
     }
 
     saveChanges() {
-        Object.keys(this.form.controls).forEach((key) => {
-            const control = this.form.get(key);
-            console.log(key, control?.errors);
-        });
+        // Object.keys(this.form.controls).forEach((key) => {
+        //     const control = this.form.get(key);
+        //     console.log(key, control?.errors);
+        // });
         if (this.form.valid) {
             const formValue = this.form.value;
 
-            console.log({ formValue });
-
+          
             const sectionData: CreateSection = {
                 type: formValue.type!,
                 title: formValue.title!,
@@ -100,8 +101,11 @@ export class SectionForm {
                 pageId: this.selectedPageId(),
                 fileImage: formValue.imageType === ImageType.LOCAL ? (formValue.imageFile as any) : null,
                 imageUrl: formValue.imageType === ImageType.URL ? formValue.imageUrl || null : null,
-                menusIds: formValue.menusIds ? formValue.menusIds.map(({ data }) => Number(data)) : []
+                menusIds: formValue.menusIds ? formValue.menusIds.map(({ data }) => Number(data)) : [],
+                mode: this.mode()
             };
+
+            console.log(sectionData);
 
             if (this.selectedSection()) {
                 this.sectionService

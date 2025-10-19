@@ -7,6 +7,7 @@ import { providePrimeNG } from 'primeng/config';
 import { appRoutes } from './app.routes';
 import { authInterceptor } from '@/auth/interceptors/auth.interceptor';
 import { handlerErrorInterceptor } from '@/shared/interceptors/handler-error.interceptor';
+import { cacheInterceptor } from '@/shared/interceptors/cache.interceptor';
 
 export const appConfig: ApplicationConfig = {
     providers: [

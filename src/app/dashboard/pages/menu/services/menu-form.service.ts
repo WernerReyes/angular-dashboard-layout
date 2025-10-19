@@ -13,7 +13,7 @@ export class MenuFormService {
         title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
         linkId: [null, [Validators.required, Validators.min(1)]],
         parentId: [null],
-        isInternal: [true, [Validators.required]], // true = internal, false = external
+        linkType: [LinkType.PAGE, [Validators.required]],
         active: [true, [Validators.required]]
     });
 
@@ -40,7 +40,7 @@ export class MenuFormService {
             title: menu.title,
             linkId: menu.linkId as any,
             parentId: menu.parentId as any,
-            isInternal: menu.link?.type === LinkType.PAGE,
+            linkType: menu.link?.type,
             active: menu.active
         });
     }

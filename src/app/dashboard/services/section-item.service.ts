@@ -8,12 +8,14 @@ import { mapSectionItemEntityToSectionItem, SectionItemEntity } from '../../shar
 import { CreateSectionItem, UpdateSectionItem } from '../interfaces/section-item';
 import { SectionUtils } from '../utils/section.utils';
 import { SectionService } from './section.service';
+import { PageService } from './page.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class SectionItemService {
     private readonly sectionService = inject(SectionService);
+    private readonly pageService = inject(PageService);
 
     private readonly http = inject(HttpClient);
     private readonly prefix = `${environment.apiUrl}/section-item`;
@@ -32,6 +34,14 @@ export class SectionItemService {
                 this.sectionService.sectionListResource.update((sections) => {
                     return SectionUtils.insertSectionItemInSectionList(sections, sectionItem);
                 });
+                // this.pageService.getPageByIdRs.update((page) => {
+                //     if (!page) return null;
+                //     const updatedSections = SectionUtils.insertSectionItemInSectionList(page.sections || [], sectionItem);
+                //     return {
+                //         ...page,
+                //         sections: updatedSections
+                //     };
+                // });
             })
         );
     }
@@ -51,6 +61,15 @@ export class SectionItemService {
                     if (!sections) return [];
                     return SectionUtils.updateSectionItemInSectionList(sections, sectionItem);
                 });
+
+                // this.pageService.getPageByIdRs.update((page) => {
+                //     if (!page) return null;
+                //     const updatedSections = SectionUtils.updateSectionItemInSectionList(page.sections || [], sectionItem);
+                //     return {
+                //         ...page,
+                //         sections: updatedSections
+                //     };
+                // });
             }),
             
         );
@@ -63,6 +82,15 @@ export class SectionItemService {
                     if (!sections) return [];
                     return SectionUtils.removeSectionItemFromSectionList(sections, id, sectionId);
                 });
+
+                // this.pageService.getPageByIdRs.update((page) => {
+                //     if (!page) return null;
+                //     const updatedSections = SectionUtils.removeSectionItemFromSectionList(page.sections || [], id, sectionId);
+                //     return {
+                //         ...page,
+                //         sections: updatedSections
+                //     };
+                // });
             })
         );
     }

@@ -1,6 +1,7 @@
 import { Section } from '../interfaces/section';
 import { LinkEntity, mapLinkEntityToLink } from './link.mapper';
 import { mapMenuEntityToMenu, MenuEntity } from './menu.mapper';
+import { mapPageEntityToPage, PageEntity } from './page.mapper';
 import { mapSectionItemEntityToSectionItem, SectionItemEntity } from './section-item.mapper';
 
 export enum SectionType {
@@ -20,15 +21,27 @@ export enum SectionType {
     FOOTER = 'FOOTER',
 
     // BENEFIT = 'BENEFIT',
-    // MACHINE_TYPE = 'MACHINE_TYPE',
-    // BILL_MACHINE = 'BILL_MACHINE',
+    MACHINE_TYPE = 'MACHINE_TYPE',
+    BILL_MACHINE = 'BILL_MACHINE'
     // COIN_MACHINE = 'COIN_MACHINE',
     // CONTACT = 'CONTACT',
 }
 
-export interface SectionEntity {
+export enum SectionMode {
+    CUSTOM = 'CUSTOM',
+    LAYOUT = 'LAYOUT'
+}
+
+type PivotPagesEntity = {
+    id_page: number;
     id_section: number;
     order_num: number;
+    active: boolean;
+    type: SectionMode;
+};
+
+export interface SectionEntity {
+    id_section: number;
     type: SectionType;
     title: string | null;
     subtitle: string | null;
@@ -37,16 +50,17 @@ export interface SectionEntity {
     link_id: number | null;
     active: boolean;
     image: string | null;
-    page_id: number;
     section_items: SectionItemEntity[];
     link: LinkEntity | null;
     menus: MenuEntity[] | null;
+    pivot_pages?: PivotPagesEntity[] | null;
+    pages?: (PageEntity & { pivot: PivotPagesEntity })[] | null;
+
 }
 
 export const mapSectionEntityToSection = (entity: SectionEntity): Section => {
     return {
         id: entity.id_section,
-        orderNum: entity.order_num,
         type: entity.type,
         title: entity.title,
         subtitle: entity.subtitle,
@@ -54,10 +68,30 @@ export const mapSectionEntityToSection = (entity: SectionEntity): Section => {
         textButton: entity.text_button,
         linkId: entity.link_id,
         image: entity.image,
-        active: Boolean(entity.active),
-        pageId: Number(entity.page_id),
         link: entity.link ? mapLinkEntityToLink(entity.link) : null,
         items: entity?.section_items && entity.section_items.length > 0 ? entity.section_items.map((item) => mapSectionItemEntityToSectionItem(item)) : [],
-        menus: entity?.menus && entity.menus.length > 0 ? entity.menus.map(mapMenuEntityToMenu) : []
+        menus: entity?.menus && entity.menus.length > 0 ? entity.menus.map(mapMenuEntityToMenu) : [],
+        pivotPages:
+            entity?.pivot_pages && entity.pivot_pages.length > 0
+                ? entity.pivot_pages.map((item) => ({
+                      orderNum: item.order_num,
+                      idPage: item.id_page,
+                      // id_section: item.id_section,
+                      active: Boolean(item.active),
+                      type: item.type
+                  }))
+                : null,
+
+        pages: entity?.pages && entity.pages.length > 0
+            ? entity.pages.map((item) => ({
+                  ...mapPageEntityToPage(item),
+                  pivot: item.pivot ? {
+                      idPage: item.pivot.id_page,
+                      orderNum: item.pivot.order_num,
+                      active: Boolean(item.pivot.active),
+                      type: item.pivot.type
+                  } : undefined
+              }))
+            : null
     };
 };

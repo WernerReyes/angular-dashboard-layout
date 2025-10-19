@@ -6,11 +6,11 @@ export const sectionRoutes: Routes = [
         loadComponent: () => import('./pages/layout/layout.page')
     },
     {
-        path: 'personalized',
-        loadComponent: () => import('./pages/personalized/personalized.page')
+        path: 'custom',
+        loadComponent: () => import('./pages/custom/custom.page')
     },
     {
         path: '**',
-        redirectTo: 'personalized'
+        redirectTo: 'custom'
     }
 ];

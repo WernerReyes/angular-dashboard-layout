@@ -7,7 +7,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class FilterLinksByTypePipe implements PipeTransform {
     transform(value: Link[], type: LinkType): Link[] {
-        if (!value) return [];
+        if (!value) return value;
         return value.filter((link) => link.type === type);
     }
 }

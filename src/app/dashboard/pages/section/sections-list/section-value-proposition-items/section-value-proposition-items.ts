@@ -18,7 +18,7 @@ export class SectionValuePropositionItems {
     deleteItemConfirmation = input.required<DeleteSectionItemFunction>();
     onSelectSectionItem = output<SectionItem>();
 
-    @ViewChild(ContextMenuCrud) contextMenu!: ContextMenuCrud;
+    @ViewChild(ContextMenuCrud) contextMenu!: ContextMenuCrud<SectionItem>;
 
     selectedItem = signal<SectionItem | null>(null);
 

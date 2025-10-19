@@ -1,4 +1,5 @@
 import { Menu } from './menu';
+import { Section } from './section';
 
 export interface Page {
     readonly id: number;
@@ -8,6 +9,7 @@ export interface Page {
     readonly linkId: number | null;
     readonly createdAt: Date;
     readonly updatedAt: Date;
+    readonly sections: Section[] | null;
 
     // readonly sectionCount: number | null;
 }

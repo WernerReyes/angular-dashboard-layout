@@ -2,7 +2,7 @@ import { PageService } from '@/dashboard/services/page.service';
 import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
 import type { Page } from '@/shared/interfaces/page';
 import type { Section } from '@/shared/interfaces/section';
-import { Component, inject, linkedSignal, signal } from '@angular/core';
+import { Component, computed, effect, inject, linkedSignal, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
@@ -30,4 +30,11 @@ export default class PersonalizedPage {
     selectedPage = linkedSignal<Page | null>(() => {
         return this.pageList.hasValue() ? this.pageList.value()![0] : null;
     });
+
+    
+    // private effect = effect(() => {
+    //     const pageId = this.selectedPage()?.id ?? null;
+    //     console.log('Effect triggered. Setting page ID to:', pageId);
+    //     this.pageService.setPageId(pageId);
+    // })
 }

@@ -24,6 +24,7 @@ export class SectionFormService {
         currentImage: [''],
         imageFile: [null, [Validators.maxLength(255)]],
         imageUrl: ['', [Validators.maxLength(255)]],
+     
 
         showLink: [false],
         typeLink: [true], // true = internal, false = external
@@ -101,8 +102,8 @@ export class SectionFormService {
             textButton: section.textButton!,
             typeLink: section.link ? (section.link.type === LinkType.PAGE ? true : false) : true,
             linkId: section.linkId as any,
-            active: section.active,
-
+            active: section.pivotPages ? section.pivotPages[0].active : true,
+            
             imageFile: null,
             currentImage: section.image || '',
             imageUrl: '',

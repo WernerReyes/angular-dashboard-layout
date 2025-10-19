@@ -1,12 +1,20 @@
-import { SectionType } from '../mappers/section.mapper';
+import { SectionMode, SectionType } from '../mappers/section.mapper';
 import { Link } from './link';
 import { Menu } from './menu';
+import { Page } from './page';
 import { SectionItem } from './section-item';
 import { Severity } from './severity';
 
+
+export type PivotPages = {
+    idPage: number;
+    orderNum: number;
+    active: boolean;
+    type: SectionMode;
+}
+
 export interface Section {
     id: number;
-    orderNum: number;
     type: SectionType;
     title: string | null;
     subtitle: string | null;
@@ -14,11 +22,12 @@ export interface Section {
     textButton: string | null;
     linkId: number | null;
     image: string | null;
-    active: boolean;
-    pageId: number;
     items: SectionItem[];
     link: Link | null;
     menus: Menu[];
+    pages: (Page & { pivot?: PivotPages })[] | null;
+    pivotPages: PivotPages[] | null;
+    
 }
 
 type SectionStatusOption = {
@@ -32,6 +41,12 @@ type SectionTypeOption = {
     value: SectionType;
     severity: Severity;
 };
+
+type SectionModeOption = {
+    label: string;
+    value: SectionMode;
+    severity: Severity;
+}
 
 export const sectionStatusOptions: Record<string, SectionStatusOption> = {
     true: { label: 'Activo', value: true, severity: 'success' },
@@ -59,8 +74,14 @@ export const sectionTypesOptions: Record<SectionType, SectionTypeOption> = {
     
 
     // BENEFIT: { label: 'Beneficios', value: SectionType.BENEFIT, severity: 'success' },
-    // MACHINE_TYPE: { label: 'Tipo de Máquina', value: SectionType.MACHINE_TYPE, severity: 'warn' },
-    // BILL_MACHINE: { label: 'Tipo de Factura', value: SectionType.BILL_MACHINE, severity: 'danger' },
+    MACHINE_TYPE: { label: 'Tipo de Máquina', value: SectionType.MACHINE_TYPE, severity: 'warn' },
+    BILL_MACHINE: { label: 'Tipo de Factura', value: SectionType.BILL_MACHINE, severity: 'danger' },
     // COIN_MACHINE: { label: 'Máquina de Monedas', value: SectionType.COIN_MACHINE, severity: 'contrast' },
     // CONTACT: { label: 'Contacto', value: SectionType.CONTACT, severity: 'danger' },
+};
+
+
+export const sectionModeOptions: Record<SectionMode, SectionModeOption> = {
+    CUSTOM: { label: 'Personalizado', value: SectionMode.CUSTOM, severity: 'info' },
+    LAYOUT: { label: 'Diseño', value: SectionMode.LAYOUT, severity: 'warn' }
 };

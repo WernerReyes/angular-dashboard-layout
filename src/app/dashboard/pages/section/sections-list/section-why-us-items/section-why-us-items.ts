@@ -20,7 +20,7 @@ export class SectionWhyUsItems {
 
     selectedItem = signal<SectionItem | null>(null);
 
-    @ViewChild(ContextMenuCrud) contextMenu!: ContextMenuCrud;
+    @ViewChild(ContextMenuCrud) contextMenu!: ContextMenuCrud<SectionItem>;
 
     edit = () => {
         this.onSelectSectionItem.emit(this.selectedItem()!);

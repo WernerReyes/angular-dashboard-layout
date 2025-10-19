@@ -23,10 +23,9 @@
 
             <app-error-boundary skeletonHeight="2.5rem" [resource]="linksList" errorMessage="Ocurrió un error cargando los enlaces.">
                 <ng-template #content let-links>
-                    @let isInternal = form.controls['isInternal'].value;
-                    @let filteredLinks = links | filterLinksByType: isInternal;
-                    <div class="flex gap-2">
-                        <div>
+                    @let linkType = form.controls['linkType'].value; @let filteredLinks = links | filterLinksByType: linkType;
+                    <div class="flex flex-wrap md:flex-nowrap  gap-2 items-center">
+                        <div class="flex-grow">
                             <p-select
                                 [overlayOptions]="{
                                 mode: 'modal'
@@ -38,6 +37,7 @@
                                 [checkmark]="true"
                                 optionLabel="title"
                                 optionValue="id"
+                                fluid
                                 placeholder="Selecciona una página"
                             >
                             </p-select>
@@ -45,9 +45,14 @@
                             <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'linkId') }} </p-message>
                             }
                         </div>
-                        <p-togglebutton
-                            formControlName="isInternal"
-                            onLabel="Interno" offLabel="Externo" onIcon="pi pi-file" offIcon="pi pi-external-link" class="ml-auto" ariaLabel="Do you confirm" />
+                        <p-selectbutton
+                       
+                        [options]="linkTypeOptions | keyvalue" formControlName="linkType" optionLabel="value.label" optionValue="key" aria-labelledby="basic">
+                            <ng-template #item let-option>
+                                <i [class]="option.value.icon"></i>
+                            </ng-template>
+                        </p-selectbutton>
+                     
                     </div>
                 </ng-template>
             </app-error-boundary>

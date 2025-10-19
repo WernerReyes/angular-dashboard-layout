@@ -11,7 +11,7 @@ import { MenuUtils } from '@/dashboard/utils/menu.utils';
 
 @Component({
     selector: 'section-main-navigation-menu-items',
-    imports: [JsonPipe, ImageError, MenubarModule],
+    imports: [ImageError, MenubarModule],
     templateUrl: './section-main-navigation-menu-items.html'
 })
 export class SectionMainNavigationMenuItems {

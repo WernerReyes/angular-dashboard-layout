@@ -30,7 +30,7 @@ export class SectionMachineItems {
     deleteItemConfirmation = input.required<DeleteSectionItemFunction>();
     onSelectSectionItem = output<SectionItem>();
 
-    @ViewChild(ContextMenuCrud) contextMenu!: ContextMenuCrud;
+    @ViewChild(ContextMenuCrud) contextMenu!: ContextMenuCrud<SectionItem>;
 
     selectedItem = signal<SectionItem | null>(null);
     selectedCategoryId = signal<number | null>(null);

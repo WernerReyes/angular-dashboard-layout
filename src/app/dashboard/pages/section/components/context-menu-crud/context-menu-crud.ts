@@ -8,11 +8,12 @@ import { ContextMenu, ContextMenuModule } from 'primeng/contextmenu';
   imports: [ContextMenuModule],
   templateUrl: './context-menu-crud.html',
 })
-export class ContextMenuCrud {
+export class ContextMenuCrud<T> {
     editCommand = input.required<() => void>();
     deleteCommand = input.required<(event: MenuItemCommandEvent) => void>();
+   
 
-    selectedItem = model<SectionItem | null>(null);
+    selected = model<T | null>(null);
 
     @ViewChild('cm') cm!: ContextMenu;
 
@@ -36,13 +37,13 @@ export class ContextMenuCrud {
         }
     ];
 
-    onContextMenu(event: any, item: any) {
+    onContextMenu(event: any, item:T) {
         this.cm.target = event.currentTarget;
         this.cm.show(event);
-        this.selectedItem.set(item);
+        this.selected.set(item);
     }
 
     onHide() {
-        this.selectedItem.set(null);
+        // TODO: this.selected.set(null);
     }
 }

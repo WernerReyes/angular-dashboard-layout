@@ -12,7 +12,7 @@ import { JsonPipe } from '@angular/common';
 
 @Component({
     selector: 'dialog-form',
-    imports: [JsonPipe, DialogModule, ReactiveFormsModule, InputTextModule, ButtonModule, MessageModule, FileUploadModule],
+    imports: [DialogModule, ReactiveFormsModule, InputTextModule, ButtonModule, MessageModule, FileUploadModule],
     templateUrl: './dialog-form.html'
 })
 export class DialogForm {

@@ -15,7 +15,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 
 @Component({
     selector: 'show-link-switch',
-    imports: [JsonPipe, ErrorBoundary, FilterLinksByTypePipe, ReactiveFormsModule, KeyValuePipe, SelectButtonModule, MessageModule, InputTextModule, ToggleSwitchModule, ToggleButtonModule, SelectModule],
+    imports: [ErrorBoundary, FilterLinksByTypePipe, ReactiveFormsModule, KeyValuePipe, SelectButtonModule, MessageModule, InputTextModule, ToggleSwitchModule, ToggleButtonModule, SelectModule],
     templateUrl: './show-link-switch.html'
 })
 export class ShowLinkSwitch {

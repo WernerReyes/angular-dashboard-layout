@@ -8,7 +8,7 @@
         <!-- <div class="flex items-center justify-center h-full">Panel 1</div> -->
         <app-error-boundary [resource]="categoryList" errorMessage="Ocurrió un error cargando las categorias recientes." emptyMessage="No hay categorias recientes">
             <ng-template #content let-categories>
-                @let categoriesFiltered = categories | filterByIdsPipe : categoriesIds() : 'id'; @if (categoriesFiltered.length > 0) {
+                @let categoriesFiltered = categories | filterByIds : categoriesIds() : 'id'; @if (categoriesFiltered.length > 0) {
 
                 <div class="p-3">
                     <p-listbox [scrollHeight]="isMobile() ? '100px' : ''" [options]="categoriesFiltered" [(ngModel)]="selectedCategoryId" optionLabel="title" optionValue="id" class="w-full" />
@@ -24,7 +24,7 @@
         </app-error-boundary>
     </ng-template>
     <ng-template #panel>
-        @let itemsByCategory = section().items | filterByIdsPipe : selectedCategoryId() : 'categoryId';
+        @let itemsByCategory = section().items | filterByIds : selectedCategoryId() : 'categoryId';
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-3 h-full overflow-y-auto">
             @if (itemsByCategory.length === 0) {
             <div class="flex flex-col items-center justify-center py-8 text-surface-500 col-span-full">
@@ -58,7 +58,7 @@
             </p-card>
             }
 
-            <context-menu-crud [editCommand]="edit" [deleteCommand]="delete" [(selectedItem)]="selectedItem"></context-menu-crud>
+            <context-menu-crud [editCommand]="edit" [deleteCommand]="delete" [(selected)]="selectedItem"></context-menu-crud>
             }
         </div>
     </ng-template>

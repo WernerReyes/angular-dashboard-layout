@@ -6,9 +6,9 @@ import { ApiResponse } from '../interfaces/api-response';
 
 export function handlerErrorInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
     const messageService = inject(MessageService);
+    
     return next(req).pipe(
         tap((res) => {
-            console.log(res);
             if (res instanceof HttpResponse) {
                 if (req.method === 'GET') return;
                 const message = (res.body as ApiResponse<unknown>).message;
@@ -20,6 +20,10 @@ export function handlerErrorInterceptor(req: HttpRequest<unknown>, next: HttpHan
         catchError((error) => {
             const code = error.status;
 
+            if (req.method === 'GET') {
+                return throwError(() => error);
+            }
+
             switch (code) {
                 case HttpStatusCode.UnprocessableEntity:
                     const details = error.error?.details;
@@ -28,14 +32,23 @@ export function handlerErrorInterceptor(req: HttpRequest<unknown>, next: HttpHan
                     messageService.setError(array[0]);
                     break;
 
-                case HttpStatusCode.BadRequest:
-                    messageService.setError(error?.error?.message);
-                    break;
+                // case HttpStatusCode.BadRequest:
+                //     messageService.setError(error?.error?.message);
+                //     break;
 
-                case HttpStatusCode.NotFound:
-                    messageService.setError(error?.error?.message);
+                // case HttpStatusCode.NotFound:
+                //     messageService.setError(error?.error?.message);
+                //     break;
+                
+                // case HttpStatusCode.InternalServerError: 
+                //     messageService.setError(error?.error?.message);
+                //     break;
+                default:
+                    messageService.setError(error?.error?.message)
                     break;
+                
             }
+
 
             return throwError(() => error);
         })

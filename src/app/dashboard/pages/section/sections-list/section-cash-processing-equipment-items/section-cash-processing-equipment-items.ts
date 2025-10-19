@@ -16,7 +16,7 @@ import { ContextMenuCrud } from '../../components/context-menu-crud/context-menu
 export class SectionCashProcessingEquipmentItems {
     section = input.required<Section>();
 
-    @ViewChild(ContextMenuCrud) contextMenu!: ContextMenuCrud;
+    @ViewChild(ContextMenuCrud) contextMenu!: ContextMenuCrud<SectionItem>;
 
     deleteItemConfirmation = input.required<DeleteSectionItemFunction>();
 

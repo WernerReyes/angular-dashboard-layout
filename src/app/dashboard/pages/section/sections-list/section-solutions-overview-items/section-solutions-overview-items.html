@@ -44,7 +44,7 @@
             </p-card>
 
             }
-            <context-menu-crud [editCommand]="edit" [deleteCommand]="delete" [(selectedItem)]="selectedItem"></context-menu-crud>
+            <context-menu-crud [editCommand]="edit" [deleteCommand]="delete" [(selected)]="selectedItem"></context-menu-crud>
             } @else {
             <div class="w-fit mx-auto col-span-full">
                 <empty-field-message textContent="No hay soluciones disponibles"></empty-field-message>

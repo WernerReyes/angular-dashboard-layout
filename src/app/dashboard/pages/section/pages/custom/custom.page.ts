@@ -7,19 +7,19 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { SectionMode } from '@/shared/mappers/section.mapper';
 import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { SectionForm } from '../../section-form/section-form';
 import { SectionsList } from '../../sections-list/sections-list';
-import { SectionMode } from '@/shared/mappers/section.mapper';
 
 @Component({
-    selector: 'app-layout-page',
-    imports: [SectionsList, SectionForm, FormsModule, SelectModule, ButtonModule, ConfirmDialogModule],
-    templateUrl: './layout.page.html',
+    selector: 'app-custom-page',
+    imports: [ErrorBoundary, SectionsList, SectionForm, FormsModule, SelectModule, ButtonModule, ConfirmDialogModule],
+    templateUrl: './custom.page.html',
     providers: [ConfirmationService]
 })
-export default class LayoutPage {
+export default class CustomPage {
     private readonly pageService = inject(PageService);
 
     selectedSection = signal<Section | null>(null);
@@ -33,4 +33,6 @@ export default class LayoutPage {
     selectedPage = linkedSignal<Page | null>(() => {
         return this.pageList.hasValue() ? this.pageList.value()![0] : null;
     });
+
+  
 }

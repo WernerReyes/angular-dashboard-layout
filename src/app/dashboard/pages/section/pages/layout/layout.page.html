@@ -12,7 +12,9 @@
             </div>
         </div>
 
-        <sections-list [selectedPage]="selectedPage()" (onDisplay)="display.set($event)" (onSelectedSection)="selectedSection.set($event)"></sections-list>
-        <section-form [display]="display()" (onCloseDialog)="display.set(false)" [selectedPageId]="selectedPage()?.id!" [(selectedSection)]="selectedSection"></section-form>
+        <sections-list [type]="SectionMode.LAYOUT" [selectedPage]="selectedPage()" (onDisplay)="display.set($event)" (onSelectedSection)="selectedSection.set($event)"></sections-list>
+        <section-form 
+         [mode]="SectionMode.LAYOUT"
+        [display]="display()" (onCloseDialog)="display.set(false)" [selectedPageId]="selectedPage()?.id!" [(selectedSection)]="selectedSection"></section-form>
     </div>
 </div>

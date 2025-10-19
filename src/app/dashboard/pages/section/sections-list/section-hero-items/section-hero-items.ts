@@ -21,7 +21,7 @@ export class SectionHeroItems {
 
     selectedItem = signal<SectionItem | null>(null);
 
-    @ViewChild(ContextMenuCrud) contextMenu!: ContextMenuCrud;
+    @ViewChild(ContextMenuCrud) contextMenu!: ContextMenuCrud<SectionItem>;
 
     
     

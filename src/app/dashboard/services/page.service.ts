@@ -1,8 +1,8 @@
 import type { Page } from '@/shared/interfaces/page';
 import { mapPageEntityToPage, PageEntity } from '@/shared/mappers/page.mapper';
 import { HttpClient, httpResource } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { map, tap } from 'rxjs';
+import { inject, Injectable, signal, Signal } from '@angular/core';
+import { map, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ApiResponse } from '../../shared/interfaces/api-response';
 import type { CreatePage } from '../interfaces/page';
@@ -12,15 +12,14 @@ import type { CreatePage } from '../interfaces/page';
 })
 export class PageService {
     private readonly http = inject(HttpClient);
- 
+
     private readonly prefix = `${environment.apiUrl}/page`;
 
     pagesListResource = httpResource<Page[]>(
         () => ({
             url: this.prefix,
             method: 'GET',
-            cache: 'reload',
-            withCredentials: true
+            cache: 'reload'
         }),
         {
             parse: (value) => {
@@ -29,6 +28,38 @@ export class PageService {
             }
         }
     );
+
+    private _pageId = signal<number | null>(null);
+
+    getPageByIdRs = httpResource<Page | null>(
+        () => {
+            if (this._pageId() === null) {
+                return undefined;
+            }
+           
+            return{
+            url: `${this.prefix}/${this._pageId()}`,
+            method: 'GET',
+
+            transferCache: true,
+            keepalive: true,
+            cache: 'reload'
+
+            //   integrity: 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GhEXAMPLEKEY='
+        }},
+        {
+            parse: (value) => {
+                const data = value as ApiResponse<PageEntity>;
+                return mapPageEntityToPage(data.data);
+            },
+            defaultValue: null,
+            
+        }
+    );
+
+    setPageId(pageId: number | null) {
+        this._pageId.set(pageId);
+    }
 
     createPage(create: CreatePage) {
         return this.http
@@ -66,8 +97,7 @@ export class PageService {
                         }
                         return [page];
                     });
-                }),
-                
+                })
             );
     }
 
@@ -80,8 +110,7 @@ export class PageService {
                     }
                     return [];
                 });
-            }),
-           
+            })
         );
     }
 }

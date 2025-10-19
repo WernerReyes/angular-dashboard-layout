@@ -1,0 +1,45 @@
+<p-panel class="dark:!bg-surface-800 dark:!border-surface-700" [toggleable]="true">
+    <ng-template #header>
+        <div class="flex items-center gap-3">
+            <i class="pi pi-folder-open text-surface-600 dark:text-surface-400"></i>
+            <span>Contenido</span>
+        </div>
+    </ng-template>
+
+    @switch (section().type) { @case (SectionType.HERO) {
+    <section-hero-items [deleteItemConfirmation]="delete" [sectionItems]="section().items" (onSelectSectionItem)="open($event)"></section-hero-items>
+    } @case (SectionType.WHY_US) {
+    <section-why-us-items [deleteItemConfirmation]="delete" [section]="section()" (onSelectSectionItem)="open($event)"></section-why-us-items>
+    } @case (SectionType.CASH_PROCESSING_EQUIPMENT) {
+    <section-cash-processing-equipment-items [section]="section()" [deleteItemConfirmation]="delete" (onSelectSectionItem)="open($event)"></section-cash-processing-equipment-items>
+    } @case (SectionType.VALUE_PROPOSITION) {
+    <section-value-proposition-items [deleteItemConfirmation]="delete" [section]="section()" (onSelectSectionItem)="open($event)"></section-value-proposition-items>
+    } @case (SectionType.CLIENT) {
+    <section-client-items [section]="section()" [deleteItemConfirmation]="delete" (onSelectSectionItem)="open($event)"></section-client-items>
+    } @case (SectionType.OUR_COMPANY) {
+    <section-our-company-items [section]="section()" [deleteItemConfirmation]="delete" (onSelectSectionItem)="open($event)"></section-our-company-items>
+
+    } @case (SectionType.MACHINE) {
+    <section-machine-items [section]="section()" [deleteItemConfirmation]="delete" (onSelectSectionItem)="open($event)"></section-machine-items>
+    } @case (SectionType.CONTACT_TOP_BAR) {
+    <section-contact-top-bar-items [section]="section()" [deleteItemConfirmation]="delete" (onSelectSectionItem)="open($event)"></section-contact-top-bar-items>
+    } @case (SectionType.MAIN_NAVIGATION_MENU) {
+    <section-main-navigation-menu-items [section]="section()"></section-main-navigation-menu-items>
+    } @case (SectionType.CTA_BANNER) {
+    <section-cta-banner-items [section]="section()"></section-cta-banner-items>
+    } @case (SectionType.SOLUTIONS_OVERVIEW) {
+    <section-solutions-overview-items [section]="section()" [deleteItemConfirmation]="delete" (onSelectSectionItem)="open($event)"></section-solutions-overview-items>
+    } @case (SectionType.MISSION_VISION) {
+    <section-mission-vision-items [section]="section()" [deleteItemConfirmation]="delete" (onSelectSectionItem)="open($event)"></section-mission-vision-items>
+    } @case (SectionType.CONTACT_US) {
+    <section-contact-us-items [section]="section()" [deleteItemConfirmation]="delete" (onSelectSectionItem)="open($event)"></section-contact-us-items>
+    } @case (SectionType.FOOTER) {
+    <section-footer-items [section]="section()" [deleteItemConfirmation]="delete" (onSelectSectionItem)="open($event)"></section-footer-items>
+    } @default {
+    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-12">
+        @for (item of section().items; track item.id) {
+        <section-item [sectionItem]="item" (onSelectSectionItem)="open(item)"></section-item>
+        }
+    </div>
+    } }
+</p-panel>

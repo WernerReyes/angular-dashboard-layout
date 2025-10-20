@@ -35,7 +35,7 @@ import { NavigationMenuForm } from './navigation-menu-form/navigation-menu-form'
         ReactiveFormsModule,
         InputTextModule,
         KeyValuePipe,
-        // JsonPipe,
+        JsonPipe,
         ToggleSwitchModule,
         TextareaModule,
         SelectModule,

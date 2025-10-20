@@ -18,8 +18,8 @@ export class PageFormService {
 
     constructor() {
         this.form.get('title')?.valueChanges.subscribe((title) => {
-            const slug = title.toLowerCase().replace(/\s+/g, '-');
-            this.form.get('slug')?.setValue(slug);
+            const slug = this.slugify(title);
+            this.form.get('slug')?.setValue(slug, { emitEvent: false });
         });
 
         this.form.get('content')?.valueChanges.subscribe((content) => {
@@ -37,6 +37,19 @@ export class PageFormService {
             slug: page.slug,
             content: page.description || undefined
         });
+    }
+
+    // helper para generar slugs seguros (quita tildes, caracteres inválidos, colapsa guiones)
+    private slugify(value: string): string {
+        if (!value) return '';
+        return value
+            .toLowerCase() // convertir a minúsculas
+            .trim() // eliminar espacios al inicio y fin
+            .normalize('NFD') // descomponer caracteres acentuados
+            .replace(/[\u0300-\u036f]/g, '') // eliminar acentos (é → e)
+            .replace(/[^a-z0-9\s-]/g, '') // quitar caracteres especiales excepto espacios y guiones
+            .replace(/\s+/g, '-') // reemplazar espacios por guiones
+            .replace(/-+/g, '-'); // evitar guiones consecutivos
     }
 
     reset() {

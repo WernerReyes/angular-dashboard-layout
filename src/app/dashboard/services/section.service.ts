@@ -134,19 +134,7 @@ export class SectionService {
                     this.sectionListResource.update((sections) => {
                         if (!sections) return [];
                         if (pageId) {
-                            console.log(
-                                sections.map((section) => {
-                                    if (section.id === id) {
-                                        return {
-                                            ...section,
-                                            pivotPages: section.pivotPages?.filter((pivot) => pivot.idPage !== pageId),
-                                            pages: section.pages?.filter((page) => page.id !== pageId) || []
-                                        };
-                                    }
-                                    return section;
-                                })
-                            );
-                            return sections.map((section) => {
+                        return sections.map((section) => {
                                 if (section.id === id) {
                                     return {
                                         ...section,

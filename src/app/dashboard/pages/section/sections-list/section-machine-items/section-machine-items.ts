@@ -5,19 +5,17 @@ import { ImageError } from '@/shared/components/error/image/image';
 import type { Section } from '@/shared/interfaces/section';
 import type { SectionItem } from '@/shared/interfaces/section-item';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, computed, inject, input, output, signal, ViewChild } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MenuItemCommandEvent } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ListboxModule } from 'primeng/listbox';
 import { MenuModule } from 'primeng/menu';
 import { SplitterModule } from 'primeng/splitter';
-import { ContextMenuCrud } from '../../components/context-menu-crud/context-menu-crud';
-import { DeleteSectionItemFunction } from '../sections-list';
+import type { ContextMenuCrud } from '../../components/context-menu-crud/context-menu-crud';
 @Component({
     selector: 'section-machine-items',
-    imports: [ContextMenuCrud, ErrorBoundary, ImageError, FilterByIdsPipe, SplitterModule, FormsModule, ListboxModule, CardModule, ButtonModule, MenuModule],
+    imports: [ErrorBoundary, ImageError, FilterByIdsPipe, SplitterModule, FormsModule, ListboxModule, CardModule, ButtonModule, MenuModule],
     templateUrl: './section-machine-items.html'
 })
 export class SectionMachineItems {
@@ -27,12 +25,9 @@ export class SectionMachineItems {
     categoryList = this.categoryService.categoryListResource;
 
     section = input.required<Section>();
-    deleteItemConfirmation = input.required<DeleteSectionItemFunction>();
-    onSelectSectionItem = output<SectionItem>();
+    contextMenu = input.required<ContextMenuCrud<SectionItem>>();
 
-    @ViewChild(ContextMenuCrud) contextMenu!: ContextMenuCrud<SectionItem>;
-
-    selectedItem = signal<SectionItem | null>(null);
+ 
     selectedCategoryId = signal<number | null>(null);
 
     categoriesIds = computed(() => {
@@ -45,22 +40,7 @@ export class SectionMachineItems {
 
     isMobile = signal<boolean>(false);
 
-    edit = () => {
-        this.onSelectSectionItem.emit(this.selectedItem()!);
-    };
-
-    delete = (event: MenuItemCommandEvent) => {
-        this.deleteItemConfirmation()(
-            event.originalEvent!,
-            {
-                id: this.selectedItem()!.id,
-                sectionId: this.selectedItem()!.sectionId
-            },
-            () => {
-                this.selectedItem.set(null);
-            }
-        );
-    };
+   
 
     constructor() {
         this.breakpointObserver

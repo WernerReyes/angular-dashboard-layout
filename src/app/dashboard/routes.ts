@@ -27,6 +27,11 @@ const dashboardRoutes: Route[] = [
         path: 'categories',
         loadComponent: () => import('./pages/category/category.page')
     },
+
+    {
+        path: 'machines',
+        loadComponent: () => import('./pages/machine/machine.page')
+    },
     {
         path: 'settings',
         loadComponent: () => import('./pages/setting/setting.page')

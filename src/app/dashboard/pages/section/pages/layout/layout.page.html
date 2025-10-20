@@ -12,7 +12,25 @@
             </div>
         </div>
 
-        <sections-list [type]="SectionMode.LAYOUT" [selectedPage]="selectedPage()" (onDisplay)="display.set($event)" (onSelectedSection)="selectedSection.set($event)">
+        <div class="flex border-b border-surface-200 dark:border-surface-700 pb-4 mb-4 items-center flex-wrap sm:flex-nowrap gap-4">
+            <p-inputgroup>
+                <p-inputgroup-addon>
+                    <i class="pi pi-search cursor-pointer"></i>
+                </p-inputgroup-addon>
+                <input pInputText placeholder="Buscar sección..." #searchInput />
+            </p-inputgroup>
+
+            <p-multiSelect class="sm:max-w-72" [options]="sectionTypesOptions | keyvalue" placeholder="Filtrar por tipo" optionLabel="value.label" optionValue="key" display="chip" fluid #selectedTypes>
+                <ng-template let-country #item>
+                    <p-tag [severity]="country.value.severity" class="text-sm" [value]="country.value.label"></p-tag>
+                </ng-template>
+            </p-multiSelect>
+        </div>
+        {{selectedTypes.value}}
+
+        <sections-list [searchTerm]="searchInput.value"
+            [filterByType]="selectedTypes.value"
+        [type]="SectionMode.LAYOUT" [selectedPage]="selectedPage()" (onDisplay)="display.set($event)" (onSelectedSection)="selectedSection.set($event)">
             <ng-template #associatedPage let-section>
                 <p-button (click)="op.toggle($event); setPages(section)" icon="pi pi-sitemap" label="Asociar páginas" variant="outlined"> </p-button>
 

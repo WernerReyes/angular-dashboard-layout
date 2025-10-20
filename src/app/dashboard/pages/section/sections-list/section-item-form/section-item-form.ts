@@ -61,6 +61,7 @@ export class SectionItemForm {
     private readonly linkService = inject(LinkService);
     form = this.sectionItemFormService.form;
     linksList = this.linkService.linksListResource;
+    loading = this.sectionItemService.loading;
 
     onCloseDialog = output<void>();
     display = input.required<boolean>();

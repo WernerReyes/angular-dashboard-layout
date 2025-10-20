@@ -41,7 +41,13 @@ export class SectionFormService {
             if (type === SectionType.MAIN_NAVIGATION_MENU || type === SectionType.FOOTER) {
                 menusIdsControl?.setValidators([Validators.required]);
 
-                imageFile?.setValidators([Validators.required]);
+                console.log(this.form.get('currentImage')?.value)
+                if (!this.form.get('currentImage')?.value) {
+
+
+                    // imageFile?.setValidators([Validators.required]);
+                }
+
             } else {
                 menusIdsControl?.clearValidators();
                 imageFile?.clearValidators();

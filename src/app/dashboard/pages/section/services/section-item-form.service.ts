@@ -102,9 +102,11 @@ export class SectionItemFormService {
                 break;
                 
             case SectionType.CONTACT_US:
+                console.log('SETTING CONTACT US SECTION TYPE');
                 const inputType = this.form.get('inputType');
                 inputType?.setValidators([Validators.required]);
                 inputType?.updateValueAndValidity();
+                this.enableFields(['inputType', 'title', 'subtitle']);
                 // this.disableFields(['subtitle', 'content', 'imageFile', 'currentImage', 'imageBackFile', 'currentImageBack', 'textButton', 'showLink', 'linkId', 'typeLink', 'categoryId']);
                 break;
         }
@@ -117,6 +119,17 @@ export class SectionItemFormService {
                 control?.disable();
             } else {
                 control?.enable();
+            }
+        });
+    }
+
+    private enableFields(fields: string[]) {
+        Object.keys(this.form.controls).forEach((key) => {
+            const control = this.form.get(key);
+            if (fields.includes(key)) {
+                control?.enable();
+            } else {
+                control?.disable();
             }
         });
     }

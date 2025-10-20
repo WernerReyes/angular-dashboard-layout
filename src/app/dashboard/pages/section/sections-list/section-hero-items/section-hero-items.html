@@ -9,7 +9,7 @@
 
 @if (sectionItems().length === 1) {
 <div
-(contextmenu)="contextMenu.onContextMenu($event, sectionItems()[0])">
+(contextmenu)="contextMenu().onContextMenu($event, sectionItems()[0])">
     <hero-item [item]="sectionItems()[0]"></hero-item>
 </div>
 } @else {
@@ -27,7 +27,7 @@
 >
     <ng-template #item let-item>
         <!-- <img [src]="item.image" style="width: 100%" /> -->
-        <div class="w-full" (contextmenu)="contextMenu.onContextMenu($event, item)">
+        <div class="w-full" (contextmenu)="contextMenu().onContextMenu($event, item)">
             <hero-item [item]="item"></hero-item>
         </div>
     </ng-template>
@@ -42,5 +42,5 @@
 
 } 
 
-<context-menu-crud [editCommand]="edit" [deleteCommand]="delete" [(selected)]="selectedItem"> </context-menu-crud>
+
 }

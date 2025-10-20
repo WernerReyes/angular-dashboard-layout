@@ -6,10 +6,11 @@ import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { StyleClassModule } from 'primeng/styleclass';
 import { Profile } from './profile/profile';
+import { CompanyLogo } from './company-logo/company-logo';
 
 @Component({
     selector: 'dashboard-topbar',
-    imports: [Profile, RouterModule, StyleClassModule, AppConfigurator],
+    imports: [Profile, CompanyLogo, RouterModule, StyleClassModule, AppConfigurator],
     templateUrl: './topbar.html'
 })
 export class Topbar {

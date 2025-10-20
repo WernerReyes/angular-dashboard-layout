@@ -1,0 +1,44 @@
+<section class="bg-gradient-to-br from-gray-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 py-20 transition-all duration-300">
+    <div class="container mx-auto px-4">
+        <!-- Header -->
+        <div class="max-w-4xl mx-auto text-center mb-10">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-100">{{ section().title }}</h2>
+            <p class="mt-4 text-slate-600 dark:text-slate-300 leading-relaxed">{{ section().description }}</p>
+        </div>
+
+        <!-- CTA ancho -->
+        <div class="max-w-5xl mx-auto mb-12">
+            <div class="rounded-xl overflow-hidden shadow-lg">
+                <div class="bg-blue-700 dark:bg-blue-600 text-white px-6 py-4 text-center text-lg font-semibold">{{ section().subtitle }}</div>
+            </div>
+        </div>
+
+        <!-- Grid de items -->
+        <div class="max-w-7xl mx-auto">
+            @if (section().items.length === 0) {
+            <empty-field-message className="max-w-lg mx-auto" textContent="No hay elementos disponibles"></empty-field-message>
+            } @else {
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                @for (item of section().items; track item.id) {
+                <p-card (contextmenu)="contextMenu().onContextMenu($event, item)" class="advantage-item flex flex-col items-center text-center p-6 transition-shadow duration-300 h-full">
+                    @if (item.icon) {
+                    <img [src]="item.icon" alt="{{ item.title }} icon" class="size-16 mx-auto dark:!text-red-500" />
+                    } @else {
+                    <empty-field-message className="flex items-center justify-center" textContent="Sin ícono"></empty-field-message>
+                    }
+
+                    <h4 class="!text-xl font-semibold text-surface-800 dark:text-surface-100 mb-2">{{ item.title }}</h4>
+
+                    @if (item.description) {
+                    <p class="text-surface-600 dark:text-surface-300 leading-relaxed">{{ item.description }}</p>
+                    } @else {
+                    <empty-field-message className="w-full" textContent="Contenido pendiente"></empty-field-message>
+                    }
+                </p-card>
+
+                }
+            </div>
+            }
+        </div>
+    </div>
+</section>

@@ -9,9 +9,9 @@ import { SelectModule } from 'primeng/select';
 
 import type { AssocieteSectionToPages } from '@/dashboard/interfaces/section';
 import { SectionService } from '@/dashboard/services/section.service';
-import { SectionMode } from '@/shared/mappers/section.mapper';
+import { SectionMode, SectionType } from '@/shared/mappers/section.mapper';
 import { FormUtils } from '@/utils/form-utils';
-import { JsonPipe } from '@angular/common';
+import { JsonPipe, KeyValuePipe } from '@angular/common';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessageModule } from 'primeng/message';
@@ -19,10 +19,16 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { PopoverModule } from 'primeng/popover';
 import { SectionForm } from '../../section-form/section-form';
 import { SectionsList } from '../../sections-list/sections-list';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { InputTextModule } from 'primeng/inputtext';
+import { DividerModule } from 'primeng/divider';
+import { sectionTypesOptions } from '@/shared/interfaces/section';
+import { TagModule } from 'primeng/tag';
 
 @Component({
     selector: 'app-layout-page',
-    imports: [JsonPipe, SectionsList, MessageModule, ErrorBoundary, ReactiveFormsModule, MultiSelectModule, SectionForm, SelectModule, ButtonModule, ConfirmDialogModule, PopoverModule, ButtonModule],
+    imports: [JsonPipe, KeyValuePipe, SectionsList, MessageModule, ErrorBoundary, ReactiveFormsModule, MultiSelectModule, TagModule, SectionForm, SelectModule, ButtonModule, ConfirmDialogModule, PopoverModule, ButtonModule, InputGroupModule, InputGroupAddonModule, InputTextModule, DividerModule, MultiSelectModule],
     templateUrl: './layout.page.html',
     providers: [ConfirmationService]
 })
@@ -38,6 +44,7 @@ export default class LayoutPage {
     pageList = this.pageService.pagesListResource;
 
     SectionMode = SectionMode;
+    sectionTypesOptions = sectionTypesOptions;
 
     selectedPage = linkedSignal<Page | null>(() => {
         return this.pageList.hasValue() ? this.pageList.value()![0] : null;
@@ -64,14 +71,6 @@ export default class LayoutPage {
             pagesIds: this.form.value.pagesIds || []
         };
 
-        this.sectionService.associateToPages(payload).subscribe({
-            next: () => {
-                // this.sectionService.sectionListResource.refresh();
-                // this.messageService.addSuccess('Se han asociado las páginas correctamente.');
-            },
-            error: () => {
-                // this.messageService.addError('Hubo un error al asociar las páginas.');
-            }
-        });
+        this.sectionService.associateToPages(payload).subscribe();
     }
 }

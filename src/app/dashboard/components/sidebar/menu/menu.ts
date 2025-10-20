@@ -45,6 +45,10 @@ export class Menu {
                         label: 'Categorías',
                         icon: 'pi pi-tags',
                         routerLink: ['/dashboard/categories']
+                    }, {
+                        label: 'Maquinas',
+                        icon: 'pi pi-calculator',
+                        routerLink: ['/dashboard/machines']
                     }
                 ]
             }

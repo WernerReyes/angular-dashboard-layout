@@ -1,7 +1,7 @@
 import type { ApiResponse } from '@/shared/interfaces/api-response';
 import { TransformUtils } from '@/utils/transform-utils';
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { map, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { mapSectionItemEntityToSectionItem, SectionItemEntity } from '../../shared/mappers/section-item.mapper';
@@ -20,7 +20,12 @@ export class SectionItemService {
     private readonly http = inject(HttpClient);
     private readonly prefix = `${environment.apiUrl}/section-item`;
 
+
+    loading = signal<boolean>(false);
+
     createSectionItem(sectionItem: CreateSectionItem) {
+        this.loading.set(true);
+
         const formData = TransformUtils.toFormData(sectionItem);
         // Object.entries(sectionItem).forEach(([key, value]) => {
         //     if (value !== null && value !== undefined) {
@@ -32,8 +37,11 @@ export class SectionItemService {
             map(({ data }) => mapSectionItemEntityToSectionItem(data)),
             tap((sectionItem) => {
                 this.sectionService.sectionListResource.update((sections) => {
+                    if (!sections) return [];
                     return SectionUtils.insertSectionItemInSectionList(sections, sectionItem);
                 });
+
+                this.loading.set(false);
                 // this.pageService.getPageByIdRs.update((page) => {
                 //     if (!page) return null;
                 //     const updatedSections = SectionUtils.insertSectionItemInSectionList(page.sections || [], sectionItem);
@@ -47,6 +55,8 @@ export class SectionItemService {
     }
 
     updateSection(id: number, section: UpdateSectionItem) {
+        this.loading.set(true);
+
         const formData = TransformUtils.toFormData(section);
         // Object.entries(section).forEach(([key, value]) => {
         //     if (value !== null && value !== undefined) {
@@ -62,6 +72,8 @@ export class SectionItemService {
                     return SectionUtils.updateSectionItemInSectionList(sections, sectionItem);
                 });
 
+                this.loading.set(false);
+
                 // this.pageService.getPageByIdRs.update((page) => {
                 //     if (!page) return null;
                 //     const updatedSections = SectionUtils.updateSectionItemInSectionList(page.sections || [], sectionItem);
@@ -76,12 +88,15 @@ export class SectionItemService {
     }
 
     delete(id: number, sectionId: number) {
+        this.loading.set(true);
         return this.http.delete<ApiResponse<void>>(`${this.prefix}/${id}`).pipe(
             tap(() => {
                 this.sectionService.sectionListResource.update((sections) => {
                     if (!sections) return [];
                     return SectionUtils.removeSectionItemFromSectionList(sections, id, sectionId);
                 });
+
+                this.loading.set(false);
 
                 // this.pageService.getPageByIdRs.update((page) => {
                 //     if (!page) return null;

@@ -1,18 +1,16 @@
 import type { Section } from '@/shared/interfaces/section';
-import { SectionItem } from '@/shared/interfaces/section-item';
+import type { SectionItem } from '@/shared/interfaces/section-item';
 import { Component, input } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { MenuModule } from 'primeng/menu';
 import type { ContextMenuCrud } from '../../components/context-menu-crud/context-menu-crud';
 import { EmptyFieldMessage } from '../../components/empty-field-message/empty-field-message';
 
 @Component({
-    selector: 'section-solutions-overview-items',
-    imports: [ButtonModule, CardModule, EmptyFieldMessage, MenuModule],
-    templateUrl: './section-solutions-overview-items.html'
+    selector: 'section-advantages-items',
+    imports: [EmptyFieldMessage, CardModule],
+    templateUrl: './section-advantages-items.html'
 })
-export class SectionSolutionsOverviewItems {
+export class SectionAdvantagesItems {
     section = input.required<Section>();
     contextMenu = input.required<ContextMenuCrud<SectionItem>>();
 }

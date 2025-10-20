@@ -71,13 +71,9 @@ export const sectionTypesOptions: Record<SectionType, SectionTypeOption> = {
     MISSION_VISION: { label: 'Misión y Visión', value: SectionType.MISSION_VISION, severity: 'success' },
     CONTACT_US: { label: 'Contáctanos', value: SectionType.CONTACT_US, severity: 'danger' },
     FOOTER: { label: 'Pie de Página', value: SectionType.FOOTER, severity: 'warn' },
-    
-
-    // BENEFIT: { label: 'Beneficios', value: SectionType.BENEFIT, severity: 'success' },
-    MACHINE_TYPE: { label: 'Tipo de Máquina', value: SectionType.MACHINE_TYPE, severity: 'warn' },
-    BILL_MACHINE: { label: 'Tipo de Factura', value: SectionType.BILL_MACHINE, severity: 'danger' },
-    // COIN_MACHINE: { label: 'Máquina de Monedas', value: SectionType.COIN_MACHINE, severity: 'contrast' },
-    // CONTACT: { label: 'Contacto', value: SectionType.CONTACT, severity: 'danger' },
+    ADVANTAGES: { label: 'Ventajas Competitivas', value: SectionType.ADVANTAGES, severity: 'contrast' },
+    SUPPORT_MAINTENANCE: { label: 'Soporte y Mantenimiento', value: SectionType.SUPPORT_MAINTENANCE, severity: 'info' },
+    PRODUCT_DETAILS: { label: 'Detalles del Producto', value: SectionType.PRODUCT_DETAILS, severity: 'success' }
 };
 
 

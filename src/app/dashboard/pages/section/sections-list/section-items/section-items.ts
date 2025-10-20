@@ -1,6 +1,6 @@
 import { Section } from '@/shared/interfaces/section';
 import { SectionType } from '@/shared/mappers/section.mapper';
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, signal, ViewChild } from '@angular/core';
 import { PanelModule } from 'primeng/panel';
 import { SectionHeroItems } from '../section-hero-items/section-hero-items';
 import { SectionWhyUsItems } from '../section-why-us-items/section-why-us-items';
@@ -19,6 +19,10 @@ import { DeleteSectionItemFunction } from '../sections-list';
 import { SectionItem as ISectionItem } from '@/shared/interfaces/section-item';
 import { SectionItem } from '../section-item/section-item';
 import { SectionCashProcessingEquipmentItems } from '../section-cash-processing-equipment-items/section-cash-processing-equipment-items';
+import { SectionAdvantagesItems } from '../section-advantages-items/section-advantages-items';
+import { SectionSupportMaintenanceItems } from '../section-support-maintenance-items/section-support-maintenance-items';
+import { MenuItemCommandEvent } from 'primeng/api';
+import { ContextMenuCrud } from '../../components/context-menu-crud/context-menu-crud';
 
 @Component({
     selector: 'section-items',
@@ -37,8 +41,11 @@ import { SectionCashProcessingEquipmentItems } from '../section-cash-processing-
         SectionMissionVisionItems,
         SectionContactUsItems,
         SectionFooterItems,
+        SectionAdvantagesItems,
+        SectionSupportMaintenanceItems,
         SectionItem,
-        PanelModule
+        PanelModule,
+        ContextMenuCrud
     ],
     templateUrl: './section-items.html'
 })
@@ -47,13 +54,31 @@ export class SectionItems {
     deleteItemConfirmation = input.required<DeleteSectionItemFunction>();
     onSelectSectionItem = output<ISectionItem>();
 
+    @ViewChild(ContextMenuCrud) contextMenu!: ContextMenuCrud<ISectionItem>;
+
     SectionType = SectionType;
 
-    delete = () => {
-        this.deleteItemConfirmation().bind(this);
-    };
+    selectedItem = signal<ISectionItem | null>(null);
 
     open = (item: ISectionItem) => {
         this.onSelectSectionItem.emit(item);
     };
+
+    edit = () => {
+        this.onSelectSectionItem.emit(this.selectedItem()!);
+    }
+
+    delete = (event: MenuItemCommandEvent) => {
+        this.deleteItemConfirmation()(
+            event.originalEvent!,
+            {
+                id: this.selectedItem()!.id,
+                sectionId: this.selectedItem()!.sectionId
+            },
+            () => {
+                this.selectedItem.set(null);
+            }
+        );
+    }
+
 }

@@ -1,4 +1,5 @@
 import { FilterByPagePipe } from '@/dashboard/pipes/filter-by-page-pipe';
+import { FilterByTermPipe } from '@/dashboard/pipes/filter-by-term-pipe';
 import { SectionItemService } from '@/dashboard/services/section-item.service';
 import { SectionService } from '@/dashboard/services/section.service';
 import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
@@ -8,8 +9,8 @@ import { Section, sectionStatusOptions, sectionTypesOptions } from '@/shared/int
 import type { SectionItem as ISectionItem } from '@/shared/interfaces/section-item';
 import { SectionMode, SectionType } from '@/shared/mappers/section.mapper';
 import { MessageService } from '@/shared/services/message.service';
-import { PopoverModule } from 'primeng/popover';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { JsonPipe, NgTemplateOutlet } from '@angular/common';
 import { Component, computed, ContentChild, inject, input, linkedSignal, output, signal, TemplateRef, ViewChild } from '@angular/core';
 import { ConfirmationService, MenuItemCommandEvent } from 'primeng/api';
 import { BadgeModule } from 'primeng/badge';
@@ -24,8 +25,8 @@ import { SectionFormService } from '../services/section-form.service';
 import { SectionItemFormService } from '../services/section-item-form.service';
 import { SectionItemForm } from './section-item-form/section-item-form';
 import { SectionItems } from './section-items/section-items';
-import { JsonPipe, NgTemplateOutlet } from '@angular/common';
-import { PluckPipe } from '@/shared/pipes/pluck-pipe';
+
+import { FilterArrayByPipe } from '@/shared/pipes/filter-array-by-pipe';
 
 type DeleteSectionItemParams = {
     id: number;
@@ -35,7 +36,7 @@ type DeleteSectionItemParams = {
 export type DeleteSectionItemFunction = (event: Event, params: DeleteSectionItemParams, accept?: () => void, reject?: () => void) => void;
 @Component({
     selector: 'sections-list',
-    imports: [SectionItemForm, ErrorBoundary, PanelModule, CarouselModule, JsonPipe, DragDropModule, NgTemplateOutlet, MessageModule, DataViewSkeleton, FieldsetModule, TagModule, ButtonModule, ContextMenuCrud, SectionItems, BadgeModule, FilterByPagePipe],
+    imports: [SectionItemForm, FilterArrayByPipe, ErrorBoundary, PanelModule, CarouselModule, JsonPipe, FilterByTermPipe, DragDropModule, NgTemplateOutlet, MessageModule, DataViewSkeleton, FieldsetModule, TagModule, ButtonModule, ContextMenuCrud, SectionItems, BadgeModule, FilterByPagePipe],
     templateUrl: './sections-list.html'
 })
 export class SectionsList {
@@ -54,6 +55,8 @@ export class SectionsList {
     selectedPage = input<Page | null>(null);
     onDisplay = output<boolean>();
     onSelectedSection = output<Section | null>();
+    searchTerm = input<string>('');
+    filterByType = input<Array<string>>([]);
 
     @ViewChild(ContextMenuCrud) contextMenu!: ContextMenuCrud<Section>;
 
@@ -79,10 +82,9 @@ export class SectionsList {
     currentSection = signal<Section | null>(null);
     selectedSectionItem = signal<ISectionItem | null>(null);
 
-    sectionList = this.sectionService.sectionListResource;
 
     orginalSectionList = linkedSignal<Section[]>(() => {
-        const sectionList = this.sectionList.hasValue() ? this.sectionList.value() : [];
+        const sectionList = this.sectionsListRs.hasValue() ? this.sectionsListRs.value() : [];
         const pageId = this.selectedPage()?.id;
         if (!pageId) return sectionList;
         return this.filterByPagePipe.transform(sectionList, { idPage: pageId, type: this.type() }, ['idPage', 'type']);
@@ -149,7 +151,7 @@ export class SectionsList {
         const newOrder = this.targetList().map((section, index) => ({ id: section.id, pageId: this.pageId(), order: index + 1 }));
         this.sectionService.updateSectionsOrder({ orderArray: newOrder }).subscribe({
             next: () => {
-                this.sectionList.update((sections) => {
+                this.sectionsListRs.update((sections) => {
         if (!sections) return [];
 
         const orderMap = new Map(newOrder.map(item => [item.id, item.order]));
@@ -184,7 +186,7 @@ export class SectionsList {
     cancelChanges() {
         
         const original = this.orginalSectionList().map((section, index) => ({ id: section.id, pageId: this.pageId(), order: index + 1 }));
-        this.sectionList.update((sections) => {
+        this.sectionsListRs.update((sections) => {
             if (!sections) return [];
             console.log('CANCEL CHANGES - ORIGNAL', original);
             const orderMap = new Map(original.map(item => [item.id, item.order]));
@@ -226,6 +228,7 @@ export class SectionsList {
     }
 
     deleteSectionItemConfirmation(event: Event, { id, sectionId }: DeleteSectionItemParams, accept?: () => void, reject?: () => void) {
+        console.log('deleteSectionItemConfirmation called', { id, sectionId });
         this.confirmationDialog(
             event,
             '¿Estás seguro de que deseas eliminar este ítem de sección? Esta acción no se puede deshacer.',

@@ -12,9 +12,42 @@
             </div>
         </div>
 
-        <sections-list [type]="SectionMode.LAYOUT" [selectedPage]="selectedPage()" (onDisplay)="display.set($event)" (onSelectedSection)="selectedSection.set($event)"></sections-list>
-        <section-form 
-         [mode]="SectionMode.LAYOUT"
-        [display]="display()" (onCloseDialog)="display.set(false)" [selectedPageId]="selectedPage()?.id!" [(selectedSection)]="selectedSection"></section-form>
+        <sections-list [type]="SectionMode.LAYOUT" [selectedPage]="selectedPage()" (onDisplay)="display.set($event)" (onSelectedSection)="selectedSection.set($event)">
+            <ng-template #associatedPage let-section>
+                <p-button (click)="op.toggle($event); setPages(section)" icon="pi pi-sitemap" label="Asociar páginas" variant="outlined"> </p-button>
+
+                <p-popover #op>
+                    <div class="flex flex-col gap-4 w-xs" [formGroup]="form">
+                        <app-error-boundary [resource]="pageList" emptyMessage="No hay páginas disponibles para asociar" errorMessage="Hubo un error al cargar las páginas">
+                            <ng-template #content let-pages>
+                                <!-- optionValue="id" -->
+
+                                <p-multiSelect formControlName="pagesIds" size="small" [options]="pages" optionLabel="title" optionValue="id" placeholder="Selecciona páginas para asociar" display="chip" fluid>
+                                    <ng-template #footer>
+                                        <div class="p-3 flex justify-end">
+                                            <p-button
+                                                label="Guardar"
+                                                severity="secondary"
+                                                [disabled]="
+                                                form.invalid
+                                            "
+                                                text
+                                                size="small"
+                                                icon="pi pi-save"
+                                                (click)="associateToPages(section); op.hide()"
+                                            />
+                                        </div>
+                                    </ng-template>
+                                </p-multiSelect>
+                                @if (form.controls['pagesIds'].errors) {
+                                <p-message severity="error" variant="simple" size="small">{{FormUtils.getFieldError(form, 'pagesIds')}}</p-message>
+                                }
+                            </ng-template>
+                        </app-error-boundary>
+                    </div>
+                </p-popover>
+            </ng-template>
+        </sections-list>
+        <section-form [mode]="SectionMode.LAYOUT" [display]="display()" (onCloseDialog)="display.set(false)" [selectedPageId]="selectedPage()?.id!" [(selectedSection)]="selectedSection"></section-form>
     </div>
 </div>

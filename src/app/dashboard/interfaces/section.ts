@@ -13,7 +13,11 @@ export interface CreateSection {
     imageUrl?: string | null;
     menusIds?: number[] | null;
     mode: SectionMode;
+}
 
+export interface AssocieteSectionToPages {
+    sectionId: number;
+    pagesIds: number[];
 }
 
 export interface UpdateSection extends Partial<CreateSection> {

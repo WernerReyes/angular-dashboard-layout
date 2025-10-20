@@ -29,5 +29,5 @@ export class ErrorBoundary<T> {
     @ContentChild('error') errorTemplate?: TemplateRef<any>;
     @ContentChild('empty') emptyTemplate?: TemplateRef<any>;
     @ContentChild('content') contentTemplate?: TemplateRef<any>;
-      @ContentChild(TemplateRef) content!: TemplateRef<T>;
+      
 }

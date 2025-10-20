@@ -10,7 +10,7 @@ import { SectionMode, SectionType } from '@/shared/mappers/section.mapper';
 import { MessageService } from '@/shared/services/message.service';
 import { PopoverModule } from 'primeng/popover';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, computed, inject, input, linkedSignal, output, signal, ViewChild } from '@angular/core';
+import { Component, computed, ContentChild, inject, input, linkedSignal, output, signal, TemplateRef, ViewChild } from '@angular/core';
 import { ConfirmationService, MenuItemCommandEvent } from 'primeng/api';
 import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
@@ -24,6 +24,8 @@ import { SectionFormService } from '../services/section-form.service';
 import { SectionItemFormService } from '../services/section-item-form.service';
 import { SectionItemForm } from './section-item-form/section-item-form';
 import { SectionItems } from './section-items/section-items';
+import { JsonPipe, NgTemplateOutlet } from '@angular/common';
+import { PluckPipe } from '@/shared/pipes/pluck-pipe';
 
 type DeleteSectionItemParams = {
     id: number;
@@ -33,7 +35,7 @@ type DeleteSectionItemParams = {
 export type DeleteSectionItemFunction = (event: Event, params: DeleteSectionItemParams, accept?: () => void, reject?: () => void) => void;
 @Component({
     selector: 'sections-list',
-    imports: [SectionItemForm, ErrorBoundary, PanelModule, CarouselModule, DragDropModule, MessageModule, DataViewSkeleton, FieldsetModule, PopoverModule, TagModule, ButtonModule, ContextMenuCrud, SectionItems, BadgeModule, FilterByPagePipe],
+    imports: [SectionItemForm, ErrorBoundary, PanelModule, CarouselModule, JsonPipe, DragDropModule, NgTemplateOutlet, MessageModule, DataViewSkeleton, FieldsetModule, TagModule, ButtonModule, ContextMenuCrud, SectionItems, BadgeModule, FilterByPagePipe],
     templateUrl: './sections-list.html'
 })
 export class SectionsList {
@@ -44,8 +46,9 @@ export class SectionsList {
     private readonly sectionItemFormService = inject(SectionItemFormService);
     private readonly confirmationService = inject(ConfirmationService);
     private readonly messageService = inject(MessageService);
-
     private readonly filterByPagePipe = new FilterByPagePipe();
+
+    @ContentChild('associatedPage') associatedPageTemplate?: TemplateRef<any>;
 
     type = input.required<SectionMode>();
     selectedPage = input<Page | null>(null);
@@ -55,7 +58,8 @@ export class SectionsList {
     @ViewChild(ContextMenuCrud) contextMenu!: ContextMenuCrud<Section>;
 
     getSectionStatus(section: Section) {
-        return sectionStatusOptions[`${section.pivotPages?.[0]?.active}`];
+        const active = section.pivotPages?.some((pivot) => pivot.idPage === this.pageId() && pivot.active);
+        return sectionStatusOptions[`${active}`];
     }
 
     getSectionType(section: Section) {
@@ -81,7 +85,7 @@ export class SectionsList {
         const sectionList = this.sectionList.hasValue() ? this.sectionList.value() : [];
         const pageId = this.selectedPage()?.id;
         if (!pageId) return sectionList;
-        return this.filterByPagePipe.transform(sectionList, { idPage: pageId }, ['idPage']);
+        return this.filterByPagePipe.transform(sectionList, { idPage: pageId, type: this.type() }, ['idPage', 'type']);
     });
 
     targetList = signal<Section[]>([]);
@@ -115,6 +119,11 @@ export class SectionsList {
             message,
             'Eliminar sección',
             () => {
+                const isSectionLayout = this.isSectionLayout(section);
+                if (isSectionLayout && this.type() === SectionMode.CUSTOM) {
+                    this.sectionService.deleteSection(section.id, this.pageId()).subscribe();
+                    return;
+                }
                 this.sectionService.deleteSection(section.id).subscribe();
             },
             () => {}
@@ -137,24 +146,64 @@ export class SectionsList {
     }
 
     savePositionChanges() {
-        const newOrder = this.targetList().map((section, index) => ({ id: section.id, order: index + 1 }));
+        const newOrder = this.targetList().map((section, index) => ({ id: section.id, pageId: this.pageId(), order: index + 1 }));
         this.sectionService.updateSectionsOrder({ orderArray: newOrder }).subscribe({
             next: () => {
                 this.sectionList.update((sections) => {
-                    if (!sections) return [];
-                    return structuredClone(this.targetList());
-                });
-                this.orginalSectionList.set(structuredClone(this.targetList()));
+        if (!sections) return [];
+
+        const orderMap = new Map(newOrder.map(item => [item.id, item.order]));
+
+        // Solo modificamos el order_num dentro de pivot_pages
+        const updatedSections = sections.map(section => {
+          const pivot = section.pivotPages?.find(p => p.idPage === this.pageId());
+          if (pivot && orderMap.has(section.id)) {
+            pivot.orderNum = orderMap.get(section.id)!;
+          }
+          return section;
+        });
+
+        // Reordenar secciones por su nuevo order_num
+        return [...updatedSections].sort((a, b) => {
+          const orderA = a.pivotPages?.find(p => p.idPage === this.pageId())?.orderNum ?? 9999;
+          const orderB = b.pivotPages?.find(p => p.idPage === this.pageId())?.orderNum ?? 9999;
+          return orderA - orderB;
+        });
+      });
+                // this.sectionList.update((sections) => {
+                //     if (!sections) return [];
+                //     console.log('SECTIONS BEFORE ORDER UPDATE', sections, this.targetList());
+                //     return sections
+                // });
+                // this.orginalSectionList.set(structuredClone(this.targetList()));
                 this.hasPositionChanged.set(false);
             }
         });
     }
 
     cancelChanges() {
+        
+        const original = this.orginalSectionList().map((section, index) => ({ id: section.id, pageId: this.pageId(), order: index + 1 }));
         this.sectionList.update((sections) => {
             if (!sections) return [];
-            const original = this.orginalSectionList();
-            return structuredClone(original);
+            console.log('CANCEL CHANGES - ORIGNAL', original);
+            const orderMap = new Map(original.map(item => [item.id, item.order]));
+
+        // Solo modificamos el order_num dentro de pivot_pages
+        const updatedSections = sections.map(section => {
+          const pivot = section.pivotPages?.find(p => p.idPage === this.pageId());
+          if (pivot && orderMap.has(section.id)) {
+            pivot.orderNum = orderMap.get(section.id)!;
+          }
+          return section;
+        });
+
+        // Reordenar secciones por su nuevo order_num
+        return [...updatedSections].sort((a, b) => {
+          const orderA = a.pivotPages?.find(p => p.idPage === this.pageId())?.orderNum ?? 9999;
+          const orderB = b.pivotPages?.find(p => p.idPage === this.pageId())?.orderNum ?? 9999;
+          return orderA - orderB;
+        });
         });
         this.hasPositionChanged.set(false);
 
@@ -189,6 +238,10 @@ export class SectionsList {
                 if (reject) reject();
             }
         );
+    }
+
+    isSectionLayout(section: Section): boolean {
+        return section.pivotPages?.some((pivot) => pivot.type === SectionMode.LAYOUT) ?? false;
     }
 
     private confirmationDialog = (event: Event, message: string, header: string, accept: () => void, reject: () => void) => {

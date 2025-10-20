@@ -7,7 +7,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UpdateOrder } from '../interfaces/common';
-import { CreateSection, UpdateSection } from '../interfaces/section';
+import type { AssocieteSectionToPages, CreateSection, UpdateSection } from '../interfaces/section';
 import { PageService } from './page.service';
 
 @Injectable({
@@ -43,7 +43,6 @@ export class SectionService {
         return this.http.post<ApiResponse<SectionEntity>>(this.prefix, formData).pipe(
             map(({ data }) => mapSectionEntityToSection(data)),
             tap((createdSection) => {
-
                 // this.pageService.getPageByIdRs.update((page) => {
                 //     if (!page) return null;
                 //     const updatedPage = {
@@ -109,23 +108,67 @@ export class SectionService {
         );
     }
 
+    associateToPages({ pagesIds, sectionId }: AssocieteSectionToPages) {
+        return this.http.post<ApiResponse<SectionEntity>>(`${this.prefix}/${sectionId}/pages`, { pagesIds }).pipe(
+            map(({ data }) => mapSectionEntityToSection(data)),
+            tap((updatedSection) => {
+                this.sectionListResource.update((sections) => {
+                    if (!sections) return [];
+                    return sections.map((s) => (s.id === updatedSection.id ? { ...updatedSection, items: s.items } : s));
+                });
+            })
+        );
+    }
+
     updateSectionsOrder(order: UpdateOrder) {
         return this.http.put<ApiResponse<null>>(`${this.prefix}/order`, order);
     }
 
-    deleteSection(id: number) {
-        return this.http.delete<ApiResponse<null>>(`${this.prefix}/${id}`).pipe(
-            tap(() => {
-                this.sectionListResource.update((sections) => sections?.filter((s) => s.id !== id) || []);
-                // this.pageService.getPageByIdRs.update((page) => {
-                //     if (!page) return null;
-                //     const updatedPage = {
-                //         ...page,
-                //         sections: page.sections ? page.sections.filter((s) => s.id !== id) : []
-                //     };
-                //     return updatedPage;
-                // });
+    deleteSection(id: number, pageId?: number) {
+        return this.http
+            .delete<ApiResponse<null>>(`${this.prefix}/${id}`, {
+                params: pageId ? { pageId: pageId.toString() } : {}
             })
-        );
+            .pipe(
+                tap(() => {
+                    this.sectionListResource.update((sections) => {
+                        if (!sections) return [];
+                        if (pageId) {
+                            console.log(
+                                sections.map((section) => {
+                                    if (section.id === id) {
+                                        return {
+                                            ...section,
+                                            pivotPages: section.pivotPages?.filter((pivot) => pivot.idPage !== pageId),
+                                            pages: section.pages?.filter((page) => page.id !== pageId) || []
+                                        };
+                                    }
+                                    return section;
+                                })
+                            );
+                            return sections.map((section) => {
+                                if (section.id === id) {
+                                    return {
+                                        ...section,
+                                        pivotPages: section.pivotPages?.filter((pivot) => pivot.idPage !== pageId) || [],
+                                        pages: section.pages?.filter((page) => page.id !== pageId) || []
+                                    };
+                                }
+                                return section;
+                            });
+                        }
+
+                        return sections.filter((section) => section.id !== id);
+                    });
+                    // this.pageService.getPageByIdRs.update((page) => {
+                    //     if (!page) return null;
+                    //     const updatedPage = {
+                    //         ...page,
+                    //         sections: page.sections ? page.sections.filter((s) => s.id !== id) : []
+                    //     };
+                    //     return updatedPage;
+                    // });
+                })
+            );
     }
 }

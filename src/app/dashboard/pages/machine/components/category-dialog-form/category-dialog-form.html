@@ -1,0 +1,49 @@
+<p-dialog [visible]="display()" [modal]="true" [closable]="true" (visibleChange)="closeDialog()">
+    <ng-template #header>
+        @let isEditMode = !!(form.controls['id'].value);
+        <div class="flex items-center gap-2">
+            <i class="pi" [class]="isEditMode ? 'pi-pencil' : 'pi-plus'"></i>
+            <span class="m-0">{{ isEditMode ? 'Editar categoría' : 'Nueva categoría' }}</span>
+        </div>
+    </ng-template>
+    <form id="category-form" class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="saveChanges()">
+        <div class="flex flex-col gap-2">
+            <label for="category-type">Tipo de categoría</label>
+            <div>
+                <p-select
+                    id="category-type"
+                    [overlayOptions]="{
+                        mode: 'modal'
+            }"
+                    formControlName="type"
+                    placeholder="Selecciona una categoría"
+                    [options]="categoryOptions | keyvalue"
+                    optionLabel="value.label"
+                    optionValue="key"
+                    class="w-full mb-4"
+                    fluid
+                >
+                    <ng-template let-category #item>
+                        <p-tag [value]="category.value.label" [severity]="category.value.severity" [icon]="category.value.icon"></p-tag>
+                    </ng-template>
+                </p-select>
+                @if (form.controls['type'].errors) {
+                <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'type') }} </p-message>
+                }
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="title">Titulo</label>
+            <!-- <p-select id="title" formControlName="type" [options]="linkTypes()" optionLabel="label" optionValue="value" placeholder="Selecciona el tipo de enlace"></p-select> -->
+            <input id="title" type="text" pInputText formControlName="title" placeholder="Título de la categoría" />
+            @if (form.controls['title'].errors) {
+            <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'title') }} </p-message>
+            }
+        </div>
+    </form>
+
+    <ng-template #footer>
+        <button form="category-form" type="submit" pButton icon="pi pi-save" [disabled]="form.invalid || form.pristine" label="Guardar"></button>
+    </ng-template>
+</p-dialog>

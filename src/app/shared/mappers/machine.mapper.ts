@@ -12,7 +12,7 @@ export interface MachineEntity {
     description: string | null;
     long_description: string | null;
     images: string[] | null;
-    tecnical_specifications: TecnicalSpecifications[] | null;
+    technical_specifications: TecnicalSpecifications[] | null;
     category_id: number;
     category_title: string;
     category_type: CategoryType;
@@ -27,7 +27,7 @@ export const mapMachineEntityToMachine = (entity: MachineEntity): Machine => {
         longDescription: entity.long_description,
         name: entity.name,
         images: entity.images,
-        tecnicalSpecifications: entity.tecnical_specifications,
+        technicalSpecifications: entity.technical_specifications,
         categoryId: entity.category_id,
         categoryTitle: entity.category_title,
         categoryType: entity.category_type,

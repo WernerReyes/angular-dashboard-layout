@@ -11,7 +11,7 @@ export interface CategoryEntity {
     readonly type: CategoryType;
     readonly created_at: string;
     readonly updated_at: string;
-    readonly machines?: MachineEntity[] | null;
+    readonly machines: MachineEntity[];
 }
 
 export const mapCategoryEntityToCategory = (entity: CategoryEntity): Category => {
@@ -21,6 +21,6 @@ export const mapCategoryEntityToCategory = (entity: CategoryEntity): Category =>
         createdAt: new Date(entity.created_at),
         updatedAt: new Date(entity.updated_at),
         type: entity.type,
-        machines: entity.machines && entity.machines.length > 0 ? entity.machines.map(mapMachineEntityToMachine) : null
+        machines: entity.machines && entity.machines.length > 0 ? entity.machines.map(mapMachineEntityToMachine) : []
     };
 };

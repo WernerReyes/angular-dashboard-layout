@@ -1,5 +1,6 @@
 import { CategoryType } from '../mappers/category.mapper';
-import { Machine } from './machine';
+import type { Machine } from './machine';
+import type { Severity } from './severity';
 
 export interface Category {
     readonly id: number;
@@ -7,13 +8,13 @@ export interface Category {
     readonly createdAt: Date;
     readonly updatedAt: Date;
     readonly type: CategoryType;
-    readonly machines: Machine[] | null;
+    readonly machines: Machine[];
 }
 
 type CategoryTypeOption = {
     label: string;
     value: CategoryType;
-    severity: string;
+    severity: Severity;
     icon: string;
 };
 
@@ -21,13 +22,13 @@ export const categoryTypesOptions: Record<CategoryType, CategoryTypeOption> = {
     [CategoryType.COIN]: {
         label: 'Moneda',
         value: CategoryType.COIN,
-        severity: 'success',
+        severity: 'warn',
         icon: 'pi pi-bitcoin'
     },
     [CategoryType.BILL]: {
         label: 'Billete',
         value: CategoryType.BILL,
-        severity: 'warning',
+        severity: 'success',
         icon: 'pi pi-money-bill'
     }
 };

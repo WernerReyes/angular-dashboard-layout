@@ -1,61 +1,22 @@
-<p-table [value]="customers" sortField="representative.name" sortMode="single" dataKey="representative.name" rowGroupMode="subheader" groupRowsBy="representative.name" [tableStyle]="{'min-width': '70rem'}">
-    <ng-template #header>
-        <tr>
-            <th style="width: 20%">Name</th>
-            <th style="width: 20%">Country</th>
-            <th style="width: 20%">Company</th>
-            <th style="width: 20%">Status</th>
-            <th style="width: 20%">Date</th>
-        </tr>
-    </ng-template>
-    <ng-template #groupheader let-customer let-rowIndex="rowIndex" let-expanded="expanded">
-        <tr>
-            <td colspan="5">
-                <button type="button" pButton pRipple [pRowToggler]="customer" text rounded plain class="mr-2" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-                <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{customer.representative.image}}" width="32" style="vertical-align: middle; display: inline-block" />
-                <span class="font-bold ml-2">{{customer.representative.name}}</span>
-            </td>
-        </tr>
-    </ng-template>
-    <ng-template #groupfooter let-customer>
-        <tr class="p-rowgroup-footer">
-            <td colspan="4" style="text-align: right">Total Customers</td>
-            <!-- <td>{{calculateCustomerTotal(customer.representative.name)}}</td> -->
-        </tr>
-    </ng-template>
-    <ng-template #expandedrow let-customer>
-        <tr>
-            <td>{{customer.name}}</td>
-            <td>
-                <div class="flex items-center gap-2">
-                    <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
-                    <span>{{ customer.country.name }}</span>
-                </div>
-            </td>
-            <td>{{customer.company}}</td>
-            <td>
-                <!-- <p-tag [value]="customer.status" [severity]="getSeverity(customer.status)" /> -->
-            </td>
-            <td>{{customer.date}}</td>
-        </tr>
-    </ng-template>
-</p-table>
-
 <app-error-boundary [resource]="categoriesList" emptyMessage="No hay máquinas disponibles." errorMessage="Hubo un error al cargar las máquinas.">
     <ng-template #content let-categories>
-        <p-table [value]="categories" sortField="title" sortMode="single" dataKey="id" rowGroupMode="subheader" groupRowsBy="title" [tableStyle]="{'min-width': '70rem'}">
+        <p-confirm-dialog />
+        <p-contextmenu #cm [model]="items" (onHide)="selectedCategory.set(null)" />
+        <p-table [value]="categories" [(contextMenuSelection)]="selectedCategory" [contextMenu]="cm" sortField="title" sortMode="single" dataKey="id" rowGroupMode="subheader" groupRowsBy="id" [tableStyle]="{'min-width': '70rem'}">
             <ng-template #header>
                 <tr>
-                    <th style="width: 20%">Name</th>
-                    <th style="width: 20%">Country</th>
-                    <th style="width: 20%">Company</th>
-                    <th style="width: 20%">Status</th>
-                    <th style="width: 20%">Date</th>
+                    <th style="width: 20%">Nombre</th>
+                    <th style="width: 20%">Breve Descripción</th>
+                    <th style="width: 20%">Descripción completa</th>
+                    <th style="width: 20%">Imagenes</th>
+                    <th style="width: 20%">Especificaciones Técnicas</th>
+                    <th style="width: 20%">Creación</th>
+                    <th style="width: 20%">Última Modificación</th>
                 </tr>
             </ng-template>
             <ng-template #groupheader let-category let-rowIndex="rowIndex" let-expanded="expanded">
-                <tr>
-                    <td colspan="5" class="w-full">
+                <tr [pContextMenuRow]="category">
+                    <td colspan="7" class="w-full">
                         <button type="button" pButton pRipple [pRowToggler]="category" text rounded plain class="mr-2" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         @let type = getType(category.type);
 
@@ -65,28 +26,22 @@
                     </td>
                 </tr>
             </ng-template>
-            <ng-template #groupfooter let-customer>
+            <ng-template #groupfooter let-category>
                 <tr class="p-rowgroup-footer">
-                    <td colspan="4" style="text-align: right">Total Customers</td>
+                    <td colspan="6" style="text-align: right">Total de máquinas</td>
                     <!-- <td>{{calculateCustomerTotal(customer.representative.name)}}</td> -->
+                    <td>{{category.machines.length}}</td>
                 </tr>
             </ng-template>
-            <ng-template #expandedrow let-customer>
+            <ng-template #expandedrow let-category>
+                @let machines = category.machines; @if (machines.length === 0) {
                 <tr>
-                    <td>{{customer.name}}</td>
-                    <td>
-                        <div class="flex items-center gap-2">
-                            <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
-                            <span>{{ customer.country.name }}</span>
-                        </div>
-                    </td>
-                    <td>{{customer.company}}</td>
-                    <td>
-                        <!-- <p-tag [value]="customer.status" [severity]="getSeverity(customer.status)" /> -->
-                    </td>
-                    <td>{{customer.date}}</td>
+                    <td colspan="7" class="text-center">No hay máquinas en esta categoría.</td>
                 </tr>
+                } @else { hola }
             </ng-template>
         </p-table>
+
+        <machine-dialog-form [(display)]="dialogMachine"></machine-dialog-form>
     </ng-template>
 </app-error-boundary>

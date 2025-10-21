@@ -2,13 +2,14 @@
     <div class="card">
         <div class="flex justify-between items-center flex-wrap gap-4 mb-4">
             <div class="flex flex-col gap-0">
-                <h5 class="!text-4xl !font-extrabold !m-0">Enlaces</h5>
-                <span class="text-muted-color text-xl">Gestiona los enlaces internos y externos</span>
+                <h5 class="!text-4xl !font-extrabold !m-0">Máquinas</h5>
+                <span class="text-muted-color text-xl">Gestiona las máquinas disponibles</span>
             </div>
-            <!-- <p-button label="Nuevo Link" icon="pi pi-plus" class="p-button-sm p-button-outlined" (click)="display.set(true)"></p-button> -->
+            <p-button label="Nueva categoria" icon="pi pi-plus" class="p-button-sm p-button-outlined" (click)="displayDialog.set(true)"></p-button>
         </div>
 
-        <table-machine></table-machine>
-      
+        <table-machine (onDisplayCategoryDialog)="displayDialog.set(true)"></table-machine>
+
+        <category-dialog-form [(display)]="displayDialog"></category-dialog-form>
     </div>
 </div>

@@ -1,0 +1,61 @@
+<p-dialog [visible]="display()" (visibleChange)="display.set(false)" [modal]="true" [closable]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '25rem' }">
+    <ng-template #header>
+        <div class="flex items-center gap-2">
+            <i class="pi pi-cogs"></i>
+            <span class="m-0">Especificaciones Técnicas</span>
+        </div>
+    </ng-template>
+
+    <form class="p-fluid p-formgrid p-grid gap-4" (ngSubmit)="addNewSpecification()" [formGroup]="form">
+        <div class="flex flex-col gap-4 text-sm mb-10">
+            <div class="flex flex-col gap-2">
+                <label for="specification-name">Nombre</label>
+                <div class="w-full">
+                    <input id="specification-name" fluid size="small" type="text" pInputText placeholder="Nombre de la especificación" formControlName="title" />
+                    @if (form.controls['title'].errors) {
+                    <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'title') }} </p-message>
+                    }
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <label for="specification-value">Detalle</label>
+                <div class="w-full">
+                    <input id="specification-value" fluid size="small" type="text" pInputText placeholder="Detalle de la especificación" formControlName="description" />
+                    @if (form.controls['description'].errors) {
+                    <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'description') }} </p-message>
+                    }
+                </div>
+            </div>
+
+            @let isEditMode = !!specificationToEdit();
+
+            <p-button type="submit" [disabled]="form.invalid || form.pristine" [icon]="isEditMode ? 'pi pi-pencil' : 'pi pi-plus'" [label]="isEditMode ? 'Actualizar' : 'Agregar'" class="ml-auto"></p-button>
+        </div>
+    </form>
+
+    <p-contextmenu appendTo="body" #cm [model]="items" (onHide)="selectedSpecification.set(null)" />
+    <!-- <p-table [value]="specifications.value" size="small" [(contextMenuSelection)]="selectedSpecification" [contextMenu]="cm" dataKey="id">
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="2" class="text-center">No hay especificaciones técnicas disponibles.</td>
+            </tr>
+        </ng-template>
+
+        <ng-template #header>
+            <tr>
+                <th>Nombre</th>
+                <th>Valor</th>
+            </tr>
+        </ng-template>
+        <ng-template let-specification let-i="rowIndex" #body>
+            <tr [pContextMenuRow]="specification">
+                <td>{{specification.title}}</td>
+                <td>{{specification.description}}</td>
+            </tr>
+        </ng-template>
+    </p-table> -->
+    <technical-specifications-table [specifications]="machineFormService.technicalSpecifications" [cm]="cm" [(selectedSpecification)]="selectedSpecification"></technical-specifications-table>
+
+    {{form.value| json}}
+</p-dialog>

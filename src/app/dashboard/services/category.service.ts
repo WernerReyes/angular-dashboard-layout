@@ -53,7 +53,10 @@ export class CategoryService {
             tap((category) => {
                 this.categoryListResource.update((categories) => {
                     if (!categories) return [category];
-                    return categories.map((cat) => (cat.id === category.id ? category : cat));
+                    return categories.map((cat) => (cat.id === category.id ? {
+                        ...category,
+                        machines: cat.machines
+                    } : cat));
                 });
             })
         );

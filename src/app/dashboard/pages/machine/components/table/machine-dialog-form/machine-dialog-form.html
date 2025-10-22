@@ -1,4 +1,4 @@
-<p-dialog [(visible)]="display" [modal]="true" [closable]="true">
+<p-dialog [(visible)]="display" [modal]="true" [closable]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '25rem' }">
     <ng-template #header>
         <!-- @let isEditMode = !!(form.controls['id'].value);
         <div class="flex items-center gap-2">
@@ -33,36 +33,63 @@
 
         <div class="flex flex-col gap-2">
             <label for="machine-category">Imágenes</label>
-            <p-fileupload  name="images[]" multiple accept="image/*" maxFileSize="5000000" mode="basic" 
-             [maxFileSize]="5"
-            chooseLabel="Seleccionar imágenes" class="w-full" mode="advanced">
-                <ng-template #empty>
-                    <div class="flex items-center justify-center w-full">
-                        <label
-                            for="dropzone-file"
-                            class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500"
-                        >
-                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                    <path
-                                        stroke="currentColor"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                                    />
-                                </svg>
-                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Arrastrar</span> tu imagen aquí</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG o GIF (MAX. 800x400px)</p>
-                            </div>
-                        </label>
-                    </div>
-                </ng-template>
-            </p-fileupload>
+            <div>
+                <p-fileupload
+                    [fileLimit]="5"
+                    [showCancelButton]="false"
+                    (onSelect)="onFileSelect($event)"
+                    [showUploadButton]="false"
+                    [multiple]="true"
+                    accept="image/*"
+                    maxFileSize="5000000"
+                    mode="basic"
+                    chooseLabel="Seleccionar imágenes"
+                    class="w-full"
+                    mode="advanced"
+                >
+                    <ng-template #empty>
+                        <div class="flex items-center justify-center w-full">
+                            <label
+                                for="dropzone-file"
+                                class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500"
+                            >
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                        <path
+                                            stroke="currentColor"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                                        />
+                                    </svg>
+                                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Arrastrar</span> tu imagen aquí</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG o GIF (5MB máx.)</p>
+                                </div>
+                            </label>
+                        </div>
+                    </ng-template>
+                </p-fileupload>
+                @if (form.controls['fileImages'].errors) {
+                <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'fileImages') }} </p-message>
+                }
+            </div>
+        </div>
+
+        <pre>{{ form.value | json }}</pre>
+
+        <div class="flex flex-col gap-4 mt-5">
+            <p-button type="button" icon="pi pi-plus" label="Agregar Especificaciones" class="ml-auto" (click)="displayTechnicalSpecifications.set(true)"></p-button>
+            <technical-specifications-table [specifications]="machineFormService.technicalSpecifications"></technical-specifications-table>
+            @if (form.controls['technicalSpecifications'].errors) {
+            <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'technicalSpecifications') }} </p-message>
+            }
         </div>
     </form>
 
+    <technical-specifications-dialog-form [(display)]="displayTechnicalSpecifications"></technical-specifications-dialog-form>
+
     <ng-template #footer>
-        <button form="machine-form" type="submit" pButton icon="pi pi-save" [disabled]="form.invalid || form.pristine" label="Guardar"></button>
+        <button form="machine-form" [loading]="loading()" type="submit" pButton icon="pi pi-save" [disabled]="form.invalid || form.pristine" label="Guardar"></button>
     </ng-template>
 </p-dialog>

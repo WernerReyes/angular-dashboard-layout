@@ -2,8 +2,8 @@ import { CategoryService } from '@/dashboard/services/category.service';
 import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
 import { Category, categoryTypesOptions } from '@/shared/interfaces/category';
 import { CategoryType } from '@/shared/mappers/category.mapper';
-import { CommonModule } from '@angular/common';
-import { Component, inject, output, signal } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { Component, inject, output, signal, ViewChild } from '@angular/core';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -14,9 +14,15 @@ import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { MachineFormService } from '../../services/machine-form.service';
 import { MachineDialogForm } from './machine-dialog-form/machine-dialog-form';
+import { Popover, PopoverModule } from 'primeng/popover';
+import { TechnicalSpecificationsTable } from '../technical-specifications-table/technical-specifications-table';
+import { DataViewSkeleton } from '@/shared/components/skeleton/data-view-skeleton/data-view-skeleton';
+import { TecnicalSpecifications } from '@/shared/mappers/machine.mapper';
+import { Machine } from '@/shared/interfaces/machine';
+import { ImageModule } from 'primeng/image';
 @Component({
     selector: 'table-machine',
-    imports: [MachineDialogForm, TableModule, ErrorBoundary, TagModule, ToastModule, RatingModule, ButtonModule, CommonModule, ContextMenuModule, ConfirmDialogModule],
+    imports: [MachineDialogForm, TechnicalSpecificationsTable, DataViewSkeleton, ImageModule, TableModule, ErrorBoundary, DatePipe, TagModule, ToastModule, RatingModule, ButtonModule, PopoverModule, ContextMenuModule, ConfirmDialogModule],
     templateUrl: './table.html',
     providers: [ConfirmationService]
 })
@@ -28,10 +34,15 @@ export class Table {
     categoriesList = this.categoryService.categoryListResource;
     categoryTypesOptions = categoryTypesOptions;
 
+    @ViewChild('op') op!: Popover;
+
     dialogMachine = signal<boolean>(false);
 
     selectedCategory = signal<Category | null>(null);
     onDisplayCategoryDialog = output<void>();
+
+
+    selectedMachine = signal<Machine | null>(null);
 
     items: MenuItem[] = [
         {
@@ -39,6 +50,9 @@ export class Table {
             icon: 'pi pi-fw pi-plus',
             command: () => {
                 this.dialogMachine.set(true);
+                this.machineFormService.machineForm.patchValue({
+                    categoryId: this.selectedCategory()!.id
+                });
             }
         },
         {
@@ -60,6 +74,25 @@ export class Table {
             // command: () => this.deleteCategory()
         }
     ];
+
+
+     displaySpecifications(event: Event, machine: Machine) {
+        if (this.selectedMachine()?.id === machine.id) {
+            this.op.hide();
+            this.selectedMachine.set(null);
+        } else {
+            this.selectedMachine.set(machine);
+            this.op.show(event);
+
+            if (this.op.container) {
+                this.op.align();
+            }
+        }
+    }
+
+    hidePopover() {
+        this.op.hide();
+    }
 
     getType(type: CategoryType) {
         return this.categoryTypesOptions[type];

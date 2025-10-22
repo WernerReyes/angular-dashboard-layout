@@ -9,8 +9,6 @@ export interface Machine {
     readonly images: string[] | null;
     readonly technicalSpecifications: TecnicalSpecifications[] | null;
     readonly categoryId: number;
-    readonly categoryTitle: string;
-    readonly categoryType: CategoryType;
     readonly createdAt: Date;
     readonly updatedAt: Date;
 }

@@ -2,7 +2,7 @@ import type { ApiResponse } from '@/shared/interfaces/api-response';
 import { TransformUtils } from '@/utils/transform-utils';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { map, tap } from 'rxjs';
+import { finalize, map, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { mapSectionItemEntityToSectionItem, SectionItemEntity } from '../../shared/mappers/section-item.mapper';
 import { CreateSectionItem, UpdateSectionItem } from '../interfaces/section-item';
@@ -41,7 +41,7 @@ export class SectionItemService {
                     return SectionUtils.insertSectionItemInSectionList(sections, sectionItem);
                 });
 
-                this.loading.set(false);
+                // this.loading.set(false);
                 // this.pageService.getPageByIdRs.update((page) => {
                 //     if (!page) return null;
                 //     const updatedSections = SectionUtils.insertSectionItemInSectionList(page.sections || [], sectionItem);
@@ -50,7 +50,8 @@ export class SectionItemService {
                 //         sections: updatedSections
                 //     };
                 // });
-            })
+            }),
+            finalize(() => this.loading.set(false))
         );
     }
 
@@ -72,7 +73,7 @@ export class SectionItemService {
                     return SectionUtils.updateSectionItemInSectionList(sections, sectionItem);
                 });
 
-                this.loading.set(false);
+                // this.loading.set(false);
 
                 // this.pageService.getPageByIdRs.update((page) => {
                 //     if (!page) return null;
@@ -83,6 +84,7 @@ export class SectionItemService {
                 //     };
                 // });
             }),
+            finalize(() => this.loading.set(false))
             
         );
     }
@@ -96,7 +98,7 @@ export class SectionItemService {
                     return SectionUtils.removeSectionItemFromSectionList(sections, id, sectionId);
                 });
 
-                this.loading.set(false);
+                // this.loading.set(false);
 
                 // this.pageService.getPageByIdRs.update((page) => {
                 //     if (!page) return null;
@@ -106,7 +108,8 @@ export class SectionItemService {
                 //         sections: updatedSections
                 //     };
                 // });
-            })
+            }),
+            finalize(() => this.loading.set(false))
         );
     }
 }

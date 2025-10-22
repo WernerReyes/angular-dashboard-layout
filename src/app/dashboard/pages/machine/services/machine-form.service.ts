@@ -21,8 +21,9 @@ export class MachineFormService {
         name: ['', [Validators.required, Validators.minLength(3)]],
         shortDescription: ['', [Validators.required, Validators.minLength(10)]],
         fullDescription: ['', [Validators.required, Validators.minLength(20)]],
-        images: this.fb.array<string>([], [Validators.required, Validators.minLength(1)]),
-        technicalSpecifications: this.fb.array<TecnicalSpecifications>([]),
+        fileImages: this.fb.control<File[]>([], [Validators.required, Validators.minLength(1)]),
+        images: this.fb.array<string>([]),
+        technicalSpecifications: this.fb.array<TecnicalSpecifications>([], [Validators.required, Validators.minLength(1)]),
         categoryId: [null as number | null, [Validators.required]]
     });
 
@@ -51,5 +52,12 @@ export class MachineFormService {
 
     resetMachineForm() {
         this.machineForm.reset();
+        this.machineForm.get('images')?.reset();
+        this.machineForm.get('technicalSpecifications')?.setValue([]);
+        this.machineForm.get('categoryId')?.setValue(null);
+    }
+
+    get technicalSpecifications() {
+        return this.machineForm.get('technicalSpecifications')?.value as TecnicalSpecifications[];
     }
 }

@@ -3,7 +3,7 @@ import { Machine } from '@/shared/interfaces/machine';
 import { CategoryType } from '@/shared/mappers/category.mapper';
 import { TecnicalSpecifications } from '@/shared/mappers/machine.mapper';
 import { inject, Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, Validators } from '@angular/forms';
 
 @Injectable({
     providedIn: 'root'
@@ -16,13 +16,18 @@ export class MachineFormService {
         type: ['' as CategoryType, [Validators.required]],
         id: [null as number | null]
     });
-
+    
     machineForm = this.fb.group({
+        imagesToUpdate: [[] as { oldImage: string; newFile: File }[]],
+        id: [null as number | null],
         name: ['', [Validators.required, Validators.minLength(3)]],
         shortDescription: ['', [Validators.required, Validators.minLength(10)]],
         fullDescription: ['', [Validators.required, Validators.minLength(20)]],
         fileImages: this.fb.control<File[]>([], [Validators.required, Validators.minLength(1)]),
-        images: this.fb.array<string>([]),
+        manualFile: [null as File | null],
+        images: [[] as string[]],
+        manual: ['' as string | null],
+        imagesToDelete: this.fb.control<string[]>([]),
         technicalSpecifications: this.fb.array<TecnicalSpecifications>([], [Validators.required, Validators.minLength(1)]),
         categoryId: [null as number | null, [Validators.required]]
     });
@@ -37,14 +42,30 @@ export class MachineFormService {
 
     populateMachine(machine: Machine) {
         this.machineForm.patchValue({
+            id: machine.id,
             name: machine.name,
             shortDescription: machine.description,
             fullDescription: machine.longDescription,
             images: machine.images || [],
-            technicalSpecifications: machine.technicalSpecifications || [],
+            manual: machine.manual || null,
             categoryId: machine.categoryId
         });
+
+        const specsFormArray = this.machineForm.get('technicalSpecifications') as FormArray;
+        specsFormArray?.clear();
+
+        machine.technicalSpecifications?.forEach((spec) => {
+            specsFormArray.push(
+                this.fb.group({
+                    id: [spec.id],
+                    title: [spec.title],
+                    description: [spec.description]
+                })
+            );
+        });
     }
+
+
 
     resetCategoryForm() {
         this.categoryForm.reset();
@@ -52,8 +73,8 @@ export class MachineFormService {
 
     resetMachineForm() {
         this.machineForm.reset();
-        this.machineForm.get('images')?.reset();
-        this.machineForm.get('technicalSpecifications')?.setValue([]);
+        // this.machineForm.get('images')?.reset();
+        this.machineForm.get('technicalSpecifications')?.reset();
         this.machineForm.get('categoryId')?.setValue(null);
     }
 

@@ -7,6 +7,7 @@ export interface Machine {
     readonly longDescription: string | null;
     readonly name: string;
     readonly images: string[] | null;
+    readonly manual: string | null;
     readonly technicalSpecifications: TecnicalSpecifications[] | null;
     readonly categoryId: number;
     readonly createdAt: Date;

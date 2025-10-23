@@ -1,30 +1,54 @@
 import { CategoryService } from '@/dashboard/services/category.service';
 import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
+import { DataViewSkeleton } from '@/shared/components/skeleton/data-view-skeleton/data-view-skeleton';
 import { Category, categoryTypesOptions } from '@/shared/interfaces/category';
+import { Machine } from '@/shared/interfaces/machine';
 import { CategoryType } from '@/shared/mappers/category.mapper';
-import { CommonModule, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, inject, output, signal, ViewChild } from '@angular/core';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ContextMenuModule } from 'primeng/contextmenu';
+import { ContextMenu, ContextMenuModule } from 'primeng/contextmenu';
+import { GalleriaModule, GalleriaResponsiveOptions } from 'primeng/galleria';
+import { ImageModule } from 'primeng/image';
+import { Popover, PopoverModule } from 'primeng/popover';
 import { RatingModule } from 'primeng/rating';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { MachineFormService } from '../../services/machine-form.service';
-import { MachineDialogForm } from './machine-dialog-form/machine-dialog-form';
-import { Popover, PopoverModule } from 'primeng/popover';
 import { TechnicalSpecificationsTable } from '../technical-specifications-table/technical-specifications-table';
-import { DataViewSkeleton } from '@/shared/components/skeleton/data-view-skeleton/data-view-skeleton';
+import { MachineDialogForm } from './machine-dialog-form/machine-dialog-form';
 import { TecnicalSpecifications } from '@/shared/mappers/machine.mapper';
-import { Machine } from '@/shared/interfaces/machine';
-import { ImageModule } from 'primeng/image';
+
 @Component({
     selector: 'table-machine',
-    imports: [MachineDialogForm, TechnicalSpecificationsTable, DataViewSkeleton, ImageModule, TableModule, ErrorBoundary, DatePipe, TagModule, ToastModule, RatingModule, ButtonModule, PopoverModule, ContextMenuModule, ConfirmDialogModule],
+    imports: [
+        MachineDialogForm,
+        TechnicalSpecificationsTable,
+        DataViewSkeleton,
+        ImageModule,
+        TableModule,
+        ErrorBoundary,
+        DatePipe,
+        TagModule,
+        ToastModule,
+        RatingModule,
+        ButtonModule,
+        PopoverModule,
+        ContextMenuModule,
+        ConfirmDialogModule,
+        GalleriaModule
+    ],
     templateUrl: './table.html',
-    providers: [ConfirmationService]
+    providers: [ConfirmationService],
+    styles: `
+        ::ng-deep .p-galleria-nav-button {
+            color: white !important;
+            background: var(--primary-color) !important;
+        }
+    `
 })
 export class Table {
     private readonly confirmationService = inject(ConfirmationService);
@@ -35,13 +59,14 @@ export class Table {
     categoryTypesOptions = categoryTypesOptions;
 
     @ViewChild('op') op!: Popover;
+    @ViewChild('machineCm') machineCm!: ContextMenu;
 
     dialogMachine = signal<boolean>(false);
 
     selectedCategory = signal<Category | null>(null);
     onDisplayCategoryDialog = output<void>();
-
-
+    imagesGallery = signal<string[]>([]);
+    specifications = signal<TecnicalSpecifications[]>([]);
     selectedMachine = signal<Machine | null>(null);
 
     items: MenuItem[] = [
@@ -62,8 +87,6 @@ export class Table {
                 this.machineFormService.populateCategory(this.selectedCategory()!);
                 this.onDisplayCategoryDialog.emit();
             }
-            // command: () => this.selectedCategory.set(this.selectedCategory())
-            // command: () => this.editCategory()
         },
         {
             label: 'Eliminar',
@@ -71,17 +94,58 @@ export class Table {
             command: (event) => {
                 this.confirmDeleteCategory(event.originalEvent!, this.selectedCategory()!);
             }
-            // command: () => this.deleteCategory()
         }
     ];
 
+    machineItems: MenuItem[] = [
+        {
+            label: 'Editar Máquina',
+            icon: 'pi pi-fw pi-pencil',
+            command: () => {
+                this.dialogMachine.set(true);
+                this.machineFormService.populateMachine(this.selectedMachine()!);
+            }
+        },
+        {
+            label: 'Eliminar Máquina',
+            icon: 'pi pi-fw pi-trash',
+            command: () => {
+                // Lógica para eliminar la máquina
+            }
+        }
+    ];
 
-     displaySpecifications(event: Event, machine: Machine) {
-        if (this.selectedMachine()?.id === machine.id) {
+    responsiveOptions: GalleriaResponsiveOptions[] = [
+        {
+            breakpoint: '1500px',
+            numVisible: 5
+        },
+        {
+            breakpoint: '1024px',
+            numVisible: 3
+        },
+        {
+            breakpoint: '768px',
+            numVisible: 2
+        },
+        {
+            breakpoint: '560px',
+            numVisible: 1
+        }
+    ];
+
+    displaySpecifications(event: Event, specifications: TecnicalSpecifications[]) {
+        const isSameSelectedMachine =
+            this.specifications().length > 0 &&
+            this.specifications().every((spec, index) => {
+                return spec.id === specifications[index]?.id;
+            });
+
+        if (isSameSelectedMachine) {
             this.op.hide();
-            this.selectedMachine.set(null);
+            this.specifications.set([]);
         } else {
-            this.selectedMachine.set(machine);
+            this.specifications.set(specifications);
             this.op.show(event);
 
             if (this.op.container) {
@@ -90,12 +154,14 @@ export class Table {
         }
     }
 
-    hidePopover() {
-        this.op.hide();
-    }
-
     getType(type: CategoryType) {
         return this.categoryTypesOptions[type];
+    }
+
+    onContextMenu(event: any, machine: Machine) {
+        this.machineCm.target = event.currentTarget;
+        this.machineCm.show(event);
+        this.selectedMachine.set(machine);
     }
 
     private confirmDeleteCategory(event: Event, category: Category) {

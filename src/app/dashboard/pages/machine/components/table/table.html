@@ -12,9 +12,10 @@
                     <th style="width: 10%">Nombre</th>
                     <th style="width: 20%">Breve Descripción</th>
                     <th style="width: 30%">Descripción completa</th>
-                    <th style="width: 20%">Imagenes</th>
+                    <th style="width: 10%">Imagenes</th>
                     <th style="width: 10%">Especificaciones Técnicas</th>
-                    <th style="width: 20%">Creación</th>
+                    <th style="width: 10%">Manual</th>
+                    <th style="width: 10%">Creación</th>
                     <th style="width: 20%">Última Modificación</th>
                 </tr>
             </ng-template>
@@ -33,18 +34,16 @@
             <ng-template #groupfooter let-category>
                 <tr class="p-rowgroup-footer">
                     <td colspan="6" style="text-align: right">Total de máquinas</td>
-                    <!-- <td>{{calculateCustomerTotal(customer.representative.name)}}</td> -->
                     <td>{{category.machines.length}}</td>
                 </tr>
             </ng-template>
             <ng-template #expandedrow let-category>
-                @let machines = category.machines; @if (machines.length === 0) {
+                @if (category.machines.length === 0) {
                 <tr>
                     <td colspan="7" class="text-center">No hay máquinas en esta categoría.</td>
                 </tr>
-                } @else { @for (machine of machines; track machine.id) {
-
-                <tr>
+                } @else { @for (machine of category.machines; track machine.id) {
+                <tr [class.p-datatable-contextmenu-row-selected]="selectedMachine() && selectedMachine()!.id === machine.id" (contextmenu)="onContextMenu($event, machine)">
                     <td>{{machine.name}}</td>
                     <td>{{machine.description}}</td>
                     <td>
@@ -53,23 +52,12 @@
                     <td>
                         @if (machine.images && machine.images.length > 0) {
 
-                        <div class="flex flex-wrap gap-2">
-                            @for (img of machine.images; track img.id) {
-                            <!-- <img [src]="img" alt="Machine Image" class="w-16 h-16 object-cover rounded" /> -->
-                            <p-image [src]="img" [preview]="true" alt="Image" class="size-28 object-cover"  >
-                                <ng-template #indicator>
-                                    <i class="pi pi-search"></i>
-                                </ng-template>
-                                <ng-template #image>
-                                    <img [src]="img" alt="image" width="250" />
-                                </ng-template>
-                                <ng-template #preview let-style="style" let-previewCallback="previewCallback">
-                                    <img src="https://primefaces.org/cdn/primeng/images/galleria/galleria11.jpg" alt="image"   />
-                                </ng-template>
-                            </p-image>
-
-                            }
-                            <!-- <img *ngFor="let img of machine.images" [src]="img.url" alt="Machine Image" class="w-16 h-16 object-cover rounded" /> -->
+                        <div class="flex gap-2">
+                            @let mainImage = machine.images[0];
+                            <div class="relative" (mouseenter)="showMore.classList.remove('!hidden')" (mouseleave)="showMore.classList.add('!hidden')">
+                                <img [src]="mainImage" alt="Machine Image" class="w-16 h-16 object-cover rounded cursor-pointer hover:opacity-75" />
+                                <i #showMore class="!hidden pi pi-search absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white cursor-pointer" (click)="imagesGallery.set(machine.images)"></i>
+                            </div>
                         </div>
                         } @else {
 
@@ -77,18 +65,32 @@
                         }
                     </td>
                     <td>
-                        <p-button type="button" label="Ver" icon="pi pi-eye" text (click)="displaySpecifications($event, machine)"></p-button>
+                        <p-button type="button" label="Ver" icon="pi pi-eye" text (click)="displaySpecifications($event, machine.technicalSpecifications)"></p-button>
+                    </td>
+                    <td>
+                        @if (machine.manual) {
+                        <a pButton icon="pi pi-download" class="p-button-text" [href]="machine.manual" target="_blank" rel="noopener noreferrer" download></a>
+                        } @else {
+                        <span>No hay manual</span>
+                        }
                     </td>
                     <td>{{ machine.createdAt | date: 'short' }}</td>
                     <td>{{ machine.updatedAt | date: 'short' }}</td>
                 </tr>
                 } }
             </ng-template>
-            <p-popover #op (onHide)="selectedMachine.set(null)">
-                <technical-specifications-table [specifications]="selectedMachine()?.technicalSpecifications ?? []"></technical-specifications-table>
-            </p-popover>
         </p-table>
+        <p-popover #op (onHide)="selectedMachine.set(null)">
+            <technical-specifications-table [specifications]="specifications()"></technical-specifications-table>
+        </p-popover>
+        <p-contextmenu #machineCm [model]="machineItems" (onHide)="selectedCategory.set(null)" />
 
         <machine-dialog-form [(display)]="dialogMachine"></machine-dialog-form>
+
+        <p-galleria #galleria [value]="imagesGallery()" [visible]="imagesGallery().length > 0" (visibleChange)="imagesGallery.set([]); galleria.activeIndex = 0" [responsiveOptions]="responsiveOptions" [fullScreen]="true" [showItemNavigators]="true">
+            <ng-template #item let-item>
+                <img [src]="item" style="height: 100vh; width: 100%; display: block" />
+            </ng-template>
+        </p-galleria>
     </ng-template>
 </app-error-boundary>

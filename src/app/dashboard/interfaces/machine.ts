@@ -5,6 +5,7 @@ export interface CreateMachine {
     readonly shortDescription: string;
     readonly fullDescription: string;
     readonly fileImages: File[];
+    readonly manualFile?: File | null;
     readonly technicalSpecifications: TecnicalSpecifications[];
     readonly categoryId: number;
 }

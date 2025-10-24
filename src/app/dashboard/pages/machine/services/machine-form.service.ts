@@ -18,7 +18,7 @@ export class MachineFormService {
     });
     
     machineForm = this.fb.group({
-        imagesToUpdate: [[] as { oldImage: string; newFile: File }[]],
+        imagesToUpdate: [[] as { id: string, oldImage: string; newFile: File }[]],
         id: [null as number | null],
         name: ['', [Validators.required, Validators.minLength(3)]],
         shortDescription: ['', [Validators.required, Validators.minLength(10)]],
@@ -27,7 +27,7 @@ export class MachineFormService {
         manualFile: [null as File | null],
         images: [[] as string[]],
         manual: ['' as string | null],
-        imagesToDelete: this.fb.control<string[]>([]),
+        imagesToDelete: [[] as { id: string, delete: string; newFile?: File | null }[]],
         technicalSpecifications: this.fb.array<TecnicalSpecifications>([], [Validators.required, Validators.minLength(1)]),
         categoryId: [null as number | null, [Validators.required]]
     });
@@ -51,7 +51,7 @@ export class MachineFormService {
             categoryId: machine.categoryId
         });
 
-        const specsFormArray = this.machineForm.get('technicalSpecifications') as FormArray;
+        const specsFormArray = this.technicalSpecificationsFormArray;
         specsFormArray?.clear();
 
         machine.technicalSpecifications?.forEach((spec) => {
@@ -65,6 +65,10 @@ export class MachineFormService {
         });
     }
 
+    get technicalSpecificationsFormArray() {
+        return this.machineForm.get('technicalSpecifications') as FormArray;
+    }
+
 
 
     resetCategoryForm() {
@@ -74,7 +78,7 @@ export class MachineFormService {
     resetMachineForm() {
         this.machineForm.reset();
         // this.machineForm.get('images')?.reset();
-        this.machineForm.get('technicalSpecifications')?.reset();
+        this.technicalSpecificationsFormArray.clear();
         this.machineForm.get('categoryId')?.setValue(null);
     }
 

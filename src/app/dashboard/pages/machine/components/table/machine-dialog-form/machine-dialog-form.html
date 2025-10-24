@@ -1,5 +1,5 @@
-@let isEditMode = !!(form.controls['id'].value);
-<p-dialog [(visible)]="display" [modal]="true" [closable]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" (visibleChange)="closeDialog()" [style]="{ width: '25rem' }">
+<!-- @let isEditMode = !!(form.controls['id'].value); -->
+<p-dialog [(visible)]="display" [modal]="true" [closable]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" (visibleChange)="closeDialog()" [style]="{ width: '40rem' }">
     <ng-template #header>
         <div class="flex items-center gap-2">
             <i class="pi" [class]="isEditMode ? 'pi-pencil' : 'pi-plus'"></i>
@@ -73,23 +73,58 @@
                     <ng-template #content let-files let-removeFileCallback="removeFileCallback" let-index="index">
                         @if (isEditMode) { @let images = form.controls['images'].value; @if (images && images.length > 0) { {{fileLimit()}} {{disabledUpload()}}
                         <div class="grid gap-3 w-full mx-autojustify-center grid-cols-3 sm:grid-cols-5 xl:grid-cols-3">
-                            @for (index of maxImagesArray; track index) { @let image = images[index - 1]; @if (image) {
+                            @for (index of maxImagesArray; track index) { @let image = availableImages()[index - 1];
+                                   @let indexOrder = selectedImageOrder(images[index - 1]);
+                                   
+                                @if (image) {
+                                        
+                                
                             <div
-                                (mouseenter)="removeImage.classList.remove('!hidden')"
-                                (mouseleave)="removeImage.classList.add('!hidden')"
-                                class="mx-auto relative cursor-pointer rounded border-2 transition-all duration-200"
+                                class="mx-auto relative group cursor-pointer rounded border-2 transition-all duration-200"
                                 [ngClass]="{
-                                'border-primary bg-primary/10 p-1': selectedImages().includes(image),
+                                'border-primary bg-primary/10 p-1': includeImage(image),
                                 }"
                                 (click)="onSelectedImage($event, image)"
                             >
                                 <img [src]="image" alt="Machine Image" class="size-20 object-cover rounded" />
-                                <button  #removeImage [disabled]="selectedImages().includes(image)" icon="pi pi-times-circle" text class="!hidden absolute top-1 right-1">
-                                    <i class="pi pi-times-circle !text-2xl text-red-500 bg-white rounded-full"></i>
-                                </button>
+                                <!-- <span>{{ indexOrder }}</span> -->
+                                 @if (indexOrder > 0) {
+
+                                     <p-badge
+                                       
+                                        [value]="indexOrder"
+                                        severity="info"
+                                        class="absolute top-1 left-1 text-xs"
+                                    ></p-badge>
+                                 }
+
+                                <p-button
+                                    icon="pi pi-times"
+                                    [rounded]="true"
+                                    [text]="true"
+                                    [raised]="true"
+                                    severity="danger"
+                                    styleClass="!bg-white"
+                                    size="small"
+                                    [ngClass]="{
+                                        'group-hover:opacity-100': !includeImage(image),
+                                     
+                                    }"
+                                    (click)="!includeImage(image) ? removeImage($event, image) : null"
+                                    class="absolute top-1 right-1 opacity-0 transition-opacity duration-200"
+                                />
                             </div>
                             } @else {
-                            <div class="size-20 mx-auto flex items-center justify-center border-2 border-dashed border-gray-300 rounded cursor-not-allowed">
+                            <div class="relative size-20 mx-auto flex items-center justify-center border-2 border-dashed border-gray-300 rounded cursor-not-allowed">
+                                @if (indexOrder > 0) {
+
+                                     <p-badge
+                                       
+                                        [value]="indexOrder"
+                                        severity="info"
+                                        class="absolute top-1 left-1 text-xs"
+                                    ></p-badge>
+                                 }
                                 <i class="pi pi-image !text-3xl text-gray-400"></i>
                             </div>
                             } }
@@ -97,14 +132,26 @@
 
                         } }
                         <div class="flex flex-col gap-2">
-                            @for (file of files; track file.name) {
+                            @for (file of files; let i = $index ; track file.name) {
+                                @let selectedImage =  selectedImages()[i];
+                                
                             <div class="flex items-center justify-between p-2 rounded">
                                 <div class="flex items-center gap-2">
                                     <!-- <i class="pi pi-image !text-2xl text-blue-600"></i> -->
+                                    <p-badge
+                                       
+                                        [value]="i + 1"
+                                        severity="info"
+                                        class="text-xs"
+                                    ></p-badge>
                                     <img [src]="file.objectURL" alt="Machine Image" class="size-8 object-cover rounded" />
                                     <span>{{ file.name }}</span>
-                                    <span>{{ file.size }}</span>
-                                    <p-button icon="pi pi-trash" text class="p-button-text p-button-plain p-button-sm" (click)="removeFile($event, index)"></p-button>
+                                    <span>{{ getUuidFromFile(file) }}</span>
+                                    @if (selectedImage) {
+                                        <span>{{ selectedImage.type }}</span>
+                                       
+                                    }
+                                    <p-button icon="pi pi-trash" text class="p-button-text p-button-plain p-button-sm" (click)="removeFile($event, index, file)"></p-button>
                                 </div>
                             </div>
                             }

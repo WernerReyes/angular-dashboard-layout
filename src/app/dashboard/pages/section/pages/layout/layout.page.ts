@@ -28,7 +28,7 @@ import { TagModule } from 'primeng/tag';
 
 @Component({
     selector: 'app-layout-page',
-    imports: [JsonPipe, KeyValuePipe, SectionsList, MessageModule, ErrorBoundary, ReactiveFormsModule, MultiSelectModule, TagModule, SectionForm, SelectModule, ButtonModule, ConfirmDialogModule, PopoverModule, ButtonModule, InputGroupModule, InputGroupAddonModule, InputTextModule, DividerModule, MultiSelectModule],
+    imports: [KeyValuePipe, SectionsList, MessageModule, ErrorBoundary, ReactiveFormsModule, MultiSelectModule, TagModule, SectionForm, SelectModule, ButtonModule, ConfirmDialogModule, PopoverModule, ButtonModule, InputGroupModule, InputGroupAddonModule, InputTextModule, DividerModule, MultiSelectModule],
     templateUrl: './layout.page.html',
     providers: [ConfirmationService]
 })

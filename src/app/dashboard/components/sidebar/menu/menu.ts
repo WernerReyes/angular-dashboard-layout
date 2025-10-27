@@ -18,11 +18,6 @@ export class Menu {
                 items: [
                     { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/dashboard'] },
                     {
-                        label: 'Menus',
-                        icon: 'pi pi-fw pi-bars',
-                        routerLink: ['/dashboard/menus']
-                    },
-                    {
                         label: 'Pages',
                         icon: 'pi pi-fw pi-file',
                         routerLink: ['/dashboard/pages']
@@ -31,6 +26,11 @@ export class Menu {
                         label: 'Enlaces',
                         icon: 'pi pi-fw pi-link',
                         routerLink: ['/dashboard/links']
+                    },
+                    {
+                        label: 'Menus',
+                        icon: 'pi pi-fw pi-bars',
+                        routerLink: ['/dashboard/menus']
                     },
                     {
                         label: 'Secciones',
@@ -45,7 +45,8 @@ export class Menu {
                         label: 'Categorías',
                         icon: 'pi pi-tags',
                         routerLink: ['/dashboard/categories']
-                    }, {
+                    },
+                    {
                         label: 'Maquinas',
                         icon: 'pi pi-calculator',
                         routerLink: ['/dashboard/machines']

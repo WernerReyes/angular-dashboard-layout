@@ -93,12 +93,11 @@ export class SectionFormService {
         });
     }
 
-    populateForm(section: Section) {
+    populateForm(section: Section, pageId: number) {
         this.form.markAsPristine();
         this.form.markAsUntouched();
         this.form.get('type')?.disable();
 
-       
         this.form.setValue({
             type: section.type,
             title: section.title!,
@@ -108,7 +107,7 @@ export class SectionFormService {
             textButton: section.textButton!,
             typeLink: section.link ? (section.link.type === LinkType.PAGE ? true : false) : true,
             linkId: section.linkId as any,
-            active: section.pivotPages ? section.pivotPages[0].active : true,
+            active: section.pivotPages ? section.pivotPages.find((pp) => pp.idPage=== pageId)?.active ?? true : true,
             
             imageFile: null,
             currentImage: section.image || '',

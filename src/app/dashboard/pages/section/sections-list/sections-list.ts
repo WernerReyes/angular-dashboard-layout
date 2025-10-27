@@ -109,7 +109,7 @@ export class SectionsList {
         this.onDisplay.emit(true);
         this.onSelectedSection.emit(section);
 
-        this.sectionFormService.populateForm(section!);
+        this.sectionFormService.populateForm(section!, this.pageId());
     };
 
     delete = ($event: MenuItemCommandEvent) => {

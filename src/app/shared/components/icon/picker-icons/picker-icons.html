@@ -1,0 +1,62 @@
+<p-popover #op
+>
+    <div class="flex justify-between items-center mb-3">
+        <span class="m-0 text-lg">Personalizar iconos</span>
+        <p-button icon="pi pi-refresh" text (click)="reset()"></p-button>
+    </div>
+
+    <div class="mb-4">
+        <div class="flex justify-between align-items-center mb-2">
+            <label class="block mb-2 font-semibold">Color</label>
+            <!-- <span class="text-sm">{{ color() }}</span> -->
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 border-2 border-white rounded-full" [style]="{'background-color': color()}"></div>
+                <!-- <span>{{ color() }}</span> -->
+                <input type="text" pInputText class="w-24" [(ngModel)]="color" />
+            </div>
+        </div>
+        <div class="flex align-items-center gap-2">
+            <p-colorPicker class="w-fit mx-auto" [inline]="true" [(ngModel)]="color"></p-colorPicker>
+            <!-- <span>{{ color }}</span> -->
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <div class="flex justify-between align-items-center mb-2">
+            <label class="block mb-2 font-semibold">Grosor del trazo</label>
+            <span class="text-sm text-black dark:text-white">{{ strokeWidth() }}px</span>
+        </div>
+        <p-slider [min]="1" [max]="5" [(ngModel)]="strokeWidth"></p-slider>
+    </div>
+
+    <div class="mb-4">
+        <div class="flex justify-between align-items-center mb-2">
+            <label class="block mb-2 font-semibold">Tamaño</label>
+            <span class="text-sm text-black dark:text-white">{{ size() }}px</span>
+        </div>
+        <p-slider [min]="8" [max]="64" #sizeSlider [(ngModel)]="size"></p-slider>
+    </div>
+</p-popover>
+<div class="overflow-y-auto max-h-96">
+    <div class="flex justify-between items-center mb-4 sticky top-0 bg-[var(--surface-card)] pt-4 pb-2 z-10">
+        <p-inputgroup>
+            <p-inputgroup-addon>
+                <i class="pi pi-search cursor-pointer"></i>
+            </p-inputgroup-addon>
+            <input pInputText placeholder="Buscar icono..." #searchInput />
+        </p-inputgroup>
+        <p-button icon="pi pi-cog" text (click)="op.toggle($event)"></p-button>
+    </div>
+    <div class="flex flex-wrap gap-5">
+        @let iconsFiltered = icons | filterBy: 'name' : searchInput.value; @for (item of iconsFiltered; track item.id) {
+        <div
+            class="bg-[var(--surface-ground)] p-4 rounded-lg flex flex-col mx-auto items-center gap-2 shadow-md size-auto cursor-pointer transition-all hover:shadow-lg"
+            [class.border-2]="selectedIcon() && selectedIcon()?.name === item.name"
+            [class.border-primary]="selectedIcon() && selectedIcon()?.name === item.name"
+            (click)="setSelectedIcon(item.name)"
+        >
+            <svg [attr.stroke-width]="strokeWidth()" stroke-linecap="round" stroke-linejoin="round" [attr.viewBox]="'0 0 24 24'" [attr.width]="size()" [attr.height]="size()" [style.color]="color()" [innerHTML]="item.icon"></svg>
+        </div>
+        }
+    </div>
+</div>

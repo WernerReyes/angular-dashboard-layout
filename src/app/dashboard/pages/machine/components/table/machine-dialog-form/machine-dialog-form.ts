@@ -109,9 +109,9 @@ export class MachineDialogForm {
                 const selected = this.selectedImages()[i];
                 const file = files[i];
                 const uuidFromFile = this.getUuidFromFile(file);
-                if (selected.type === 'update') {
+                if (selected.type === 'update' && file) {
                     this.imagesToUpdate?.value?.push({ id: uuidFromFile, oldImage: selected.image, newFile: file });
-                } else {
+                } else if (selected.type === 'delete') {
                     this.imagesToDelete?.value?.push({ id: uuidFromFile, delete: selected.image, newFile: file });
                 }
             }

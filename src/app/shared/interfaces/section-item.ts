@@ -1,4 +1,4 @@
-import { InputType } from '../mappers/section-item.mapper';
+import { IconType, InputType } from '../mappers/section-item.mapper';
 import { Link } from './link';
 
 export interface SectionItem {
@@ -8,12 +8,12 @@ export interface SectionItem {
     description: string | null;
     image: string | null;
     backgroundImage: string | null;
-    icon: string | null;
+    iconUrl: string | null;
     textButton: string | null;
     linkId: number | null;
     order: number;
     sectionId: number;
-    categoryId: number | null;
+    categoryId: number | null;  
     inputType: InputType | null;
     link?: Link | null;
 }
@@ -24,9 +24,16 @@ export enum ImageType {
     URL = 'URL'
 }
 
+
+
 type ImageTypeOption = {
     label: string;
     value: ImageType;
+};
+
+type IconTypeOption = {
+    label: string;
+    value: IconType;
 };
 
 type InputTypeOption = {
@@ -34,10 +41,17 @@ type InputTypeOption = {
     value: InputType;
 };
 
+
+
 export const imageTypeOptions: Record<ImageType, ImageTypeOption> = {
     NONE: { label: 'Ninguna', value: ImageType.NONE },
     LOCAL: { label: 'Subir imagen', value: ImageType.LOCAL },
     URL: { label: 'Usar URL', value: ImageType.URL }
+};
+
+export const iconTypeOptions: Record<IconType, IconTypeOption> = {
+    LIBRARY: { label: 'Biblioteca', value: IconType.LIBRARY },
+    IMAGE: { label: 'Imagen', value: IconType.IMAGE }
 };
 
 export const inputTypeOptions: Record<InputType, InputTypeOption> = {

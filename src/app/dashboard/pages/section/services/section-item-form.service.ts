@@ -1,6 +1,6 @@
 import { ImageType, SectionItem } from '@/shared/interfaces/section-item';
 import { LinkType } from '@/shared/mappers/link.mapper';
-import { InputType } from '@/shared/mappers/section-item.mapper';
+import { Icon, IconType, InputType } from '@/shared/mappers/section-item.mapper';
 import { SectionType } from '@/shared/mappers/section.mapper';
 
 import { FormUtils } from '@/utils/form-utils';
@@ -31,6 +31,8 @@ export class SectionItemFormService {
 
         iconFile: ['', [Validators.maxLength(100)]],
         currentIconUrl: [''],
+        iconType: [IconType.LIBRARY],
+        icon: [null as Icon  | null],
 
         categoryId: [null],
 
@@ -58,6 +60,24 @@ export class SectionItemFormService {
             linkIdControl?.updateValueAndValidity();
             textButtonControl?.updateValueAndValidity();
         });
+
+        this.form.get('imageType')?.valueChanges.subscribe((imageType) => {
+            const imageFileControl = this.form.get('imageFile');
+            const imageUrlControl = this.form.get('imageUrl');
+            if (imageType === ImageType.LOCAL) {
+                imageFileControl?.setValidators([Validators.required]);
+                imageUrlControl?.clearValidators();
+            }
+            else if (imageType === ImageType.URL) {
+                imageUrlControl?.setValidators([Validators.required, Validators.maxLength(255)]);
+                imageFileControl?.clearValidators();
+            }   else {
+                imageFileControl?.clearValidators();
+                imageUrlControl?.clearValidators();
+            }
+            imageFileControl?.updateValueAndValidity();
+            imageUrlControl?.updateValueAndValidity();
+        });
     }
 
     setSectionType(type: SectionType) {
@@ -80,9 +100,18 @@ export class SectionItemFormService {
                 break;
 
             case SectionType.CLIENT:
-                const image = this.form.get('imageFile');
-                image?.setValidators([Validators.required]);
-                image?.updateValueAndValidity();
+                // const image = this.form.get('imageFile');
+                // const imageType = this.form.get('imageType');
+                // console.log('SETTING CLIENT SECTION TYPE', imageType?.value);
+                // if (imageType?.value === ImageType.LOCAL) {
+                //     image?.setValidators([Validators.required]);
+                // }  else if (imageType?.value === ImageType.URL) {
+                //     const imageUrl = this.form.get('imageUrl');
+                //     imageUrl?.setValidators([Validators.required, Validators.maxLength(255)]);
+                
+                //     image?.clearValidators();
+                // }
+                // image?.updateValueAndValidity();
                 this.disableFields(['title', 'subtitle', 'content', 'imageBackFile', 'currentImageBack', 'imageBackUrl', 'imageBackType', 'textButton', 'showLink', 'linkId', 'typeLink', 'iconFile', 'currentIconUrl', 'categoryId', 'inputType']);
                 break;
 
@@ -155,8 +184,11 @@ export class SectionItemFormService {
             imageUrl: '',
             imageType: ImageType.NONE,
 
+
             iconFile: '',
-            currentIconUrl: section.icon || '',
+            currentIconUrl: section.iconUrl || '',
+            iconType: IconType.LIBRARY,
+            icon: null,
 
             imageBackFile: null,
             currentImageBack: section.backgroundImage || '',

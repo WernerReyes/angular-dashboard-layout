@@ -1,5 +1,7 @@
 <div class="flex flex-col gap-x-2 gap-y-4 w-full" [formGroup]="form()">
-    @let icon = form().controls[currentIconUrlName()].value;
+    <p-selectbutton [options]="iconTypeOptions" formControlName="iconType" optionLabel="label" optionValue="value" aria-labelledby="iconType" />
+
+    @let icon = form().controls[currentIconUrlName()].value; @if (form().controls['iconType'].value === IconType.IMAGE) {
 
     <p-fileupload #uploader chooseLabel="Seleccionar icono" [showUploadButton]="false" (onSelect)="onFileSelect($event)" [showCancelButton]="false" [multiple]="false" accept="image/svg+xml" maxFileSize="10000000" mode="advanced">
         <ng-template #empty>
@@ -31,4 +33,7 @@
             }
         </ng-template>
     </p-fileupload>
+    } @else {
+    <app-picker-icons (onSelectedIcon)="form().controls['icon'].setValue($event)"></app-picker-icons>
+    }
 </div>

@@ -85,10 +85,13 @@ export class SectionItemForm {
                 imageUrl: formValue.imageType === ImageType.URL ? formValue.imageUrl || null : null,
                 backgroundFileImage: formValue.imageBackType === ImageType.LOCAL ? (formValue.imageBackFile as any) : null,
                 backgroundImageUrl: formValue.imageBackType === ImageType.URL ? formValue.imageBackUrl || null : null,
-                fileIcon: formValue.iconFile as any,
-                fileIconUrl: formValue.currentIconUrl || null,
                 categoryId: formValue.categoryId || null,
                 inputType: formValue.inputType || null,
+                
+                fileIcon: formValue.iconFile as any,
+                fileIconUrl: formValue.currentIconUrl || null,
+                icon: formValue.icon || null,
+                iconType: formValue.iconType!,
 
                 sectionType: this.selectedSection()!.type
             };

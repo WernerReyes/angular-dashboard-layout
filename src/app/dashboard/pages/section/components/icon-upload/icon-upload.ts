@@ -1,10 +1,14 @@
+import { PickerIcons } from '@/shared/components/icon/picker-icons/picker-icons';
+import { iconTypeOptions } from '@/shared/interfaces/section-item';
+import { IconType } from '@/shared/mappers/section-item.mapper';
 import { Component, effect, input, ViewChild } from '@angular/core';
 import { ReactiveFormsModule, type FormGroup } from '@angular/forms';
 import { FileSelectEvent, FileUpload } from 'primeng/fileupload';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 @Component({
   selector: 'icon-upload',
-  imports: [ReactiveFormsModule, FileUpload],
+  imports: [ReactiveFormsModule, FileUpload, PickerIcons, SelectButtonModule],
   templateUrl: './icon-upload.html',
 })
 export class IconUpload {
@@ -13,6 +17,7 @@ export class IconUpload {
   form = input.required<FormGroup<any>>();
   iconFileName =  input.required<string>();
   currentIconUrlName =  input.required<string>();
+  
 
   display = input.required<boolean>();
 
@@ -21,6 +26,10 @@ export class IconUpload {
       this.uploader.clear();
     }
   });
+
+  iconTypeOptions = Object.values(iconTypeOptions);
+  
+  IconType = IconType;
 
   onFileSelect(event: FileSelectEvent) {
         const file = event.files[0];

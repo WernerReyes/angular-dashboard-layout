@@ -1,4 +1,4 @@
-import type { InputType } from '@/shared/mappers/section-item.mapper';
+import type { Icon, IconType, InputType } from '@/shared/mappers/section-item.mapper';
 import type { SectionType } from '@/shared/mappers/section.mapper';
 
 export interface CreateSectionItem {
@@ -13,8 +13,13 @@ export interface CreateSectionItem {
     sectionId: number;
     backgroundFileImage: File | null;
     backgroundImageUrl: string | null;
+
     fileIcon: File | null;
     fileIconUrl: string | null;
+    icon: Icon | null;
+    iconType: IconType | null;
+
+
     categoryId: number | null;
     inputType: InputType | null;
 }

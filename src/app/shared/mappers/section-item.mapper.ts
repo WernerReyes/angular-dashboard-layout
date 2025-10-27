@@ -6,6 +6,20 @@ export enum InputType {
     EMAIL = 'EMAIL',
     TEXTAREA = 'TEXTAREA'
 }
+
+export enum IconType {
+    LIBRARY = 'LIBRARY',
+    IMAGE = 'IMAGE'
+}
+
+
+export interface Icon {
+    name: string;
+    size: number;
+    color: string;
+    strokeWidth: number;
+}
+
 export interface SectionItemEntity {
     id_section_item: number;
     title: string | null;
@@ -13,7 +27,7 @@ export interface SectionItemEntity {
     description: string | null;
     image: string | null;
     background_image: string | null;
-    icon: string | null;
+    icon_url: string | null;
     text_button: string | null;
     link_id: number | null;
     order_num: number;
@@ -30,7 +44,7 @@ export const mapSectionItemEntityToSectionItem = (entity: SectionItemEntity): Se
     description: entity.description,
     image: entity.image,
     backgroundImage: entity.background_image,
-    icon: entity.icon,
+    iconUrl: entity.icon_url,
     textButton: entity.text_button,
     linkId: entity.link_id ? Number(entity.link_id) : null,
     order: entity.order_num,

@@ -15,27 +15,4 @@ import { EmptyFieldMessage } from '../../components/empty-field-message/empty-fi
 export class SectionContactTopBarItems {
     section = input.required<Section>();
     contextMenu = input.required<ContextMenuCrud<SectionItem>>();
-    // deleteItemConfirmation = input.required<DeleteSectionItemFunction>();
-    // onSelectSectionItem = output<SectionItem>();
-
-    // @ViewChild(ContextMenuCrud) contextMenu!: ContextMenuCrud<SectionItem>;
-
-    // selectedItem = signal<SectionItem | null>(null);
-
-    // edit = () => {
-    //     this.onSelectSectionItem.emit(this.selectedItem()!);
-    // };
-
-    // delete = (event: MenuItemCommandEvent) => {
-    //     this.deleteItemConfirmation()(
-    //         event.originalEvent!,
-    //         {
-    //             id: this.selectedItem()!.id,
-    //             sectionId: this.section().id
-    //         },
-    //         () => {
-    //             this.selectedItem.set(null);
-    //         }
-    //     );
-    // };
 }

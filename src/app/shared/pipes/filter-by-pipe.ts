@@ -4,8 +4,16 @@ import { Pipe, PipeTransform } from '@angular/core';
     name: 'filterBy'
 })
 export class FilterByPipe implements PipeTransform {
-    transform<T>(items: T[], key: keyof T, value: any): T[] {
-        if (!items || !key || value === undefined || value === null) return items;
-        return items.filter((item) => item[key] === value);
+   transform<T>(array: T[], field: keyof T, term: string): T[] {
+        if (!term) return array;
+
+        const lowerTerm = term.toLowerCase();
+        return array.filter((item) => {
+            const fieldValue = item[field];
+            if (typeof fieldValue === 'string') {
+                return fieldValue.toLowerCase().includes(lowerTerm);
+            }
+            return false;
+        });
     }
 }

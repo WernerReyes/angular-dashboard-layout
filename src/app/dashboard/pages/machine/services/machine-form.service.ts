@@ -31,6 +31,7 @@ export class MachineFormService {
         technicalSpecifications: this.fb.array<TecnicalSpecifications>([], [Validators.required, Validators.minLength(1)]),
         categoryId: [null as number | null, [Validators.required]]
     });
+    
 
     populateCategory(category: Category) {
         this.categoryForm.patchValue({
@@ -39,6 +40,7 @@ export class MachineFormService {
             id: category.id
         });
     }
+
 
     populateMachine(machine: Machine) {
         this.machineForm.patchValue({
@@ -50,6 +52,12 @@ export class MachineFormService {
             manual: machine.manual || null,
             categoryId: machine.categoryId
         });
+
+        const currentImages = this.machineForm.get('images')?.value as string[];
+        if (currentImages.length > 0) {
+            this.machineForm.get('fileImages')?.clearValidators();
+            this.machineForm.get('fileImages')?.updateValueAndValidity();  
+        }
 
         const specsFormArray = this.technicalSpecificationsFormArray;
         specsFormArray?.clear();

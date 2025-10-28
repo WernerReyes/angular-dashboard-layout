@@ -1,3 +1,4 @@
+import type { IconName } from '../constants/icons';
 import type { SectionItem } from '../interfaces/section-item';
 import { LinkEntity, mapLinkEntityToLink } from './link.mapper';
 
@@ -14,7 +15,7 @@ export enum IconType {
 
 
 export interface Icon {
-    name: string;
+    name: IconName;
     size: number;
     color: string;
     strokeWidth: number;
@@ -35,6 +36,8 @@ export interface SectionItemEntity {
     category_id: number | null;
     input_type: InputType | null;
     link: LinkEntity | null;
+    icon: Icon | null;
+    icon_type: IconType | null;
 }
 
 export const mapSectionItemEntityToSectionItem = (entity: SectionItemEntity): SectionItem => ({
@@ -51,5 +54,7 @@ export const mapSectionItemEntityToSectionItem = (entity: SectionItemEntity): Se
     sectionId: Number(entity.section_id),
     categoryId: entity.category_id ? Number(entity.category_id) : null,
     inputType: entity.input_type,
-    link: entity.link ? mapLinkEntityToLink(entity.link) : null
+    link: entity.link ? mapLinkEntityToLink(entity.link) : null,
+    icon: entity.icon,
+    iconType: entity.icon_type
 });

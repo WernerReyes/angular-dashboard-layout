@@ -5,7 +5,7 @@ import { Component, effect, input, ViewChild } from '@angular/core';
 import { ReactiveFormsModule, type FormGroup } from '@angular/forms';
 import { FileSelectEvent, FileUpload } from 'primeng/fileupload';
 import { SelectButtonModule } from 'primeng/selectbutton';
-
+import { toSignal } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'icon-upload',
   imports: [ReactiveFormsModule, FileUpload, PickerIcons, SelectButtonModule],

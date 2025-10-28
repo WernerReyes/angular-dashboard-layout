@@ -1,5 +1,4 @@
-<p-popover #op
->
+<p-popover #op>
     <div class="flex justify-between items-center mb-3">
         <span class="m-0 text-lg">Personalizar iconos</span>
         <p-button icon="pi pi-refresh" text (click)="reset()"></p-button>
@@ -48,14 +47,17 @@
         <p-button icon="pi pi-cog" text (click)="op.toggle($event)"></p-button>
     </div>
     <div class="flex flex-wrap gap-5">
-        @let iconsFiltered = icons | filterBy: 'name' : searchInput.value; @for (item of iconsFiltered; track item.id) {
+        @let iconsFiltered = icons  | filterBy: 'name' : searchInput.value | sanitizerHtml: 'html'; 
+        
+        
+        @for (item of iconsFiltered; track item.name) {
         <div
             class="bg-[var(--surface-ground)] p-4 rounded-lg flex flex-col mx-auto items-center gap-2 shadow-md size-auto cursor-pointer transition-all hover:shadow-lg"
             [class.border-2]="selectedIcon() && selectedIcon()?.name === item.name"
             [class.border-primary]="selectedIcon() && selectedIcon()?.name === item.name"
             (click)="setSelectedIcon(item.name)"
         >
-            <svg [attr.stroke-width]="strokeWidth()" stroke-linecap="round" stroke-linejoin="round" [attr.viewBox]="'0 0 24 24'" [attr.width]="size()" [attr.height]="size()" [style.color]="color()" [innerHTML]="item.icon"></svg>
+            <svg [attr.stroke-width]="strokeWidth()" stroke-linecap="round" stroke-linejoin="round" [attr.viewBox]="'0 0 24 24'" [attr.width]="size()" [attr.height]="size()" [style.color]="color()" [innerHTML]="item.html"></svg>
         </div>
         }
     </div>

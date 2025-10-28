@@ -2,15 +2,14 @@
     <div class="container mx-auto px-4">
         <!-- Header Section -->
         <div class="text-center mb-12">
-            
             @if (section().subtitle) {
-                <h3 class="!text-2xl md:text-3xl font-semibold text-surface-800 dark:text-surface-100 mb-6">{{ section().subtitle }}</h3>
+            <h3 class="!text-2xl md:text-3xl font-semibold text-surface-800 dark:text-surface-100 mb-6">{{ section().subtitle }}</h3>
             } @else {
-                <empty-field-message className="max-w-lg mx-auto mb-4" textContent="Sin subtítulo"></empty-field-message>
-            } 
-            
+            <empty-field-message className="max-w-lg mx-auto mb-4" textContent="Sin subtítulo"></empty-field-message>
+            }
+
             <h2 class="!text-3xl md:!text-4xl !font-bold text-primary-600 dark:text-primary-400 mb-4">{{ section().title }}</h2>
-            
+
             @if (section().description) {
             <p class="text-lg text-surface-600 dark:text-surface-300 mx-auto text-center leading-relaxed">{{ section().description }}</p>
             } @else {
@@ -24,13 +23,15 @@
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
             @for (item of section().items; track item.id) {
             <p-card (contextmenu)="contextMenu().onContextMenu($event, item)" class="feature-item flex flex-col items-center text-center p-6 transition-shadow duration-300 h-full">
-                @if (item.icon) {
-
-                <img [src]="item.icon" alt="{{ item.title }} icon" class="size-16 mx-auto dark:!text-red-500" />
-
+                <!-- @if (item.iconUrl) {
+                <img [src]="item.iconUrl" alt="{{ item.title }} icon" class="size-16 mx-auto dark:!text-red-500" />
                 } @else {
                 <empty-field-message className="flex items-center justify-center" textContent="Sin ícono"></empty-field-message>
-                }
+                } -->
+                <div class="flex justify-center ">
+
+                    <icon-image [item]="item" imageClass="size-16 mx-auto dark:!text-red-500" [imageErrorClass]="{ iconClass: '!size-12', containerClass: '!size-16' }"></icon-image>
+                </div>
 
                 <h4 class="!text-xl font-semibold text-surface-800 dark:text-surface-100 mb-2">{{ item.title }}</h4>
 

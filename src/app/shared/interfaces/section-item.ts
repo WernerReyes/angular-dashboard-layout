@@ -1,4 +1,4 @@
-import { IconType, InputType } from '../mappers/section-item.mapper';
+import { Icon, IconType, InputType } from '../mappers/section-item.mapper';
 import { Link } from './link';
 
 export interface SectionItem {
@@ -16,6 +16,8 @@ export interface SectionItem {
     categoryId: number | null;  
     inputType: InputType | null;
     link?: Link | null;
+    icon: Icon | null;
+    iconType: IconType | null;
 }
 
 export enum ImageType {

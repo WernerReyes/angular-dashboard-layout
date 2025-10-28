@@ -6,18 +6,12 @@
             <empty-field-message className="w-full" textContent="No hay números de contacto agregados."></empty-field-message>
             } @else { @for (item of section().items; track item.id) {
             <div class="flex items-center space-x-2 text-white/90 hover:text-white transition-colors duration-300" (contextmenu)="contextMenu().onContextMenu($event, item)">
-                @if (item.iconUrl) {
-                <img alt="Icon" class="size-6 object-contain" (error)="item.iconUrl = null" [src]="item.iconUrl" />
-                } @else {
-                <app-image-error iconClass="!size-4" containerClass="!size-6"></app-image-error>
-                }
+                <icon-image [item]="item" imageClass="size-6 object-contain" [imageErrorClass]="{ iconClass: '!size-4', containerClass: '!size-6' }"></icon-image>
+
                 <span #contact class="font-medium text-surface-600 dark:text-white"> {{ item.title }} </span>
             </div>
 
-            }
-
-           
-            }
+            } }
         </div>
     </div>
 </section>

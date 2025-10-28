@@ -24,6 +24,11 @@ export class TransformUtils {
                 });
             } else {
                 if (data.hasOwnProperty(key)) {
+                    if (typeof data[key] === 'object' && !(data[key] instanceof File)) {
+                        formData.append(key, JSON.stringify(data[key]));
+                        continue;
+                    }
+
                     formData.append(key, data[key]);
                 }
             }

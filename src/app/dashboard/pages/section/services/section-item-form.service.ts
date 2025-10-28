@@ -187,8 +187,8 @@ export class SectionItemFormService {
 
             iconFile: '',
             currentIconUrl: section.iconUrl || '',
-            iconType: IconType.LIBRARY,
-            icon: null,
+            iconType: section.iconType || IconType.LIBRARY,
+            icon: section.icon || null,
 
             imageBackFile: null,
             currentImageBack: section.backgroundImage || '',

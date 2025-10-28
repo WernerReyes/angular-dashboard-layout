@@ -34,6 +34,6 @@
         </ng-template>
     </p-fileupload>
     } @else {
-    <app-picker-icons (onSelectedIcon)="form().controls['icon'].setValue($event)"></app-picker-icons>
+    <app-picker-icons [selectedIcon]="form().controls['icon'].value" (onSelectedIcon)="form().controls['icon'].setValue($event)"></app-picker-icons>
     }
 </div>

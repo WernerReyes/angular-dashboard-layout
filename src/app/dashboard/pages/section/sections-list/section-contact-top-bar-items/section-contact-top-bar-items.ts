@@ -6,13 +6,15 @@ import { MenuModule } from 'primeng/menu';
 import type { ContextMenuCrud } from '../../components/context-menu-crud/context-menu-crud';
 import { EmptyFieldMessage } from '../../components/empty-field-message/empty-field-message';
 import { IconImage } from '../../components/icon-image/icon-image';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'section-contact-top-bar-items',
-    imports: [EmptyFieldMessage, IconImage, MenuModule, ButtonModule],
+    imports: [NgClass, EmptyFieldMessage, IconImage, MenuModule, ButtonModule],
     templateUrl: './section-contact-top-bar-items.html'
 })
 export class SectionContactTopBarItems {
     section = input.required<Section>();
-    contextMenu = input.required<ContextMenuCrud<SectionItem>>();
+    contextMenu = input<ContextMenuCrud<SectionItem>>();
+    currentSectionItem = input<SectionItem | null>(null);
 }

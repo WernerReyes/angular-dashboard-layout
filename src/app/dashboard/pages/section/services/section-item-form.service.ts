@@ -164,7 +164,6 @@ export class SectionItemFormService {
     }
 
     populateForm(section: SectionItem) {
-        console.log('POPULATE SECTION ITEM FORM', section);
         this.form.markAsPristine();
         this.form.markAsUntouched();
         // TODO: CHECK console.log(section);

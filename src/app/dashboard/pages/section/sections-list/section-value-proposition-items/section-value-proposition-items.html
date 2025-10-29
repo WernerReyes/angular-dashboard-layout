@@ -13,7 +13,11 @@
         <!-- Grid de cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             @for (item of section().items; track item.id) {
-            <p-card class="value-card h-full" (contextmenu)="contextMenu().onContextMenu($event, item)">
+            <p-card class="value-card h-full"
+                [ngClass]="{
+                    'border border-primary': currentSectionItem()?.id === item.id
+                }"
+            (contextmenu)="contextMenu()?.onContextMenu($event, item)">
                 <div class="p-6">
                     <h3 class="!text-xl font-bold mb-4 !mt-0 transition-colors duration-300">{{ item.title }}</h3>
 

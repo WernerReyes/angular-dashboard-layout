@@ -1,6 +1,6 @@
 <!-- [header]="selectedSectionItem () ? 'Editar item' : `Agregar item a la sección '${selectedSection()?.title}'`" -->
 
-<p-dialog class="!overflow-hidden" [visible]="display()" (visibleChange)="closeDialog()" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '30vw' }" [modal]="true" [maximizable]="true">
+<p-dialog class="!overflow-hidden" [visible]="display()" (visibleChange)="closeDialog()" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '80vw' }" [modal]="true" [maximizable]="true">
     <ng-template #header>
         <div class="flex items-center gap-3">
             <i class="pi pi-folder-open text-surface-600 dark:text-surface-400"></i>
@@ -8,183 +8,191 @@
         </div>
     </ng-template>
 
-    <form class="flex flex-col gap-4" [formGroup]="form" id="menu-form" (ngSubmit)="saveChanges()">
-        @let sectionType = selectedSection()?.type;
+    <div></div>
 
-        <div class="flex flex-col gap-x-2 gap-y-4 w-full">
-            @switch (sectionType) { @case (SectionType.HERO) {
-            <hero-form [selectedSectionItem]="selectedSectionItem()"></hero-form>
-            } @case (SectionType.WHY_US) {
-            <common-inputs
-                [form]="form"
-                [includeFields]="[{
-                type: 'title',
-                label: 'Título',
-                placeholder: 'Título del item',
-                isTextarea: false
-            },
-            {
-                type: 'content',
-                label: 'Descripción',
-                placeholder: 'Descripción del item',
-                isTextarea: true
-            }]"
-            ></common-inputs>
-            <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
+    <div class="grid lg:grid-cols-3 gap-4">
+        <form class="flex flex-col gap-4" [formGroup]="form" id="menu-form" (ngSubmit)="saveChanges()">
+            @let sectionType = selectedSection()?.type;
 
-            } @case (SectionType.CASH_PROCESSING_EQUIPMENT) {
-            <common-inputs
-                [form]="form"
-                [includeFields]="[{
-                type: 'title',
-                label: 'Título',
-                placeholder: 'Título del item',
-                isTextarea: false
-            }]"
-            ></common-inputs>
-            <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
-            <show-link-switch [form]="form"></show-link-switch>
-            } @case (SectionType.VALUE_PROPOSITION) {
-            <common-inputs
-                [form]="form"
-                [includeFields]="[{
-                type: 'title',
-                label: 'Título',
-                placeholder: 'Título del item',
-                isTextarea: false
-            },
-            {
-                type: 'content',
-                label: 'Descripción',
-                placeholder: 'Descripción del item',
-                isTextarea: true
-            }, {
-                type: 'subtitle',
-                label: 'Extra info',
-                placeholder: 'Información extra del item',
-                isTextarea: false
-            }]"
-            ></common-inputs>
-            } @case (SectionType.CLIENT) { @let imageType = form.controls['imageType'].value;
-            <div class="flex flex-col gap-2">
-                <label>Imagen</label>
-                <!-- [selectedSectionItem]="selectedSectionItem()" -->
-                <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+            <div class="flex flex-col gap-x-2 gap-y-4 w-full">
+                @switch (sectionType) { @case (SectionType.HERO) {
+                <hero-form [selectedSectionItem]="selectedSectionItem()"></hero-form>
+                } @case (SectionType.WHY_US) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[{
+                    type: 'title',
+                    label: 'Título',
+                    placeholder: 'Título del item',
+                    isTextarea: false
+                },
+                {
+                    type: 'content',
+                    label: 'Descripción',
+                    placeholder: 'Descripción del item',
+                    isTextarea: true
+                }]"
+                ></common-inputs>
+                <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
+
+                } @case (SectionType.CASH_PROCESSING_EQUIPMENT) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[{
+                    type: 'title',
+                    label: 'Título',
+                    placeholder: 'Título del item',
+                    isTextarea: false
+                }]"
+                ></common-inputs>
+                <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
+                <show-link-switch [form]="form"></show-link-switch>
+                } @case (SectionType.VALUE_PROPOSITION) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[{
+                    type: 'title',
+                    label: 'Título',
+                    placeholder: 'Título del item',
+                    isTextarea: false
+                },
+                {
+                    type: 'content',
+                    label: 'Descripción',
+                    placeholder: 'Descripción del item',
+                    isTextarea: true
+                }, {
+                    type: 'subtitle',
+                    label: 'Extra info',
+                    placeholder: 'Información extra del item',
+                    isTextarea: false
+                }]"
+                ></common-inputs>
+                } @case (SectionType.CLIENT) { @let imageType = form.controls['imageType'].value;
+                <div class="flex flex-col gap-2">
+                    <label>Imagen</label>
+                    <!-- [selectedSectionItem]="selectedSectionItem()" -->
+                    <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+                </div>
+                } @case (SectionType.OUR_COMPANY) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[{
+                    type: 'title',
+                    label: 'Título',
+                    placeholder: 'Título del item',
+                    isTextarea: false
+                },
+                {
+                    type: 'subtitle',
+                    label: 'Subtítulo',
+                    placeholder: 'Subtítulo del item',
+                    isTextarea: false
+                },
+                {
+                    type: 'content',
+                    label: 'Descripción',
+                    placeholder: 'Descripción del item',
+                    isTextarea: true
+                }]"
+                ></common-inputs>
+                } @case (SectionType.MACHINE) {
+                <machine-form></machine-form>
+                } @case (SectionType.CONTACT_TOP_BAR) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[{
+                    type: 'title',
+                    label: 'Título',
+                    placeholder: 'Título del item',
+                    isTextarea: false
+                }]"
+                ></common-inputs>
+                <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
+                } @case (SectionType.SOLUTIONS_OVERVIEW) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[{
+                    type: 'title',
+                    label: 'Título',
+                    placeholder: 'Título',
+                }, {
+                    type: 'content',
+                    label: 'Descripción',
+                    placeholder: 'Descripción del item',
+                    isTextarea: true
+                }]"
+                ></common-inputs>
+                <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
+                } @case (SectionType.MISSION_VISION) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[{
+                    type: 'title',
+                    label: 'Título',
+                    placeholder: 'Título del item',
+                    isTextarea: false
+                },
+                {
+                    type: 'content',
+                    label: 'Descripción',
+                    placeholder: 'Descripción del item',
+                    isTextarea: true
+                }]"
+                ></common-inputs>
+                } @case (SectionType.CONTACT_US) {
+                <contact-us-form></contact-us-form>
+                } @case (SectionType.FOOTER) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[{
+                    type: 'title',
+                    label: 'Información extra',
+                    placeholder: 'Información extra del footer',
+                }]"
+                ></common-inputs>
+                } @case (SectionType.ADVANTAGES) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[{
+                    type: 'title',
+                    label: 'Título',
+                    placeholder: 'Título del item',
+                    isTextarea: false
+                },
+                {
+                    type: 'content',
+                    label: 'Descripción',
+                    placeholder: 'Descripción del item',
+                    isTextarea: true
+                }]"
+                ></common-inputs>
+                <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
+                } @case (SectionType.SUPPORT_MAINTENANCE) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[{
+                    type: 'title',
+                    label: 'Título',
+                    placeholder: 'Título del item',
+                    isTextarea: false
+                },
+                {
+                    type: 'content',
+                    label: 'Descripción',
+                    placeholder: 'Descripción del item',
+                    isTextarea: true
+                }]"
+                ></common-inputs>
+                <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
+                } @default { } }
             </div>
-            } @case (SectionType.OUR_COMPANY) {
-            <common-inputs
-                [form]="form"
-                [includeFields]="[{
-                type: 'title',
-                label: 'Título',
-                placeholder: 'Título del item',
-                isTextarea: false
-            },
-            {
-                type: 'subtitle',
-                label: 'Subtítulo',
-                placeholder: 'Subtítulo del item',
-                isTextarea: false
-            },
-            {
-                type: 'content',
-                label: 'Descripción',
-                placeholder: 'Descripción del item',
-                isTextarea: true
-            }]"
-            ></common-inputs>
-            } @case (SectionType.MACHINE) {
-            <machine-form></machine-form>
-            } @case (SectionType.CONTACT_TOP_BAR) {
-            <common-inputs
-                [form]="form"
-                [includeFields]="[{
-                type: 'title',
-                label: 'Título',
-                placeholder: 'Título del item',
-                isTextarea: false
-            }]"
-            ></common-inputs>
-            <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
-            } @case (SectionType.SOLUTIONS_OVERVIEW) {
-            <common-inputs
-                [form]="form"
-                [includeFields]="[{
-                type: 'title',
-                label: 'Título',
-                placeholder: 'Título',
-            }, {
-                type: 'content',
-                label: 'Descripción',
-                placeholder: 'Descripción del item',
-                isTextarea: true
-            }]"
-            ></common-inputs>
-            <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
-            } @case (SectionType.MISSION_VISION) {
-            <common-inputs
-                [form]="form"
-                [includeFields]="[{
-                type: 'title',
-                label: 'Título',
-                placeholder: 'Título del item',
-                isTextarea: false
-            },
-            {
-                type: 'content',
-                label: 'Descripción',
-                placeholder: 'Descripción del item',
-                isTextarea: true
-            }]"
-            ></common-inputs>
-            } @case (SectionType.CONTACT_US) {
-            <contact-us-form></contact-us-form>
-            } @case (SectionType.FOOTER) {
-            <common-inputs
-                [form]="form"
-                [includeFields]="[{
-                type: 'title',
-                label: 'Información extra',
-                placeholder: 'Información extra del footer',
-            }]"
-            ></common-inputs>
-            } @case (SectionType.ADVANTAGES) {
-            <common-inputs
-                [form]="form"
-                [includeFields]="[{
-                type: 'title',
-                label: 'Título',
-                placeholder: 'Título del item',
-                isTextarea: false
-            },
-            {
-                type: 'content',
-                label: 'Descripción',
-                placeholder: 'Descripción del item',
-                isTextarea: true
-            }]"
-            ></common-inputs>
-            <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
-            } @case (SectionType.SUPPORT_MAINTENANCE) {
-            <common-inputs
-                [form]="form"
-                [includeFields]="[{
-                type: 'title',
-                label: 'Título',
-                placeholder: 'Título del item',
-                isTextarea: false
-            },
-            {
-                type: 'content',
-                label: 'Descripción',
-                placeholder: 'Descripción del item',
-                isTextarea: true
-            }]"
-            ></common-inputs>
-            <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
-            } @default { } }
+        </form>
+
+        <div class="lg:col-span-2">
+            <preview level="item" [form]="form" [currentSectionItem]="selectedSectionItem()" [section]="selectedSection() ?? null"></preview>
         </div>
-    </form>
+    </div>
 
     TODO
     <pre>{{ form.value | json }}</pre>

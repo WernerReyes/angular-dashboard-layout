@@ -5,7 +5,7 @@ import { CommonInputs } from '../../../components/common-inputs/common-inputs';
   selector: 'app-cash-processing-equipment-form',
   imports: [CommonInputs],
   templateUrl: './cash-processing-equipment-form.html',
-  styleUrl: './cash-processing-equipment-form.scss'
+  // styleUrl: './cash-processing-equipment-form.scss'
 })
 export class CashProcessingEquipmentForm {
 

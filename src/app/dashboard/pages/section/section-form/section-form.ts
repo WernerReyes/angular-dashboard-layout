@@ -23,7 +23,9 @@ import { WhyUsForm } from './why-us-form/why-us-form';
 import { FileUpload } from '../components/file-upload/file-upload';
 import { ImageType } from '@/shared/interfaces/section-item';
 import { NavigationMenuForm } from './navigation-menu-form/navigation-menu-form';
+import { Preview } from './preview/preview';
 
+  
 @Component({
     selector: 'section-form',
     imports: [
@@ -36,6 +38,7 @@ import { NavigationMenuForm } from './navigation-menu-form/navigation-menu-form'
         InputTextModule,
         KeyValuePipe,
         JsonPipe,
+        Preview,
         ToggleSwitchModule,
         TextareaModule,
         SelectModule,
@@ -50,7 +53,7 @@ export class SectionForm {
     private readonly linkService = inject(LinkService);
     private readonly sectionService = inject(SectionService);
     private readonly sectionFormService = inject(SectionFormService);
-
+  
     onCloseDialog = output<void>();
     display = input.required<boolean>();
     selectedSection = model<Section | null>();
@@ -68,9 +71,9 @@ export class SectionForm {
 
     FormUtils = FormUtils;
     SectionType = SectionType;
-
     LinkType = LinkType;
 
+   
     closeDialog() {
         this.onCloseDialog.emit();
         this.sectionFormService.reset();

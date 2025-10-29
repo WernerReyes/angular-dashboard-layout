@@ -27,11 +27,13 @@ import { SectionItemFormService } from '../../services/section-item-form.service
 import { ContactUsForm } from './contact-us-form/contact-us-form';
 import { HeroForm } from './hero-form/hero-form';
 import { MachineForm } from './machine-form/machine-form';
+import { Preview } from '../../section-form/preview/preview';
 
 @Component({
     selector: 'section-item-form',
     imports: [
         JsonPipe,
+        Preview,
         MachineForm,
         ContactUsForm,
         CommonInputs,

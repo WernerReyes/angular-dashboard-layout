@@ -15,7 +15,8 @@ import { EmptyFieldMessage } from '../../components/empty-field-message/empty-fi
 })
 export class SectionClientItems {
     section = input.required<Section>();
-   contextMenu = input.required<ContextMenuCrud<SectionItem>>();
+   contextMenu = input<ContextMenuCrud<SectionItem>>();
+   currentSectionItem = input<SectionItem | null>(null);
 
     responsiveOptions = [
         {
@@ -40,6 +41,7 @@ export class SectionClientItems {
         }
     ];
 
+   
 
    
 }

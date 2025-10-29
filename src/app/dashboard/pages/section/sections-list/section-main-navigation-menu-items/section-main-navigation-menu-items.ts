@@ -24,6 +24,7 @@ export class SectionMainNavigationMenuItems {
         }
 
         const menus = MenuUtils.buildMenuTree(sectionData.menus);
+        console.log('menus', this.section(), menus);
 
         return menus.map((menu) => ({
             id: menu.id.toString(),

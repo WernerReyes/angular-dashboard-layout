@@ -5,13 +5,15 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import type { ContextMenuCrud } from '../../components/context-menu-crud/context-menu-crud';
 import { EmptyFieldMessage } from '../../components/empty-field-message/empty-field-message';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'section-value-proposition-items',
-    imports: [CardModule, EmptyFieldMessage, ButtonModule],
+    imports: [NgClass, CardModule, EmptyFieldMessage, ButtonModule],
     templateUrl: './section-value-proposition-items.html'
 })
 export class SectionValuePropositionItems {
     section = input.required<Section>();
-    contextMenu = input.required<ContextMenuCrud<SectionItem>>();
+    contextMenu = input<ContextMenuCrud<SectionItem>>();
+    currentSectionItem = input<SectionItem | null>(null);
 }

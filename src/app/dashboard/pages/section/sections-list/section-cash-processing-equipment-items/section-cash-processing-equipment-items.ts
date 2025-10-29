@@ -13,5 +13,5 @@ import { EmptyFieldMessage } from '../../components/empty-field-message/empty-fi
 })
 export class SectionCashProcessingEquipmentItems {
     section = input.required<Section>();
-    contextMenu = input.required<ContextMenuCrud<SectionItem>>();
+    contextMenu = input<ContextMenuCrud<SectionItem>>();
 }

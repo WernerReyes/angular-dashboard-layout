@@ -1,0 +1,46 @@
+
+{{ sectionPreview2() | json }};
+@let preview = sectionPreview;
+<section class="rounded-2xl p-6 bg-white dark:bg-surface-800 shadow-md transition-all duration-300">
+    <!-- <pre>
+        {{ section()?.menus    | json }}
+        {{ preview.menus | json }}
+    </pre> -->
+
+    @let type = preview.type; {{ type }} @switch (type) { @case (SectionType.HERO) { @if (level() === 'section') {
+    <span class="block p-message p-2 p-message-info">Los campos que llenen en esta sección no se ven visualmente. El contenido se verá a través de los slides.</span>
+    }
+    <div class="mt-4">
+        <section-hero-items [sectionItems]="items"></section-hero-items>
+    </div>
+    } @case (SectionType.WHY_US) {
+    <section-why-us-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-why-us-items>
+    }
+    <!-- TODO: Focus on here, because after some time, it's gonna change -->
+    @case (SectionType.CASH_PROCESSING_EQUIPMENT) {
+    <section-cash-processing-equipment-items [section]="preview"></section-cash-processing-equipment-items>
+    }
+    <!-- TODO: End -->
+
+    @case (SectionType.VALUE_PROPOSITION) {
+    <section-value-proposition-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-value-proposition-items>
+    } @case (SectionType.CLIENT) {
+    <section-client-items [section]="sectionCreate" [currentSectionItem]="currentSectionItem()"></section-client-items>
+    } @case (SectionType.OUR_COMPANY) {
+    <section-our-company-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-our-company-items>
+    } @case (SectionType.CONTACT_US) {
+    <section-contact-us-items [currentSectionItem]="currentSectionItem()" [isPreview]="true" [section]="preview"></section-contact-us-items>
+    }
+    <!-- TODO: Focus on here, because after some time, it's gonna change when the machine page is ready -->
+    @case (SectionType.MACHINE) {
+    <section-machine-items [section]="sectionPreview" [currentSectionItem]="currentSectionItem()"></section-machine-items>
+    }
+    <!-- TODO: End -->
+    @case (SectionType.CONTACT_TOP_BAR) {
+    <span class="block p-message p-2 p-message-info w-4/5 mx-auto mb-5">Los campos que llenen en esta sección no se ven visualmente. El contenido se verá al agregar los items de contacto </span>
+    <section-contact-top-bar-items [section]="sectionPreview!" [currentSectionItem]="currentSectionItem()"></section-contact-top-bar-items>
+    } @case (SectionType.MAIN_NAVIGATION_MENU) {
+    <!-- <span class="block p-message p-2 p-message-info w-4/5 mx-auto mb-5">Los campos que llenen en esta sección no se ven visualmente. El contenido se verá al agregar los items del menú de navegación principal </span> -->
+    <section-main-navigation-menu-items [section]="sectionPreview!"></section-main-navigation-menu-items>
+    } }
+</section>

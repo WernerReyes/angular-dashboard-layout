@@ -6,13 +6,15 @@ import { CardModule } from 'primeng/card';
 import type { ContextMenuCrud } from '../../components/context-menu-crud/context-menu-crud';
 import { EmptyFieldMessage } from '../../components/empty-field-message/empty-field-message';
 import { IconImage } from '../../components/icon-image/icon-image';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'section-why-us-items',
-    imports: [EmptyFieldMessage, IconImage, CardModule,  ButtonModule],
+    imports: [EmptyFieldMessage, NgClass, IconImage, CardModule,  ButtonModule],
     templateUrl: './section-why-us-items.html'
 })
 export class SectionWhyUsItems {
     section = input.required<Section>();
-    contextMenu = input.required<ContextMenuCrud<SectionItem>>();
+    contextMenu = input<ContextMenuCrud<SectionItem>>();
+    currentSectionItem = input<SectionItem | null>(null);   
 }

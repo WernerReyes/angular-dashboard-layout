@@ -4,69 +4,74 @@
     [visible]="display()"
     (visibleChange)="closeDialog()"
     [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
-    [style]="{ width: '30vw' }"
+    [style]="{ width: '60vw' }"
     [modal]="true"
     [maximizable]="true"
 >
-    <form class="flex flex-col gap-4" [formGroup]="form" id="menu-form" (ngSubmit)="saveChanges()">
-        @let type = form.controls['type'].value; @let imageType = form.controls['imageType'].value;
-        <div class="flex flex-col gap-2">
-            <label for="type">Tipo</label>
-            <p-select
-                id="type"
-                [overlayOptions]="{
+    <!-- <p-button
+    icon="pi pi-question-circle"
+    (click)="startTour()"
+></p-button> -->
+    <div class="grid lg:grid-cols-3 gap-4 items-center">
+        <form class="flex flex-col gap-4" [formGroup]="form" id="menu-form" (ngSubmit)="saveChanges()">
+            @let type = form.controls['type'].value; @let imageType = form.controls['imageType'].value;
+            <div class="flex flex-col gap-2">
+                <label for="type">Tipo</label>
+                <p-select
+                    id="type"
+                    [overlayOptions]="{
                     mode: 'modal'
                 }"
-                [filter]="true"
-                formControlName="type"
-                [options]="sectionTypesOptions | keyvalue"
-                optionLabel="value.label"
-                optionValue="value.value"
-                placeholder="Selecciona el tipo de sección"
-            ></p-select>
-            @if (form.controls['type'].errors) {
-            <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'type') }} </p-message>
-            }
-        </div>
-
-        <div class="flex flex-col gap-2 w-full">
-            <common-inputs [form]="form" [includeFields]="[{ type: 'title', label: 'Título', placeholder: 'Título de la sección' }]"></common-inputs>
-
-            @switch (type) { @case (SectionType.WHY_US) { <why-us-form [form]="form"></why-us-form>
-            } @case (SectionType.CASH_PROCESSING_EQUIPMENT) {
-            <div class="mt-3">
-                <show-link-switch [form]="form"></show-link-switch>
+                    [filter]="true"
+                    formControlName="type"
+                    [options]="sectionTypesOptions | keyvalue"
+                    optionLabel="value.label"
+                    optionValue="value.value"
+                    placeholder="Selecciona el tipo de sección"
+                ></p-select>
+                @if (form.controls['type'].errors) {
+                <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'type') }} </p-message>
+                }
             </div>
-            } @case (SectionType.CLIENT) {
-            <common-inputs
-                [form]="form"
-                [includeFields]="[{
+
+            <div class="flex flex-col gap-2 w-full">
+                <common-inputs [form]="form" [includeFields]="[{ type: 'title', label: 'Título', placeholder: 'Título de la sección' }]"></common-inputs>
+
+                @switch (type) { @case (SectionType.WHY_US) { <why-us-form [form]="form"></why-us-form>
+                } @case (SectionType.CASH_PROCESSING_EQUIPMENT) {
+                <div class="mt-3">
+                    <show-link-switch [form]="form"></show-link-switch>
+                </div>
+                } @case (SectionType.CLIENT) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[{
                 type: 'content',
                 label: 'Descripción',
                 placeholder: 'Descripción de la sección',
                 isTextarea: true
             }]"
-            ></common-inputs>
-            } @case (SectionType.OUR_COMPANY) {
-            <common-inputs
-                [form]="form"
-                [includeFields]="[{
+                ></common-inputs>
+                } @case (SectionType.OUR_COMPANY) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[{
                     type: 'content',
                     label: 'Historia',
                     placeholder: 'Breve historia de la empresa',
                     isTextarea: true,
                     }]"
-            ></common-inputs>
-            <div class="flex flex-col gap-2">
-                <label>Imagen referencial</label>
-                <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
-            </div>
-            } @case(SectionType.MAIN_NAVIGATION_MENU) {
-            <navigation-menu-form></navigation-menu-form>
-            } @case(SectionType.CTA_BANNER) {
-            <common-inputs
-                [form]="form"
-                [includeFields]="[
+                ></common-inputs>
+                <div class="flex flex-col gap-2">
+                    <label>Imagen referencial</label>
+                    <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+                </div>
+                } @case(SectionType.MAIN_NAVIGATION_MENU) {
+                <navigation-menu-form></navigation-menu-form>
+                } @case(SectionType.CTA_BANNER) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[
                   
                     {
                 type: 'subtitle',
@@ -78,27 +83,27 @@
                 placeholder: 'Contenido de la sección',
                 isTextarea: true,
             }]"
-            ></common-inputs>
+                ></common-inputs>
 
-            <div class="flex flex-col gap-2">
-                <label>Imagen de Fondo</label>
-                <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
-            </div>
+                <div class="flex flex-col gap-2">
+                    <label>Imagen de Fondo</label>
+                    <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+                </div>
 
-            <show-link-switch [form]="form"></show-link-switch>
-            } @case (SectionType.SOLUTIONS_OVERVIEW) {
-            <common-inputs
-                [form]="form"
-                [includeFields]="[{
+                <show-link-switch [form]="form"></show-link-switch>
+                } @case (SectionType.SOLUTIONS_OVERVIEW) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[{
                     type: 'subtitle',
                     label: 'Subtítulo',
                     placeholder: 'Subtítulo de la sección',
                 }]"
-            ></common-inputs>
-            } @case (SectionType.MISSION_VISION) {
-            <common-inputs
-                [form]="form"
-                [includeFields]="[
+                ></common-inputs>
+                } @case (SectionType.MISSION_VISION) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[
                     
                     {
                         type: 'content',
@@ -107,16 +112,16 @@
                         isTextarea: true,
                     }
                 ]"
-            ></common-inputs>
-            <div class="flex flex-col gap-2">
-                <label>Imagen</label>
-                <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
-            </div>
+                ></common-inputs>
+                <div class="flex flex-col gap-2">
+                    <label>Imagen</label>
+                    <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+                </div>
 
-            } @case (SectionType.CONTACT_US) {
-            <common-inputs
-                [form]="form"
-                [includeFields]="[
+                } @case (SectionType.CONTACT_US) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[
                     
                     {
                         type: 'content',
@@ -125,26 +130,26 @@
                         isTextarea: true,
                     }
                 ]"
-            ></common-inputs>
-            <div class="flex flex-col gap-2">
-                <label>Imagen</label>
-                <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
-            </div>
-            <show-link-switch [form]="form"></show-link-switch>
-            } @case (SectionType.FOOTER) {
-            <common-inputs
-                [form]="form"
-                [includeFields]="[{
+                ></common-inputs>
+                <div class="flex flex-col gap-2">
+                    <label>Imagen</label>
+                    <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+                </div>
+                <show-link-switch [form]="form"></show-link-switch>
+                } @case (SectionType.FOOTER) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[{
                     type: 'subtitle',
                     label: 'Texto de copyright',
                     placeholder: 'Texto de copyright',
                 }]"
-            ></common-inputs>
-            <navigation-menu-form></navigation-menu-form>
-            }  @case (SectionType.SUPPORT_MAINTENANCE) {
-            <common-inputs
-                [form]="form"
-                [includeFields]="[
+                ></common-inputs>
+                <navigation-menu-form></navigation-menu-form>
+                } @case (SectionType.SUPPORT_MAINTENANCE) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[
                     
                     {
                         type: 'content',
@@ -158,13 +163,17 @@
                         placeholder: 'Frase destacada de la sección',
                     }
                 ]"
-            ></common-inputs>
-        }
-    }
-    </div>
+                ></common-inputs>
+                } }
+            </div>
 
-        <p-togglebutton formControlName="active" onLabel="Activo" offLabel="Inactivo" onIcon="pi pi-check" offIcon="pi pi-times" onIcon="pi pi-lock-open" offIcon="pi pi-lock" class="w-36" ariaLabel="Do you confirm" />
-    </form>
+            <p-togglebutton formControlName="active" onLabel="Activo" offLabel="Inactivo" onIcon="pi pi-check" offIcon="pi pi-times" onIcon="pi pi-lock-open" offIcon="pi pi-lock" class="w-36" ariaLabel="Do you confirm" />
+        </form>
+
+        <div class="lg:col-span-2">
+            <preview [form]="form" [section]="selectedSection() ?? null"></preview>
+        </div>
+    </div>
 
     <!-- TODO: <pre>{{ form.value | json }}</pre> -->
 

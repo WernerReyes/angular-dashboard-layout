@@ -32,8 +32,11 @@
             <!-- (click)="onSelectItem(item)" -->
             <ng-template let-item #item>
                 <div
-                    (contextmenu)="contextMenu().onContextMenu($event, item)"
+                (contextmenu)="contextMenu()?.onContextMenu($event, item)"
                     class="m-6 p-4 cursor-pointer transition-all duration-300 rounded-lg bg-white/70 dark:bg-slate-800/70 hover:bg-white hover:dark:bg-slate-800 hover:shadow-lg hover:-translate-y-1"
+                    [ngClass]="{
+                        'border border-primary': currentSectionItem()?.id === item.id
+                    }"
                 >
                     <div class="mb-4">
                         <div class="relative mx-auto">

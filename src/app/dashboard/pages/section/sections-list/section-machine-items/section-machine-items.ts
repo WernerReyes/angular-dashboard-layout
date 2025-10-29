@@ -22,10 +22,12 @@ export class SectionMachineItems {
     private readonly breakpointObserver = inject(BreakpointObserver);
     private readonly categoryService = inject(CategoryService);
 
+
     categoryList = this.categoryService.categoryListResource;
 
     section = input.required<Section>();
-    contextMenu = input.required<ContextMenuCrud<SectionItem>>();
+    contextMenu = input<ContextMenuCrud<SectionItem>>();
+    currentSectionItem = input<SectionItem | null>(null);
 
  
     selectedCategoryId = signal<number | null>(null);

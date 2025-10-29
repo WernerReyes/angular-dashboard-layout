@@ -14,7 +14,8 @@ import { HeroItem } from './hero-item/hero-item';
 })
 export class SectionHeroItems {
     sectionItems = input.required<SectionItem[]>();
-    contextMenu = input.required<ContextMenuCrud<SectionItem>>();
+    contextMenu = input<ContextMenuCrud<SectionItem>>();
+    // contextMenu = input.required<any>();
 
     responsiveOptions: GalleriaResponsiveOptions[] = [
         {

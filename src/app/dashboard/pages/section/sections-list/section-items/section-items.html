@@ -10,17 +10,25 @@
     <section-hero-items [sectionItems]="section().items" [contextMenu]="contextMenu"></section-hero-items>
     } @case (SectionType.WHY_US) {
     <section-why-us-items [section]="section()" [contextMenu]="contextMenu"></section-why-us-items>
-    } @case (SectionType.CASH_PROCESSING_EQUIPMENT) {
+    }
+    <!-- TODO: Focus on here, because after some time, it's gonna change -->
+    @case (SectionType.CASH_PROCESSING_EQUIPMENT) {
     <section-cash-processing-equipment-items [section]="section()" [contextMenu]="contextMenu"></section-cash-processing-equipment-items>
-    } @case (SectionType.VALUE_PROPOSITION) {
+    } 
+    <!-- TODO: End -->
+    @case (SectionType.VALUE_PROPOSITION) {
     <section-value-proposition-items [section]="section()" [contextMenu]="contextMenu"></section-value-proposition-items>
     } @case (SectionType.CLIENT) {
     <section-client-items [section]="section()" [contextMenu]="contextMenu"></section-client-items>
     } @case (SectionType.OUR_COMPANY) {
     <section-our-company-items [section]="section()" [contextMenu]="contextMenu"></section-our-company-items>
-    } @case (SectionType.MACHINE) {
+    } 
+      <!-- TODO: Focus on here, because after some time, it's gonna change when the machine page is ready -->
+    @case (SectionType.MACHINE) {
     <section-machine-items [section]="section()" [contextMenu]="contextMenu"></section-machine-items>
-    } @case (SectionType.CONTACT_TOP_BAR) {
+    } 
+    <!-- TODO: End -->
+    @case (SectionType.CONTACT_TOP_BAR) {
     <section-contact-top-bar-items [section]="section()" [contextMenu]="contextMenu"></section-contact-top-bar-items>
     } @case (SectionType.MAIN_NAVIGATION_MENU) {
     <section-main-navigation-menu-items [section]="section()"></section-main-navigation-menu-items>

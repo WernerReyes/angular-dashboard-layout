@@ -69,6 +69,8 @@ export class SectionFormService {
                 linkIdControl?.setValidators([Validators.required, FormUtils.noWhitespace()]);
             } else {
                 linkIdControl?.clearValidators();
+                // linkIdControl?.setValue(null);
+                // textButtonControl?.setValue('');
                 textButtonControl?.clearValidators();
             }
 

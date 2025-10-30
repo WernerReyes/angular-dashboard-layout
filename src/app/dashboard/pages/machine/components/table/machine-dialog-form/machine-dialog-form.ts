@@ -19,26 +19,28 @@ import { ImageCompareModule } from 'primeng/imagecompare';
 import { TecnicalSpecifications } from '@/shared/mappers/machine.mapper';
 import { StyleClass } from 'primeng/styleclass';
 import { BadgeModule } from 'primeng/badge';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 @Component({
     selector: 'machine-dialog-form',
     imports: [
-        JsonPipe,
-        TechnicalSpecificationsDialogForm,
-        TechnicalSpecificationsTable,
-        NgClass,
-        ReactiveFormsModule,
-        DialogModule,
-        ButtonModule,
-        InputTextModule,
-        MessageModule,
-        TextareaModule,
-        FileUploadModule,
-        AccordionModule,
-        ImageCompareModule,
-        BadgeModule,
-      
-    ],
+    JsonPipe,
+    TechnicalSpecificationsDialogForm,
+    TechnicalSpecificationsTable,
+    NgClass,
+    ReactiveFormsModule,
+    DialogModule,
+    ButtonModule,
+    InputTextModule,
+    MessageModule,
+    TextareaModule,
+    FileUploadModule,
+    AccordionModule,
+    ImageCompareModule,
+    SelectButtonModule,
+    BadgeModule,
+    
+],
     templateUrl: './machine-dialog-form.html'
 })
 export class MachineDialogForm {
@@ -75,6 +77,11 @@ export class MachineDialogForm {
         }[]
     >([]);
 
+    currentImages = signal<({
+        image: string;
+        disabled: boolean;
+    } | null)[]>(Array.from({ length: 5 }, () => null));
+
     disabledUpload = linkedSignal(() => {
         const images = this.images?.value || [];
         // const newAvailables = (images.length ?? 0) - this.availableImages().length;
@@ -90,6 +97,12 @@ export class MachineDialogForm {
         this.images?.valueChanges.subscribe((imgs) => {
             this.disabledUpload.set((imgs?.length ?? 0) >= 5);
             this.availableImages.set(imgs || []);
+            this.currentImages.update((current) => {
+                for (let i = 0; i < current.length; i++) {
+                    current[i] = imgs?.[i] ? { image: imgs[i], disabled: false } : null;
+                }
+                return current;
+            });
         });
 
         // this.imagesToDelete?.valueChanges.subscribe((imgs) => {
@@ -134,7 +147,6 @@ export class MachineDialogForm {
             // }
         }
 
-           console.log(files.length,  this.selectedImages().length)
 
         if (files.length > this.fileLimit()) {
             const rest = files.length - this.fileLimit();
@@ -209,6 +221,7 @@ export class MachineDialogForm {
 
         this.selectedImages.update((images) => {
             const index = images.findIndex((img) => img.image === image);
+            
             if (index === -1) {
                 images.push({ image, type: 'delete' });
             } else {
@@ -218,12 +231,20 @@ export class MachineDialogForm {
             return [...images];
         });
 
-        this.availableImages.update((available) => {
-            return available.filter((img) => img !== image);
+        // this.availableImages.update((available) => {
+        //     return available.filter((img) => img !== image);
+        // });
+
+        this.currentImages.update((current) => {
+            const index = current.findIndex((value) => value?.image === image);
+            if (index > -1) {
+                current[index] = { image: image, disabled: true };
+            }
+            return current;
         });
     }
 
-    selectedImageOrder(image?: string) {
+    selectedImageOrder(image?: string | null) {
         return this.selectedImages().findIndex((img) => img.image === image) + 1;
     }
 
@@ -282,4 +303,17 @@ export class MachineDialogForm {
             }
         });
     }
+
+
+     updateImagesOptions = computed(() => {
+        const totalToUpdate = this.selectedImages().filter((img) => img.type === 'update').length;
+        const totalToDelete = this.selectedImages().filter((img) => img.type === 'delete').length;
+        
+        return [
+            { label: 'Actualizar', total: totalToUpdate, icon: 'pi pi-pencil' },
+            { label: 'Eliminar', total: totalToDelete, icon: 'pi pi-times' },
+            { label: 'Agregar Nuevos', total: 0, icon: 'pi pi-plus' }
+        ];
+    })
+
 }

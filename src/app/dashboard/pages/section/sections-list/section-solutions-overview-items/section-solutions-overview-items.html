@@ -8,14 +8,28 @@
         </div>
 
         <!-- Grid de soluciones -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+        <div
+            class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto"
+            [ngClass]="{
+                '2xl:grid-cols-3': isPreview(),
+              'lg:grid-cols-4': !isPreview()
+          }"
+        >
             @if (section().items && section().items.length > 0) { @for (item of section().items; track item.id) {
 
-            <p-card class="solution-card h-full" (contextmenu)="contextMenu().onContextMenu($event, item)">
+            <p-card class="solution-card h-full" [ngClass]="{'border border-primary': currentSectionItem()?.id === item.id}" (contextmenu)="contextMenu()?.onContextMenu($event, item)">
                 <ng-template #header>
                     <div class="flex justify-center pt-5">
                         <div class="w-24 h-24 md:w-28 md:h-28 bg-blue-600 dark:bg-blue-500 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-2xl group-hover:scale-110 transition-all duration-500">
-                            <img [src]="item.iconUrl" alt="{{ item.title }} Icon" class="w-12 h-12 md:w-16 md:h-16 object-contain" />
+                            <!-- <img [src]="item.iconUrl" alt="{{ item.title }} Icon" class="w-12 h-12 md:w-16 md:h-16 object-contain" /> -->
+                            <icon-image
+                                [item]="item"
+                                imageClass="size-12 md:size-16 object-contain"
+                                [imageErrorClass]="{
+                                iconClass: '!size-12',
+                                containerClass: 'h-auto rounded-full items-center justify-center'
+                              }"
+                            ></icon-image>
                         </div>
                     </div>
                 </ng-template>
@@ -23,7 +37,7 @@
                 <ng-template #title>
                     <span class="text-center block w-full">
                         <!-- Elemento vacío para balance -->
-                        
+
                         <!-- Título centrado -->
                         {{ item.title }}
 
@@ -43,9 +57,7 @@
                 }
             </p-card>
 
-            }
-           
-            } @else {
+            } } @else {
             <div class="w-fit mx-auto col-span-full">
                 <empty-field-message textContent="No hay soluciones disponibles"></empty-field-message>
             </div>

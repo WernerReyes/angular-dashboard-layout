@@ -14,7 +14,7 @@
                 <!-- Cards de Visión y Misión -->
                 <div class="space-y-8">
                     @if (section().items && section().items.length > 0) { @for (item of section().items; track item.id) {
-                    <p-card (contextmenu)="contextMenu().onContextMenu($event, item)">
+                    <p-card (contextmenu)="contextMenu()?.onContextMenu($event, item)" [ngClass]="{'border border-primary': currentSectionItem()?.id === item.id}">
                         <ng-template #header>
                             <div class="flex items-center space-x-3 px-6 bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/30 dark:to-primary-900/30">
                                 <div class="flex items-center space-x-2 primary">
@@ -32,9 +32,7 @@
                         <empty-field-message className="mx-auto my-4 max-w-lg" textContent="Descripción pendiente"></empty-field-message>
                         }
                     </p-card>
-                    }
-                   
-                    } @else {
+                    } } @else {
                     <!-- Contenido por defecto -->
                     <empty-field-message textContent="No hay elementos de misión y visión disponibles"></empty-field-message>
 
@@ -45,9 +43,9 @@
             <!-- Image placeholder -->
             <div class="relative flex justify-center lg:justify-end">
                 <div class="relative w-full max-w-lg">
-                    <div class="w-full md:h-[600px]  dark:bg-slate-900 rounded-2xl shadow-2xl relative overflow-hidden transition-colors duration-300 flex items-center justify-center">
+                    <div class="w-full md:h-[600px] dark:bg-slate-900 rounded-2xl shadow-2xl relative overflow-hidden transition-colors duration-300 flex items-center justify-center">
                         @if (section().image) {
-                        <img [src]="section().image" alt="Mapa del Perú" class="w-full h-full  object-contain opacity-80" />
+                        <img [src]="section().image" alt="Mapa del Perú" class="w-full h-full object-contain opacity-80" />
                         } @else {
                         <empty-field-message className="w-full h-full">
                             <ng-template #content>

@@ -37,7 +37,7 @@ export class Menu {
                         icon: 'pi pi-th-large',
                         // routerLink: ['/dashboard/sections'],
                         items: [
-                            { label: 'Layouts', icon: 'pi pi-th-large', routerLink: ['/dashboard/sections/layouts'] },
+                            { label: 'Plantillas reutilizables', icon: 'pi pi-th-large', routerLink: ['/dashboard/sections/layouts'] },
                             { label: 'Personalizadas', icon: 'pi pi-cog', routerLink: ['/dashboard/sections/custom'] }
                         ]
                     },

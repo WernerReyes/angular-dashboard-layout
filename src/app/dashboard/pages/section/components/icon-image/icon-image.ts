@@ -15,8 +15,8 @@ export class IconImage {
 
     imageClass = input();
     imageErrorClass = input<{
-        iconClass: string;
-        containerClass: string;
+        iconClass?: string;
+        containerClass?: string;
     }>();
 
     IconType = IconType;

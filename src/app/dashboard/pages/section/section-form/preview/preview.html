@@ -1,6 +1,4 @@
-
-{{ sectionPreview2() | json }};
-@let preview = sectionPreview;
+{{ currentSectionItem() | json }}; @let preview = sectionPreview();
 <section class="rounded-2xl p-6 bg-white dark:bg-surface-800 shadow-md transition-all duration-300">
     <!-- <pre>
         {{ section()?.menus    | json }}
@@ -11,7 +9,7 @@
     <span class="block p-message p-2 p-message-info">Los campos que llenen en esta sección no se ven visualmente. El contenido se verá a través de los slides.</span>
     }
     <div class="mt-4">
-        <section-hero-items [sectionItems]="items"></section-hero-items>
+        <section-hero-items [sectionItems]="items()"></section-hero-items>
     </div>
     } @case (SectionType.WHY_US) {
     <section-why-us-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-why-us-items>
@@ -25,22 +23,37 @@
     @case (SectionType.VALUE_PROPOSITION) {
     <section-value-proposition-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-value-proposition-items>
     } @case (SectionType.CLIENT) {
-    <section-client-items [section]="sectionCreate" [currentSectionItem]="currentSectionItem()"></section-client-items>
+    <section-client-items [section]="sectionCreate()" [currentSectionItem]="currentSectionItem()"></section-client-items>
     } @case (SectionType.OUR_COMPANY) {
     <section-our-company-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-our-company-items>
-    } @case (SectionType.CONTACT_US) {
-    <section-contact-us-items [currentSectionItem]="currentSectionItem()" [isPreview]="true" [section]="preview"></section-contact-us-items>
     }
     <!-- TODO: Focus on here, because after some time, it's gonna change when the machine page is ready -->
     @case (SectionType.MACHINE) {
-    <section-machine-items [section]="sectionPreview" [currentSectionItem]="currentSectionItem()"></section-machine-items>
+    <section-machine-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-machine-items>
     }
     <!-- TODO: End -->
-    @case (SectionType.CONTACT_TOP_BAR) {
+    @case (SectionType.CONTACT_TOP_BAR) { @if (level() === 'section') {
     <span class="block p-message p-2 p-message-info w-4/5 mx-auto mb-5">Los campos que llenen en esta sección no se ven visualmente. El contenido se verá al agregar los items de contacto </span>
-    <section-contact-top-bar-items [section]="sectionPreview!" [currentSectionItem]="currentSectionItem()"></section-contact-top-bar-items>
+    }
+    <section-contact-top-bar-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-contact-top-bar-items>
     } @case (SectionType.MAIN_NAVIGATION_MENU) {
     <!-- <span class="block p-message p-2 p-message-info w-4/5 mx-auto mb-5">Los campos que llenen en esta sección no se ven visualmente. El contenido se verá al agregar los items del menú de navegación principal </span> -->
-    <section-main-navigation-menu-items [section]="sectionPreview!"></section-main-navigation-menu-items>
-    } }
+    <section-main-navigation-menu-items [section]="preview"></section-main-navigation-menu-items>
+    } @case (SectionType.CTA_BANNER) {
+    <section-cta-banner-items [section]="preview"></section-cta-banner-items>
+    } @case (SectionType.SOLUTIONS_OVERVIEW) {
+    <section-solutions-overview-items [section]="preview" [isPreview]="true" [currentSectionItem]="currentSectionItem()"></section-solutions-overview-items>
+    } @case (SectionType.MISSION_VISION) {
+    <section-mission-vision-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-mission-vision-items>
+    } @case (SectionType.CONTACT_US) {
+    <section-contact-us-items [currentSectionItem]="currentSectionItem()" [isPreview]="true" [section]="preview"></section-contact-us-items>
+    } @case (SectionType.FOOTER) {
+    <section-footer-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-footer-items>
+    } @case (SectionType.ADVANTAGES) {
+    <section-advantages-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-advantages-items>
+    } @case (SectionType.SUPPORT_MAINTENANCE) {
+    <section-support-maintenance-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-support-maintenance-items>
+    } @default {}
+
+}
 </section>

@@ -5,15 +5,18 @@ import { SectionItem } from '@/shared/interfaces/section-item';
 import { CardModule } from 'primeng/card';
 import { ContextMenuCrud } from '../../components/context-menu-crud/context-menu-crud';
 import { EmptyFieldMessage } from '../../components/empty-field-message/empty-field-message';
+import { IconImage } from '../../components/icon-image/icon-image';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'section-support-maintenance-items',
-    imports: [CardModule, EmptyFieldMessage],
+    imports: [NgClass, CardModule, IconImage, EmptyFieldMessage],
     templateUrl: './section-support-maintenance-items.html'
 })
 export class SectionSupportMaintenanceItems {
     section = input.required<Section>();
-    contextMenu = input.required<ContextMenuCrud<SectionItem>>();
+    contextMenu = input<ContextMenuCrud<SectionItem>>();
+    currentSectionItem = input<SectionItem | null>();
 
     
 }

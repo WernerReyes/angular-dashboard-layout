@@ -24,6 +24,7 @@ import { FileUpload } from '../components/file-upload/file-upload';
 import { ImageType } from '@/shared/interfaces/section-item';
 import { NavigationMenuForm } from './navigation-menu-form/navigation-menu-form';
 import { Preview } from './preview/preview';
+import { MachineForm } from './machine-form/machine-form';
 
   
 @Component({
@@ -33,6 +34,7 @@ import { Preview } from './preview/preview';
         ShowLinkSwitch,
         FileUpload,
         WhyUsForm,
+        MachineForm,
         NavigationMenuForm,
         ReactiveFormsModule,
         InputTextModule,
@@ -105,7 +107,8 @@ export class SectionForm {
                 fileImage: formValue.imageType === ImageType.LOCAL ? (formValue.imageFile as any) : null,
                 imageUrl: formValue.imageType === ImageType.URL ? formValue.imageUrl || null : null,
                 menusIds: formValue.menusIds ? formValue.menusIds.map(({ data }) => Number(data)) : [],
-                mode: this.mode()
+                mode: this.mode(),
+                machinesIds: formValue.machinesIds || []
             };
 
             console.log(sectionData);

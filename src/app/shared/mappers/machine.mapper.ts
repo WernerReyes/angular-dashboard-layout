@@ -1,5 +1,5 @@
 import { Machine } from '../interfaces/machine';
-import { CategoryType } from './category.mapper';
+import { CategoryEntity, CategoryType, mapCategoryEntityToCategory } from './category.mapper';
 
 export type TecnicalSpecifications = {
     id: string;
@@ -16,6 +16,7 @@ export interface MachineEntity {
     manual: string | null;
     technical_specifications: TecnicalSpecifications[] | null;
     category_id: number;
+    category: CategoryEntity | null;
     created_at: Date;
     updated_at: Date;
 }
@@ -28,6 +29,7 @@ export const mapMachineEntityToMachine = (entity: MachineEntity): Machine => {
         name: entity.name,
         images: entity.images,
         manual: entity.manual,
+        category: entity.category ? mapCategoryEntityToCategory(entity.category) : null,
         technicalSpecifications: entity.technical_specifications,
         categoryId: entity.category_id,
         createdAt: entity.created_at,

@@ -31,6 +31,7 @@ export class SectionFormService {
         linkId: [null],
         active: [true, [Validators.required]],
 
+        machinesIds: [[] as number[]],
         menusIds: [[] as TreeNode[]]
     });
 
@@ -115,6 +116,8 @@ export class SectionFormService {
             currentImage: section.image || '',
             imageUrl: '',
             imageType: ImageType.NONE,
+
+            machinesIds: section.machines ? section.machines.map((machine) => machine.id) : [],
 
             menusIds: section.menus
                 ? section.menus.map((menu) => {

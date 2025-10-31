@@ -87,7 +87,7 @@ export class SectionItemForm {
                 imageUrl: formValue.imageType === ImageType.URL ? formValue.imageUrl || null : null,
                 backgroundFileImage: formValue.imageBackType === ImageType.LOCAL ? (formValue.imageBackFile as any) : null,
                 backgroundImageUrl: formValue.imageBackType === ImageType.URL ? formValue.imageBackUrl || null : null,
-                categoryId: formValue.categoryId || null,
+                // categoryId: formValue.categoryId || null,
                 inputType: formValue.inputType || null,
                 
                 fileIcon: formValue.iconFile as any,

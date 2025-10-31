@@ -1,7 +1,7 @@
 import { FilterByIdsPipe } from '@/dashboard/pipes/filter-by-ids-pipe';
-import { CategoryService } from '@/dashboard/services/category.service';
-import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
+import { MachineService } from '@/dashboard/services/machine.service';
 import { ImageError } from '@/shared/components/error/image/image';
+import { Machine } from '@/shared/interfaces/machine';
 import type { Section } from '@/shared/interfaces/section';
 import type { SectionItem } from '@/shared/interfaces/section-item';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -15,34 +15,29 @@ import { SplitterModule } from 'primeng/splitter';
 import type { ContextMenuCrud } from '../../components/context-menu-crud/context-menu-crud';
 @Component({
     selector: 'section-machine-items',
-    imports: [ErrorBoundary, ImageError, FilterByIdsPipe, SplitterModule, FormsModule, ListboxModule, CardModule, ButtonModule, MenuModule],
+    imports: [ImageError, FilterByIdsPipe, SplitterModule, FormsModule, ListboxModule, CardModule, ButtonModule, MenuModule],
     templateUrl: './section-machine-items.html'
 })
 export class SectionMachineItems {
+    private readonly machineService = inject(MachineService);
     private readonly breakpointObserver = inject(BreakpointObserver);
-    private readonly categoryService = inject(CategoryService);
 
-
-    categoryList = this.categoryService.categoryListResource;
+    machinesList = this.machineService.machinesListRs;
 
     section = input.required<Section>();
-    contextMenu = input<ContextMenuCrud<SectionItem>>();
-    currentSectionItem = input<SectionItem | null>(null);
-
- 
+    
+    
     selectedCategoryId = signal<number | null>(null);
 
-    categoriesIds = computed(() => {
-        const ids = this.section()
-            .items.map((item) => item.categoryId)
-            .filter((id): id is number => id !== null);
+    categories = computed(() => {
+        const uniqueCategories = this.section()
+            ?.machines?.map((machine) => machine.category)
+            .filter((category, index, self) => category != null && index === self.findIndex((c) => c?.id === category.id));
 
-        return ids.length ? ids : [-1];
+        return uniqueCategories || [];
     });
 
     isMobile = signal<boolean>(false);
-
-   
 
     constructor() {
         this.breakpointObserver

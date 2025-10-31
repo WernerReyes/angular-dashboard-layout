@@ -13,7 +13,6 @@ export interface SectionItem {
     linkId: number | null;
     order: number;
     sectionId: number;
-    categoryId: number | null;  
     inputType: InputType | null;
     link?: Link | null;
     icon: Icon | null;

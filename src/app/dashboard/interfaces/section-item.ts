@@ -20,7 +20,7 @@ export interface CreateSectionItem {
     iconType: IconType | null;
 
 
-    categoryId: number | null;
+    // categoryId: number | null;
     inputType: InputType | null;
 }
 

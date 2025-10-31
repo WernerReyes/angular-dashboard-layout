@@ -1,4 +1,3 @@
-<!-- @let isEditMode = !!(form.controls['id'].value); -->
 <p-dialog [(visible)]="display" [modal]="true" [closable]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" (visibleChange)="closeDialog()" [style]="{ width: '40rem' }">
     <ng-template #header>
         <div class="flex items-center gap-2">
@@ -33,27 +32,7 @@
 
         <div class="flex flex-col gap-2">
             <label for="machine-category">Imágenes</label>
-            <!-- @if (isEditMode) { 
-                
-                
-                @let images = form.controls['images'].value;
-            <div>
-                @if (images && images.length > 0) {
-                <div class="grid justify-center gap-5 [grid-template-columns:repeat(auto-fit,minmax(100px,1fr))] max-w-[400px] mx-auto">
-                    @for (image of images; track image) {
-                    <div
-                     [class.selected-image]="selectedImages().includes(image)"
-                    class="relative flex justify-center" (click)="onSelectedImage(image)">
-                        <img [src]="image" alt="Machine Image" class="size-25 object-cover rounded" />
-                    </div>
-                    }
-                </div>
-                } @else {
-                <span class="text-muted-color">No hay imágenes cargadas.</span>
-                }
-            </div>
 
-            } @else { -->
             <div>
                 <p-fileupload
                     #fileUp
@@ -62,7 +41,7 @@
                     (onSelect)="onImagesSelect($event)"
                     [showUploadButton]="false"
                     [multiple]="true"
-                    [disabled]="disabledUpload()"
+                    [disabled]="isEditMode && (disabledUpload() || !optionSelectButton())"
                     accept="image/*"
                     maxFileSize="5000000"
                     mode="basic"
@@ -73,18 +52,17 @@
                     <ng-template #content let-files let-removeFileCallback="removeFileCallback" let-index="index">
                         @if (isEditMode) {
 
-                        <p-selectbutton [disabled]="true" [options]="updateImagesOptions()"  optionLabel="label" class="mx-auto" aria-labelledby="basic">
+                        <p-selectbutton [formControl]="optionSelectButtonControl" optionDisabled="constant" [options]="updateImagesOptions()" optionLabel="label" class="mx-auto" optionValue="value" aria-labelledby="basic">
                             <ng-template #item let-option>
                                 <span class="flex items-center gap-2">
                                     <i class="pi" [class]="option.icon"></i>
                                     <span>{{ option.label }}</span>
                                     <!-- <span class="ml-auto">{{ option.total }}</span> -->
-                                     <p-badge [value]="option.total"  class="ml-auto"></p-badge>
+                                    <p-badge [value]="option.total" class="ml-auto"></p-badge>
                                 </span>
                             </ng-template>
                         </p-selectbutton>
-                        @let images = form.controls['images'].value; @if (images && images.length > 0) { {{fileLimit()}} {{disabledUpload()}}
-                  
+                        @let images = form.controls['images'].value; @if (images && images.length > 0) { {{fileLimit()}} {{disabledUpload()}} {{optionSelectButton()}}
                         <div class="grid gap-3 w-full mx-autojustify-center grid-cols-3 sm:grid-cols-5 xl:grid-cols-3">
                             @for (value of currentImages(); let i = $index; track i) { @let indexOrder = selectedImageOrder(value?.image); @if (value && !value?.disabled) {
 
@@ -92,23 +70,16 @@
                                 class="mx-auto relative group cursor-pointer rounded border-2 transition-all duration-200"
                                 [ngClass]="{
                                 'border-primary bg-primary/10 p-1': includeImage(value!.image),
+                                'opacity-50 cursor-not-allowed': optionSelectButton() === 'new'
                                 }"
-                                (click)="onSelectedImage($event, value!.image)"
+                                (click)="optionSelectButton() === 'update' ? onSelectedImage($event, value!.image) : null"
                             >
-                                <img [src]="value!.image" alt="Machine Image" class="size-20 object-cover rounded"
-                                    
-                                />
+                                <img [src]="value!.image" alt="Machine Image" class="size-20 object-cover rounded" />
                                 <!-- <span>{{ indexOrder }}</span> -->
                                 @if (indexOrder > 0) {
 
                                 <p-badge [value]="indexOrder" severity="info" class="absolute top-1 left-1 text-xs"></p-badge>
-                                }
-                                <!-- [ngClass]="{
-                                     'group-hover:opacity-100': !includeImage(image),
-                                  
-                                 }" -->
-
-                              
+                                } @if (optionSelectButton() === 'delete') {
 
                                 <p-button
                                     icon="pi pi-times"
@@ -119,20 +90,26 @@
                                     styleClass="!bg-white"
                                     size="small"
                                     [ngClass]="{
-                                     'group-hover:opacity-100': !includeImage(value!.image),
-                                  
-                                 }"
+                                         'group-hover:opacity-100': !includeImage(value!.image),
+                                      
+                                     }"
                                     (click)="!includeImage(value!.image) ? removeImage($event, value!.image) : null"
                                     class="absolute top-1 right-1 opacity-0 transition-opacity duration-200"
                                 />
-                                
+                                }
                             </div>
                             } @else {
+                            <!-- {{value | json}} -->
                             <div class="relative size-20 mx-auto flex items-center justify-center border-2 border-dashed border-gray-300 rounded cursor-not-allowed">
                                 @if (indexOrder > 0) {
 
                                 <p-badge [value]="indexOrder" severity="info" class="absolute top-1 left-1 text-xs"></p-badge>
+                                } @if (value && value?.disabled) {
+                                <!-- styleClass="!bg-white" -->
+                                <!-- severity="danger" -->
+                                <p-button icon="pi pi-refresh" [rounded]="true" [text]="true" [raised]="true" size="small" (click)="removeImage($event, value!.image)" class="absolute top-1 right-1 opacity-100 transition-opacity duration-200" />
                                 }
+
                                 <i class="pi pi-image !text-3xl text-gray-400"></i>
                             </div>
                             } }
@@ -161,27 +138,6 @@
                     </ng-template>
 
                     <ng-template #empty>
-                        <!-- @if (isEditMode) { @let images = form.controls['images'].value; @if (images && images.length > 0) { {{selectedImages() | json}}
-                        <div class="grid gap-3 w-full mx-autojustify-center grid-cols-3 sm:grid-cols-5 xl:grid-cols-3">
-                            @for (index of maxImagesArray; track index) { @let image = images[index - 1]; @if (image) { 
-                            <div
-                                class="mx-auto cursor-pointer rounded border-2 transition-all duration-200"
-                                [ngClass]="{
-                                'border-primary bg-primary/10 p-1': selectedImages().includes(image),
-                            }"
-                                (click)="onSelectedImage(image)"
-                            >
-                                <img [src]="image" alt="Machine Image" class="size-20 object-cover rounded" />
-                            </div>
-                            } @else {
-                            <div class="size-20 mx-auto flex items-center justify-center border-2 border-dashed border-gray-300 rounded cursor-not-allowed">
-                                <i class="pi pi-image !text-3xl text-gray-400"></i>
-                            </div>
-                            } }
-                        </div>
-
-                        } } -->
-
                         <div class="flex items-center justify-center w-full">
                             <label
                                 for="dropzone-file"
@@ -216,7 +172,18 @@
         <div class="flex flex-col gap-2">
             <label for="machine-category">Manual ( Opcional )</label>
             <div>
-                <p-fileupload [showCancelButton]="false" (onSelect)="onManualSelect($event)" [showUploadButton]="false" accept="application/pdf" maxFileSize="5000000" mode="basic" chooseLabel="Seleccionar PDF" class="w-full" mode="advanced">
+                <p-fileupload
+                    #manualFileUp
+                    [showCancelButton]="false"
+                    (onSelect)="onManualSelect($event)"
+                    [showUploadButton]="false"
+                    accept="application/pdf"
+                    maxFileSize="5000000"
+                    mode="basic"
+                    chooseLabel="Seleccionar PDF"
+                    class="w-full"
+                    mode="advanced"
+                >
                     <ng-template #content let-files let-uploadedFiles="uploadedFiles" let-removeFileCallback="removeFileCallback" let-removeUploadedFileCallback="removeUploadedFileCallback">
                         <div class="flex flex-col gap-2">
                             @for (file of files; track file.name) {
@@ -234,6 +201,16 @@
                     </ng-template>
 
                     <ng-template #empty>
+                        @let manual = form.controls['currentManual'].value; @if (manual) {
+                        <div class="flex items-center justify-center w-full">
+                            <a href="{{ manual }}" target="_blank" class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg bg-gray-50 hover:bg-gray-100">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <i class="pi pi-file-pdf !text-4xl text-red-600"></i>
+                                    <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Ver</span> el manual PDF</p>
+                                </div>
+                            </a>
+                        </div>
+                        } @else {
                         <div class="flex items-center justify-center w-full">
                             <label
                                 for="dropzone-file"
@@ -246,6 +223,7 @@
                                 </div>
                             </label>
                         </div>
+                        }
                     </ng-template>
                 </p-fileupload>
                 @if (form.controls['manualFile'].errors) {
@@ -258,6 +236,6 @@
     <technical-specifications-dialog-form [(display)]="displayTechnicalSpecifications"></technical-specifications-dialog-form>
 
     <ng-template #footer>
-        <button form="machine-form" [loading]="loading()" type="submit" pButton icon="pi pi-save" [disabled]="form.invalid || form.pristine" label="Guardar"></button>
+        <button form="machine-form" [loading]="loading()" type="submit" pButton icon="pi pi-save" [disabled]="form.invalid" label="Guardar"></button>
     </ng-template>
 </p-dialog>

@@ -1,5 +1,6 @@
 import { SectionMode, SectionType } from '../mappers/section.mapper';
 import { Link } from './link';
+import { Machine } from './machine';
 import { Menu } from './menu';
 import { Page } from './page';
 import { SectionItem } from './section-item';
@@ -27,6 +28,7 @@ export interface Section {
     menus: Menu[];
     pages: (Page & { pivot?: PivotPages })[] | null;
     pivotPages: PivotPages[] | null;
+    machines: Machine[] | null;
     
 }
 

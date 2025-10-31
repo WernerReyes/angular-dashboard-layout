@@ -41,11 +41,11 @@ export class Menu {
                             { label: 'Personalizadas', icon: 'pi pi-cog', routerLink: ['/dashboard/sections/custom'] }
                         ]
                     },
-                    {
-                        label: 'Categorías',
-                        icon: 'pi pi-tags',
-                        routerLink: ['/dashboard/categories']
-                    },
+                    // {
+                    //     label: 'Categorías',
+                    //     icon: 'pi pi-tags',
+                    //     routerLink: ['/dashboard/categories']
+                    // },
                     {
                         label: 'Maquinas',
                         icon: 'pi pi-calculator',

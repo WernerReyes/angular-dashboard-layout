@@ -11,6 +11,7 @@ export interface CreateSection {
     pageId: number | null;
     fileImage?: File | null;
     imageUrl?: string | null;
+    machinesIds?: number[] | null;
     menusIds?: number[] | null;
     mode: SectionMode;
 }

@@ -3,9 +3,9 @@
     <div class="flex flex-col gap-2">
         <label>Selecciona una categoría</label>
         <!-- [selectedSectionItem]="selectedSectionItem()" -->
-        <app-error-boundary [resource]="categoriesList" errorMessage="Ocurrió un error cargando las categorías." emptyMessage="No hay categorías disponibles. Por favor, crea una categoría primero.">
-            <ng-template #content let-categories>
-                <p-select id="category" class="w-full" formControlName="categoryId" [options]="categories" optionLabel="title" optionValue="id" placeholder="Selecciona una categoría"></p-select>
+        <app-error-boundary [resource]="machinesList" errorMessage="Ocurrió un error cargando las máquinas." emptyMessage="No hay máquinas disponibles. Por favor, crea una máquina primero.">
+            <ng-template #content let-machines>
+                <p-select id="machine" class="w-full" [options]="machines" optionLabel="title" optionValue="id" placeholder="Selecciona una máquina"></p-select>
             </ng-template>
         </app-error-boundary>
     </div>

@@ -118,7 +118,13 @@
                     <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
                 </div>
 
-                } @case (SectionType.CONTACT_US) {
+                }
+                
+                @case (SectionType.MACHINE) {
+                <machine-form [form]="form"></machine-form>
+                }
+
+                @case (SectionType.CONTACT_US) {
                 <common-inputs
                     [form]="form"
                     [includeFields]="[
@@ -175,7 +181,7 @@
         </div>
     </div>
 
-    <!-- TODO: <pre>{{ form.value | json }}</pre> -->
+    TODO: <pre>{{ form.value | json }}</pre>
 
     <ng-template #footer>
         <button pButton [loading]="loading()" type="submit" form="menu-form" icon="pi pi-save" [disabled]="form.invalid" label="Guardar"></button>

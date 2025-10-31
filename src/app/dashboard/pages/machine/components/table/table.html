@@ -6,7 +6,9 @@
     <ng-template #content let-categories>
         <p-confirm-dialog />
         <p-contextmenu #cm [model]="items" (onHide)="selectedCategory.set(null)" />
-        <p-table [value]="categories" [(contextMenuSelection)]="selectedCategory" [contextMenu]="cm" sortField="title" sortMode="single" dataKey="id" rowGroupMode="subheader" groupRowsBy="id" [tableStyle]="{'min-width': '70rem'}">
+        <p-table 
+          
+        [value]="categories" [(contextMenuSelection)]="selectedCategory" [contextMenu]="cm" sortField="title" sortMode="single" dataKey="id" rowGroupMode="subheader" groupRowsBy="id" [tableStyle]="{'min-width': '70rem'}">
             <ng-template #header>
                 <tr>
                     <th style="width: 10%">Nombre</th>
@@ -19,6 +21,17 @@
                     <th style="width: 20%">Última Modificación</th>
                 </tr>
             </ng-template>
+
+            <ng-template #emptymessage>
+                <!-- <tr class="flex flex-col items-center bg-red-400 justify-center py-8 text-surface-500">                   -->
+                    <td colspan="7" class="text-center p-4">
+                        <i class="pi pi-inbox text-4xl mb-3"></i>
+                        <div class="font-semibold text-lg mb-1">No se encontraron categorías</div>
+                        <div class="text-sm">Intenta ajustar tu búsqueda o crea una nueva categoría para comenzar.</div>
+                    </td>
+                <!-- </tr>      -->
+            </ng-template>
+
             <ng-template #groupheader let-category let-rowIndex="rowIndex" let-expanded="expanded">
                 <tr [pContextMenuRow]="category">
                     <td colspan="7" class="w-full">

@@ -25,9 +25,10 @@ export class MachineFormService {
         fullDescription: ['', [Validators.required, Validators.minLength(20)]],
         fileImages: this.fb.control<File[]>([], [Validators.required, Validators.minLength(1)]),
         manualFile: [null as File | null],
+        currentManual: [null as string | null],
         images: [[] as string[]],
         manual: ['' as string | null],
-        imagesToDelete: [[] as { id: string, delete: string; newFile?: File | null }[]],
+        imagesToDelete: [[] as string[]],
         technicalSpecifications: this.fb.array<TecnicalSpecifications>([], [Validators.required, Validators.minLength(1)]),
         categoryId: [null as number | null, [Validators.required]]
     });
@@ -50,7 +51,8 @@ export class MachineFormService {
             fullDescription: machine.longDescription,
             images: machine.images || [],
             manual: machine.manual || null,
-            categoryId: machine.categoryId
+            categoryId: machine.categoryId,
+            currentManual: machine.manual || null
         });
 
         const currentImages = this.machineForm.get('images')?.value as string[];

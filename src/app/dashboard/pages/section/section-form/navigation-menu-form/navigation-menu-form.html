@@ -13,6 +13,7 @@
         <ng-template #content let-menus>
 
                 <p-treeSelect
+                     emptyMessage="No se encontraron menús."
                     [options]="menusListSelect()"
                     formControlName="menusIds"
                     [overlayOptions]="{

@@ -1,5 +1,6 @@
 import type { CategoryType } from "../mappers/category.mapper";
 import type { TecnicalSpecifications } from "../mappers/machine.mapper";
+import { Category } from "./category";
 
 export interface Machine {
     readonly id: number;
@@ -10,6 +11,7 @@ export interface Machine {
     readonly manual: string | null;
     readonly technicalSpecifications: TecnicalSpecifications[] | null;
     readonly categoryId: number;
+    readonly category: Category | null;
     readonly createdAt: Date;
     readonly updatedAt: Date;
 }

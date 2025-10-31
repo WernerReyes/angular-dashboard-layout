@@ -34,7 +34,7 @@ export class SectionItemFormService {
         iconType: [IconType.LIBRARY],
         icon: [null as Icon  | null],
 
-        categoryId: [null],
+        // categoryId: [null],
 
         showLink: [false],
         typeLink: [LinkType.PAGE as LinkType | null], // true = internal, false = external
@@ -176,7 +176,7 @@ export class SectionItemFormService {
             typeLink: section.link?.type ?? null,
             linkId: section.linkId ?? (null as any),
 
-            categoryId: section.categoryId ?? (null as any),
+            // categoryId: section.categoryId ?? (null as any),
 
             imageFile: null,
             currentImage: section.image || '',

@@ -7,6 +7,7 @@ import { CommonInputs } from '../../../components/common-inputs/common-inputs';
 import { FileUpload } from '../../../components/file-upload/file-upload';
 import { ShowLinkSwitch } from '../../../components/show-link-switch/show-link-switch';
 import { SectionItemFormService } from '../../../services/section-item-form.service';
+import { MachineService } from '@/dashboard/services/machine.service';
 
 @Component({
   selector: 'machine-form',
@@ -16,8 +17,11 @@ import { SectionItemFormService } from '../../../services/section-item-form.serv
 export class MachineForm {
   private readonly categoryService = inject(CategoryService);
   private readonly sectionItemFormService = inject(SectionItemFormService);
+  private readonly machineService = inject(MachineService);
 
   form = this.sectionItemFormService.form
 
   categoriesList = this.categoryService.categoryListResource;
+
+  machinesList = this.machineService.machinesListRs;
 }

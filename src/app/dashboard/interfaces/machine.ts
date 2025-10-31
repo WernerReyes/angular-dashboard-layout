@@ -9,3 +9,9 @@ export interface CreateMachine {
     readonly technicalSpecifications: TecnicalSpecifications[];
     readonly categoryId: number;
 }
+
+export interface UpdateMachine extends Partial<CreateMachine> {
+    readonly imagesToUpdate?: { id: string; oldImage: string; newFile: File }[];
+    readonly imagesToRemove?: string[];
+    readonly id: number;
+}

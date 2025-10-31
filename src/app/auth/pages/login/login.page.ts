@@ -23,7 +23,6 @@ import type { LoginRequest } from '@/auth/interfaces/login';
         // AppFloatingConfigurator
     ],
     templateUrl: './login.page.html',
-    styleUrl: './login.page.scss',
    
 })
 export default class LoginPage {

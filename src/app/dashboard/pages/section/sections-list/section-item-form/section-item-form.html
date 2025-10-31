@@ -96,9 +96,12 @@
                     isTextarea: true
                 }]"
                 ></common-inputs>
-                } @case (SectionType.MACHINE) {
+                } 
+                <!-- @case (SectionType.MACHINE) {
                 <machine-form></machine-form>
-                } @case (SectionType.CONTACT_TOP_BAR) {
+                }  -->
+                
+                @case (SectionType.CONTACT_TOP_BAR) {
                 <common-inputs
                     [form]="form"
                     [includeFields]="[{

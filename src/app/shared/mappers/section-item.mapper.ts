@@ -33,7 +33,6 @@ export interface SectionItemEntity {
     link_id: number | null;
     order_num: number;
     section_id: number;
-    category_id: number | null;
     input_type: InputType | null;
     link: LinkEntity | null;
     icon: Icon | null;
@@ -52,7 +51,6 @@ export const mapSectionItemEntityToSectionItem = (entity: SectionItemEntity): Se
     linkId: entity.link_id ? Number(entity.link_id) : null,
     order: entity.order_num,
     sectionId: Number(entity.section_id),
-    categoryId: entity.category_id ? Number(entity.category_id) : null,
     inputType: entity.input_type,
     link: entity.link ? mapLinkEntityToLink(entity.link) : null,
     icon: entity.icon,

@@ -22,6 +22,7 @@ import { SectionMissionVisionItems } from '../../sections-list/section-mission-v
 import { SectionFooterItems } from '../../sections-list/section-footer-items/section-footer-items';
 import { SectionAdvantagesItems } from '../../sections-list/section-advantages-items/section-advantages-items';
 import { SectionSupportMaintenanceItems } from '../../sections-list/section-support-maintenance-items/section-support-maintenance-items';
+import { MachineService } from '@/dashboard/services/machine.service';
 
 @Component({
     selector: 'preview',
@@ -47,22 +48,23 @@ import { SectionSupportMaintenanceItems } from '../../sections-list/section-supp
     templateUrl: './preview.html'
 })
 export class Preview {
+    private readonly sectionFormService = inject(SectionFormService);
+    private readonly sectionItemFormService = inject(SectionItemFormService);
+    private readonly machineService = inject(MachineService);
+
     level = input<'section' | 'item'>('section');
     section = input<Section | null>(null);
     currentSectionItem = input<SectionItem | null>(null);
-    readonly sectionFormService = inject(SectionFormService);
-    readonly sectionItemFormService = inject(SectionItemFormService);
 
     SectionType = SectionType;
 
     sectionFormValue = toSignal(this.sectionFormService.form.valueChanges, {
-    initialValue: this.sectionFormService.form.value
-  });
+        initialValue: this.sectionFormService.form.value
+    });
 
     formValue = toSignal(this.sectionItemFormService.form.valueChanges, {
-    initialValue: this.sectionItemFormService.form.value
-  });
-
+        initialValue: this.sectionItemFormService.form.value
+    });
 
     sectionPreview = computed<Section>(() => {
         // if (this.level() === 'section') {
@@ -130,10 +132,19 @@ export class Preview {
                 }) || [],
             // textButton: value.showLink ? value.textButton || null : null,
             subtitle: value.subtitle ?? null,
+            machines: this.getMachines(value).filter((machine) => (value.machinesIds || []).includes(machine.id)),
             linkId: value.showLink ? value.linkId || null : null,
             pages: [],
             pivotPages: []
         };
+    }
+
+    private getMachines(value: any ) {
+        console.log('GET MACHINES', this.section()?.type, value);
+        if ((!this.section() && value?.type !== SectionType.MACHINE) || (this.section() && this.section()?.type !== SectionType.MACHINE)) return [];
+        console.log('GET MACHINES', this.section()?.type);
+        const machines = this.machineService.machinesListRs;
+        return machines.hasValue() ? machines.value() : [];
     }
 
     private getImage(value: any, item?: SectionItem): string {
@@ -172,10 +183,10 @@ export class Preview {
             iconType: value.iconType || null,
             inputType: value.inputType || null,
             image: this.getImage(value),
-            categoryId: null,
+            // categoryId: null,
             order: 0,
             link: null,
-            iconUrl: value.iconFile ? this.getBlobUrl(value.iconFile) :  '',
+            iconUrl: value.iconFile ? this.getBlobUrl(value.iconFile) : ''
 
             // description: value.content ?? '',
             // icon: this.getImage,

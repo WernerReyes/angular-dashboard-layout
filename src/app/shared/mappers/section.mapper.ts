@@ -1,5 +1,6 @@
 import { Section } from '../interfaces/section';
 import { LinkEntity, mapLinkEntityToLink } from './link.mapper';
+import { MachineEntity, mapMachineEntityToMachine } from './machine.mapper';
 import { mapMenuEntityToMenu, MenuEntity } from './menu.mapper';
 import { mapPageEntityToPage, PageEntity } from './page.mapper';
 import { mapSectionItemEntityToSectionItem, SectionItemEntity } from './section-item.mapper';
@@ -52,6 +53,7 @@ export interface SectionEntity {
     menus: MenuEntity[] | null;
     pivot_pages?: PivotPagesEntity[] | null;
     pages?: (PageEntity & { pivot: PivotPagesEntity })[] | null;
+    machines?: MachineEntity[] | null;
 
 }
 
@@ -68,6 +70,7 @@ export const mapSectionEntityToSection = (entity: SectionEntity): Section => {
         link: entity.link ? mapLinkEntityToLink(entity.link) : null,
         items: entity?.section_items && entity.section_items.length > 0 ? entity.section_items.map((item) => mapSectionItemEntityToSectionItem(item)) : [],
         menus: entity?.menus && entity.menus.length > 0 ? entity.menus.map(mapMenuEntityToMenu) : [],
+        machines: entity?.machines &&  entity.machines.length > 0 ? entity.machines.map((machine) => mapMachineEntityToMachine(machine)) : null,
         pivotPages:
             entity?.pivot_pages && entity.pivot_pages.length > 0
                 ? entity.pivot_pages.map((item) => ({

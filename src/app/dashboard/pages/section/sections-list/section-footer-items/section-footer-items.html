@@ -7,7 +7,7 @@
             <li class="flex items-center">
                 @if (menu.items && menu.items.length > 0) {
                 <p-button link (click)="menuPrime.toggle($event)" [label]="menu.label" icon="pi pi-chevron-down" iconPos="right" styleClass="!text-gray-700 transition hover:!text-gray-700/75 dark:!text-white dark:hover:!text-primary"></p-button>
-                <p-menu #menuPrime [model]="menu.items" appendTo="body" [popup]="true" />
+                <p-tieredMenu #menuPrime [model]="menu.items" appendTo="body" [popup]="true" />
                 } @else {
                 <p-button link [label]="menu.label" styleClass="!text-gray-700 transition hover:!text-gray-700/75 dark:!text-white dark:hover:!text-primary"></p-button>
                 }

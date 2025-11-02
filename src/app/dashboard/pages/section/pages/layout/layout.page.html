@@ -1,36 +1,35 @@
 <p-confirmdialog />
 <div class="flex flex-col max-w-7xl mx-auto">
     <div class="card">
-        <div class="flex justify-between items-center flex-wrap gap-4 mb-4">
-            <div class="flex flex-col gap-0">
-                <h5 class="!text-4xl !font-extrabold !m-0">Plantillas reutilizables</h5>
-                <span class="text-muted-color text-xl">Gestiona las secciones de tipo layout</span>
+        <div class="sticky top-16 bg-[var(--surface-card)] pb-2 z-20">
+            <div class="flex justify-between items-center flex-wrap gap-4 mb-4">
+                <div class="flex flex-col gap-0">
+                    <h5 class="!text-4xl !font-extrabold !m-0">Plantillas reutilizables</h5>
+                    <span class="text-muted-color text-xl">Gestiona las secciones de tipo layout</span>
+                </div>
+
+                <div class="flex items-center- flex-wrap gap-2">
+                    <p-button label="Nueva Sección" icon="pi pi-plus" (click)="display.set(true)"></p-button>
+                </div>
             </div>
 
-            <div class="flex items-center- flex-wrap gap-2">
-                <p-button label="Nueva Sección" icon="pi pi-plus" (click)="display.set(true)"></p-button>
+            <div class="flex border-b border-surface-200 dark:border-surface-700 pb-4 mb-4 items-center flex-wrap sm:flex-nowrap gap-4">
+                <p-inputgroup>
+                    <p-inputgroup-addon>
+                        <i class="pi pi-search cursor-pointer"></i>
+                    </p-inputgroup-addon>
+                    <input pInputText placeholder="Buscar sección..." #searchInput />
+                </p-inputgroup>
+
+                <p-multiSelect class="sm:max-w-72" [options]="sectionTypesOptions | keyvalue" placeholder="Filtrar por tipo" optionLabel="value.label" optionValue="key" display="chip" fluid #selectedTypes>
+                    <ng-template let-country #item>
+                        <p-tag [severity]="country.value.severity" class="text-sm" [value]="country.value.label"></p-tag>
+                    </ng-template>
+                </p-multiSelect>
             </div>
         </div>
 
-        <div class="flex border-b border-surface-200 dark:border-surface-700 pb-4 mb-4 items-center flex-wrap sm:flex-nowrap gap-4">
-            <p-inputgroup>
-                <p-inputgroup-addon>
-                    <i class="pi pi-search cursor-pointer"></i>
-                </p-inputgroup-addon>
-                <input pInputText placeholder="Buscar sección..." #searchInput />
-            </p-inputgroup>
-
-            <p-multiSelect class="sm:max-w-72" [options]="sectionTypesOptions | keyvalue" placeholder="Filtrar por tipo" optionLabel="value.label" optionValue="key" display="chip" fluid #selectedTypes>
-                <ng-template let-country #item>
-                    <p-tag [severity]="country.value.severity" class="text-sm" [value]="country.value.label"></p-tag>
-                </ng-template>
-            </p-multiSelect>
-        </div>
-        {{selectedTypes.value}}
-
-        <sections-list [searchTerm]="searchInput.value"
-            [filterByType]="selectedTypes.value"
-        [type]="SectionMode.LAYOUT" [selectedPage]="selectedPage()" (onDisplay)="display.set($event)" (onSelectedSection)="selectedSection.set($event)">
+        <sections-list [searchTerm]="searchInput.value" [filterByType]="selectedTypes.value" [type]="SectionMode.LAYOUT" [selectedPage]="selectedPage()" (onDisplay)="display.set($event)" (onSelectedSection)="selectedSection.set($event)">
             <ng-template #associatedPage let-section>
                 <p-button (click)="op.toggle($event); setPages(section)" icon="pi pi-sitemap" label="Asociar páginas" variant="outlined"> </p-button>
 

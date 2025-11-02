@@ -17,7 +17,6 @@ export const mapMenuEntityToMenu = (entity: MenuEntity): Menu => {
     return {
         id: entity.id_menu,
         title: entity.title,
-        order: entity.order_num,
         active: entity.active === 1,
         parentId: entity.parent_id,
         children: entity.children ? entity.children.map((child) => mapMenuEntityToMenu(child)) : null,

@@ -44,7 +44,7 @@ export class MenuUtils {
             const newList = this.insertMenuIntoHierarchy(listWithoutItem, updatedItem);
 
             // Recalcular orden y relaciones
-            this.updateMenuHierarchy(newList);
+            // this.updateMenuHierarchy(newList);
 
             return newList;
         }
@@ -73,7 +73,13 @@ export class MenuUtils {
     private static updateChildMenu(list: Menu[], updated: Menu): Menu[] {
         return list.map((item) => {
             if (item.id === updated.id) {
-                return { ...item, ...updated };
+                 const fieldToUpdate: (keyof Menu)[] = ['title', 'linkId', 'active', 'parentId', 'link'];
+                for (const field of fieldToUpdate) {
+                    if (updated[field] !== undefined) {
+                        (item as any)[field] = updated[field];
+                    }
+                }
+                return { ...item };
             }
             if (item.children?.length) {
                 return { ...item, children: this.updateChildMenu(item.children, updated) };
@@ -136,7 +142,7 @@ export class MenuUtils {
     //*  To Component Methods *//
     static updateMenuHierarchy(list: Menu[], parentId: number | null = null) {
         list.forEach((item, index) => {
-            item.order = index + 1;
+            // item.order = index + 1;
             item.parentId = parentId ?? null;
 
             if (item.children && item.children.length > 0) {
@@ -148,116 +154,112 @@ export class MenuUtils {
     // /**
     //  * 🔹 Devuelve una lista plana (para enviar al backend)
     //  */
-    static flattenMenu(list: Menu[]): UpdateMenuOrder[] {
-        const result: UpdateMenuOrder[] = [];
+    // static flattenMenu(list: Menu[]) {
+    //     // const result: UpdateMenuOrder[] = [];
 
-        const traverse = (items: Menu[]) => {
-            for (const item of items) {
-                result.push({
-                    id: item.id,
-                    order: item.order!,
-                    parentId: item.parentId!
-                });
+    //     // const traverse = (items: Menu[]) => {
+    //     //     for (const item of items) {
+    //     //         result.push({
+    //     //             id: item.id,
+    //     //             order: item.order!,
+    //     //             parentId: item.parentId!
+    //     //         });
 
-                if (item.children?.length) traverse(item.children);
-            }
-        };
+    //     //         if (item.children?.length) traverse(item.children);
+    //     //     }
+    //     // };
 
-        traverse(list);
-        return result;
-    }
+    //     // traverse(list);
+    //     // return result;
 
-    static orderHierarchically(items: Menu[]): Menu[] {
-        // Separate parents and children
-        const parents = items.filter((i) => i.parentId === null);
-        const children = items.filter((i) => i.parentId !== null);
+        
+    // }
 
-        // Final ordered list
-        const result: Menu[] = [];
+    // static orderHierarchically(items: Menu[]): Menu[] {
+    //     // Separate parents and children
+    //     const parents = items.filter((i) => i.parentId === null);
+    //     const children = items.filter((i) => i.parentId !== null);
 
-        // Loop through each parent and its children
-        parents.forEach((parent, parentIndex) => {
-            // Assign order to parent
-            result.push({
-                ...parent,
-                order: parentIndex + 1
+    //     // Final ordered list
+    //     const result: Menu[] = [];
+
+    //     // Loop through each parent and its children
+    //     parents.forEach((parent, parentIndex) => {
+    //         // Assign order to parent
+    //         result.push({
+    //             ...parent,
+    //             order: parentIndex + 1
+    //         });
+
+    //         // Get all children of the current parent
+    //         const childrenOfParent = children.filter((c) => c.parentId === parent.id);
+
+    //         // Assign order to each child relative to its parent
+    //         childrenOfParent.forEach((child, childIndex) => {
+    //             result.push({
+    //                 ...child,
+    //                 order: childIndex + 1 // local order within the parent
+    //             });
+    //         });
+    //     });
+
+    //     return result;
+    // }
+
+    // static orderChildrenOnly(items: Menu[]): Menu[] {
+    //     // Group by parentId
+    //     const groupedByParent: Record<number, Menu[]> = {};
+
+    //     items.forEach((item) => {
+    //         if (item.parentId == null) return; // ignore items without parent
+    //         if (!groupedByParent[item.parentId]) groupedByParent[item.parentId] = [];
+    //         groupedByParent[item.parentId].push(item);
+    //     });
+
+    //     const result: Menu[] = [];
+
+    //     // Assign local order within each parent group
+    //     Object.entries(groupedByParent).forEach(([parentId, children]) => {
+    //         children.forEach((child, index) => {
+    //             result.push({
+    //                 ...child,
+    //                 order: index + 1 // local order within that parent
+    //             });
+    //         });
+    //     });
+
+    //     return result;
+    // }
+
+
+
+   static buildReversedTree(menus: Menu[]): Menu[] {
+    const result: Menu[] = [];
+
+    for (const menu of menus) {
+        // Buscamos el ancestro más alto
+        let current = menu;
+        const chain: Menu[] = [];
+
+        // Subimos hasta el ancestro
+        while (current) {
+            chain.unshift({
+                ...current,
+                children: []
             });
-
-            // Get all children of the current parent
-            const childrenOfParent = children.filter((c) => c.parentId === parent.id);
-
-            // Assign order to each child relative to its parent
-            childrenOfParent.forEach((child, childIndex) => {
-                result.push({
-                    ...child,
-                    order: childIndex + 1 // local order within the parent
-                });
-            });
-        });
-
-        return result;
-    }
-
-    static orderChildrenOnly(items: Menu[]): Menu[] {
-        // Group by parentId
-        const groupedByParent: Record<number, Menu[]> = {};
-
-        items.forEach((item) => {
-            if (item.parentId == null) return; // ignore items without parent
-            if (!groupedByParent[item.parentId]) groupedByParent[item.parentId] = [];
-            groupedByParent[item.parentId].push(item);
-        });
-
-        const result: Menu[] = [];
-
-        // Assign local order within each parent group
-        Object.entries(groupedByParent).forEach(([parentId, children]) => {
-            children.forEach((child, index) => {
-                result.push({
-                    ...child,
-                    order: index + 1 // local order within that parent
-                });
-            });
-        });
-
-        return result;
-    }
-
-
-
-    static buildMenuTree(menus: Menu[]): Menu[] {
-        const tree: Menu[] = [];
-        const parentsMap = new Map<number, Menu>();
-
-        for (const menu of menus) {
-            if (menu.parent) {
-                const parentId = menu.parent.id;
-
-                // Si aún no existe el padre en el mapa, lo creamos
-                if (!parentsMap.has(parentId)) {
-                    parentsMap.set(parentId, {
-                        ...menu.parent,
-                        children: []
-                    });
-                }
-
-                // Agregamos el hijo al array de children del padre
-                parentsMap?.get(parentId)?.children?.push({
-                    ...menu,
-                    children: [] // Inicializamos el array de children para el hijo
-                });
-            } else {
-                // Si el menú no tiene padre, lo tratamos como raíz directamente
-                tree.push({
-                    ...menu,
-                    children: [] // Inicializamos el array de children para el menú raíz
-                });
-            }
+            current = current.parent as Menu;
         }
 
-        // Agregamos los padres al árbol final
-        tree.push(...parentsMap.values());
+        // Ahora conectamos de abuelo a nieto
+        for (let i = 0; i < chain.length - 1; i++) {
+            chain[i].children!.push(chain[i + 1]);
+        }
 
-        return tree.sort((a, b) => a.order - b.order);
+        // El primero de la cadena (abuelo) es la raíz
+        result.push(chain[0]);
     }
+
+    return result;
+}
+
 }

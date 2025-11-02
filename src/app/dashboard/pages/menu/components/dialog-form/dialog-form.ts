@@ -17,11 +17,13 @@ import { CreateMenu } from '@/dashboard/interfaces/menu';
 import { LinkType } from '@/shared/mappers/link.mapper';
 import { FilterLinksByTypePipe } from '@/dashboard/pipes/filter-links-by-type-pipe';
 import { linkTypeOptions } from '@/shared/interfaces/link';
-import { KeyValuePipe } from '@angular/common';
+import { JsonPipe, KeyValuePipe } from '@angular/common';
+import { TreeSelectModule } from 'primeng/treeselect';
+import { TreeNode } from 'primeng/api';
 
 @Component({
     selector: 'link-dialog-form',
-    imports: [FilterLinksByTypePipe, DialogModule, ErrorBoundary, KeyValuePipe, FormsModule, ReactiveFormsModule,  ToggleButtonModule, InputTextModule, MessageModule, SelectModule, SelectButtonModule, ButtonModule],
+    imports: [FilterLinksByTypePipe, JsonPipe, DialogModule, ErrorBoundary, KeyValuePipe, FormsModule, ReactiveFormsModule, TreeSelectModule,  ToggleButtonModule, InputTextModule, MessageModule, SelectModule, SelectButtonModule, ButtonModule],
     templateUrl: './dialog-form.html'
 })
 export class DialogForm {
@@ -50,6 +52,23 @@ export class DialogForm {
 
      checked = signal<boolean>(false);
 
+       menusListSelect = computed<TreeNode[]>(() => {
+    const menus = this.menusList.hasValue() ? this.menusList.value() : [];
+
+    const buildTree = (items: any[]): TreeNode[] => {
+        return items.map((item) => ({
+            label: item.title,
+            data: item.id,
+            key: String(item.id),
+            children: item.children && item.children.length > 0 ? buildTree(item.children) : undefined,
+        }));
+    };
+
+    return buildTree(menus);
+});
+
+    
+
  
 
     saveChanges() {
@@ -58,7 +77,7 @@ export class DialogForm {
             const menu: CreateMenu = {
                 title: menuData.title!,
                 linkId: menuData.linkId!,
-                parentId: menuData.parentId || null,
+                parentId: menuData.parentId ? (typeof menuData.parentId === 'object' ? (menuData.parentId as TreeNode).data : menuData.parentId) : null,
                 active: menuData.active === true
             };
 

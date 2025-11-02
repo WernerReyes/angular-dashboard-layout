@@ -26,13 +26,9 @@
     <section-client-items [section]="sectionCreate()" [currentSectionItem]="currentSectionItem()"></section-client-items>
     } @case (SectionType.OUR_COMPANY) {
     <section-our-company-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-our-company-items>
-    }
-    <!-- TODO: Focus on here, because after some time, it's gonna change when the machine page is ready -->
-    @case (SectionType.MACHINE) {
-    <section-machine-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-machine-items>
-    }
-    <!-- TODO: End -->
-    @case (SectionType.CONTACT_TOP_BAR) { @if (level() === 'section') {
+    } @case (SectionType.MACHINE) {
+    <section-machine-items [section]="preview"></section-machine-items>
+    } @case (SectionType.CONTACT_TOP_BAR) { @if (level() === 'section') {
     <span class="block p-message p-2 p-message-info w-4/5 mx-auto mb-5">Los campos que llenen en esta sección no se ven visualmente. El contenido se verá al agregar los items de contacto </span>
     }
     <section-contact-top-bar-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-contact-top-bar-items>
@@ -53,7 +49,16 @@
     <section-advantages-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-advantages-items>
     } @case (SectionType.SUPPORT_MAINTENANCE) {
     <section-support-maintenance-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-support-maintenance-items>
-    } @default {}
-
-}
+    } @case (SectionType.OPERATIONAL_BENEFITS) {
+        @if (level() === 'section') {
+    <span class="block p-message p-2 p-message-info w-4/5 mx-auto mb-5">Los campos que llenen en esta sección no se ven visualmente. El contenido se verá al agregar los items de beneficios operacionales </span>
+    }
+    <section-operacional-benefits-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-operacional-benefits-items>
+    } @case (SectionType.MACHINE_DETAILS) {
+        <section-machine-details-items [section]="preview"></section-machine-details-items>
+    } @case (SectionType.MACHINES_CATALOG) {
+        <section-machines-catalog-items [section]="preview" [isPreview]="true"></section-machines-catalog-items>
+    }
+    
+    @default {} }
 </section>

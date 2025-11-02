@@ -1,4 +1,4 @@
-import { Section } from '@/shared/interfaces/section';
+import type { Section } from '@/shared/interfaces/section';
 import { SectionType } from '@/shared/mappers/section.mapper';
 import { Component, input, output, signal, ViewChild } from '@angular/core';
 import { PanelModule } from 'primeng/panel';
@@ -16,13 +16,16 @@ import { SectionMissionVisionItems } from '../section-mission-vision-items/secti
 import { SectionContactUsItems } from '../section-contact-us-items/section-contact-us-items';
 import { SectionFooterItems } from '../section-footer-items/section-footer-items';
 import { DeleteSectionItemFunction } from '../sections-list';
-import { SectionItem as ISectionItem } from '@/shared/interfaces/section-item';
+import type { SectionItem as ISectionItem } from '@/shared/interfaces/section-item';
 import { SectionItem } from '../section-item/section-item';
 import { SectionCashProcessingEquipmentItems } from '../section-cash-processing-equipment-items/section-cash-processing-equipment-items';
 import { SectionAdvantagesItems } from '../section-advantages-items/section-advantages-items';
 import { SectionSupportMaintenanceItems } from '../section-support-maintenance-items/section-support-maintenance-items';
 import { MenuItemCommandEvent } from 'primeng/api';
 import { ContextMenuCrud } from '../../components/context-menu-crud/context-menu-crud';
+import { SectionOperacionalBenefitsItems } from '../section-operacional-benefits-items/section-operacional-benefits-items';
+import { SectionMachineDetailsItems } from '../section-machine-details-items/section-machine-details-items';
+import { SectionMachinesCatalogItems } from '../section-machines-catalog-items/section-machines-catalog-items';
 
 @Component({
     selector: 'section-items',
@@ -43,6 +46,9 @@ import { ContextMenuCrud } from '../../components/context-menu-crud/context-menu
         SectionFooterItems,
         SectionAdvantagesItems,
         SectionSupportMaintenanceItems,
+        SectionOperacionalBenefitsItems,
+        SectionMachineDetailsItems,
+        SectionMachinesCatalogItems,
         SectionItem,
         PanelModule,
         ContextMenuCrud

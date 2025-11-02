@@ -8,6 +8,8 @@
     <ng-template #content let-sections>
         @let filteredSections = sections | filterByPage: { idPage: selectedPage()!.id, type: type() } : ['idPage', 'type'] | filterByTerm :'title': searchTerm() | filterArrayBy: 'type': filterByType();
         <div class="mt-4 flex flex-col gap-4">
+           
+           
             @if (filteredSections.length === 0) {
             <div class="flex flex-col items-center justify-center py-8 text-surface-500">
                 <i class="pi pi-inbox text-4xl mb-3"></i>
@@ -15,8 +17,11 @@
                 <div class="text-sm">Intenta ajustar tu búsqueda o crea una nueva sección para comenzar.</div>
             </div>
 
-            } @else { @if (type() !== SectionMode.LAYOUT) {
-            <div cdkDropList [cdkDropListData]="filteredSections" (cdkDropListDropped)="drop($event, filteredSections)" class="flex flex-col gap-4">
+            } @else {
+                
+
+                
+            @if (type() !== SectionMode.LAYOUT) {
                 @if (hasPositionChanged()) {
                 <p-message (onClose)="cancelChanges()" severity="info" class="mb-4 w-full" [closable]="true">
                     <ng-template #icon>
@@ -26,7 +31,14 @@
                         <span class="ml-2">Has cambiado el orden de las secciones</span>
                     </div>
                 </p-message>
-                } @for (section of filteredSections; track section.id) { @let status = getSectionStatus(section); @let typeOption = getSectionType(section);
+
+
+                } 
+
+
+            <div cdkDropList [cdkDropListData]="filteredSections" (cdkDropListDropped)="drop($event, filteredSections)" class="flex flex-col gap-4">
+                
+                @for (section of filteredSections; track section.id) { @let status = getSectionStatus(section); @let typeOption = getSectionType(section);
 
                 <div class="bg-white dark:bg-surface-800 rounded-lg border border-surface-200 dark:border-surface-700 p-5" cdkDrag (contextmenu)="contextMenu.onContextMenu($event, section)">
                     <div class="flex items-center justify-between mb-5 flex-wrap gap-3">
@@ -50,7 +62,7 @@
                             }
                             <div class="flex items-center gap-2 flex-wrap ml-auto">
                                 <p-tag [severity]="status.severity" class="text-sm" [value]="status.label"></p-tag>
-                                @if (![SectionType.MAIN_NAVIGATION_MENU, SectionType.CTA_BANNER, SectionType.MACHINE].includes(section.type)) {
+                                @if (![SectionType.MAIN_NAVIGATION_MENU, SectionType.CTA_BANNER, SectionType.MACHINE, SectionType.MACHINE_DETAILS, SectionType.MACHINES_CATALOG].includes(section.type)) {
                                 <p-button icon="pi pi-plus" label="Agregar item" (click)="openDialogItem(section)"></p-button>
                                 }
                                 <!-- <p-button icon="pi pi-pencil" text (click)="openDialogAndEdit(section)"></p-button>
@@ -63,6 +75,8 @@
                 </div>
                 }
             </div>
+
+
             } @else { @for (section of filteredSections; track section.id) { @let typeOption = getSectionType(section);
             <div class="bg-white dark:bg-surface-800 rounded-lg border border-surface-200 dark:border-surface-700 p-5" (contextmenu)="contextMenu.onContextMenu($event, section)">
                 <div class="flex items-center justify-between mb-5 flex-wrap gap-3">

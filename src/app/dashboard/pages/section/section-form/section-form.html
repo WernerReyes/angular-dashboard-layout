@@ -118,13 +118,9 @@
                     <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
                 </div>
 
-                }
-                
-                @case (SectionType.MACHINE) {
-                <machine-form [form]="form"></machine-form>
-                }
-
-                @case (SectionType.CONTACT_US) {
+                } @case (SectionType.MACHINE) {
+                <select-machine [form]="form" label="Selecciona las Máquinas" [multiple]="true"></select-machine>
+                } @case (SectionType.CONTACT_US) {
                 <common-inputs
                     [form]="form"
                     [includeFields]="[
@@ -170,7 +166,39 @@
                     }
                 ]"
                 ></common-inputs>
-                } }
+                } @case (SectionType.OPERATIONAL_BENEFITS) { } 
+                @case (SectionType.MACHINE_DETAILS) {
+                <select-machine [form]="form" label="Selecciona una máquina"></select-machine>
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[
+                    
+                    {
+                        type: 'subtitle',
+                        label: 'Titulo de especificaciones',
+                        placeholder: 'Título de las especificaciones',
+                      
+                    }
+                ]"
+                ></common-inputs>
+                } @case (SectionType.MACHINES_CATALOG) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[
+                    
+                    
+                    {
+                        type: 'content',
+                        label: 'Descripción',
+                        placeholder: 'Descripción de la sección',
+                        isTextarea: true,
+                    }
+                ]" 
+                ></common-inputs>
+                <!-- < -->
+                 <select-machine [form]="form" label="Selecciona las Máquinas" [multiple]="true"></select-machine>
+                }}
+                
             </div>
 
             <p-togglebutton formControlName="active" onLabel="Activo" offLabel="Inactivo" onIcon="pi pi-check" offIcon="pi pi-times" onIcon="pi pi-lock-open" offIcon="pi pi-lock" class="w-36" ariaLabel="Do you confirm" />
@@ -181,7 +209,8 @@
         </div>
     </div>
 
-    TODO: <pre>{{ form.value | json }}</pre>
+    TODO:
+    <pre>{{ form.value | json }}</pre>
 
     <ng-template #footer>
         <button pButton [loading]="loading()" type="submit" form="menu-form" icon="pi pi-save" [disabled]="form.invalid" label="Guardar"></button>

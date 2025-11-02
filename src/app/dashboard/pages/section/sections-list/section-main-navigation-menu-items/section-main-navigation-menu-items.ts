@@ -23,20 +23,23 @@ export class SectionMainNavigationMenuItems {
             return [];
         }
 
-        const menus = MenuUtils.buildMenuTree(sectionData.menus);
-        console.log('menus', this.section(), menus);
+        const menus = MenuUtils.buildReversedTree(sectionData.menus);
+        
 
-        return menus.map((menu) => ({
-            id: menu.id.toString(),
-            label: menu.title,
-            items: menu.children?.length
-                ? menu.children.map((child) => ({
-                      id: child.id.toString(),
-                      label: child.title
-                  }))
-                : undefined
-        }));
+        const buildTree = (items: Menu[]): MenuItem[] => {
+            return items.map((item) => ({
+                id: item.id.toString(),
+                label: item.title,
+                // data: item.id,
+                // key: String(item.id),
+                items: item.children && item.children.length > 0 ? buildTree(item.children) : undefined
+            }));
+        };
+        
+        return buildTree(menus);
+
+     
     });
 
-   
+    
 }

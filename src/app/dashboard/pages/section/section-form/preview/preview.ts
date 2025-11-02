@@ -23,6 +23,11 @@ import { SectionFooterItems } from '../../sections-list/section-footer-items/sec
 import { SectionAdvantagesItems } from '../../sections-list/section-advantages-items/section-advantages-items';
 import { SectionSupportMaintenanceItems } from '../../sections-list/section-support-maintenance-items/section-support-maintenance-items';
 import { MachineService } from '@/dashboard/services/machine.service';
+import { TreeNode } from 'primeng/api';
+import { Menu } from '@/shared/interfaces/menu';
+import { SectionOperacionalBenefitsItems } from '../../sections-list/section-operacional-benefits-items/section-operacional-benefits-items';
+import { SectionMachineDetailsItems } from '../../sections-list/section-machine-details-items/section-machine-details-items';
+import { SectionMachinesCatalogItems } from '../../sections-list/section-machines-catalog-items/section-machines-catalog-items';
 
 @Component({
     selector: 'preview',
@@ -43,6 +48,9 @@ import { MachineService } from '@/dashboard/services/machine.service';
         SectionFooterItems,
         SectionAdvantagesItems,
         SectionSupportMaintenanceItems,
+        SectionOperacionalBenefitsItems,
+        SectionMachineDetailsItems,
+        SectionMachinesCatalogItems,
         JsonPipe
     ],
     templateUrl: './preview.html'
@@ -117,19 +125,7 @@ export class Preview {
             link: null,
             linksId: section?.linkId || null,
             textButton: value.showLink ? value.textButton || section?.textButton : null,
-            menus:
-                value.menusIds?.map((menu: any) => {
-                    return {
-                        id: menu.data,
-                        title: menu.label,
-                        parent: menu.parent
-                            ? {
-                                  id: menu.parent.data,
-                                  title: menu.parent.label
-                              }
-                            : null
-                    };
-                }) || [],
+            menus: value.menusIds?.map((menu: any) => this.buildRecursiveNode(menu)) || [],
             // textButton: value.showLink ? value.textButton || null : null,
             subtitle: value.subtitle ?? null,
             machines: this.getMachines(value).filter((machine) => (value.machinesIds || []).includes(machine.id)),
@@ -139,9 +135,27 @@ export class Preview {
         };
     }
 
-    private getMachines(value: any ) {
-        console.log('GET MACHINES', this.section()?.type, value);
-        if ((!this.section() && value?.type !== SectionType.MACHINE) || (this.section() && this.section()?.type !== SectionType.MACHINE)) return [];
+    private buildRecursiveNode(menu: TreeNode): Partial<Menu> {
+        const node: any = {
+            id: menu.data,
+            title: menu.label as string,
+            parent: menu.parent ? this.buildRecursiveNode(menu.parent) : null
+        };
+
+        if (menu.parent) {
+            node.parent = this.buildRecursiveNode(menu.parent); // llamada recursiva
+        }
+
+        return node;
+    }
+
+    private getMachines(value: any) {
+        const sectionType = this.section()?.type ?? value?.type;
+
+        if (sectionType !== SectionType.MACHINE && sectionType !== SectionType.MACHINE_DETAILS && sectionType !== SectionType.MACHINES_CATALOG) {
+            return [];
+        }
+
         console.log('GET MACHINES', this.section()?.type);
         const machines = this.machineService.machinesListRs;
         return machines.hasValue() ? machines.value() : [];

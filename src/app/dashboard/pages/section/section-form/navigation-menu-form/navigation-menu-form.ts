@@ -23,18 +23,21 @@ export class NavigationMenuForm {
 
     menuList = this.menuService.menuListResource;
 
-    menusListSelect = computed<TreeNode[]>(() => {
-        const menus = this.menuList.hasValue() ? this.menuList.value() : [];
-        return menus.map((menu) => ({
-            label: menu.title,
-            data: menu.id,
-            key: String(menu.id),
-            // partialSelectable: !(menu.children && menu.children.length > 0),
-            selectable: !(menu.children && menu.children.length > 0),
+   menusListSelect = computed<TreeNode[]>(() => {
+    const menus = this.menuList.hasValue() ? this.menuList.value() : [];
 
-            children: menu.children?.map((child) => ({ label: child.title, key: String(child.id), data: child.id }))
+    const buildTree = (items: any[]): TreeNode[] => {
+        return items.map((item) => ({
+            label: item.title,
+            data: item.id,
+            key: String(item.id),
+            selectable: !(item.children && item.children.length > 0),
+            children: item.children && item.children.length > 0 ? buildTree(item.children) : undefined,
         }));
-    });
+    };
+
+    return buildTree(menus);
+});
 
     FormUtils = FormUtils;
 }

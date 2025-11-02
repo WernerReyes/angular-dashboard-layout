@@ -7,11 +7,12 @@ import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import type { ContextMenuCrud } from '../../components/context-menu-crud/context-menu-crud';
 import { EmptyFieldMessage } from '../../components/empty-field-message/empty-field-message';
-import { NgClass } from '@angular/common';
-
+import { JsonPipe, NgClass } from '@angular/common';
+import type { Menu } from '@/shared/interfaces/menu';
+import { TieredMenuModule } from 'primeng/tieredmenu';
 @Component({
     selector: 'section-footer-items',
-    imports: [NgClass, EmptyFieldMessage,  MenuModule, ButtonModule],
+    imports: [NgClass, EmptyFieldMessage, JsonPipe, TieredMenuModule, ButtonModule],
     templateUrl: './section-footer-items.html'
 })
 export class SectionFooterItems {
@@ -21,25 +22,37 @@ export class SectionFooterItems {
 
     currentYear = new Date().getFullYear();
 
+    items = [
+    {
+      "id": "2",
+      "label": "Procesamiento de Billetes",
+      "items": [
+        {
+          "id": "3",
+          "label": "Valorizantes"
+        }
+      ]
+    }
+  ]
+
     menus = computed<MenuItem[]>(() => {
         const sectionData = this.section();
         if (!sectionData?.menus) {
             return [];
         }
 
-        const menus = MenuUtils.buildMenuTree(sectionData.menus);
+        const menus = MenuUtils.buildReversedTree(sectionData.menus);
 
-        return menus.map((menu) => ({
-            id: menu.id.toString(),
-            label: menu.title,
-            items: menu.children?.length
-                ? menu.children.map((child) => ({
-                      id: child.id.toString(),
-                      label: child.title
-                  }))
-                : undefined
-        }));
+        const buildTree = (items: Menu[]): MenuItem[] => {
+            return items.map((item) => ({
+                id: item.id.toString(),
+                label: item.title,
+                // data: item.id,
+                // key: String(item.id),
+                items: item.children && item.children.length > 0 ? buildTree(item.children) : undefined
+            }));
+        };
+
+        return buildTree(menus);
     });
-
-   
 }

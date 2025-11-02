@@ -3,7 +3,6 @@ import { Link } from './link';
 export interface Menu {
     id: number;
     title: string;
-    order: number;
     active: boolean;
     parentId: number | null;
     linkId: number | null;

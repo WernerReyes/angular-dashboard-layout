@@ -75,7 +75,9 @@ export const sectionTypesOptions: Record<SectionType, SectionTypeOption> = {
     FOOTER: { label: 'Pie de Página', value: SectionType.FOOTER, severity: 'warn' },
     ADVANTAGES: { label: 'Ventajas Competitivas', value: SectionType.ADVANTAGES, severity: 'contrast' },
     SUPPORT_MAINTENANCE: { label: 'Soporte y Mantenimiento', value: SectionType.SUPPORT_MAINTENANCE, severity: 'info' },
-    PRODUCT_DETAILS: { label: 'Detalles del Producto', value: SectionType.PRODUCT_DETAILS, severity: 'success' }
+    OPERATIONAL_BENEFITS: { label: 'Beneficios Operacionales', value: SectionType.OPERATIONAL_BENEFITS, severity: 'warn' },
+    MACHINE_DETAILS: { label: 'Detalles de la máquina', value: SectionType.MACHINE_DETAILS, severity: 'success' },
+    MACHINES_CATALOG: { label: 'Catálogo de Máquinas', value: SectionType.MACHINES_CATALOG, severity: 'contrast' }
 };
 
 

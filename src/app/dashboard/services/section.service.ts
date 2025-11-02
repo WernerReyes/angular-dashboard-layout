@@ -15,7 +15,6 @@ import { PageService } from './page.service';
 })
 export class SectionService {
     private readonly http = inject(HttpClient);
-    private readonly pageService = inject(PageService);
     private readonly prefix = `${environment.apiUrl}/section`;
 
     isCreating = signal(false);
@@ -114,7 +113,7 @@ export class SectionService {
             tap((updatedSection) => {
                 this.sectionListResource.update((sections) => {
                     if (!sections) return [];
-                    return sections.map((s) => (s.id === updatedSection.id ? { ...updatedSection, items: s.items } : s));
+                    return sections.map((s) => (s.id === updatedSection.id ? { ...updatedSection, items: s.items, menus: s.menus } : s));
                 });
             })
         );

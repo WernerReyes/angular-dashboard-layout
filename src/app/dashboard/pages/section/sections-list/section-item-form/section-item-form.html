@@ -188,7 +188,26 @@
                 }]"
                 ></common-inputs>
                 <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
-                } @default { } }
+                } @case (SectionType.OPERATIONAL_BENEFITS) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[{
+                    type: 'title',
+                    label: 'Título',
+                    placeholder: 'Título del item',
+                    isTextarea: false
+                },
+                {
+                    type: 'content',
+                    label: 'Descripción',
+                    placeholder: 'Descripción del item',
+                    isTextarea: true
+                }]"
+                ></common-inputs>
+                <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
+                } 
+                
+                @default { } }
             </div>
         </form>
 
@@ -197,8 +216,7 @@
         </div>
     </div>
 
-    TODO
-    <pre>{{ form.value | json }}</pre>
+    <!-- TODO <pre>{{ form.value | json }}</pre> -->
 
     <ng-template #footer>
         <button pButton type="submit" [loading]="loading()" form="menu-form" icon="pi pi-save" [disabled]="form.invalid" label="Guardar"></button>

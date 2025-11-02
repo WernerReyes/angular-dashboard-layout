@@ -24,7 +24,8 @@ import { FileUpload } from '../components/file-upload/file-upload';
 import { ImageType } from '@/shared/interfaces/section-item';
 import { NavigationMenuForm } from './navigation-menu-form/navigation-menu-form';
 import { Preview } from './preview/preview';
-import { MachineForm } from './machine-form/machine-form';
+
+import { SelectMachine } from '../components/select-machine/select-machine';
 
   
 @Component({
@@ -34,11 +35,11 @@ import { MachineForm } from './machine-form/machine-form';
         ShowLinkSwitch,
         FileUpload,
         WhyUsForm,
-        MachineForm,
         NavigationMenuForm,
         ReactiveFormsModule,
         InputTextModule,
         KeyValuePipe,
+        SelectMachine,
         JsonPipe,
         Preview,
         ToggleSwitchModule,
@@ -108,11 +109,11 @@ export class SectionForm {
                 imageUrl: formValue.imageType === ImageType.URL ? formValue.imageUrl || null : null,
                 menusIds: formValue.menusIds ? formValue.menusIds.map(({ data }) => Number(data)) : [],
                 mode: this.mode(),
-                machinesIds: formValue.machinesIds || []
+                machinesIds: formValue.machinesIds ? formValue.machinesIds : []
             };
 
             console.log(sectionData);
-
+ 
             if (this.selectedSection()) {
                 this.sectionService
                     .updateSection(this.selectedSection()!.id, {

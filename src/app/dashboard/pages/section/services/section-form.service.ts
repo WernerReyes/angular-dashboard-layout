@@ -1,3 +1,4 @@
+import { Menu } from '@/shared/interfaces/menu';
 import { Section } from '@/shared/interfaces/section';
 import { ImageType } from '@/shared/interfaces/section-item';
 import { LinkType } from '@/shared/mappers/link.mapper';
@@ -94,6 +95,13 @@ export class SectionFormService {
             const menusWithoutChildren = (menus as TreeNode[]).filter((menu) => !menu.children || menu.children.length === 0);
             menusIdsControl?.setValue(menusWithoutChildren, { emitEvent: false });
         });
+
+        this.form.get('machinesIds')?.valueChanges.subscribe((machines) => {
+            const machinesIdsControl = this.form.get('machinesIds');
+            if (!Array.isArray(machines)) {
+                machinesIdsControl?.setValue([machines], { emitEvent: false });
+            }
+        });
     }
 
     populateForm(section: Section, pageId: number) {
@@ -117,27 +125,32 @@ export class SectionFormService {
             imageUrl: '',
             imageType: ImageType.NONE,
 
-            machinesIds: section.machines ? section.machines.map((machine) => machine.id) : [],
+            machinesIds: this.setMachinesIds(section),
 
-            menusIds: section.menus
-                ? section.menus.map((menu) => {
-                      return {
-                          key: menu.id.toString(),
-                          label: menu.title,
-                          data: menu.id,
-                          parent: menu.parent
-                              ? {
-                                    key: menu.parent.id.toString(),
-                                    label: menu.parent.title,
-                                    data: menu.parent.id
-                                }
-                              : undefined
-                      };
-                  })
-                : ([] as TreeNode[])
+            menusIds: section.menus ? section.menus.map((menu) => this.buildRecursiveNode(menu)) : []
         });
     }
 
+    private setMachinesIds(section: Section): any {
+        if (section.type === SectionType.MACHINE_DETAILS) {
+            return section.machines?.[0]?.id ? section.machines[0].id : null;
+        }
+        return section.machines ? section.machines.map((machine) => machine.id) : [];
+    }
+
+ private buildRecursiveNode(menu: Menu): TreeNode {
+    const node: TreeNode = {
+        key: menu.id.toString(),
+        label: menu.title,
+        data: menu.id
+    };
+
+    if (menu.parent) {
+        node.parent = this.buildRecursiveNode(menu.parent); // llamada recursiva
+    }
+
+    return node;
+}
 
     
     

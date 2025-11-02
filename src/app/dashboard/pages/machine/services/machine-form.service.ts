@@ -1,6 +1,7 @@
 import { Category } from '@/shared/interfaces/category';
 import { Machine } from '@/shared/interfaces/machine';
 import { CategoryType } from '@/shared/mappers/category.mapper';
+import { LinkType } from '@/shared/mappers/link.mapper';
 import { TecnicalSpecifications } from '@/shared/mappers/machine.mapper';
 import { inject, Injectable } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
@@ -16,9 +17,9 @@ export class MachineFormService {
         type: ['' as CategoryType, [Validators.required]],
         id: [null as number | null]
     });
-    
+
     machineForm = this.fb.group({
-        imagesToUpdate: [[] as { id: string, oldImage: string; newFile: File }[]],
+        imagesToUpdate: [[] as { id: string; oldImage: string; newFile: File }[]],
         id: [null as number | null],
         name: ['', [Validators.required, Validators.minLength(3)]],
         shortDescription: ['', [Validators.required, Validators.minLength(10)]],
@@ -30,9 +31,13 @@ export class MachineFormService {
         manual: ['' as string | null],
         imagesToDelete: [[] as string[]],
         technicalSpecifications: this.fb.array<TecnicalSpecifications>([], [Validators.required, Validators.minLength(1)]),
-        categoryId: [null as number | null, [Validators.required]]
+        categoryId: [null as number | null, [Validators.required]],
+
+        showLink: [false],
+        typeLink: [LinkType.PAGE as LinkType | null], // true = internal, false = external
+        linkId: [null as number | null],
+        textButton: ['', [Validators.maxLength(50)]]
     });
-    
 
     populateCategory(category: Category) {
         this.categoryForm.patchValue({
@@ -41,7 +46,6 @@ export class MachineFormService {
             id: category.id
         });
     }
-
 
     populateMachine(machine: Machine) {
         this.machineForm.patchValue({
@@ -52,13 +56,18 @@ export class MachineFormService {
             images: machine.images || [],
             manual: machine.manual || null,
             categoryId: machine.categoryId,
-            currentManual: machine.manual || null
+            currentManual: machine.manual || null,
+
+            showLink: !!machine.linkId,
+            typeLink: machine.link ? machine.link.type : null,
+            linkId: machine.linkId,
+            textButton: machine.textButton || ''
         });
 
         const currentImages = this.machineForm.get('images')?.value as string[];
         if (currentImages.length > 0) {
             this.machineForm.get('fileImages')?.clearValidators();
-            this.machineForm.get('fileImages')?.updateValueAndValidity();  
+            this.machineForm.get('fileImages')?.updateValueAndValidity();
         }
 
         const specsFormArray = this.technicalSpecificationsFormArray;
@@ -78,8 +87,6 @@ export class MachineFormService {
     get technicalSpecificationsFormArray() {
         return this.machineForm.get('technicalSpecifications') as FormArray;
     }
-
-
 
     resetCategoryForm() {
         this.categoryForm.reset();

@@ -21,6 +21,7 @@ import { MessageModule } from 'primeng/message';
 import { TagModule } from 'primeng/tag';
 import { MenuUtils } from '../../../../utils/menu.utils';
 import { MenuFormService } from '../../services/menu-form.service';
+import { MenuItem } from './menu-item/menu-item';
 
 type MenuComponent = Menu & {
     expanded?: boolean;
@@ -28,7 +29,7 @@ type MenuComponent = Menu & {
 
 @Component({
     selector: 'menu-list',
-    imports: [ErrorBoundary, DataViewSkeleton, ConfirmDialogModule, MessageModule, DragDropModule, FormsModule, TagModule, DividerModule, BadgeModule, MenuModule, InputTextModule, InputGroupModule, InputGroupAddonModule, ButtonModule],
+    imports: [ErrorBoundary, MenuItem, DataViewSkeleton, ConfirmDialogModule, MessageModule, DragDropModule, FormsModule, TagModule, DividerModule, BadgeModule, MenuModule, InputTextModule, InputGroupModule, InputGroupAddonModule, ButtonModule],
     templateUrl: './menu-list.html',
     providers: [ConfirmationService]
 })
@@ -51,15 +52,10 @@ export class MenuList {
 
     searchQuery = signal<string>('');
 
-    originMenuList = linkedSignal<MenuComponent[]>(() => {
-        const menus = this.menuList.hasValue() ? this.menuList.value() : [];
-        return structuredClone(menus).map((menu) => ({ ...menu, expanded: false })) as MenuComponent[];
-    });
-
+    
     filteredMenuList = linkedSignal<MenuComponent[]>(() => {
         const term = this.searchQuery().toLowerCase();
         const menus = this.menuList.hasValue() ? this.menuList.value() : [];
-        console.log({ menus })
         const menuComponents = structuredClone(menus).map((menu) => ({
             ...menu,
             expanded: false
@@ -81,77 +77,12 @@ export class MenuList {
         this.menuFormService.populateForm(menu);
     }
 
-    drop(event: CdkDragDrop<Menu[]>, targetList: Menu[], parentList?: Menu[]) {
-        // Si se reordenó dentro del mismo contenedor
-        if (event.previousContainer === event.container) {
-            moveItemInArray(targetList, event.previousIndex, event.currentIndex);
-        } else {
-            // Si se movió entre contenedores (por ejemplo, de children a principal)
-            transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+   
 
-            // Opcional: actualizar parentId o similar
-            const moved = event.container.data[event.currentIndex];
-            if (parentList) {
-                // Si está en el nivel raíz, por ejemplo:
-                moved.parentId = null;
-            }
-        }
+    
+   
 
-        this.targetList.update((menus) => {
-            return [...menus, ...targetList];
-        });
-
-        this.hasPositionChanged.set(this.hasOrderChanged());
-    }
-
-    savePositionChanges() {
-        let menuListOrdered: Menu[] = [];
-        const hasChildren = this.targetList().every((item) => item.parentId !== null);
-        const onlyRoots = this.targetList().every((item) => item.parentId === null);
-
-        if (hasChildren) {
-            menuListOrdered = MenuUtils.orderChildrenOnly(this.targetList());
-        } else if (onlyRoots) {
-            menuListOrdered = this.targetList().map((menu, index) => ({ ...menu, order: index + 1 }));
-        } else {
-            menuListOrdered = MenuUtils.orderHierarchically(this.targetList());
-        }
-
-        const uniqueMenus = Array.from(new Map(menuListOrdered.map((item) => [item.id, item])).values());
-        this.menuService.updateOrder(uniqueMenus.map((item) => ({ id: item.id, order: item.order, parentId: item.parentId }))).subscribe({
-            next: () => {
-                this.originMenuList.set(structuredClone(this.targetList()));
-                this.hasPositionChanged.set(false);
-            }
-        });
-    }
-
-    cancelChanges() {
-        this.filteredMenuList.update((menus) => {
-            if (!menus) return [];
-            const original = this.originMenuList();
-            return structuredClone(original);
-        });
-        this.hasPositionChanged.set(false);
-
-        this.messageService.setSuccess('Los cambios han sido descartados correctamente.');
-    }
-
-    hasOrderChanged(): boolean {
-        const current = MenuUtils.flattenMenu(this.filteredMenuList());
-        const original = MenuUtils.flattenMenu(this.originMenuList());
-
-        // Si ambos están vacíos, no hay cambios
-        if (current.length === 0 && original.length === 0) return false;
-
-        // Si la longitud difiere, algo cambió
-        if (current.length !== original.length) return true;
-        // Comparar item por item
-        return current.some((item, i) => {
-            const origin = original[i];
-            return item.id !== origin.id || item.order !== origin.order || item.parentId !== origin.parentId;
-        });
-    }
+  
 
     confirmDeleteMenu(event: Event, menu: Menu) {
         const message = menu.children && menu.children.length > 0 ? 'Esta acción eliminará el menú seleccionado y todos sus submenús. ¿Deseas continuar?' : 'Estás seguro de que deseas eliminar este menú?';

@@ -18,6 +18,7 @@ import { ImageCompareModule } from 'primeng/imagecompare';
 import { BadgeModule } from 'primeng/badge';
 import { SelectButton, SelectButtonModule } from 'primeng/selectbutton';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { ShowLinkSwitch } from '@/dashboard/pages/section/components/show-link-switch/show-link-switch';
 
 @Component({
     selector: 'machine-dialog-form',
@@ -25,6 +26,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
         JsonPipe,
         TechnicalSpecificationsDialogForm,
         TechnicalSpecificationsTable,
+        ShowLinkSwitch,
         NgClass,
         ReactiveFormsModule,
 
@@ -285,7 +287,7 @@ export class MachineDialogForm {
             return;
         }
 
-        const { name, shortDescription, fullDescription, fileImages, technicalSpecifications, categoryId, manualFile, id, imagesToDelete, imagesToUpdate } = this.form.value;
+        const { name, shortDescription, fullDescription, fileImages, technicalSpecifications, categoryId, manualFile, id, imagesToDelete, imagesToUpdate, linkId, textButton } = this.form.value;
 
         const payload: CreateMachine = {
             name: name!,
@@ -294,7 +296,10 @@ export class MachineDialogForm {
             fileImages: fileImages!,
             technicalSpecifications: technicalSpecifications as any,
             categoryId: categoryId!,
-            manualFile
+            manualFile,
+            linkId: linkId || null,
+            textButton: textButton || null
+
         };
 
         if (this.isEditMode) {

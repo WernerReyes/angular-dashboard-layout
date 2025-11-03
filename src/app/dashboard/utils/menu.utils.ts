@@ -10,33 +10,32 @@ interface OrderedItem {
 export class MenuUtils {
     //*  To Service Methods *//
     static insertMenuItem(list: Menu[], newMenu: Menu): Menu[] {
-    if (!newMenu.parentId) {
-        // No tiene padre → se agrega al nivel raíz
-        return [...list, newMenu];
+        if (!newMenu.parentId) {
+            // No tiene padre → se agrega al nivel raíz
+            return [...list, newMenu];
+        }
+
+        const insertRecursively = (menus: Menu[]): Menu[] => {
+            return menus.map((menu) => {
+                if (menu.id === newMenu.parentId) {
+                    // Encontró el padre
+                    return {
+                        ...menu,
+                        children: [...(menu.children || []), newMenu]
+                    };
+                } else if (menu.children && menu.children.length > 0) {
+                    // Buscar en los hijos recursivamente
+                    return {
+                        ...menu,
+                        children: insertRecursively(menu.children)
+                    };
+                }
+                return menu;
+            });
+        };
+
+        return insertRecursively(list);
     }
-
-    const insertRecursively = (menus: Menu[]): Menu[] => {
-        return menus.map(menu => {
-            if (menu.id === newMenu.parentId) {
-                // Encontró el padre
-                return {
-                    ...menu,
-                    children: [...(menu.children || []), newMenu]
-                };
-            } else if (menu.children && menu.children.length > 0) {
-                // Buscar en los hijos recursivamente
-                return {
-                    ...menu,
-                    children: insertRecursively(menu.children)
-                };
-            }
-            return menu;
-        });
-    };
-
-    return insertRecursively(list);
-}
-
 
     /**
      * Actualiza un ítem dentro de una jerarquía de menús.
@@ -84,7 +83,7 @@ export class MenuUtils {
     private static updateChildMenu(list: Menu[], updated: Menu): Menu[] {
         return list.map((item) => {
             if (item.id === updated.id) {
-                 const fieldToUpdate: (keyof Menu)[] = ['title', 'linkId', 'active', 'parentId', 'link'];
+                const fieldToUpdate: (keyof Menu)[] = ['title', 'linkId', 'active', 'parentId', 'link'];
                 for (const field of fieldToUpdate) {
                     if (updated[field] !== undefined) {
                         (item as any)[field] = updated[field];
@@ -183,7 +182,6 @@ export class MenuUtils {
     //     // traverse(list);
     //     // return result;
 
-        
     // }
 
     // static orderHierarchically(items: Menu[]): Menu[] {
@@ -242,35 +240,140 @@ export class MenuUtils {
     //     return result;
     // }
 
+    static buildReversedTree(menus: Menu[]): Menu[] {
+     const map = new Map<number, Menu>();
+    const allMenus: Menu[] = [];
 
-
-   static buildReversedTree(menus: Menu[]): Menu[] {
-    const result: Menu[] = [];
-
-    for (const menu of menus) {
-        // Buscamos el ancestro más alto
-        let current = menu;
-        const chain: Menu[] = [];
-
-        // Subimos hasta el ancestro
+    // Función recursiva para aplanar jerarquía de padres
+    const flattenWithParents = (menu: Menu) => {
+        let current: Menu | null = menu;
         while (current) {
-            chain.unshift({
-                ...current,
-                children: []
-            });
-            current = current.parent as Menu;
+            if (!map.has(current.id)) {
+                map.set(current.id, { ...current, children: [] });
+                allMenus.push(map.get(current.id)!);
+            }
+            current = current.parent;
         }
+    };
 
-        // Ahora conectamos de abuelo a nieto
-        for (let i = 0; i < chain.length - 1; i++) {
-            chain[i].children!.push(chain[i + 1]);
-        }
-
-        // El primero de la cadena (abuelo) es la raíz
-        result.push(chain[0]);
+    // Aplanar todos los menús con sus padres
+    for (const menu of menus) {
+        flattenWithParents(menu);
     }
 
-    return result;
+    // Enlazar padres e hijos
+    for (const menu of map.values()) {
+        if (menu.parentId && map.has(menu.parentId)) {
+            map.get(menu.parentId)!.children!.push(menu);
+        }
+    }
+
+    // Retornar solo las raíces
+    return Array.from(map.values()).filter(m => !m.parentId);
+}
 }
 
-}
+
+// [
+//     {
+//         "id": 2,
+//         "title": "Inicio",
+//         "active": true,
+//         "parentId": null,
+//         "children": null,
+//         "linkId": 3,
+//         "link": null,
+//         "parent": null
+//     },
+//     {
+//         "id": 3,
+//         "title": "Nosotros",
+//         "active": true,
+//         "parentId": null,
+//         "children": null,
+//         "linkId": 4,
+//         "link": null,
+//         "parent": null
+//     },
+//     {
+//         "id": 8,
+//         "title": "Valorizadoras",
+//         "active": true,
+//         "parentId": 5,
+//         "children": null,
+//         "linkId": 5,
+//         "link": null,
+//         "parent": {
+//             "id": 5,
+//             "title": "Procesamiento de Billetes",
+//             "active": true,
+//             "parentId": 4,
+//             "children": null,
+//             "linkId": 5,
+//             "link": null,
+//             "parent": {
+//                 "id": 4,
+//                 "title": "Soluciones",
+//                 "active": false,
+//                 "children": null,
+//                 "link": null,
+//                 "parent": null
+//             }
+//         }
+//     },
+//     {
+//         "id": 6,
+//         "title": "Procesamiento de Monedas",
+//         "active": true,
+//         "parentId": 4,
+//         "children": null,
+//         "linkId": 6,
+//         "link": null,
+//         "parent": {
+//             "id": 4,
+//             "title": "Soluciones",
+//             "active": true,
+//             "parentId": null,
+//             "children": null,
+//             "linkId": null,
+//             "link": null,
+//             "parent": null
+//         }
+//     }
+// ]
+
+
+// [
+//     {
+//         "id": 2,
+//         "title": "Inicio",
+//         "parent": null
+//     },
+//     {
+//         "id": 3,
+//         "title": "Nosotros",
+//         "parent": null
+//     },
+//     {
+//         "id": 8,
+//         "title": "Valorizadoras",
+//         "parent": {
+//             "id": 5,
+//             "title": "Procesamiento de Billetes",
+//             "parent": {
+//                 "id": 4,
+//                 "title": "Soluciones",
+//                 "parent": null
+//             }
+//         }
+//     },
+//     {
+//         "id": 6,
+//         "title": "Procesamiento de Monedas",
+//         "parent": {
+//             "id": 4,
+//             "title": "Soluciones",
+//             "parent": null
+//         }
+//     }
+// ]

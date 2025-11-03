@@ -1,4 +1,4 @@
-import type { TecnicalSpecifications } from "../mappers/machine.mapper";
+import type { MachineImages, TecnicalSpecifications } from "../mappers/machine.mapper";
 import { Category } from "./category";
 import type { Link } from "./link";
 import type { Section } from "./section";
@@ -8,7 +8,7 @@ export interface Machine {
     readonly description: string | null;
     readonly longDescription: string | null;
     readonly name: string;
-    readonly images: string[] | null;
+    readonly images: MachineImages[] | null;
     readonly manual: string | null;
     readonly technicalSpecifications: TecnicalSpecifications[] | null;
     readonly categoryId: number;

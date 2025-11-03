@@ -160,6 +160,11 @@ export class Table {
         return this.categoryTypesOptions[type];
     }
 
+    getMainImageUrl(machine: Machine) {
+        const mainImage = machine.images?.find((img) => img.isMain) || machine.images?.[0];
+        return mainImage ? mainImage.url : '';
+    }
+
     onContextMenu(event: any, machine: Machine) {
         this.machineCm.target = event.currentTarget;
         this.machineCm.show(event);
@@ -217,4 +222,4 @@ export class Table {
             }
         });
     }
-    }
+}

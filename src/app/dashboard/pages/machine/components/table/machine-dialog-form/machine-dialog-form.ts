@@ -1,24 +1,27 @@
+import { CreateMachine } from '@/dashboard/interfaces/machine';
+import { ShowLinkSwitch } from '@/dashboard/pages/section/components/show-link-switch/show-link-switch';
+import { MachineService } from '@/dashboard/services/machine.service';
 import { FormUtils } from '@/utils/form-utils';
+import { JsonPipe, NgClass } from '@angular/common';
 import { Component, computed, inject, linkedSignal, model, type Signal, signal, ViewChild } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { AccordionModule } from 'primeng/accordion';
+import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-import { MachineFormService } from '../../../services/machine-form.service';
-import { ReactiveFormsModule, FormsModule, FormControl } from '@angular/forms';
+import { FileSelectEvent, FileUpload, FileUploadModule } from 'primeng/fileupload';
+import { ImageCompareModule } from 'primeng/imagecompare';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
+import { SelectButtonModule } from 'primeng/selectbutton';
 import { TextareaModule } from 'primeng/textarea';
-import { FileSelectEvent, FileUpload, FileUploadModule } from 'primeng/fileupload';
-import { AccordionModule } from 'primeng/accordion';
-import { TechnicalSpecificationsDialogForm } from './technical-specifications-dialog-form/technical-specifications-dialog-form';
+import { MachineFormService } from '../../../services/machine-form.service';
 import { TechnicalSpecificationsTable } from '../../technical-specifications-table/technical-specifications-table';
-import { JsonPipe, NgClass } from '@angular/common';
-import { CreateMachine } from '@/dashboard/interfaces/machine';
-import { MachineService } from '@/dashboard/services/machine.service';
-import { ImageCompareModule } from 'primeng/imagecompare';
-import { BadgeModule } from 'primeng/badge';
-import { SelectButton, SelectButtonModule } from 'primeng/selectbutton';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { ShowLinkSwitch } from '@/dashboard/pages/section/components/show-link-switch/show-link-switch';
+import { TechnicalSpecificationsDialogForm } from './technical-specifications-dialog-form/technical-specifications-dialog-form';
+import { ContextMenu, ContextMenuModule } from 'primeng/contextmenu';
+import { MenuItem } from 'primeng/api';
+import { MachineImages } from '@/shared/mappers/machine.mapper';
 
 @Component({
     selector: 'machine-dialog-form',
@@ -29,7 +32,7 @@ import { ShowLinkSwitch } from '@/dashboard/pages/section/components/show-link-s
         ShowLinkSwitch,
         NgClass,
         ReactiveFormsModule,
-
+        ContextMenuModule,
         DialogModule,
         ButtonModule,
         InputTextModule,
@@ -39,7 +42,9 @@ import { ShowLinkSwitch } from '@/dashboard/pages/section/components/show-link-s
         AccordionModule,
         ImageCompareModule,
         SelectButtonModule,
-        BadgeModule
+        MessageModule,
+        BadgeModule,
+        JsonPipe
     ],
     templateUrl: './machine-dialog-form.html'
 })
@@ -49,7 +54,7 @@ export class MachineDialogForm {
 
     @ViewChild('fileUp') fileUpload!: FileUpload;
     @ViewChild('manualFileUp') manualFileUpload!: FileUpload;
-  
+    @ViewChild('imageCM') contextMenu!: ContextMenu;
 
     optionSelectButtonControl = new FormControl<'update' | 'delete' | 'new'>('update');
 
@@ -109,7 +114,7 @@ export class MachineDialogForm {
 
     // availableImages = signal<string[]>([]);
 
-    images = toSignal(this.form.get('images')!.valueChanges, { initialValue: this.form.get('images')!.value }) as Signal<string[]>;
+    images = toSignal(this.form.get('images')!.valueChanges, { initialValue: this.form.get('images')!.value }) as Signal<MachineImages[]>;
 
     private imagesToDeleteSignal = toSignal(this.form.get('imagesToDelete')!.valueChanges, { initialValue: this.form.get('imagesToDelete')!.value }) as Signal<string[]>;
 
@@ -127,6 +132,38 @@ export class MachineDialogForm {
             { label: 'Agregar Nuevos', total: totalToAdd, icon: 'pi pi-plus', value: 'new', constant: totalToUpdate > 0 || totalToDelete.length > 0 }
         ];
     });
+
+    selectedImage = signal<string | null>(null);
+
+    imageActions: MenuItem[] = [
+        {
+            label: 'Marcar como principal',
+            icon: 'pi pi-star',
+            command: () => {
+                const image = this.selectedImage();
+                if (!image) return;
+
+                const machineId = this.form.get('id')?.value;
+                this.machineService.setImageAsMain(machineId!, image).subscribe(() => {
+                    this.currentImages.update((current) => {
+                        return current.map((img) => {
+                            if (!img) return img;
+                            if (img?.image.url === image) {
+                                return { image: { ...img.image, isMain: true }, disabled: img.disabled };
+                            }
+                            return { image: { ...img!.image, isMain: false }, disabled: img!.disabled };
+                        });
+                    });
+                });
+            }
+        }
+    ];
+
+    onContextMenu(event: any, image: MachineImages | null) {
+        this.contextMenu.target = event.currentTarget;
+        this.contextMenu.show(event);
+        this.selectedImage.set(image!.url);
+    }
 
     onImagesSelect(event: FileSelectEvent) {
         const control = this.form.get('fileImages');
@@ -214,14 +251,11 @@ export class MachineDialogForm {
         //         // this.removeFile(e, index, this.fileUpload.files[index]);
         //     }
         // }
-
-     
     }
 
     removeImage(e: Event, image: string) {
         e.stopPropagation();
 
-     
         this.selectedImages.update((images) => {
             const index = images.findIndex((img) => img.image === image);
 
@@ -238,9 +272,8 @@ export class MachineDialogForm {
 
         this.imagesToDelete?.setValue(found ? (this.imagesToDeleteSignal()?.filter((img) => img !== image) ?? []) : [...(this.imagesToDeleteSignal() || []), image]);
 
-        
         this.currentImages.update((current) => {
-            const found = current.find((value) => value?.image === image);
+            const found = current.find((value) => value?.image.url === image);
             if (found) {
                 const idx = current.indexOf(found);
                 current[idx] = { image: found.image, disabled: !found.disabled };
@@ -257,9 +290,6 @@ export class MachineDialogForm {
         return (file as any)?.objectURL.changingThisBreaksApplicationSecurity.split('/').pop();
     }
 
-    
-
-   
     get imagesToDelete() {
         return this.form.get('imagesToDelete');
     }
@@ -299,8 +329,9 @@ export class MachineDialogForm {
             manualFile,
             linkId: linkId || null,
             textButton: textButton || null
-
         };
+
+        console.log('Payload:', payload);
 
         if (this.isEditMode) {
             this.machineService.updateMachine({ id: id!, imagesToRemove: imagesToDelete!, imagesToUpdate: imagesToUpdate!, ...payload }).subscribe({
@@ -321,6 +352,4 @@ export class MachineDialogForm {
             }
         });
     }
-
-    
 }

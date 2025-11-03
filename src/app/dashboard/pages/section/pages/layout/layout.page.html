@@ -21,12 +21,19 @@
                     <input pInputText placeholder="Buscar sección..." #searchInput />
                 </p-inputgroup>
 
-                <p-multiSelect class="sm:max-w-72" [options]="sectionTypesOptions | keyvalue" 
-
-                selectedItemsLabel="{0} tipos seleccionados"
-                emptyFilterMessage="No se encontraron tipos"
-                emptyMessage="No hay tipos disponibles"
-                placeholder="Filtrar por tipo" optionLabel="value.label" optionValue="key" display="chip" fluid #selectedTypes>
+                <p-multiSelect
+                    class="sm:max-w-72"
+                    [options]="sectionTypesOptions | keyvalue"
+                    selectedItemsLabel="{0} tipos seleccionados"
+                    emptyFilterMessage="No se encontraron tipos"
+                    emptyMessage="No hay tipos disponibles"
+                    placeholder="Filtrar por tipo"
+                    optionLabel="value.label"
+                    optionValue="key"
+                    display="chip"
+                    fluid
+                    #selectedTypes
+                >
                     <ng-template let-country #item>
                         <p-tag [severity]="country.value.severity" class="text-sm" [value]="country.value.label"></p-tag>
                     </ng-template>
@@ -36,9 +43,7 @@
 
         <sections-list [searchTerm]="searchInput.value" [filterByType]="selectedTypes.value" [type]="SectionMode.LAYOUT" [selectedPage]="selectedPage()" (onDisplay)="display.set($event)" (onSelectedSection)="selectedSection.set($event)">
             <ng-template #associatedPage let-section>
-                <p-button 
-                [loading]="sectionService.loading()"
-                (click)="op.toggle($event); setPages(section)" icon="pi pi-sitemap" label="Asociar páginas" variant="outlined"> </p-button>
+                <p-button [loading]="sectionService.loading()" (click)="op.toggle($event); setPages(section)" icon="pi pi-sitemap" label="Asociar páginas" variant="outlined"> </p-button>
 
                 <p-popover #op>
                     <div class="flex flex-col gap-4 w-xs" [formGroup]="form">
@@ -47,8 +52,18 @@
                                 <!-- optionValue="id" -->
 
                                 <p-multiSelect
-                                 
-                                formControlName="pagesIds" size="small" [options]="pages" optionLabel="title" optionValue="id" placeholder="Selecciona páginas para asociar" display="chip" fluid>
+                                    formControlName="pagesIds"
+                                    size="small"
+                                    emptyMessage="No hay páginas disponibles para asociar"
+                                    emptyFilterMessage="No se encontraron páginas"
+                                    selectedItemsLabel="{0} páginas seleccionadas"
+                                    [options]="pages"
+                                    optionLabel="title"
+                                    optionValue="id"
+                                    placeholder="Selecciona páginas para asociar"
+                                    display="chip"
+                                    fluid
+                                >
                                     <ng-template #footer>
                                         <div class="p-3 flex justify-end">
                                             <p-button

@@ -2,7 +2,12 @@
     <div class="container mx-auto px-4">
         <!-- Header Section -->
         <div class="text-center">
-            <h2 class="!text-3xl md:!text-4xl !font-bold text-primary-600 dark:text-primary-400 mb-4">{{ section().title }}</h2>
+            @if (section().title) {
+
+                <h2 class="!text-3xl md:!text-4xl !font-bold text-primary-600 dark:text-primary-400 mb-4">{{ section().title }}</h2>
+            } @else {
+                <empty-field-message className="max-w-md mx-auto mb-4" textContent="Sin título"></empty-field-message>
+            }
 
             @if (section().description) {
             <p class="text-lg text-surface-600 dark:text-surface-300 mx-auto text-center leading-relaxed">{{ section().description }}</p>
@@ -11,28 +16,29 @@
             }
         </div>
 
-
         @if (section().items.length === 0) {
         <empty-field-message className="max-w-lg mx-auto" textContent="No hay elementos disponibles"></empty-field-message>
         } @else {
+        
         <p-carousel
             [value]="section().items"
             [ngClass]="{
             'md:max-w-[40rem] mx-auto': section().items.length < 3,
                      }"
+            [contentClass]="isPreview() ? 'max-w-56 sm:max-w-full mx-auto' : ''"
             [numVisible]="3"
             [showIndicators]="false"
             [showNavigators]="true"
             [numScroll]="1"
             [circular]="true"
-            [responsiveOptions]="responsiveOptions"
+            [responsiveOptions]="responsiveOptions()"
             autoplayInterval="6000"
         >
             <!-- 'ring-4 ring-primary ring-opacity-50 bg-white dark:bg-slate-700 shadow-2xl transform scale-105 -translate-y-2': selectedItem()?.id === item.id, -->
             <!-- (click)="onSelectItem(item)" -->
             <ng-template let-item #item>
                 <div
-                (contextmenu)="contextMenu()?.onContextMenu($event, item)"
+                    (contextmenu)="contextMenu()?.onContextMenu($event, item)"
                     class="m-6 p-4 cursor-pointer transition-all duration-300 rounded-lg bg-white/70 dark:bg-slate-800/70 hover:bg-white hover:dark:bg-slate-800 hover:shadow-lg hover:-translate-y-1"
                     [ngClass]="{
                         'border border-primary': currentSectionItem()?.id === item.id
@@ -50,8 +56,6 @@
                 </div>
             </ng-template>
         </p-carousel>
-
-       
 
         }
     </div>

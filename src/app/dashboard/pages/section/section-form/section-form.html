@@ -1,6 +1,6 @@
 <p-dialog
     [header]="selectedSection() ? 'Editar sección' : 'Crear nueva sección'"
-    class="!overflow-hidden"
+    contentStyleClass="overflow-x-hidden"
     [visible]="display()"
     (visibleChange)="closeDialog()"
     [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
@@ -41,9 +41,7 @@
 
                 @switch (type) { @case (SectionType.WHY_US) { <why-us-form [form]="form"></why-us-form>
                 } @case (SectionType.CASH_PROCESSING_EQUIPMENT) {
-                <div class="mt-3">
-                    <show-link-switch [form]="form"></show-link-switch>
-                </div>
+                <select-machine [form]="form" label="Selecciona las Máquinas" [multiple]="true"></select-machine>
                 } @case (SectionType.CLIENT) {
                 <common-inputs
                     [form]="form"
@@ -168,8 +166,7 @@
                     }
                 ]"
                 ></common-inputs>
-                } @case (SectionType.OPERATIONAL_BENEFITS) { } 
-                @case (SectionType.MACHINE_DETAILS) {
+                } @case (SectionType.OPERATIONAL_BENEFITS) { } @case (SectionType.MACHINE_DETAILS) {
                 <select-machine [form]="form" label="Selecciona una máquina"></select-machine>
                 <common-inputs
                     [form]="form"
@@ -195,12 +192,11 @@
                         placeholder: 'Descripción de la sección',
                         isTextarea: true,
                     }
-                ]" 
+                ]"
                 ></common-inputs>
                 <!-- < -->
-                 <select-machine [form]="form" label="Selecciona las Máquinas" [multiple]="true"></select-machine>
+                <select-machine [form]="form" label="Selecciona las Máquinas" [multiple]="true"></select-machine>
                 }}
-                
             </div>
 
             <p-togglebutton formControlName="active" onLabel="Activo" offLabel="Inactivo" onIcon="pi pi-check" offIcon="pi pi-times" onIcon="pi pi-lock-open" offIcon="pi pi-lock" class="w-36" ariaLabel="Do you confirm" />
@@ -211,7 +207,6 @@
         </div>
     </div>
 
-    
     <!-- TODO:
     <pre>{{ form.value | json }}</pre> -->
 

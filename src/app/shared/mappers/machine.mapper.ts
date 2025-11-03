@@ -9,12 +9,17 @@ export type TecnicalSpecifications = {
     description: string;
 };
 
+export type MachineImages = {
+    url: string;
+    isMain: boolean;
+}
+
 export interface MachineEntity {
     id_machine: number;
     name: string;
     description: string | null;
     long_description: string | null;
-    images: string[] | null;
+    images: MachineImages[] | null;
     manual: string | null;
     technical_specifications: TecnicalSpecifications[] | null;
     category_id: number;

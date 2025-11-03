@@ -3,7 +3,6 @@ import { MachineService } from '@/dashboard/services/machine.service';
 import { ImageError } from '@/shared/components/error/image/image';
 import { Machine } from '@/shared/interfaces/machine';
 import type { Section } from '@/shared/interfaces/section';
-import type { SectionItem } from '@/shared/interfaces/section-item';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -12,10 +11,10 @@ import { CardModule } from 'primeng/card';
 import { ListboxModule } from 'primeng/listbox';
 import { MenuModule } from 'primeng/menu';
 import { SplitterModule } from 'primeng/splitter';
-import type { ContextMenuCrud } from '../../components/context-menu-crud/context-menu-crud';
+import { EmptyFieldMessage } from '../../components/empty-field-message/empty-field-message';
 @Component({
     selector: 'section-machine-items',
-    imports: [ImageError, FilterByIdsPipe, SplitterModule, FormsModule, ListboxModule, CardModule, ButtonModule, MenuModule],
+    imports: [ImageError, EmptyFieldMessage, FilterByIdsPipe, SplitterModule, FormsModule, ListboxModule, CardModule, ButtonModule, MenuModule],
     templateUrl: './section-machine-items.html'
 })
 export class SectionMachineItems {
@@ -46,4 +45,11 @@ export class SectionMachineItems {
                 this.isMobile.set(result.matches);
             });
     }
+
+   getMainImageUrl(
+    machine: Machine
+  ) {
+    const mainImage = machine.images?.find((img) => img.isMain) || machine.images?.[0];
+    return mainImage ? mainImage.url : '';
+  }
 }

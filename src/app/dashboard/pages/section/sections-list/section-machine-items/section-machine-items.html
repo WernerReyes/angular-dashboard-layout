@@ -1,4 +1,10 @@
 <!-- {{section() | json}} -->
+ @if (section().title) {
+
+     <h2 class="!text-xl md:!text-2xl font-bold text-primary-700 dark:text-primary-400  mb-6">{{section().title}}</h2>
+ } @else {
+     <empty-field-message className="max-w-md mb-4" textContent="Sin título"></empty-field-message>
+ }
 <p-splitter
     [layout]="isMobile() ? 'vertical' : 'horizontal'"
     [panelSizes]="isMobile() ? [40, 60] : [25, 75]"
@@ -34,7 +40,7 @@
             <p-card class="h-full">
                 <ng-template #header>
                     @if (item.images && item.images.length > 0) {
-                    <img alt="Card" class="w-full h-48 object-cover" [src]="item.images[0]" />
+                    <img alt="Card" class="w-full h-48 object-cover" [src]="getMainImageUrl(item)" />
 
                     }@else {
                     <app-image-error></app-image-error>

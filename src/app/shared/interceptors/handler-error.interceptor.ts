@@ -24,11 +24,14 @@ export function handlerErrorInterceptor(req: HttpRequest<unknown>, next: HttpHan
                 return throwError(() => error);
             }
 
+            console.log(error);
+
             switch (code) {
                 case HttpStatusCode.UnprocessableEntity:
+                    
                     const details = error.error?.details;
+                
                     const array = Object.values(details).flat() as string[];
-                    console.log(array);
                     messageService.setError(array[0]);
                     break;
 

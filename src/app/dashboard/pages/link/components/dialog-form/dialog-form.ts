@@ -5,7 +5,7 @@ import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-bo
 import { linkTypeOptions, type Link } from '@/shared/interfaces/link';
 import { LinkType } from '@/shared/mappers/link.mapper';
 import { FormUtils } from '@/utils/form-utils';
-import { Component, computed, inject, input, output } from '@angular/core';
+import { Component, computed, effect, inject, input, output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -17,38 +17,48 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { LinkFormService } from '../../services/link-form.service';
 import { JsonPipe } from '@angular/common';
 import { FileSelectEvent, FileUpload } from 'primeng/fileupload';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'link-dialog-form',
-    imports: [JsonPipe, DialogModule, ErrorBoundary, ReactiveFormsModule, FileUpload,  InputTextModule, MessageModule, SkeletonModule, SelectModule, SelectButtonModule, ButtonModule],
+    imports: [JsonPipe, DialogModule, ErrorBoundary, ReactiveFormsModule, FileUpload, InputTextModule, MessageModule, SkeletonModule, SelectModule, SelectButtonModule, ButtonModule],
     templateUrl: './dialog-form.html'
 })
 export class DialogForm {
     private readonly pageService = inject(PageService);
     private readonly linkService = inject(LinkService);
     private readonly linkFormService = inject(LinkFormService);
-  
-
-    selectedLink = input<Link | null>();
-
-    onCloseDialog = output<void>();
-
-    form = this.linkFormService.form;
-
-    FormUtils = FormUtils;
-
-    display = input.required<boolean>();
 
     pagesList = this.pageService.pagesListResource;
-
+    form = this.linkFormService.form;
+    FormUtils = FormUtils;
     LinkType = LinkType;
-
-    linkTypes = computed(() => Object.values(linkTypeOptions));
-
-    linkTargets = computed(() => [
+    linkTypes = Object.values(linkTypeOptions);
+    linkTargets = [
         { label: 'Misma pestaña', value: false },
         { label: 'Nueva pestaña', value: true }
-    ]);
+    ];
+
+    selectedLink = input<Link | null>();
+    onCloseDialog = output<void>();
+    display = input.required<boolean>();
+
+    private pageId = toSignal(this.form.get('pageId')!.valueChanges, { initialValue: this.form.get('pageId')!.value });
+    private type = toSignal(this.form.get('type')!.valueChanges, { initialValue: this.form.get('type')!.value });
+
+    private setDefaultLinkTitle = effect(() => {
+        const type = this.type();
+        const currentTitle = this.form.get('title')!;
+        // if (!currentTitle || currentTitle.value.trim() === '') {
+            if (type === LinkType.PAGE) {
+                const pageId = this.pageId();
+                const page = this.pagesList.hasValue() ? this.pagesList.value().find((p) => p.id === pageId) : null;
+                if (page) {
+                    currentTitle.setValue(page.title);
+                }
+            }
+        // }
+    });
 
     onFileSelect(event: FileSelectEvent) {
         console.log(event);
@@ -57,11 +67,10 @@ export class DialogForm {
         if (file) {
             this.form.patchValue({ file: file as any });
             this.form.get('file')?.markAsTouched();
-            }
         }
+    }
 
     saveChanges() {
-       
         const formValue = this.form.value;
         Object.keys(this.form.controls).forEach((key) => {
             const control = this.form.get(key);
@@ -80,7 +89,6 @@ export class DialogForm {
             if (this.selectedLink()) {
                 this.linkService.updateLink(this.selectedLink()!.id, createLinkData).subscribe({
                     next: () => {
-                     
                         this.linkFormService.form.reset();
                         this.linkFormService.clearTemporalValidators();
                         this.onCloseDialog.emit();
@@ -91,7 +99,6 @@ export class DialogForm {
 
             this.linkService.createLink(createLinkData).subscribe({
                 next: () => {
-                 
                     this.linkFormService.form.reset();
                     this.linkFormService.clearTemporalValidators();
                     this.onCloseDialog.emit();

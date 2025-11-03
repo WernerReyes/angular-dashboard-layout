@@ -5,7 +5,8 @@
 
     <ng-template #content let-pages>
         <p-confirmdialog />
-        @let filteredPages = pages | filterByTerm:'title': searchQuery();
+       
+        @let filteredPages = pages | filterBy:'title': searchQuery();
         <p-dataview [paginator]="true" [totalRecords]="filteredPages.length" [rowsPerPageOptions]="[5, 10, 20]" [rows]="5" [value]="filteredPages" layout="list">
             <ng-template #header>
                 <p-inputgroup>
@@ -25,11 +26,21 @@
             </ng-template>
 
             <ng-template #list let-pages>
+                
                 <div class="flex flex-col">
                     @for (page of pages; let i = $index; track page.id) {
-                    <div class="flex flex-col sm:flex-row sm:items-center p-6 gap-4" [ngClass]="{ 'border-t border-surface': i !== 0 }">
+
+                    <div
+                        class="flex flex-col sm:flex-row sm:items-center p-6 gap-4"
+                        [ngClass]="{ 'border-t border-surface': i !== 0 && selectedPage()?.id !== page.id, 
+                        'border border-primary p-4 rounded-lg': selectedPage()?.id === page.id,
+                        'border border-primary bg-primary/10 p-4 rounded-lg': page.isMain
+
+                     }"
+                        (contextmenu)="onContextMenu($event); selectedPage.set(page)"
+                    >
                         <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
-                            <div class="flex flex-row md:flex-col justify-between items-start gap-2">
+                            <div class="flex w-full justify-between items-start gap-2">
                                 <div class="flex items-center gap-2">
                                     <div class="text-lg font-medium">
                                         {{page.title}}
@@ -39,12 +50,13 @@
                                         <small class="text-sm pt-2 text-muted-color">Creado el {{ page.createdAt | date: 'mediumDate' }}</small>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="flex flex-col md:items-end gap-8">
-                                <div class="flex flex-row-reverse md:flex-row gap-2">
-                                    <p-button label="Editar" text icon="pi pi-pencil" (click)="openDialogAndEdit(page)"></p-button>
-                                    <p-button label="Eliminar" text icon="pi pi-trash" severity="danger" (click)="deletePage($event, page)"></p-button>
+                                <div class="mt-2 md:mt-0">
+                                    @if (page.isMain) {
+                                    <p-tag severity="success" value="Página Principal" class="text-sm"></p-tag>
+                                    } @else {
+                                    <p-tag severity="info" value="Página Secundaria" class="text-sm"></p-tag>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -54,5 +66,6 @@
                 </div>
             </ng-template>
         </p-dataview>
+        <p-contextmenu #cm [model]="actions()" />
     </ng-template>
 </app-error-boundary>

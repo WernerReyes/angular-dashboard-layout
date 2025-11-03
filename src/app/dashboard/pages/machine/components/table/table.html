@@ -6,9 +6,7 @@
     <ng-template #content let-categories>
         <p-confirm-dialog />
         <p-contextmenu #cm [model]="items" (onHide)="selectedCategory.set(null)" />
-        <p-table 
-          
-        [value]="categories" [(contextMenuSelection)]="selectedCategory" [contextMenu]="cm" sortField="title" sortMode="single" dataKey="id" rowGroupMode="subheader" groupRowsBy="id" [tableStyle]="{'min-width': '70rem'}">
+        <p-table [value]="categories" [(contextMenuSelection)]="selectedCategory" [contextMenu]="cm" sortField="title" sortMode="single" dataKey="id" rowGroupMode="subheader" groupRowsBy="id" [tableStyle]="{'min-width': '70rem'}">
             <ng-template #header>
                 <tr>
                     <th style="width: 10%">Nombre</th>
@@ -25,11 +23,11 @@
 
             <ng-template #emptymessage>
                 <!-- <tr class="flex flex-col items-center bg-red-400 justify-center py-8 text-surface-500">                   -->
-                    <td colspan="7" class="text-center p-4">
-                        <i class="pi pi-inbox text-4xl mb-3"></i>
-                        <div class="font-semibold text-lg mb-1">No se encontraron categorías</div>
-                        <div class="text-sm">Intenta ajustar tu búsqueda o crea una nueva categoría para comenzar.</div>
-                    </td>
+                <td colspan="7" class="text-center p-4">
+                    <i class="pi pi-inbox text-4xl mb-3"></i>
+                    <div class="font-semibold text-lg mb-1">No se encontraron categorías</div>
+                    <div class="text-sm">Intenta ajustar tu búsqueda o crea una nueva categoría para comenzar.</div>
+                </td>
                 <!-- </tr>      -->
             </ng-template>
 
@@ -67,9 +65,8 @@
                         @if (machine.images && machine.images.length > 0) {
 
                         <div class="flex gap-2">
-                            @let mainImage = machine.images[0];
                             <div class="relative" (mouseenter)="showMore.classList.remove('!hidden')" (mouseleave)="showMore.classList.add('!hidden')">
-                                <img [src]="mainImage" alt="Machine Image" class="w-16 h-16 object-cover rounded cursor-pointer hover:opacity-75" />
+                                <img [src]="getMainImageUrl(machine)" alt="Machine Image" class="w-16 h-16 object-cover rounded cursor-pointer hover:opacity-75" />
                                 <i #showMore class="!hidden pi pi-search absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white cursor-pointer" (click)="imagesGallery.set(machine.images)"></i>
                             </div>
                         </div>
@@ -94,7 +91,6 @@
                         } @else {
                         <span>No hay enlace</span>
                         }
-
                     </td>
                     <td>{{ machine.createdAt | date: 'short' }}</td>
                     <td>{{ machine.updatedAt | date: 'short' }}</td>
@@ -111,7 +107,7 @@
 
         <p-galleria #galleria [value]="imagesGallery()" [visible]="imagesGallery().length > 0" (visibleChange)="imagesGallery.set([]); galleria.activeIndex = 0" [responsiveOptions]="responsiveOptions" [fullScreen]="true" [showItemNavigators]="true">
             <ng-template #item let-item>
-                <img [src]="item" style="height: 100vh; width: 100%; display: block" />
+                <img [src]="item.url" style="height: 100vh; width: 100%; display: block" />
             </ng-template>
         </p-galleria>
     </ng-template>

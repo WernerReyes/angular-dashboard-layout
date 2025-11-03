@@ -26,9 +26,9 @@ export class PickerIcons {
     icons = Icons.getAll();
 
     filterText = linkedSignal<string>(() => (this.selectedIcon() ? this.selectedIcon()!.name : ''));
-    size = linkedSignal<number>(() => (this.selectedIcon() ? this.selectedIcon()!.size : 24));
-    color = linkedSignal<string>(() => (this.selectedIcon() ? this.selectedIcon()!.color : '#000000'));
-    strokeWidth = linkedSignal<number>(() => (this.selectedIcon() ? this.selectedIcon()!.strokeWidth : 2));
+    size = linkedSignal<number>(() => (this.selectedIcon() ? this.selectedIcon()!.size : Number(localStorage.getItem('picker-icon-last-size')) || 24));
+    color = linkedSignal<string>(() => (this.selectedIcon() ? this.selectedIcon()!.color : localStorage.getItem('picker-icon-last-color') || '#000000'));
+    strokeWidth = linkedSignal<number>(() => (this.selectedIcon() ? this.selectedIcon()!.strokeWidth : Number(localStorage.getItem('picker-icon-last-stroke-width')) || 2));
 
     reset() {
         this.size.set(24);
@@ -58,6 +58,10 @@ export class PickerIcons {
                 color: this.color(),
                 strokeWidth: this.strokeWidth()
             });
+
+            localStorage.setItem('picker-icon-last-size', this.size().toString());
+            localStorage.setItem('picker-icon-last-color', this.color());
+            localStorage.setItem('picker-icon-last-stroke-width', this.strokeWidth().toString());
         }
     });
 }

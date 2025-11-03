@@ -7,6 +7,7 @@ import { FormUtils } from '@/utils/form-utils';
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import type { TreeNode } from 'primeng/api';
+import { sectionTypesOptions } from '../../../../shared/interfaces/section';
 
 @Injectable({
     providedIn: 'root'
@@ -21,14 +22,13 @@ export class SectionFormService {
         content: [''],
         textButton: ['', [Validators.maxLength(50)]],
 
-        imageType: [ImageType.NONE], 
+        imageType: [ImageType.NONE],
         currentImage: [''],
         imageFile: [null, [Validators.maxLength(255)]],
         imageUrl: ['', [Validators.maxLength(255)]],
-     
 
         showLink: [false],
-        typeLink: [true], 
+        typeLink: [true],
         linkId: [null],
         active: [true, [Validators.required]],
 
@@ -39,23 +39,22 @@ export class SectionFormService {
     constructor() {
         this.form.get('type')?.valueChanges.subscribe((type) => {
             const menusIdsControl = this.form.get('menusIds');
-            const imageFile = this.form.get('imageFile')
+            const imageFile = this.form.get('imageFile');
             if (type === SectionType.MAIN_NAVIGATION_MENU || type === SectionType.FOOTER) {
                 menusIdsControl?.setValidators([Validators.required]);
 
-                console.log(this.form.get('currentImage')?.value)
+                console.log(this.form.get('currentImage')?.value);
                 if (!this.form.get('currentImage')?.value) {
-
-
                     // imageFile?.setValidators([Validators.required]);
                 }
-
             } else {
                 menusIdsControl?.clearValidators();
                 imageFile?.clearValidators();
             }
             imageFile?.updateValueAndValidity();
             menusIdsControl?.updateValueAndValidity();
+
+            this.setDefaultDataAccordingToType(type);
         });
 
         this.form.get('showLink')?.valueChanges.subscribe((showLink) => {
@@ -79,8 +78,6 @@ export class SectionFormService {
             linkIdControl?.updateValueAndValidity();
             textButtonControl?.updateValueAndValidity();
         });
-
-       
 
         this.form.get('menusIds')?.valueChanges.subscribe((menus) => {
             const menusIdsControl = this.form.get('menusIds');
@@ -110,8 +107,8 @@ export class SectionFormService {
             textButton: section.textButton!,
             typeLink: section.link ? (section.link.type === LinkType.PAGE ? true : false) : true,
             linkId: section.linkId as any,
-            active: section.pivotPages ? section.pivotPages.find((pp) => pp.idPage=== pageId)?.active ?? true : true,
-            
+            active: section.pivotPages ? (section.pivotPages.find((pp) => pp.idPage === pageId)?.active ?? true) : true,
+
             imageFile: null,
             currentImage: section.image || '',
             imageUrl: '',
@@ -121,6 +118,42 @@ export class SectionFormService {
 
             menusIds: section.menus ? section.menus.map((menu) => this.buildRecursiveNode(menu)) : []
         });
+
+        // this.setDefaultDataAccordingToType(section.type);
+    }
+
+    private setDefaultDataAccordingToType(type: SectionType) {
+        const titleControl = this.form.get('title');
+        console.log('SETTING DEFAULT DATA ACCORDING TO TYPE:', type);
+        // if (titleControl?.value.trim()) return;
+        let title = '';
+        switch (type) {
+            case SectionType.CONTACT_TOP_BAR:
+                title = sectionTypesOptions[SectionType.CONTACT_TOP_BAR].label;
+                break;
+            case SectionType.MAIN_NAVIGATION_MENU:
+                title = sectionTypesOptions[SectionType.MAIN_NAVIGATION_MENU].label;
+                break;
+            case SectionType.HERO:
+                title = sectionTypesOptions[SectionType.HERO].label;
+                break;
+
+            case SectionType.OPERATIONAL_BENEFITS:
+                title = sectionTypesOptions[SectionType.OPERATIONAL_BENEFITS].label;
+                break;
+
+            case SectionType.FOOTER:
+                title = sectionTypesOptions[SectionType.FOOTER].label;
+                break;
+
+            default:
+                title = '';
+                break;
+        }
+
+        
+            titleControl?.setValue(title, { emitEvent: false });
+        
     }
 
     private setMachinesIds(section: Section): any {
@@ -130,22 +163,19 @@ export class SectionFormService {
         return section.machines ? section.machines.map((machine) => machine.id) : [];
     }
 
- private buildRecursiveNode(menu: Menu): TreeNode {
-    const node: TreeNode = {
-        key: menu.id.toString(),
-        label: menu.title,
-        data: menu.id
-    };
+    private buildRecursiveNode(menu: Menu): TreeNode {
+        const node: TreeNode = {
+            key: menu.id.toString(),
+            label: menu.title,
+            data: menu.id
+        };
 
-    if (menu.parent) {
-        node.parent = this.buildRecursiveNode(menu.parent); // llamada recursiva
+        if (menu.parent) {
+            node.parent = this.buildRecursiveNode(menu.parent); // llamada recursiva
+        }
+
+        return node;
     }
-
-    return node;
-}
-
-    
-    
 
     reset() {
         this.form.reset();

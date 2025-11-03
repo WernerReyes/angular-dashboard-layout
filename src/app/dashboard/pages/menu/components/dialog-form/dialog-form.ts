@@ -3,7 +3,7 @@ import { MenuService } from '@/dashboard/services/menu.service';
 import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
 import type { Menu } from '@/shared/interfaces/menu';
 import { FormUtils } from '@/utils/form-utils';
-import { Component, computed, inject, input, output, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -20,10 +20,11 @@ import { linkTypeOptions } from '@/shared/interfaces/link';
 import { JsonPipe, KeyValuePipe } from '@angular/common';
 import { TreeSelectModule } from 'primeng/treeselect';
 import { TreeNode } from 'primeng/api';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'link-dialog-form',
-    imports: [FilterLinksByTypePipe, JsonPipe, DialogModule, ErrorBoundary, KeyValuePipe, FormsModule, ReactiveFormsModule, TreeSelectModule,  ToggleButtonModule, InputTextModule, MessageModule, SelectModule, SelectButtonModule, ButtonModule],
+    imports: [FilterLinksByTypePipe, JsonPipe, DialogModule, ErrorBoundary, KeyValuePipe, FormsModule, ReactiveFormsModule, TreeSelectModule, ToggleButtonModule, InputTextModule, MessageModule, SelectModule, SelectButtonModule, ButtonModule],
     templateUrl: './dialog-form.html'
 })
 export class DialogForm {
@@ -33,43 +34,47 @@ export class DialogForm {
 
     linksList = this.linkService.linksListResource;
     menusList = this.menuService.menuListResource;
-
     form = this.menuFormService.form;
-
     linkTypeOptions = linkTypeOptions;
+    FormUtils = FormUtils;
+
+    selectedMenu = input<Menu | null>();
+    display = input.required<boolean>();
+    onCloseDialog = output<void>();
+
+    private linkId = toSignal(this.form.get('linkId')!.valueChanges, { initialValue: this.form.get('linkId')!.value });
+    checked = signal<boolean>(false);
 
     menuParentsList = computed(() => {
         const parents = (this.menusList.value() || []).filter((menu) => menu.parentId === null);
         return [{ id: null, title: 'Sin padre (Nivel superior)' }, ...parents];
     });
 
-    onCloseDialog = output<void>();
-    display = input.required<boolean>();
+    menusListSelect = computed<TreeNode[]>(() => {
+        const menus = this.menusList.hasValue() ? this.menusList.value() : [];
 
-    FormUtils = FormUtils;
+        const buildTree = (items: any[]): TreeNode[] => {
+            return items.map((item) => ({
+                label: item.title,
+                data: item.id,
+                key: String(item.id),
+                children: item.children && item.children.length > 0 ? buildTree(item.children) : undefined
+            }));
+        };
 
-    selectedMenu = input<Menu | null>();
+        return buildTree(menus);
+    });
 
-     checked = signal<boolean>(false);
-
-       menusListSelect = computed<TreeNode[]>(() => {
-    const menus = this.menusList.hasValue() ? this.menusList.value() : [];
-
-    const buildTree = (items: any[]): TreeNode[] => {
-        return items.map((item) => ({
-            label: item.title,
-            data: item.id,
-            key: String(item.id),
-            children: item.children && item.children.length > 0 ? buildTree(item.children) : undefined,
-        }));
-    };
-
-    return buildTree(menus);
-});
-
-    
-
- 
+    private setDefaultMenuTitle = effect(() => {
+        const linkId = this.linkId();
+        const currentTitle = this.form.get('title')!;
+        // if (!currentTitle || currentTitle.value.trim() === '') {
+            const link = this.linksList.hasValue() ? this.linksList.value().find((l) => l.id === linkId) : null;
+            if (link) {
+                currentTitle.setValue(link.title);
+            }
+        // }
+    });
 
     saveChanges() {
         if (this.form.valid) {
@@ -81,7 +86,6 @@ export class DialogForm {
                 active: menuData.active === true
             };
 
-    
             if (this.selectedMenu()) {
                 this.menuService.updateMenu(this.selectedMenu()!.id, menu).subscribe({
                     next: () => {

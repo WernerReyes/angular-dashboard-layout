@@ -2,9 +2,18 @@
     <label>{{ label() }}</label>
     <app-error-boundary [resource]="machinesList" errorMessage="Ocurrió un error cargando las máquinas." emptyMessage="No hay máquinas disponibles. Por favor, crea una máquina primero.">
         <ng-template #content let-machines>
-           
-            <p-multiSelect id="machine" class="w-full" [options]="machines" [selectionLimit]="multiple() ? null : 1" formControlName="machinesIds" optionLabel="name" optionValue="id" placeholder="Selecciona máquinas"></p-multiSelect>
-            
+            <p-multiSelect
+                id="machine"
+                class="w-full"
+                emptyMessage="No hay máquinas disponibles. Por favor, crea una máquina primero."
+                emptyFilterMessage="No se encontraron máquinas"
+                [options]="machines"
+                [selectionLimit]="multiple() ? null : 1"
+                formControlName="machinesIds"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Selecciona máquinas"
+            ></p-multiSelect>
         </ng-template>
     </app-error-boundary>
 </div>

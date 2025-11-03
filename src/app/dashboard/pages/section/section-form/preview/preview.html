@@ -16,14 +16,14 @@
     }
     <!-- TODO: Focus on here, because after some time, it's gonna change -->
     @case (SectionType.CASH_PROCESSING_EQUIPMENT) {
-    <section-cash-processing-equipment-items [section]="preview"></section-cash-processing-equipment-items>
+    <section-cash-processing-equipment-items [section]="preview" [isPreview]="true"></section-cash-processing-equipment-items>
     }
     <!-- TODO: End -->
 
     @case (SectionType.VALUE_PROPOSITION) {
     <section-value-proposition-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-value-proposition-items>
     } @case (SectionType.CLIENT) {
-    <section-client-items [section]="sectionCreate()" [currentSectionItem]="currentSectionItem()"></section-client-items>
+    <section-client-items [section]="sectionCreate()" [isPreview]="true" [currentSectionItem]="currentSectionItem()"></section-client-items>
     } @case (SectionType.OUR_COMPANY) {
     <section-our-company-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-our-company-items>
     } @case (SectionType.MACHINE) {

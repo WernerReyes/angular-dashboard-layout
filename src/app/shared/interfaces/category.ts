@@ -16,6 +16,7 @@ type CategoryTypeOption = {
     value: CategoryType;
     severity: Severity;
     icon: string;
+    color: string;
 };
 
 export const categoryTypesOptions: Record<CategoryType, CategoryTypeOption> = {
@@ -23,12 +24,14 @@ export const categoryTypesOptions: Record<CategoryType, CategoryTypeOption> = {
         label: 'Moneda',
         value: CategoryType.COIN,
         severity: 'warn',
-        icon: 'pi pi-bitcoin'
+        icon: 'pi pi-bitcoin',
+        color: 'gold'
     },
     [CategoryType.BILL]: {
         label: 'Billete',
         value: CategoryType.BILL,
         severity: 'success',
-        icon: 'pi pi-money-bill'
+        icon: 'pi pi-money-bill',
+        color: 'green'
     }
 };

@@ -3,12 +3,12 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
             <!-- IMAGEN Y THUMBNAILS -->
             <div class="col-span-1 flex flex-col gap-4">
-                <p-galleria [showThumbnailNavigators]="false" [value]="machine()?.images ?? []" [showThumbnails]="true" [numVisible]="5" styleClass="shadow-lg rounded-xl overflow-hidden bg-white dark:bg-surface-800">
+                <p-galleria [showThumbnailNavigators]="false" [value]="imagesGallery()" [showThumbnails]="true" [numVisible]="5" styleClass="shadow-lg rounded-xl overflow-hidden bg-white dark:bg-surface-800">
                     <ng-template #item let-image>
-                        <img [src]="image" alt="{{machine()?.name}}" class="w-full max-h-64 object-contain rounded-xl" />
+                        <img [src]="image.url" alt="{{machine()?.name}}" class="w-full max-h-64 object-contain rounded-xl" />
                     </ng-template>
                     <ng-template #thumbnail let-image>
-                        <img [src]="image" alt="{{machine()?.name}} Thumbnail" class="size-14 object-cover" />
+                        <img [src]="image.url" alt="{{machine()?.name}} Thumbnail" class="size-14 object-cover" />
                     </ng-template>
                 </p-galleria>
             </div>
@@ -27,8 +27,8 @@
                         <a pButton label="Descargar brochure" icon="pi pi-file-pdf" [href]="machine()?.manual" target="_blank" rel="noopener noreferrer" styleClass="p-button-sm"></a>
                         }
 
-                        @if (section()?.textButton){
-                        <p-button [label]="section()?.textButton ?? ''"  ></p-button>
+                        @if (section().textButton){
+                        <p-button [label]="section().textButton!"  ></p-button>
                         }
 
                     </div>
@@ -40,9 +40,20 @@
 
         <div class="mt-10">
             <p-accordion>
-                <h6 class="!text-xl font-bold mb-4 text-center">{{section()?.title}}</h6>
+                @if (section().title) {
+                    <h6 class="!text-xl font-bold mb-4 text-center">{{section().title}}</h6>
+                } @else {
+                    <empty-field-message className="max-w-md mx-auto mb-4" textContent="Sin título de especificaciones técnicas"></empty-field-message>
+                }
                 <p-accordion-panel value="0">
-                    <p-accordion-header>{{section()?.subtitle}}</p-accordion-header>
+                    <p-accordion-header>
+                        @if (section().subtitle) {
+                            {{section().subtitle}}
+                        } @else {
+                            <empty-field-message className="max-w-md mx-auto mb-4" textContent="Sin subtítulo de especificaciones técnicas"></empty-field-message>
+                        }
+
+                    </p-accordion-header>
                     <p-accordion-content>
                         <table class="w-full table-auto text-sm">
                             <tbody>

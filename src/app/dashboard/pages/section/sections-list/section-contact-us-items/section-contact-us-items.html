@@ -5,22 +5,42 @@
  }"
 >
     <div class="h-full flex flex-col">
+        @if (section().image) {
+
         <img
             [src]="section().image"
             [alt]="section().title"
             class="h-auto m-auto"
             [ngClass]="{
-    'w-56 lg:w-full': !isPreview(),
-    'w-52': isPreview()
- }"
+                'w-56 lg:w-full': !isPreview(),
+                'w-52': isPreview()
+            }"
         />
+        } @else {
+        <empty-field-message className="w-fit mx-auto">
+            <ng-template #content>
+                <div class="flex flex-col items-center gap-2">
+                    <i class="pi pi-image !text-7xl"></i>
+                    <span>Sin imagen de fondo</span>
+                </div>
+            </ng-template>
+        </empty-field-message>
+
+        }
     </div>
 
     <form class="mb-5 flex flex-col gap-3">
-        <h2 class="!text-3xl md:!text-4xl !font-bold text-primary-600 !text-center mb-4">{{section().title}}</h2>
-        <p class="!text-lg text-surface-600 dark:text-surface-300 mx-auto text-center leading-relaxed">{{section().description}}</p>
+        @if (section().title) {
 
-        @if (section().items.length === 0) {
+        <h2 class="!text-3xl md:!text-4xl !font-bold text-primary-600 !text-center mb-4">{{section().title}}</h2>
+        } @else {
+        <empty-field-message className="max-w-md mx-auto mb-4" textContent="Sin título"></empty-field-message>
+        } @if (section().description) {
+
+        <p class="!text-lg text-surface-600 dark:text-surface-300 mx-auto text-center leading-relaxed">{{section().description}}</p>
+        } @else {
+        <empty-field-message className="max-w-lg mx-auto" textContent="Sin descripción"></empty-field-message>
+        } @if (section().items.length === 0) {
         <empty-field-message textContent="No hay campos de contacto configurados."></empty-field-message>
         } @else { @for (input of section().items; track input.id) { @switch (input.inputType) { @case (InputType.TEXT) {
         <div

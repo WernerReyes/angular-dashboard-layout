@@ -6,7 +6,12 @@
             <div class="space-y-8 order-1">
                 <!-- Título principal -->
                 <div class="space-y-6">
-                    <h2 class="text-4xl md:text-5xl font-bold text-blue-700 dark:text-blue-400 transition-colors duration-300">{{ section().title }}</h2>
+                    @if (section().title) {
+
+                        <h2 class="text-4xl md:text-5xl font-bold text-blue-700 dark:text-blue-400 transition-colors duration-300">{{ section().title }}</h2>
+                    } @else {
+                        <empty-field-message className="max-w-md mx-auto mb-4" textContent="Sin título"></empty-field-message>
+                    }
 
                     <!-- Texto descriptivo -->
                     @if (section().description) {

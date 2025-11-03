@@ -5,6 +5,7 @@
             @if (section().items.length === 0) {
             <empty-field-message className="w-full" textContent="No hay números de contacto agregados."></empty-field-message>
             } @else { @for (item of section().items; track item.id) {
+
             <div
                 class="flex items-center space-x-2 text-white/90 hover:text-white transition-colors duration-300"
                 [ngClass]="{

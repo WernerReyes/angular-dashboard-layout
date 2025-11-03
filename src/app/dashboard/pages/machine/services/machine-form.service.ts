@@ -2,7 +2,7 @@ import { Category } from '@/shared/interfaces/category';
 import { Machine } from '@/shared/interfaces/machine';
 import { CategoryType } from '@/shared/mappers/category.mapper';
 import { LinkType } from '@/shared/mappers/link.mapper';
-import { TecnicalSpecifications } from '@/shared/mappers/machine.mapper';
+import { MachineImages, TecnicalSpecifications } from '@/shared/mappers/machine.mapper';
 import { inject, Injectable } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 
@@ -27,7 +27,7 @@ export class MachineFormService {
         fileImages: this.fb.control<File[]>([], [Validators.required, Validators.minLength(1)]),
         manualFile: [null as File | null],
         currentManual: [null as string | null],
-        images: [[] as string[]],
+        images: [[] as MachineImages[]],
         manual: ['' as string | null],
         imagesToDelete: [[] as string[]],
         technicalSpecifications: this.fb.array<TecnicalSpecifications>([], [Validators.required, Validators.minLength(1)]),
@@ -64,7 +64,7 @@ export class MachineFormService {
             textButton: machine.textButton || ''
         });
 
-        const currentImages = this.machineForm.get('images')?.value as string[];
+        const currentImages = this.machineForm.get('images')?.value as MachineImages[];
         if (currentImages.length > 0) {
             this.machineForm.get('fileImages')?.clearValidators();
             this.machineForm.get('fileImages')?.updateValueAndValidity();

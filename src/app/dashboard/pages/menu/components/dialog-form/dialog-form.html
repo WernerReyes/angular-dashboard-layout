@@ -10,21 +10,12 @@
 >
     <form class="flex flex-col gap-4" [formGroup]="form" id="menu-form" (ngSubmit)="saveChanges()">
         <div class="flex flex-col gap-2">
-            <label for="title">Titulo</label>
-            <!-- <p-select id="title" formControlName="type" [options]="linkTypes()" optionLabel="label" optionValue="value" placeholder="Selecciona el tipo de enlace"></p-select> -->
-            <input id="title" type="text" pInputText formControlName="title" placeholder="Título del enlace" />
-            @if (form.controls['title'].errors) {
-            <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'title') }} </p-message>
-            }
-        </div>
-
-        <div class="flex flex-col gap-2">
             <label for="link">Enlace</label>
 
             <app-error-boundary skeletonHeight="2.5rem" [resource]="linksList" errorMessage="Ocurrió un error cargando los enlaces.">
                 <ng-template #content let-links>
                     @let linkType = form.controls['linkType'].value; @let filteredLinks = links | filterLinksByType: linkType;
-                    <div class="flex flex-wrap md:flex-nowrap  gap-2 items-center">
+                    <div class="flex flex-wrap md:flex-nowrap gap-2 items-center">
                         <div class="flex-grow">
                             <p-select
                                 [overlayOptions]="{
@@ -46,17 +37,23 @@
                             <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'linkId') }} </p-message>
                             }
                         </div>
-                        <p-selectbutton
-                       
-                        [options]="linkTypeOptions | keyvalue" formControlName="linkType" optionLabel="value.label" optionValue="key" aria-labelledby="basic">
+                        <p-selectbutton [options]="linkTypeOptions | keyvalue" formControlName="linkType" optionLabel="value.label" optionValue="key" aria-labelledby="basic">
                             <ng-template #item let-option>
                                 <i [class]="option.value.icon"></i>
                             </ng-template>
                         </p-selectbutton>
-                     
                     </div>
                 </ng-template>
             </app-error-boundary>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="title">Titulo</label>
+            <!-- <p-select id="title" formControlName="type" [options]="linkTypes()" optionLabel="label" optionValue="value" placeholder="Selecciona el tipo de enlace"></p-select> -->
+            <input id="title" type="text" pInputText formControlName="title" placeholder="Título del enlace" />
+            @if (form.controls['title'].errors) {
+            <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'title') }} </p-message>
+            }
         </div>
 
         <div class="flex flex-col gap-2">
@@ -77,27 +74,25 @@
                 >
                 </p-select>
 
-
                 <ng-template #content let-menus>
-
-                <p-treeSelect
-                     emptyMessage="No se encontraron menús."
-                    [options]="menusListSelect()"
-                    formControlName="parentId"
-                    [overlayOptions]="{
+                    <p-treeSelect
+                        emptyMessage="No se encontraron menús."
+                        [options]="menusListSelect()"
+                        formControlName="parentId"
+                        [overlayOptions]="{
                     mode: 'modal'
                     }"
-                    class="w-full"
-                    placeholder="Selecciona los menús para esta sección"
-                    selectionMode="single"
-                    [filter]="true"
-                    [showClear]="true"
-                    [panelStyle]="{ 'max-height': '300px', 'overflow': 'auto' }"
-                ></p-treeSelect>
-                <!-- @if (form.controls['menusIds'].errors) {
+                        class="w-full"
+                        placeholder="Selecciona los menús para esta sección"
+                        selectionMode="single"
+                        [filter]="true"
+                        [showClear]="true"
+                        [panelStyle]="{ 'max-height': '300px', 'overflow': 'auto' }"
+                    ></p-treeSelect>
+                    <!-- @if (form.controls['menusIds'].errors) {
                 <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'menusIds') }} </p-message>
                 } -->
-            </ng-template>
+                </ng-template>
             </app-error-boundary>
         </div>
 

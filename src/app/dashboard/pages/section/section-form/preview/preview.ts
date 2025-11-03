@@ -95,7 +95,6 @@ export class Preview {
             return this.sectionPreview().items;
         } else {
             const item = this.sectionPreview().items.find((i) => i.id === this.currentSectionItem()?.id);
-            console.log('ITEM IN ITEMS GETTER', item);
             return item ? [item] : [this.addItem(this.formValue())];
         }
     });
@@ -139,6 +138,7 @@ export class Preview {
         const node: any = {
             id: menu.data,
             title: menu.label as string,
+            parentId: menu.parent ? (menu.parent.data as number) : null,
             parent: menu.parent ? this.buildRecursiveNode(menu.parent) : null
         };
 
@@ -152,7 +152,7 @@ export class Preview {
     private getMachines(value: any) {
         const sectionType = this.section()?.type ?? value?.type;
 
-        if (sectionType !== SectionType.MACHINE && sectionType !== SectionType.MACHINE_DETAILS && sectionType !== SectionType.MACHINES_CATALOG) {
+        if (sectionType !== SectionType.MACHINE && sectionType !== SectionType.MACHINE_DETAILS && sectionType !== SectionType.MACHINES_CATALOG && sectionType !== SectionType.CASH_PROCESSING_EQUIPMENT) {
             return [];
         }
 

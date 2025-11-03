@@ -7,6 +7,7 @@ export interface PageEntity {
     readonly slug: string;
     readonly description: string | null;
     readonly link_id: number | null;
+    readonly is_main: boolean;
     readonly created_at: string;
     readonly updated_at: string;
     readonly sections?: SectionEntity[] | null;
@@ -21,6 +22,7 @@ export const mapPageEntityToPage = (entity: PageEntity): Page => {
         linkId: entity.link_id,
         createdAt: new Date(entity.created_at),
         updatedAt: new Date(entity.updated_at),
+        isMain: entity.is_main,
         sections: entity.sections ? (entity.sections.length > 0 ? entity.sections.map(mapSectionEntityToSection) : []) : null
     };
 };

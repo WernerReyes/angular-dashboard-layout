@@ -55,7 +55,7 @@ export const sectionStatusOptions: Record<string, SectionStatusOption> = {
     false: { label: 'Inactivo', value: false, severity: 'danger' }
 };
 export const sectionTypesOptions: Record<SectionType, SectionTypeOption> = {
-    HERO: { label: 'Hero', value: SectionType.HERO, severity: 'info' },
+    HERO: { label: 'Portada', value: SectionType.HERO, severity: 'info' },
     WHY_US: { label: '¿Por qué nosotros?', value: SectionType.WHY_US, severity: 'info' },
     CASH_PROCESSING_EQUIPMENT: { label: 'Equipos para Procesamiento de Efectivo', value: SectionType.CASH_PROCESSING_EQUIPMENT, severity: 'warn' },
     VALUE_PROPOSITION: { label: 'Propuesta de Valor', value: SectionType.VALUE_PROPOSITION, severity: 'contrast' },

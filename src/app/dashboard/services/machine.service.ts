@@ -48,7 +48,7 @@ export class MachineService {
                     if (!machines) return [machine];
                     return [...machines, machine];
                 });
-                
+
                 this.categoryService.categoryListResource.update((categories) => {
                     if (!categories) return [];
                     return categories.map((category) => {
@@ -61,8 +61,6 @@ export class MachineService {
                         return category;
                     });
                 });
-
-                
             }),
             finalize(() => this.loading.set(false))
         );
@@ -116,6 +114,34 @@ export class MachineService {
                         return section;
                     });
                 });
+            }),
+            finalize(() => this.loading.set(false))
+        );
+    }
+
+    setImageAsMain(machineId: number, imageUrl: string) {
+        this.loading.set(true);
+        return this.http.put<ApiResponse<null>>(`${this.prefix}/${machineId}/set-main-image`, { imageUrl }).pipe(
+            tap(() => {
+                this.machinesListRs.update((machines) => {
+                    if (!machines) return [];
+                    return machines.map((machine) => (machine.id === machineId ? { ...machine, images: machine.images?.map((img) => ({ ...img, isMain: img.url === imageUrl })) || [] } : machine));
+                });
+
+                this.categoryService.categoryListResource.update((categories) => {
+                    if (!categories) return [];
+                    return categories.map((category) => {
+                        return {
+                            ...category,
+                            machines: category.machines
+                                ? category.machines.map((machine) =>
+                                      machine.id === machineId ? { ...machine, images: machine.images?.map((img) => ({ ...img, isMain: img.url === imageUrl })) || [] } : machine
+                                  )
+                                : []
+                        };
+                    });
+                });
+
             }),
             finalize(() => this.loading.set(false))
         );

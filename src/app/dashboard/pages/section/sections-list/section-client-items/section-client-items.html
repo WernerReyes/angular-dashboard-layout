@@ -43,7 +43,7 @@
                             @if (!item.image) {
                             <app-image-error></app-image-error>
                             } @else {
-                            <img [src]="item.image" [alt]="item.name" (error)="item.image = null" class="w-full h-48 object-cover rounded-border" />
+                            <img [src]="item.image" [alt]="item.name" (error)="item.image = null" class="w-full h-20 object-contain rounded-border" />
                             }
                         </div>
                     </div>

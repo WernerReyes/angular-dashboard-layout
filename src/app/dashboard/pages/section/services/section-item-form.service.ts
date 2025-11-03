@@ -112,7 +112,7 @@ export class SectionItemFormService {
                 //     image?.clearValidators();
                 // }
                 // image?.updateValueAndValidity();
-                this.disableFields(['title', 'subtitle', 'content', 'imageBackFile', 'currentImageBack', 'imageBackUrl', 'imageBackType', 'textButton', 'showLink', 'linkId', 'typeLink', 'iconFile', 'currentIconUrl', 'categoryId', 'inputType']);
+                this.disableFields(['subtitle', 'content', 'imageBackFile', 'currentImageBack', 'imageBackUrl', 'imageBackType', 'textButton', 'showLink', 'linkId', 'typeLink', 'iconFile', 'currentIconUrl', 'categoryId', 'inputType']);
                 break;
 
             case SectionType.OUR_COMPANY:

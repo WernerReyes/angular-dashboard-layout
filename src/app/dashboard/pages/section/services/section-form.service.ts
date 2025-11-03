@@ -21,14 +21,14 @@ export class SectionFormService {
         content: [''],
         textButton: ['', [Validators.maxLength(50)]],
 
-        imageType: [ImageType.NONE], // null = none, true = local, false = url
+        imageType: [ImageType.NONE], 
         currentImage: [''],
         imageFile: [null, [Validators.maxLength(255)]],
         imageUrl: ['', [Validators.maxLength(255)]],
      
 
         showLink: [false],
-        typeLink: [true], // true = internal, false = external
+        typeLink: [true], 
         linkId: [null],
         active: [true, [Validators.required]],
 
@@ -80,15 +80,7 @@ export class SectionFormService {
             textButtonControl?.updateValueAndValidity();
         });
 
-        // this.form.get('currentImage')?.valueChanges.subscribe((currentImage) => {
-        //     const imageFile = this.form.get('imageFile');
-        //     if (!currentImage) {
-        //         imageFile?.setValidators([Validators.required]);
-        //     } else {
-        //         imageFile?.clearValidators();
-        //     }
-        //     imageFile?.updateValueAndValidity();
-        // });
+       
 
         this.form.get('menusIds')?.valueChanges.subscribe((menus) => {
             const menusIdsControl = this.form.get('menusIds');

@@ -8,7 +8,6 @@ import { ButtonModule } from 'primeng/button';
   selector: 'menu-item',
   imports: [TagModule, ButtonModule],
   templateUrl: './menu-item.html',
-  styleUrl: './menu-item.scss'
 })
 export class MenuItem {
  menuItem = input.required<Menu & { expanded?: boolean }>();

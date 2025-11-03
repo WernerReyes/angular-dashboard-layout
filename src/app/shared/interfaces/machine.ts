@@ -1,7 +1,7 @@
-import type { CategoryType } from "../mappers/category.mapper";
 import type { TecnicalSpecifications } from "../mappers/machine.mapper";
 import { Category } from "./category";
 import type { Link } from "./link";
+import type { Section } from "./section";
 
 export interface Machine {
     readonly id: number;
@@ -16,6 +16,7 @@ export interface Machine {
     readonly textButton: string | null;
     readonly link: Link | null;
     readonly category: Category | null;
+    readonly sections: Section[] | null;
     readonly createdAt: Date;
     readonly updatedAt: Date;
 }

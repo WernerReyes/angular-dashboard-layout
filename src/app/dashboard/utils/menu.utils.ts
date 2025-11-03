@@ -10,22 +10,33 @@ interface OrderedItem {
 export class MenuUtils {
     //*  To Service Methods *//
     static insertMenuItem(list: Menu[], newMenu: Menu): Menu[] {
-        if (newMenu.parentId) {
-            // Si tiene parentId, buscar el padre y agregarlo a sus children
-            const parentIndex = list!.findIndex((m) => m.id === newMenu.parentId);
-            if (parentIndex !== -1) {
-                const parent = list![parentIndex];
-                const updatedParent = {
-                    ...parent,
-                    children: [...(parent.children || []), newMenu]
-                };
-                const updatedMenus = [...list!];
-                updatedMenus[parentIndex] = updatedParent;
-                return updatedMenus;
-            }
-        }
-        return [...list!, newMenu];
+    if (!newMenu.parentId) {
+        // No tiene padre → se agrega al nivel raíz
+        return [...list, newMenu];
     }
+
+    const insertRecursively = (menus: Menu[]): Menu[] => {
+        return menus.map(menu => {
+            if (menu.id === newMenu.parentId) {
+                // Encontró el padre
+                return {
+                    ...menu,
+                    children: [...(menu.children || []), newMenu]
+                };
+            } else if (menu.children && menu.children.length > 0) {
+                // Buscar en los hijos recursivamente
+                return {
+                    ...menu,
+                    children: insertRecursively(menu.children)
+                };
+            }
+            return menu;
+        });
+    };
+
+    return insertRecursively(list);
+}
+
 
     /**
      * Actualiza un ítem dentro de una jerarquía de menús.

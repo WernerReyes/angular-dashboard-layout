@@ -21,6 +21,7 @@ import { MachineFormService } from '../../services/machine-form.service';
 import { TechnicalSpecificationsTable } from '../technical-specifications-table/technical-specifications-table';
 import { MachineDialogForm } from './machine-dialog-form/machine-dialog-form';
 import { TecnicalSpecifications } from '@/shared/mappers/machine.mapper';
+import { MachineService } from '@/dashboard/services/machine.service';
 
 @Component({
     selector: 'table-machine',
@@ -53,6 +54,7 @@ import { TecnicalSpecifications } from '@/shared/mappers/machine.mapper';
 export class Table {
     private readonly confirmationService = inject(ConfirmationService);
     private readonly categoryService = inject(CategoryService);
+    private readonly machineService = inject(MachineService);
     private readonly machineFormService = inject(MachineFormService);
 
     categoriesList = this.categoryService.categoryListResource;
@@ -109,8 +111,8 @@ export class Table {
         {
             label: 'Eliminar Máquina',
             icon: 'pi pi-fw pi-trash',
-            command: () => {
-                // Lógica para eliminar la máquina
+            command: (event) => {
+                this.confirmDeleteMachine(event.originalEvent!, this.selectedMachine()!);
             }
         }
     ];
@@ -189,4 +191,30 @@ export class Table {
             }
         });
     }
-}
+
+    private confirmDeleteMachine(event: Event, machine: Machine) {
+        this.confirmationService.confirm({
+            target: event.target as EventTarget,
+            message: '¿Estás seguro de que deseas eliminar esta máquina?',
+            header: 'Confirmar eliminación',
+            closable: true,
+            closeOnEscape: true,
+            icon: 'pi pi-exclamation-triangle',
+            rejectButtonProps: {
+                label: 'Cancelar',
+                severity: 'secondary',
+                outlined: true
+            },
+            acceptButtonProps: {
+                label: 'Guardar'
+            },
+            accept: () => {
+                this.machineService.deleteMachine(machine.id).subscribe({
+                    next: () => {
+                        this.selectedMachine.set(null);
+                    }
+                });
+            }
+        });
+    }
+    }

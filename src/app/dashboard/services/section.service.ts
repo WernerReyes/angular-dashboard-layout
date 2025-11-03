@@ -4,7 +4,7 @@ import { mapSectionEntityToSection, SectionEntity } from '@/shared/mappers/secti
 import { TransformUtils } from '@/utils/transform-utils';
 import { HttpClient, httpResource } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { catchError, map, tap, throwError } from 'rxjs';
+import { catchError, finalize, map, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UpdateOrder } from '../interfaces/common';
 import type { AssocieteSectionToPages, CreateSection, UpdateSection } from '../interfaces/section';
@@ -19,6 +19,7 @@ export class SectionService {
 
     isCreating = signal(false);
     isUpdating = signal(false);
+    loading = signal(false);
 
     sectionListResource = httpResource<Section[]>(
         () => ({
@@ -108,6 +109,7 @@ export class SectionService {
     }
 
     associateToPages({ pagesIds, sectionId }: AssocieteSectionToPages) {
+        this.loading.set(true);
         return this.http.post<ApiResponse<SectionEntity>>(`${this.prefix}/${sectionId}/pages`, { pagesIds }).pipe(
             map(({ data }) => mapSectionEntityToSection(data)),
             tap((updatedSection) => {
@@ -115,7 +117,8 @@ export class SectionService {
                     if (!sections) return [];
                     return sections.map((s) => (s.id === updatedSection.id ? { ...updatedSection, items: s.items, menus: s.menus } : s));
                 });
-            })
+            }),
+            finalize(() => this.loading.set(false))
         );
     }
 

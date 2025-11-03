@@ -8,11 +8,13 @@ import { CreateMachine, UpdateMachine } from '../interfaces/machine';
 import { TransformUtils } from '@/utils/transform-utils';
 import { CategoryService } from './category.service';
 import type { Machine } from '@/shared/interfaces/machine';
+import { SectionService } from './section.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class MachineService {
+    private readonly sectionService = inject(SectionService);
     private readonly categoryService = inject(CategoryService);
     private readonly http = inject(HttpClient);
 
@@ -42,6 +44,11 @@ export class MachineService {
         return this.http.post<ApiResponse<MachineEntity>>(this.prefix, formData).pipe(
             map(({ data }) => mapMachineEntityToMachine(data)),
             tap((machine) => {
+                this.machinesListRs.update((machines) => {
+                    if (!machines) return [machine];
+                    return [...machines, machine];
+                });
+                
                 this.categoryService.categoryListResource.update((categories) => {
                     if (!categories) return [];
                     return categories.map((category) => {
@@ -54,6 +61,8 @@ export class MachineService {
                         return category;
                     });
                 });
+
+                
             }),
             finalize(() => this.loading.set(false))
         );
@@ -68,26 +77,20 @@ export class MachineService {
         const imagesToUpdateNew = imagesToUpdate?.map((img) => img.newFile) || null;
         const imagesToUpdateOld = imagesToUpdate?.map((img) => img.oldImage) || null;
 
-        console.log({
-            imagesToUpdateNew,
-            imagesToUpdateOld
-        });
-
-        //* Delete
-        // const imagesToRemove = imagesToDelete?.map((img) => img.delete) || [];
-        // const imagesToDeleteNew = (imagesToDelete?.map((img) => img.newFile).filter((file) => file) as File[]) || [];
-
         const formData = TransformUtils.toFormData({
             ...rest,
             imagesToUpdateNew,
             imagesToUpdateOld
-            // imagesToRemove: imagesToDelete || [],
-            // imagesToDeleteNew
         });
 
         return this.http.post<ApiResponse<MachineEntity>>(`${this.prefix}/${payload.id}`, formData).pipe(
             map(({ data }) => mapMachineEntityToMachine(data)),
             tap((updatedMachine) => {
+                this.machinesListRs.update((machines) => {
+                    if (!machines) return [];
+                    return machines.map((machine) => (machine.id === updatedMachine.id ? updatedMachine : machine));
+                });
+
                 this.categoryService.categoryListResource.update((categories) => {
                     if (!categories) return [];
                     return categories.map((category) => {
@@ -98,6 +101,38 @@ export class MachineService {
                             };
                         }
                         return category;
+                    });
+                });
+
+                this.sectionService.sectionListResource.update((sections) => {
+                    if (!sections) return [];
+                    return sections.map((section) => {
+                        if (updatedMachine.sections?.some((s) => s.id === section.id)) {
+                            return {
+                                ...section,
+                                machines: section.machines ? section.machines.map((machine) => (machine.id === updatedMachine.id ? updatedMachine : machine)) : [updatedMachine]
+                            };
+                        }
+                        return section;
+                    });
+                });
+            }),
+            finalize(() => this.loading.set(false))
+        );
+    }
+
+    deleteMachine(machineId: number) {
+        this.loading.set(true);
+
+        return this.http.delete<ApiResponse<null>>(`${this.prefix}/${machineId}`).pipe(
+            tap(() => {
+                this.categoryService.categoryListResource.update((categories) => {
+                    if (!categories) return [];
+                    return categories.map((category) => {
+                        return {
+                            ...category,
+                            machines: category.machines ? category.machines.filter((machine) => machine.id !== machineId) : []
+                        };
                     });
                 });
             }),

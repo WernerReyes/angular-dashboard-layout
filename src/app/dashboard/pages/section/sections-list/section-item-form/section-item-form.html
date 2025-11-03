@@ -68,7 +68,19 @@
                     isTextarea: false
                 }]"
                 ></common-inputs>
-                } @case (SectionType.CLIENT) { @let imageType = form.controls['imageType'].value;
+                } @case (SectionType.CLIENT) { 
+                    
+                    <common-inputs
+                    [form]="form"
+                    [includeFields]="[{
+                    type: 'title',
+                    label: 'Nombre',
+                    placeholder: 'Nombre del cliente',
+
+                }]"
+                ></common-inputs>
+
+                    @let imageType = form.controls['imageType'].value;
                 <div class="flex flex-col gap-2">
                     <label>Imagen</label>
                     <!-- [selectedSectionItem]="selectedSectionItem()" -->

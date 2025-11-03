@@ -35,7 +35,7 @@ import { TagModule } from 'primeng/tag';
 export default class LayoutPage {
     private readonly fb = inject(FormBuilder);
     private readonly pageService = inject(PageService);
-    private readonly sectionService = inject(SectionService);
+    readonly sectionService = inject(SectionService);
 
     selectedSection = signal<Section | null>(null);
 

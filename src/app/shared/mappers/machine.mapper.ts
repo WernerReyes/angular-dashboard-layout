@@ -1,6 +1,7 @@
 import { Machine } from '../interfaces/machine';
-import { CategoryEntity, CategoryType, mapCategoryEntityToCategory } from './category.mapper';
+import { CategoryEntity, mapCategoryEntityToCategory } from './category.mapper';
 import { LinkEntity, mapLinkEntityToLink } from './link.mapper';
+import { mapSectionEntityToSection, SectionEntity } from './section.mapper';
 
 export type TecnicalSpecifications = {
     id: string;
@@ -21,6 +22,7 @@ export interface MachineEntity {
     text_button: string | null;
     link: LinkEntity | null;
     category: CategoryEntity | null;
+    sections: SectionEntity[] | null;
     created_at: Date;
     updated_at: Date;
 }
@@ -39,6 +41,7 @@ export const mapMachineEntityToMachine = (entity: MachineEntity): Machine => {
         linkId: entity.link_id,
         textButton: entity.text_button,
         link: entity.link ? mapLinkEntityToLink(entity.link) : null,
+        sections: entity.sections ? entity.sections.map(mapSectionEntityToSection) : null,
         createdAt: entity.created_at,
         updatedAt: entity.updated_at
     };

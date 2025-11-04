@@ -1,18 +1,18 @@
+import { AdditionalInfo, IconType, type Icon } from '../mappers/section-item.mapper';
 import { SectionMode, SectionType } from '../mappers/section.mapper';
-import { Link } from './link';
-import { Machine } from './machine';
-import { Menu } from './menu';
-import { Page } from './page';
-import { SectionItem } from './section-item';
-import { Severity } from './severity';
-
+import type { Link } from './link';
+import type { Machine } from './machine';
+import type { Menu } from './menu';
+import type { Page } from './page';
+import type { SectionItem } from './section-item';
+import type { Severity } from './severity';
 
 export type PivotPages = {
     idPage: number;
     orderNum: number;
     active: boolean;
     type: SectionMode;
-}
+};
 
 export interface Section {
     id: number;
@@ -29,7 +29,10 @@ export interface Section {
     pages: (Page & { pivot?: PivotPages })[] | null;
     pivotPages: PivotPages[] | null;
     machines: Machine[] | null;
-    
+    iconUrl: string | null;
+    iconType: IconType | null;
+    icon: Icon | null;
+    additionalInfoList: AdditionalInfo[] | null;
 }
 
 type SectionStatusOption = {
@@ -48,7 +51,7 @@ type SectionModeOption = {
     label: string;
     value: SectionMode;
     severity: Severity;
-}
+};
 
 export const sectionStatusOptions: Record<string, SectionStatusOption> = {
     true: { label: 'Activo', value: true, severity: 'success' },
@@ -77,9 +80,10 @@ export const sectionTypesOptions: Record<SectionType, SectionTypeOption> = {
     SUPPORT_MAINTENANCE: { label: 'Soporte y Mantenimiento', value: SectionType.SUPPORT_MAINTENANCE, severity: 'info' },
     OPERATIONAL_BENEFITS: { label: 'Beneficios Operacionales', value: SectionType.OPERATIONAL_BENEFITS, severity: 'warn' },
     MACHINE_DETAILS: { label: 'Detalles de la máquina', value: SectionType.MACHINE_DETAILS, severity: 'success' },
-    MACHINES_CATALOG: { label: 'Catálogo de Máquinas', value: SectionType.MACHINES_CATALOG, severity: 'contrast' }
+    MACHINES_CATALOG: { label: 'Catálogo de Máquinas', value: SectionType.MACHINES_CATALOG, severity: 'contrast' },
+    FULL_MAINTENANCE_PLAN: { label: 'Planes de Mantenimiento', value: SectionType.FULL_MAINTENANCE_PLAN, severity: 'info' },
+    PREVENTIVE_CORRECTIVE_MAINTENANCE: { label: 'Mantenimiento Preventivo y Correctivo', value: SectionType.PREVENTIVE_CORRECTIVE_MAINTENANCE, severity: 'warn' }
 };
-
 
 export const sectionModeOptions: Record<SectionMode, SectionModeOption> = {
     CUSTOM: { label: 'Personalizado', value: SectionMode.CUSTOM, severity: 'info' },

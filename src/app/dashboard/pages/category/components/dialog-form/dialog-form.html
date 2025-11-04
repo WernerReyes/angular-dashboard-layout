@@ -10,7 +10,6 @@
     <form id="link-form" class="flex flex-col gap-4" (ngSubmit)="saveChanges()" [formGroup]="form()">
         <div class="flex flex-col gap-2">
             <label for="title">Titulo</label>
-            <!-- <p-select id="title" formControlName="type" [options]="linkTypes()" optionLabel="label" optionValue="value" placeholder="Selecciona el tipo de enlace"></p-select> -->
             <input id="title" type="text" pInputText formControlName="title" placeholder="Título del enlace" />
             @if (form().controls['title'].errors) {
             <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form(), 'title') }} </p-message>

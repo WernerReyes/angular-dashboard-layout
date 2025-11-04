@@ -26,6 +26,7 @@ import { ContextMenuCrud } from '../../components/context-menu-crud/context-menu
 import { SectionOperacionalBenefitsItems } from '../section-operacional-benefits-items/section-operacional-benefits-items';
 import { SectionMachineDetailsItems } from '../section-machine-details-items/section-machine-details-items';
 import { SectionMachinesCatalogItems } from '../section-machines-catalog-items/section-machines-catalog-items';
+import { SectionFullMaintenancePlanItems } from '../section-full-maintenance-plan-items/section-full-maintenance-plan-items';
 
 @Component({
     selector: 'section-items',
@@ -49,6 +50,7 @@ import { SectionMachinesCatalogItems } from '../section-machines-catalog-items/s
         SectionOperacionalBenefitsItems,
         SectionMachineDetailsItems,
         SectionMachinesCatalogItems,
+        SectionFullMaintenancePlanItems,
         SectionItem,
         PanelModule,
         ContextMenuCrud

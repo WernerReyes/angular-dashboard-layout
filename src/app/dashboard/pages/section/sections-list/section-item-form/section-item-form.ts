@@ -28,6 +28,7 @@ import { ContactUsForm } from './contact-us-form/contact-us-form';
 import { HeroForm } from './hero-form/hero-form';
 import { MachineForm } from './machine-form/machine-form';
 import { Preview } from '../../section-form/preview/preview';
+import { InputList } from '../../components/input-list/input-list';
 
 @Component({
     selector: 'section-item-form',
@@ -47,6 +48,7 @@ import { Preview } from '../../section-form/preview/preview';
         DialogModule,
         InputTextModule,
         SelectButtonModule,
+        InputList,
         SelectModule,
         ToggleSwitchModule,
         ButtonModule,
@@ -89,13 +91,15 @@ export class SectionItemForm {
                 backgroundImageUrl: formValue.imageBackType === ImageType.URL ? formValue.imageBackUrl || null : null,
                 // categoryId: formValue.categoryId || null,
                 inputType: formValue.inputType || null,
-                
+
                 fileIcon: formValue.iconFile as any,
                 fileIconUrl: formValue.currentIconUrl || null,
                 icon: formValue.icon || null,
                 iconType: formValue.iconType!,
 
-                sectionType: this.selectedSection()!.type
+                sectionType: this.selectedSection()!.type,
+
+                additionalInfoList: (formValue?.additionalInfoList?.length ?? 0 > 0) ? formValue.additionalInfoList! : null
             };
 
             console.log('Submitting section item data:', {

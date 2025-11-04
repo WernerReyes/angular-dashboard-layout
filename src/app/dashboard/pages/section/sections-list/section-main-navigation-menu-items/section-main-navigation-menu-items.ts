@@ -1,14 +1,11 @@
-import { CommonModule, JsonPipe } from '@angular/common';
-import { Component, computed, input, signal } from '@angular/core';
-import type { MenuItem } from 'primeng/api';
-import { BadgeModule } from 'primeng/badge';
-import { MenubarModule } from 'primeng/menubar';
-import { AvatarModule } from 'primeng/avatar';
-import { Section } from '@/shared/interfaces/section';
-import { Menu } from '@/shared/interfaces/menu';
-import { ImageError } from '@/shared/components/error/image/image';
 import { MenuUtils } from '@/dashboard/utils/menu.utils';
-
+import { ImageError } from '@/shared/components/error/image/image';
+import { Menu } from '@/shared/interfaces/menu';
+import { Section } from '@/shared/interfaces/section';
+import { Component, computed, input } from '@angular/core';
+import type { MenuItem } from 'primeng/api';
+import { MenubarModule } from 'primeng/menubar';
+// TODO: Check CascadeSelectModule if needed
 @Component({
     selector: 'section-main-navigation-menu-items',
     imports: [ImageError, MenubarModule],

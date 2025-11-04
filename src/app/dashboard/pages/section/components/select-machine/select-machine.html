@@ -5,6 +5,9 @@
             <p-multiSelect
                 id="machine"
                 class="w-full"
+                [overlayOptions]="{
+                    mode: mode()
+                    }"
                 emptyMessage="No hay máquinas disponibles. Por favor, crea una máquina primero."
                 emptyFilterMessage="No se encontraron máquinas"
                 [options]="machines"

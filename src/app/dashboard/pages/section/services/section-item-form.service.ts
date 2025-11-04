@@ -1,6 +1,6 @@
 import { ImageType, SectionItem } from '@/shared/interfaces/section-item';
 import { LinkType } from '@/shared/mappers/link.mapper';
-import { Icon, IconType, InputType } from '@/shared/mappers/section-item.mapper';
+import { AdditionalInfo, Icon, IconType, InputType } from '@/shared/mappers/section-item.mapper';
 import { SectionType } from '@/shared/mappers/section.mapper';
 
 import { FormUtils } from '@/utils/form-utils';
@@ -40,7 +40,9 @@ export class SectionItemFormService {
         typeLink: [LinkType.PAGE as LinkType | null], // true = internal, false = external
         linkId: [null],
 
-        inputType: [null as InputType | null]
+        inputType: [null as InputType | null],
+
+        additionalInfoList: [[] as AdditionalInfo[]]
     });
 
     constructor() {
@@ -194,7 +196,9 @@ export class SectionItemFormService {
             imageBackUrl: '',
             imageBackType: ImageType.NONE,
 
-            inputType: section.inputType || null
+            inputType: section.inputType || null,
+
+            additionalInfoList: section.additionalInfoList || []
         });
     }
 

@@ -26,8 +26,9 @@ import { NavigationMenuForm } from './navigation-menu-form/navigation-menu-form'
 import { Preview } from './preview/preview';
 
 import { SelectMachine } from '../components/select-machine/select-machine';
+import { IconUpload } from '../components/icon-upload/icon-upload';
+import { VideoUpload } from '../components/video-upload/video-upload';
 
-  
 @Component({
     selector: 'section-form',
     imports: [
@@ -40,6 +41,8 @@ import { SelectMachine } from '../components/select-machine/select-machine';
         InputTextModule,
         KeyValuePipe,
         SelectMachine,
+        IconUpload,
+        VideoUpload,
         JsonPipe,
         Preview,
         ToggleSwitchModule,
@@ -56,13 +59,12 @@ export class SectionForm {
     private readonly linkService = inject(LinkService);
     private readonly sectionService = inject(SectionService);
     private readonly sectionFormService = inject(SectionFormService);
-  
+
     onCloseDialog = output<void>();
     display = input.required<boolean>();
     selectedSection = model<Section | null>();
     selectedPageId = input.required<number>();
     mode = input.required<SectionMode>();
-    
 
     loading = computed(() => this.sectionService.isCreating() || this.sectionService.isUpdating());
 
@@ -76,7 +78,6 @@ export class SectionForm {
     SectionType = SectionType;
     LinkType = LinkType;
 
-   
     closeDialog() {
         this.onCloseDialog.emit();
         this.sectionFormService.reset();
@@ -95,7 +96,6 @@ export class SectionForm {
         if (this.form.valid) {
             const formValue = this.form.value;
 
-          
             const sectionData: CreateSection = {
                 type: formValue.type!,
                 title: formValue.title!,
@@ -109,11 +109,16 @@ export class SectionForm {
                 imageUrl: formValue.imageType === ImageType.URL ? formValue.imageUrl || null : null,
                 menusIds: formValue.menusIds ? formValue.menusIds.map(({ data }) => Number(data)) : [],
                 mode: this.mode(),
-                machinesIds: formValue.machinesIds ? formValue.machinesIds : []
+                machinesIds: formValue.machinesIds ? formValue.machinesIds : [],
+
+                fileIcon: formValue.iconFile as any,
+                fileIconUrl: formValue.currentIconUrl || null,
+                icon: formValue.icon || null,
+                iconType: formValue.iconType!,
+
+                additionalInfoList: (formValue?.additionalInfoList?.length ?? 0 > 0) ? formValue.additionalInfoList! : null
             };
 
-            console.log(sectionData);
- 
             if (this.selectedSection()) {
                 this.sectionService
                     .updateSection(this.selectedSection()!.id, {

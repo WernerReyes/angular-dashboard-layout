@@ -2,6 +2,11 @@
 <img [alt]="item().title" [class]="imageClass()" (error)="item().iconUrl = null" [src]="item().iconUrl" />
 } @else {
 <app-image-error [iconClass]="imageErrorClass()?.iconClass" [containerClass]="imageErrorClass()?.containerClass"></app-image-error>
-} } @else if (item().iconType === IconType.LIBRARY) { @let html = (Icons.getHtml(item().icon?.name!) | sanitizerHtml )[0];
+} } @else if (item().iconType === IconType.LIBRARY) { @if (item().icon) { @let html = (Icons.getHtml(item().icon?.name!) | sanitizerHtml )[0];
+
 <svg [attr.stroke-width]="item().icon?.strokeWidth" [attr.viewBox]="'0 0 24 24'" [style.color]="item().icon?.color" [attr.width]="item().icon?.size" [attr.height]="item().icon?.size" [innerHTML]="html"></svg>
+} @else {
+<app-image-error [iconClass]="imageErrorClass()?.iconClass" [containerClass]="imageErrorClass()?.containerClass"></app-image-error>
+} } @else {
+    <app-image-error [iconClass]="imageErrorClass()?.iconClass" [containerClass]="imageErrorClass()?.containerClass"></app-image-error>
 }

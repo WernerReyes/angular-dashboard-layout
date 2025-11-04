@@ -14,7 +14,7 @@
     <!-- TODO: Focus on here, because after some time, it's gonna change -->
     @case (SectionType.CASH_PROCESSING_EQUIPMENT) {
     <section-cash-processing-equipment-items [section]="section()" [contextMenu]="contextMenu"></section-cash-processing-equipment-items>
-    } 
+    }
     <!-- TODO: End -->
     @case (SectionType.VALUE_PROPOSITION) {
     <section-value-proposition-items [section]="section()" [contextMenu]="contextMenu"></section-value-proposition-items>
@@ -22,12 +22,9 @@
     <section-client-items [section]="section()" [contextMenu]="contextMenu"></section-client-items>
     } @case (SectionType.OUR_COMPANY) {
     <section-our-company-items [section]="section()" [contextMenu]="contextMenu"></section-our-company-items>
-    } 
-    @case (SectionType.MACHINE) {
-    <section-machine-items [section]="section()" ></section-machine-items>
-    } 
-
-    @case (SectionType.CONTACT_TOP_BAR) {
+    } @case (SectionType.MACHINE) {
+    <section-machine-items [section]="section()"></section-machine-items>
+    } @case (SectionType.CONTACT_TOP_BAR) {
     <section-contact-top-bar-items [section]="section()" [contextMenu]="contextMenu"></section-contact-top-bar-items>
     } @case (SectionType.MAIN_NAVIGATION_MENU) {
     <section-main-navigation-menu-items [section]="section()"></section-main-navigation-menu-items>
@@ -48,12 +45,12 @@
     } @case (SectionType.OPERATIONAL_BENEFITS) {
     <section-operacional-benefits-items [section]="section()" [contextMenu]="contextMenu"></section-operacional-benefits-items>
     } @case (SectionType.MACHINE_DETAILS) {
-        <section-machine-details-items [section]="section()"></section-machine-details-items>
+    <section-machine-details-items [section]="section()"></section-machine-details-items>
     } @case (SectionType.MACHINES_CATALOG) {
-        <section-machines-catalog-items [section]="section()"></section-machines-catalog-items>
-    }
-    
-    @default {
+    <section-machines-catalog-items [section]="section()"></section-machines-catalog-items>
+    } @case (SectionType.FULL_MAINTENANCE_PLAN) {
+    <section-full-maintenance-plan-items [section]="section()" [contextMenu]="contextMenu"></section-full-maintenance-plan-items>
+    } @default {
     <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-12">
         @for (item of section().items; track item.id) {
         <section-item [sectionItem]="item" (onSelectSectionItem)="open(item)"></section-item>

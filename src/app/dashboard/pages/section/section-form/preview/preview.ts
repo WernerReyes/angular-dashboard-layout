@@ -23,11 +23,12 @@ import { SectionFooterItems } from '../../sections-list/section-footer-items/sec
 import { SectionAdvantagesItems } from '../../sections-list/section-advantages-items/section-advantages-items';
 import { SectionSupportMaintenanceItems } from '../../sections-list/section-support-maintenance-items/section-support-maintenance-items';
 import { MachineService } from '@/dashboard/services/machine.service';
-import { TreeNode } from 'primeng/api';
-import { Menu } from '@/shared/interfaces/menu';
+import type { TreeNode } from 'primeng/api';
+import type { Menu } from '@/shared/interfaces/menu';
 import { SectionOperacionalBenefitsItems } from '../../sections-list/section-operacional-benefits-items/section-operacional-benefits-items';
 import { SectionMachineDetailsItems } from '../../sections-list/section-machine-details-items/section-machine-details-items';
 import { SectionMachinesCatalogItems } from '../../sections-list/section-machines-catalog-items/section-machines-catalog-items';
+import { SectionFullMaintenancePlanItems } from '../../sections-list/section-full-maintenance-plan-items/section-full-maintenance-plan-items';
 
 @Component({
     selector: 'preview',
@@ -51,6 +52,7 @@ import { SectionMachinesCatalogItems } from '../../sections-list/section-machine
         SectionOperacionalBenefitsItems,
         SectionMachineDetailsItems,
         SectionMachinesCatalogItems,
+        SectionFullMaintenancePlanItems,
         JsonPipe
     ],
     templateUrl: './preview.html'
@@ -130,7 +132,15 @@ export class Preview {
             machines: this.getMachines(value).filter((machine) => (value.machinesIds || []).includes(machine.id)),
             linkId: value.showLink ? value.linkId || null : null,
             pages: [],
-            pivotPages: []
+            pivotPages: [],
+            additionalInfoList: (value?.additionalInfoList?.length ?? 0 > 0) ? value.additionalInfoList! : null,
+
+            icon: value.icon || null,
+            iconType: value.iconType || null,
+            iconUrl: value.iconFile ? this.getBlobUrl(value.iconFile) : section?.iconUrl || ''
+            
+
+        
         };
     }
 
@@ -197,6 +207,7 @@ export class Preview {
             iconType: value.iconType || null,
             inputType: value.inputType || null,
             image: this.getImage(value),
+            additionalInfoList: value.additionalInfoList || null,
             // categoryId: null,
             order: 0,
             link: null,
@@ -227,6 +238,7 @@ export class Preview {
                         description: value.content || item.description,
                         icon: value.icon || item.icon,
                         iconType: value.iconType || item.iconType,
+                        additionalInfoList: value.additionalInfoList || item.additionalInfoList,
                         iconUrl: value.iconFile ? this.getBlobUrl(value.iconFile) : item.iconUrl || ''
                     };
                 }

@@ -1,0 +1,19 @@
+<div [formGroup]="form()" class="flex flex-col gap-2">
+    <label>{{ label() }}</label>
+    <p-orderlist [value]="listControl?.value" [responsive]="true" breakpoint="575px" scrollHeight="10rem" [dragdrop]="true" [responsive]="true">
+        <ng-template #header>
+            @let icon = editMode() ? 'pi pi-pencil' : 'pi pi-plus';
+            <div class="flex gap-2 justify-center w-full">
+                <input type="text" pInputText placeholder="Agregar elemento" class="w-full" [formControl]="inputTextValue" />
+                <p-button [icon]="icon" (click)="save()"></p-button>
+            </div>
+        </ng-template>
+        <ng-template let-option  #item>
+            <div class="flex flex-wrap p-1 items-center gap-4 w-full" (contextmenu)="onContextMenu($event, option)">
+                <i class="pi pi-arrows-alt cursor-move"></i>
+                {{ option.label }}
+            </div>
+        </ng-template>
+    </p-orderlist>
+    <p-context-menu #cm [model]="items" appendTo="body"></p-context-menu>
+</div>

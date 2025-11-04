@@ -3,7 +3,7 @@ import { LinkEntity, mapLinkEntityToLink } from './link.mapper';
 import { MachineEntity, mapMachineEntityToMachine } from './machine.mapper';
 import { mapMenuEntityToMenu, MenuEntity } from './menu.mapper';
 import { mapPageEntityToPage, PageEntity } from './page.mapper';
-import { mapSectionItemEntityToSectionItem, SectionItemEntity } from './section-item.mapper';
+import { AdditionalInfo, type Icon, IconType, mapSectionItemEntityToSectionItem, SectionItemEntity } from './section-item.mapper';
 
 export enum SectionType {
     HERO = 'HERO',
@@ -24,7 +24,9 @@ export enum SectionType {
     SUPPORT_MAINTENANCE = 'SUPPORT_MAINTENANCE',
     OPERATIONAL_BENEFITS = 'OPERATIONAL_BENEFITS',
     MACHINE_DETAILS = 'MACHINE_DETAILS',
-    MACHINES_CATALOG = 'MACHINES_CATALOG'
+    MACHINES_CATALOG = 'MACHINES_CATALOG',
+    FULL_MAINTENANCE_PLAN = 'FULL_MAINTENANCE_PLAN',
+    PREVENTIVE_CORRECTIVE_MAINTENANCE = 'PREVENTIVE_CORRECTIVE_MAINTENANCE'
 }
 
 export enum SectionMode {
@@ -56,7 +58,10 @@ export interface SectionEntity {
     pivot_pages?: PivotPagesEntity[] | null;
     pages?: (PageEntity & { pivot: PivotPagesEntity })[] | null;
     machines?: MachineEntity[] | null;
-
+    icon_url?: string | null;
+    icon_type?: IconType | null;
+    icon?: Icon | null;
+    additional_info_list: AdditionalInfo[] | null;
 }
 
 export const mapSectionEntityToSection = (entity: SectionEntity): Section => {
@@ -72,7 +77,11 @@ export const mapSectionEntityToSection = (entity: SectionEntity): Section => {
         link: entity.link ? mapLinkEntityToLink(entity.link) : null,
         items: entity?.section_items && entity.section_items.length > 0 ? entity.section_items.map((item) => mapSectionItemEntityToSectionItem(item)) : [],
         menus: entity?.menus && entity.menus.length > 0 ? entity.menus.map(mapMenuEntityToMenu) : [],
-        machines: entity?.machines &&  entity.machines.length > 0 ? entity.machines.map((machine) => mapMachineEntityToMachine(machine)) : null,
+        machines: entity?.machines && entity.machines.length > 0 ? entity.machines.map((machine) => mapMachineEntityToMachine(machine)) : null,
+        iconUrl: entity.icon_url || null,
+        iconType: entity.icon_type || null,
+        icon: entity.icon || null,
+        additionalInfoList: entity.additional_info_list || null,
         pivotPages:
             entity?.pivot_pages && entity.pivot_pages.length > 0
                 ? entity.pivot_pages.map((item) => ({
@@ -84,16 +93,19 @@ export const mapSectionEntityToSection = (entity: SectionEntity): Section => {
                   }))
                 : null,
 
-        pages: entity?.pages && entity.pages.length > 0
-            ? entity.pages.map((item) => ({
-                  ...mapPageEntityToPage(item),
-                  pivot: item.pivot ? {
-                      idPage: item.pivot.id_page,
-                      orderNum: item.pivot.order_num,
-                      active: Boolean(item.pivot.active),
-                      type: item.pivot.type
-                  } : undefined
-              }))
-            : null
+        pages:
+            entity?.pages && entity.pages.length > 0
+                ? entity.pages.map((item) => ({
+                      ...mapPageEntityToPage(item),
+                      pivot: item.pivot
+                          ? {
+                                idPage: item.pivot.id_page,
+                                orderNum: item.pivot.order_num,
+                                active: Boolean(item.pivot.active),
+                                type: item.pivot.type
+                            }
+                          : undefined
+                  }))
+                : null
     };
 };

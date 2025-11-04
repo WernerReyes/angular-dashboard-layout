@@ -8,6 +8,7 @@ import { inject, Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import type { TreeNode } from 'primeng/api';
 import { sectionTypesOptions } from '../../../../shared/interfaces/section';
+import { AdditionalInfo, Icon, IconType } from '@/shared/mappers/section-item.mapper';
 
 @Injectable({
     providedIn: 'root'
@@ -32,8 +33,15 @@ export class SectionFormService {
         linkId: [null],
         active: [true, [Validators.required]],
 
+        iconFile: ['', [Validators.maxLength(100)]],
+        currentIconUrl: [''],
+        iconType: [IconType.LIBRARY],
+        icon: [null as Icon | null],
+
         machinesIds: [[] as number[]],
-        menusIds: [[] as TreeNode[]]
+        menusIds: [[] as TreeNode[]],
+
+        additionalInfoList: [[] as AdditionalInfo[]]
     });
 
     constructor() {
@@ -114,9 +122,16 @@ export class SectionFormService {
             imageUrl: '',
             imageType: ImageType.NONE,
 
+            iconFile: '',
+            currentIconUrl: section.iconUrl || '',
+            iconType: section.iconType || IconType.LIBRARY,
+            icon: section.icon || null,
+
             machinesIds: this.setMachinesIds(section),
 
-            menusIds: section.menus ? section.menus.map((menu) => this.buildRecursiveNode(menu)) : []
+            menusIds: section.menus ? section.menus.map((menu) => this.buildRecursiveNode(menu)) : [],
+
+            additionalInfoList: section.additionalInfoList || []
         });
 
         // this.setDefaultDataAccordingToType(section.type);
@@ -151,9 +166,7 @@ export class SectionFormService {
                 break;
         }
 
-        
-            titleControl?.setValue(title, { emitEvent: false });
-        
+        titleControl?.setValue(title, { emitEvent: false });
     }
 
     private setMachinesIds(section: Section): any {

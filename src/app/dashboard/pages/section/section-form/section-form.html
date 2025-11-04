@@ -3,6 +3,7 @@
     contentStyleClass="overflow-x-hidden"
     [visible]="display()"
     (visibleChange)="closeDialog()"
+    [closable]="!loading()"
     [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
     [style]="{ width: '60vw' }"
     [modal]="true"
@@ -195,8 +196,32 @@
                 ]"
                 ></common-inputs>
                 <!-- < -->
-                <select-machine [form]="form" label="Selecciona las Máquinas" [multiple]="true"></select-machine>
-                }}
+                <select-machine [form]="form" label="Selecciona las Máquinas" [multiple]="true" mode="modal"></select-machine>
+                } @case (SectionType.FULL_MAINTENANCE_PLAN) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[
+                    {
+                        type: 'content',
+                        label: 'Descripción',
+                        placeholder: 'Descripción de la sección',
+                        isTextarea: true,
+                    }
+                ]"
+                ></common-inputs>
+                <div class="flex flex-col gap-2 mb-5">
+                    <label>Imagen referencial</label>
+                    <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+                </div>
+
+                <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
+
+                <div class="mt-5">
+                    <show-link-switch [form]="form"></show-link-switch>
+                </div>
+                } @case (SectionType.PREVENTIVE_CORRECTIVE_MAINTENANCE) {
+                <video-upload [form]="form"></video-upload>
+                } }
             </div>
 
             <p-togglebutton formControlName="active" onLabel="Activo" offLabel="Inactivo" onIcon="pi pi-check" offIcon="pi pi-times" onIcon="pi pi-lock-open" offIcon="pi pi-lock" class="w-36" ariaLabel="Do you confirm" />

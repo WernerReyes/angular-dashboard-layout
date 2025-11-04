@@ -16,7 +16,7 @@
 
         <div class="flex flex-col gap-2">
             <label for="machine-description">Breve Descripción</label>
-            <textarea id="machine-description" pInputTextarea formControlName="shortDescription" placeholder="Breve descripción de la máquina" rows="3"></textarea>
+            <textarea id="machine-description" pInputTextarea formControlName="shortDescription" [autoResize]="true" placeholder="Breve descripción de la máquina" rows="3"></textarea>
             @if (form.controls['shortDescription'].errors) {
             <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'shortDescription') }} </p-message>
             }
@@ -24,7 +24,7 @@
 
         <div class="flex flex-col gap-2">
             <label for="machine-full-description">Descripción completa</label>
-            <textarea id="machine-full-description" pInputTextarea formControlName="fullDescription" placeholder="Descripción completa de la máquina" rows="5"></textarea>
+            <textarea id="machine-full-description" pInputTextarea [autoResize]="true" formControlName="fullDescription" placeholder="Descripción completa de la máquina" rows="5"></textarea>
             @if (form.controls['fullDescription'].errors) {
             <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'fullDescription') }} </p-message>
             }
@@ -65,8 +65,12 @@
                                 </span>
                             </ng-template>
                         </p-selectbutton>
-                        @let images = form.controls['images'].value; @if (images && images.length > 0) { {{fileLimit()}} {{disabledUpload()}} {{optionSelectButton()}}
-                        <div class="grid gap-3 w-full mx-autojustify-center grid-cols-3 sm:grid-cols-5 xl:grid-cols-3">
+                        @let images = form.controls['images'].value; @if (images && images.length > 0) { @if (optionSelectButton() === 'update') {
+                        <p-message severity="info" size="small" class="mt-2">Para actualizar las imágenes, haz clic en las imágenes que deseas reemplazar.</p-message>
+                        } @else if (optionSelectButton() === 'delete') {
+                        <p-message severity="info" size="small" class="mt-2">Para eliminar las imágenes, haz clic en las imágenes que deseas eliminar y luego guarda los cambios.</p-message>
+                        }
+                        <div class="grid gap-3 w-full mx-autojustify-center grid-cols-3 mt-4 sm:grid-cols-5 xl:grid-cols-3">
                             @for (value of currentImages(); let i = $index; track i) { @let indexOrder = selectedImageOrder(value?.image?.url); @if (value && !value?.disabled) {
 
                             <div

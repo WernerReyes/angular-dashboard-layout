@@ -68,9 +68,9 @@
                     isTextarea: false
                 }]"
                 ></common-inputs>
-                } @case (SectionType.CLIENT) { 
-                    
-                    <common-inputs
+                } @case (SectionType.CLIENT) {
+
+                <common-inputs
                     [form]="form"
                     [includeFields]="[{
                     type: 'title',
@@ -80,7 +80,7 @@
                 }]"
                 ></common-inputs>
 
-                    @let imageType = form.controls['imageType'].value;
+                @let imageType = form.controls['imageType'].value;
                 <div class="flex flex-col gap-2">
                     <label>Imagen</label>
                     <!-- [selectedSectionItem]="selectedSectionItem()" -->
@@ -108,11 +108,11 @@
                     isTextarea: true
                 }]"
                 ></common-inputs>
-                } 
+                }
                 <!-- @case (SectionType.MACHINE) {
                 <machine-form></machine-form>
                 }  -->
-                
+
                 @case (SectionType.CONTACT_TOP_BAR) {
                 <common-inputs
                     [form]="form"
@@ -217,9 +217,31 @@
                 }]"
                 ></common-inputs>
                 <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
-                } 
-                
-                @default { } }
+                } @case ( SectionType.FULL_MAINTENANCE_PLAN ) {
+                <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[{
+                    type: 'title',
+                    label: 'Título',
+                    placeholder: 'Título',
+                    isTextarea: false
+                },
+                {
+                    type: 'subtitle',
+                    label: 'Contenido',
+                    placeholder: 'Contenido',
+                    isTextarea: true
+                },
+                {
+                    type: 'content',
+                    label: 'Información adicional',
+                    placeholder: 'Información adicional',
+                    isTextarea: true
+                }]"
+                ></common-inputs>
+                <input-list label="Lista de planes de mantenimiento" [form]="form"></input-list>
+                } @default { } }
             </div>
         </form>
 
@@ -228,7 +250,8 @@
         </div>
     </div>
 
-    <!-- TODO <pre>{{ form.value | json }}</pre> -->
+    TODO
+    <pre>{{ form.value | json }}</pre>
 
     <ng-template #footer>
         <button pButton type="submit" [loading]="loading()" form="menu-form" icon="pi pi-save" [disabled]="form.invalid" label="Guardar"></button>

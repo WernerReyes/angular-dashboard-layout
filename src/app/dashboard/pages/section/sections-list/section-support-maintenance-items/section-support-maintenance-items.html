@@ -2,14 +2,29 @@
     <div class="container mx-auto px-4">
         <!-- Header -->
         <div class="max-w-4xl mx-auto text-center mb-10">
+            @if (section().title) {
             <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-100">{{ section().title }}</h2>
+            } @else {
+            <empty-field-message className="mx-auto max-w-sm" textContent="Título no disponible"></empty-field-message>
+            } 
+            
+            @if (section().description) {
             <p class="mt-4 text-slate-600 dark:text-slate-300 leading-relaxed">{{ section().description }}</p>
+            } @else {
+            <empty-field-message className="mx-auto mt-4" textContent="Descripción no disponible"></empty-field-message>
+            }
         </div>
 
         <!-- CTA ancho -->
         <div class="max-w-5xl mx-auto mb-12">
             <div class="rounded-xl overflow-hidden shadow-lg">
-                <div class="bg-blue-700 dark:bg-blue-600 text-white px-6 py-4 text-center text-lg font-semibold">{{ section().subtitle }}</div>
+                <div class="bg-blue-700 dark:bg-blue-600 text-white px-6 py-4 text-center text-lg font-semibold">
+                    @if (section().subtitle) {
+                    {{ section().subtitle }}
+                    } @else {
+                    <empty-field-message className="mx-auto" textContent="Frase destacada no disponible"></empty-field-message>
+                    }   
+                </div>
             </div>
         </div>
 
@@ -20,7 +35,9 @@
             } @else {
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                 @for (item of section().items; track item.id) {
-                <p-card (contextmenu)="contextMenu()?.onContextMenu($event, item)" class="advantage-item flex flex-col items-center text-center p-6 transition-shadow duration-300 h-full"
+                <p-card
+                    (contextmenu)="contextMenu()?.onContextMenu($event, item)"
+                    class="advantage-item flex flex-col items-center text-center p-6 transition-shadow duration-300 h-full"
                     [ngClass]="{'border border-primary': currentSectionItem()?.id === item.id}"
                 >
                     <!-- @if (item.iconUrl) {
@@ -29,15 +46,14 @@
                     <empty-field-message className="flex items-center justify-center" textContent="Sin ícono"></empty-field-message>
                     } -->
                     <div class="mx-auto w-fit">
-
-                        <icon-image  [item]="item" 
-                          imageClass="size-16 mx-auto"
-                          
-                          [imageErrorClass]="{
+                        <icon-image
+                            [item]="item"
+                            imageClass="size-16 mx-auto"
+                            [imageErrorClass]="{
                             iconClass: '!size-16',
                             containerClass: 'flex items-center justify-center'
                           }"
-                         ></icon-image>
+                        ></icon-image>
                     </div>
 
                     <h4 class="!text-xl font-semibold text-surface-800 dark:text-surface-100 mb-2">{{ item.title }}</h4>

@@ -4,10 +4,11 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { NgClass } from '@angular/common';
 import { Machine } from '@/shared/interfaces/machine';
+import { EmptyFieldMessage } from '../../components/empty-field-message/empty-field-message';
 
 @Component({
   selector: 'section-machines-catalog-items',
-  imports: [NgClass, CardModule, ButtonModule],
+  imports: [NgClass, EmptyFieldMessage, CardModule, ButtonModule],
   templateUrl: './section-machines-catalog-items.html',
 })
 export class SectionMachinesCatalogItems {

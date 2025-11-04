@@ -58,7 +58,10 @@
         <section-machine-details-items [section]="preview"></section-machine-details-items>
     } @case (SectionType.MACHINES_CATALOG) {
         <section-machines-catalog-items [section]="preview" [isPreview]="true"></section-machines-catalog-items>
-    }
+    } @case (SectionType.FULL_MAINTENANCE_PLAN) {
+        <section-full-maintenance-plan-items [section]="preview" [isPreview]="true" [currentSectionItem]="currentSectionItem()"></section-full-maintenance-plan-items>
+    }        
+    
     
     @default {} }
 </section>

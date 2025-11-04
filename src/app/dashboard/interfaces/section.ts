@@ -1,4 +1,5 @@
-import { SectionMode, SectionType } from '@/shared/mappers/section.mapper';
+import type { AdditionalInfo, Icon, IconType } from '@/shared/mappers/section-item.mapper';
+import type { SectionMode, SectionType } from '@/shared/mappers/section.mapper';
 
 export interface CreateSection {
     type: SectionType;
@@ -14,6 +15,13 @@ export interface CreateSection {
     machinesIds?: number[] | null;
     menusIds?: number[] | null;
     mode: SectionMode;
+
+    fileIcon: File | null;
+    fileIconUrl: string | null;
+    icon: Icon | null;
+    iconType: IconType | null;
+
+    additionalInfoList: AdditionalInfo[] | null;
 }
 
 export interface AssocieteSectionToPages {

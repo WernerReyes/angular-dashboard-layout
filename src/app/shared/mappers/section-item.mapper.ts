@@ -21,6 +21,11 @@ export interface Icon {
     strokeWidth: number;
 }
 
+export interface AdditionalInfo {
+    label: string;
+    id: string;
+}
+
 export interface SectionItemEntity {
     id_section_item: number;
     title: string | null;
@@ -37,6 +42,7 @@ export interface SectionItemEntity {
     link: LinkEntity | null;
     icon: Icon | null;
     icon_type: IconType | null;
+    additional_info_list: AdditionalInfo[] | null;
 }
 
 export const mapSectionItemEntityToSectionItem = (entity: SectionItemEntity): SectionItem => ({
@@ -54,5 +60,6 @@ export const mapSectionItemEntityToSectionItem = (entity: SectionItemEntity): Se
     inputType: entity.input_type,
     link: entity.link ? mapLinkEntityToLink(entity.link) : null,
     icon: entity.icon,
-    iconType: entity.icon_type
+    iconType: entity.icon_type,
+    additionalInfoList: entity.additional_info_list
 });

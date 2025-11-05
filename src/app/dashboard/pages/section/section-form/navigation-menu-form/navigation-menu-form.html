@@ -7,13 +7,10 @@
 
     <div class="flex flex-col gap-2 mt-1">
         <label>Menú de navegación principal</label>
-    <app-error-boundary [resource]="menuList"
-     skeletonHeight="3rem"
-    >
-        <ng-template #content let-menus>
-
+        <app-error-boundary [resource]="menuList" skeletonHeight="3rem">
+            <ng-template #content let-menus>
                 <p-treeSelect
-                     emptyMessage="No se encontraron menús."
+                    emptyMessage="No se encontraron menús."
                     [options]="menusListSelect()"
                     formControlName="menusIds"
                     [overlayOptions]="{

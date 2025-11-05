@@ -32,18 +32,10 @@
         </div>
 
         <ul class="flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12 mt-6">
-            @if (section().items.length === 0) {
+            @if (!section().additionalInfoList?.length) {
             <empty-field-message className="w-full h-full" textContent="Sin información extra"></empty-field-message>
-            } @else { @for (item of section().items; track item.id) {
-            <li
-                class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition cursor-pointer"
-                [ngClass]="{
-                'border border-primary p-2 rounded-xl': currentSectionItem()?.id === item.id
-             }"
-                (contextmenu)="contextMenu()?.onContextMenu($event, item)"
-            >
-                {{item.title}}
-            </li>
+            } @else { @for (item of section().additionalInfoList; track item.id) {
+            <li class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition cursor-pointer">{{item.label}}</li>
             } }
         </ul>
 

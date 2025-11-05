@@ -26,7 +26,8 @@ export enum SectionType {
     MACHINE_DETAILS = 'MACHINE_DETAILS',
     MACHINES_CATALOG = 'MACHINES_CATALOG',
     FULL_MAINTENANCE_PLAN = 'FULL_MAINTENANCE_PLAN',
-    PREVENTIVE_CORRECTIVE_MAINTENANCE = 'PREVENTIVE_CORRECTIVE_MAINTENANCE'
+    PREVENTIVE_CORRECTIVE_MAINTENANCE = 'PREVENTIVE_CORRECTIVE_MAINTENANCE',
+    SUPPORT_WIDGET = 'SUPPORT_WIDGET'
 }
 
 export enum SectionMode {
@@ -49,11 +50,14 @@ export interface SectionEntity {
     subtitle: string | null;
     description: string | null;
     text_button: string | null;
+    extra_text_button: string | null;
     link_id: number | null;
+    extra_link_id: number | null;
     active: boolean;
     image: string | null;
     section_items: SectionItemEntity[];
     link: LinkEntity | null;
+    extra_link: LinkEntity | null;
     menus: MenuEntity[] | null;
     pivot_pages?: PivotPagesEntity[] | null;
     pages?: (PageEntity & { pivot: PivotPagesEntity })[] | null;
@@ -62,6 +66,7 @@ export interface SectionEntity {
     icon_type?: IconType | null;
     icon?: Icon | null;
     additional_info_list: AdditionalInfo[] | null;
+    video: string | null;
 }
 
 export const mapSectionEntityToSection = (entity: SectionEntity): Section => {
@@ -72,15 +77,19 @@ export const mapSectionEntityToSection = (entity: SectionEntity): Section => {
         subtitle: entity.subtitle,
         description: entity.description,
         textButton: entity.text_button,
+        extraTextButton: entity.extra_text_button,
         linkId: entity.link_id,
+        extraLinkId: entity.extra_link_id,
         image: entity.image,
         link: entity.link ? mapLinkEntityToLink(entity.link) : null,
+        extraLink: entity.extra_link ? mapLinkEntityToLink(entity.extra_link) : null,
         items: entity?.section_items && entity.section_items.length > 0 ? entity.section_items.map((item) => mapSectionItemEntityToSectionItem(item)) : [],
         menus: entity?.menus && entity.menus.length > 0 ? entity.menus.map(mapMenuEntityToMenu) : [],
         machines: entity?.machines && entity.machines.length > 0 ? entity.machines.map((machine) => mapMachineEntityToMachine(machine)) : null,
         iconUrl: entity.icon_url || null,
         iconType: entity.icon_type || null,
         icon: entity.icon || null,
+            video: entity.video || null,
         additionalInfoList: entity.additional_info_list || null,
         pivotPages:
             entity?.pivot_pages && entity.pivot_pages.length > 0

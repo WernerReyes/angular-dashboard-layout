@@ -13,7 +13,7 @@ export interface CreateMenu {
     readonly title: string;
     readonly linkId: number;
     readonly parentId: number | null;
-    readonly active: boolean;
+    
 }
 
 
@@ -27,7 +27,6 @@ export interface UpdateMenuOrder {
 export interface DropdownMenu {
     readonly title: string;
     readonly order: number;
-    readonly active: boolean;
     readonly type: MenuTypes.EXTERNAL_LINK | MenuTypes.INTERNAL_PAGE | '';
     readonly pageId: number | null;
     readonly url: string | null;

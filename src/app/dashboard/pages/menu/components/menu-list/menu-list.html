@@ -7,8 +7,6 @@
 
     <p-confirmdialog />
 
-
-
     <p-inputgroup>
         <p-inputgroup-addon>
             <i class="pi pi-search cursor-pointer"></i>
@@ -23,30 +21,16 @@
         <div class="font-semibold text-lg mb-1">No se encontraron menús</div>
         <div class="text-sm">Intenta ajustar tu búsqueda o crea un nuevo menú para comenzar.</div>
     </div>
-    } @else { 
-        
-        <!-- @if (hasPositionChanged()) {
-    <p-message (onClose)="cancelChanges()" severity="info" class="w-full" [closable]="true">
-        <ng-template #icon>
-            <p-button (click)="savePositionChanges()" label="Guardar cambios" text class="ml-2" icon="pi pi-save" severity="info"></p-button>
-        </ng-template>
-        <div class="flex items-center justify-between">
-            <span class="ml-2">Has cambiado el orden de las secciones</span>
-            <div></div>
-        </div>
-    </p-message>
+    } @else {
 
-    } -->
-    <!-- cdkDropList [cdkDropListData]="filteredMenuList()" (cdkDropListDropped)="drop($event, filteredMenuList())" -->
-      <!-- [class]="{
-        'mt-5': hasPositionChanged()
-      }" -->
-    <div class="space-y-2 flex flex-col"
-    
-    >
-        @for (menuItem of filteredMenuList(); track menuItem.id) { @let link = menuItem.link; @let activeStatus = menuActiveStatus[`${menuItem.active}`];
-       <menu-item [menuItem]="menuItem" [confirmDeleteMenu]="confirmDeleteMenu.bind(this)" [openDialogAndEdit]="openDialogAndEdit.bind(this)"></menu-item>
+    <div class="space-y-2 flex flex-col">
+        @for (menuItem of filteredMenuList(); track menuItem.id) {
+        <menu-item [menuItem]="menuItem" 
+         [currentMenu]="currentMenu()"
+        [onContextMenu]="onContextMenu.bind(this)"></menu-item>
         }
+
+        <p-contextMenu #cm [model]="cmItems"></p-contextMenu>
     </div>
     }
 </app-error-boundary>

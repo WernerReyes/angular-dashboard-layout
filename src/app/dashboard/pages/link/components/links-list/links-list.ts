@@ -4,7 +4,7 @@ import { DataViewSkeleton } from '@/shared/components/skeleton/data-view-skeleto
 import type { Link } from '@/shared/interfaces/link';
 import { LinkType } from '@/shared/mappers/link.mapper';
 import { DatePipe, NgClass } from '@angular/common';
-import { Component, computed, inject, output, signal } from '@angular/core';
+import { Component, computed, inject, output, signal, ViewChild } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DataViewModule } from 'primeng/dataview';
 import { InputGroupModule } from 'primeng/inputgroup';
@@ -12,12 +12,13 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
 import { LinkFormService } from '../../services/link-form.service';
 import { FormsModule } from '@angular/forms';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MenuItem, MenuItemCommandEvent } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { type ContextMenu, ContextMenuModule } from 'primeng/contextmenu';
 
 @Component({
     selector: 'links-list',
-    imports: [ErrorBoundary, DataViewSkeleton, NgClass, DatePipe, FormsModule, InputTextModule, InputGroupModule, InputGroupAddonModule, DataViewModule, ButtonModule, ConfirmDialogModule],
+    imports: [ErrorBoundary, DataViewSkeleton, NgClass, DatePipe, ContextMenuModule, FormsModule, InputTextModule, InputGroupModule, InputGroupAddonModule, DataViewModule, ButtonModule, ConfirmDialogModule],
     templateUrl: './links-list.html',
     providers: [ConfirmationService]
 })
@@ -26,15 +27,20 @@ export class LinksList {
     private readonly linkService = inject(LinkService);
     private readonly linkFormService = inject(LinkFormService);
 
+    LinkType = LinkType;
+    linksList = this.linkService.linksListResource;
+
     onDisplay = output<boolean>();
     onSelectedLink = output<Link>();
 
-    LinkType = LinkType;
+    @ViewChild('cm') contextMenu!: ContextMenu;
 
-    linksList = this.linkService.linksListResource;
-
+    
     searchQuery = signal<string>('');
 
+    currentLink = signal<Link | null>(null);
+    
+    
     filteredLinksList = computed(() => {
         const query = this.searchQuery().toLowerCase();
         const links = this.linksList.hasValue() ? this.linksList.value() : [];
@@ -42,14 +48,42 @@ export class LinksList {
         return links.filter((link) => link.title.toLowerCase().includes(query));
     });
 
-    openDialogAndEdit(link: Link) {
+    cmItems: MenuItem[] = [
+        {
+            label: 'Editar',
+            icon: 'pi pi-pencil',
+            command: () => {
+                if (this.currentLink()) {
+                    this.openDialogAndEdit(this.currentLink()!);
+                }
+            }
+        },
+        {
+            label: 'Eliminar',
+            icon: 'pi pi-trash',
+            command: (event: MenuItemCommandEvent) => {
+                if (this.currentLink()) {
+                    this.deleteLink(event.originalEvent!, this.currentLink()!);
+                }
+            }
+        }
+    ];
+
+    onContextMenu(event: Event, link: Link) {
+        this.currentLink.set(link);
+        this.contextMenu.show(event);
+        this.contextMenu.target = event.currentTarget as HTMLElement;
+    }
+
+
+    private openDialogAndEdit(link: Link) {
         this.onDisplay.emit(true);
         this.onSelectedLink.emit(link);
 
         this.linkFormService.populateForm(link);
     }
 
-    deleteLink(event: Event, link: Link) {
+    private deleteLink(event: Event, link: Link) {
         this.confirmationService.confirm({
             target: event.target as EventTarget,
             message: 'Estás seguro de que deseas eliminar este enlace?',

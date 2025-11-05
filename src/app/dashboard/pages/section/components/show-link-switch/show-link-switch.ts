@@ -22,6 +22,8 @@ export class ShowLinkSwitch {
     private readonly linkService = inject(LinkService);
 
     form = input.required<FormGroup<any>>();
+    // label = input<string>('¿Incluir enlace?');
+    isExtraLink = input<boolean>(false);
 
     FormUtils = FormUtils;
 

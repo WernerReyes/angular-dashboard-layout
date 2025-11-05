@@ -44,24 +44,26 @@
     } @case (SectionType.CONTACT_US) {
     <section-contact-us-items [currentSectionItem]="currentSectionItem()" [isPreview]="true" [section]="preview"></section-contact-us-items>
     } @case (SectionType.FOOTER) {
-    <section-footer-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-footer-items>
+    <section-footer-items [section]="preview"></section-footer-items>
     } @case (SectionType.ADVANTAGES) {
     <section-advantages-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-advantages-items>
     } @case (SectionType.SUPPORT_MAINTENANCE) {
     <section-support-maintenance-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-support-maintenance-items>
-    } @case (SectionType.OPERATIONAL_BENEFITS) {
-        @if (level() === 'section') {
+    } @case (SectionType.OPERATIONAL_BENEFITS) { @if (level() === 'section') {
     <span class="block p-message p-2 p-message-info w-4/5 mx-auto mb-5">Los campos que llenen en esta sección no se ven visualmente. El contenido se verá al agregar los items de beneficios operacionales </span>
     }
     <section-operacional-benefits-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-operacional-benefits-items>
     } @case (SectionType.MACHINE_DETAILS) {
-        <section-machine-details-items [section]="preview"></section-machine-details-items>
+    <section-machine-details-items [section]="preview"></section-machine-details-items>
     } @case (SectionType.MACHINES_CATALOG) {
-        <section-machines-catalog-items [section]="preview" [isPreview]="true"></section-machines-catalog-items>
+    <section-machines-catalog-items [section]="preview" [isPreview]="true"></section-machines-catalog-items>
     } @case (SectionType.FULL_MAINTENANCE_PLAN) {
-        <section-full-maintenance-plan-items [section]="preview" [isPreview]="true" [currentSectionItem]="currentSectionItem()"></section-full-maintenance-plan-items>
-    }        
-    
+    <section-full-maintenance-plan-items [section]="preview" [isPreview]="true" [currentSectionItem]="currentSectionItem()"></section-full-maintenance-plan-items>
+    } @case (SectionType.PREVENTIVE_CORRECTIVE_MAINTENANCE) {
+    <section-preventive-corrective-maintenance-items [section]="preview" [isPreview]="true"></section-preventive-corrective-maintenance-items>
+    } @case (SectionType.SUPPORT_WIDGET) {
+    <section-support-widget-items [section]="preview" [currentSectionItem]="currentSectionItem()"></section-support-widget-items>
+    }
     
     @default {} }
 </section>

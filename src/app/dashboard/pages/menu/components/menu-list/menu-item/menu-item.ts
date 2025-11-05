@@ -1,20 +1,21 @@
-import { Menu, menuActiveStatusOptions } from '@/shared/interfaces/menu';
-import { Component, input } from '@angular/core';
+import type { Menu } from '@/shared/interfaces/menu';
 import { LinkType } from '@/shared/mappers/link.mapper';
-import { TagModule } from 'primeng/tag';
+import { DatePipe, NgClass } from '@angular/common';
+import { Component, input } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'menu-item',
-  imports: [TagModule, ButtonModule],
+  imports: [NgClass, DatePipe, ButtonModule],
   templateUrl: './menu-item.html',
 })
 export class MenuItem {
  menuItem = input.required<Menu & { expanded?: boolean }>();
- openDialogAndEdit = input.required<(menu: Menu) => void>();
- confirmDeleteMenu = input.required<(event: Event, menu: Menu) => void>();
  
-  menuActiveStatus = menuActiveStatusOptions;
+ onContextMenu = input.required<(event: any, menu: Menu) => void>(); 
+ currentMenu = input<Menu | null>();
+ 
+  
   LinkType = LinkType;
 
   toggleExpand() {

@@ -52,7 +52,8 @@ export class AuthService {
             .pipe(
                 map(({ data }) => ({
                     user: mapUserEntityToUser(data.user),
-                    token: data.accessToken
+                    token: data.accessToken,
+                    refresh: data.refreshToken
                 })),
                 tap((res) => this.handleAuthSuccess(res.user, res.token)),
                 catchError((error) => {
@@ -69,7 +70,8 @@ export class AuthService {
             .pipe(
                 map(({ data }) => ({
                     user: mapUserEntityToUser(data.user),
-                    token: data.accessToken
+                    token: data.accessToken,
+                    refresh: data.refreshToken
                 })),
                 tap((res) => {
                     this.handleAuthSuccess(res.user, res.token);
@@ -87,7 +89,8 @@ export class AuthService {
             .pipe(
                 map(({ data }) => ({
                     user: mapUserEntityToUser(data.user),
-                    token: data.accessToken
+                    token: data.accessToken,
+                    refresh: data.refreshToken
                 })),
                 tap((res) => this.handleAuthSuccess(res.user, res.token)),
                 catchError((error) => this.handleAuthError(error))
@@ -104,6 +107,8 @@ export class AuthService {
                 tap(() => {
                     this.user.set(null);
                     this._authStatus.set('not-authenticated');
+                    this.token.set(null);
+                    localStorage.removeItem('_session_token');
                 })
             );
     }
@@ -127,6 +132,7 @@ export class AuthService {
 
     private handleAuthSuccess(user: User, token: string): boolean {
         // this.userResource.update(() => user);
+        localStorage.setItem('_session_token', token);
         this._authStatus.set('authenticated');
         this.user.set(user);
         this.token.set(token);

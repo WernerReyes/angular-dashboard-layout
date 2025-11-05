@@ -1,10 +1,16 @@
+import type { CreateMenu } from '@/dashboard/interfaces/menu';
+import { FilterLinksByTypePipe } from '@/dashboard/pipes/filter-links-by-type-pipe';
 import { LinkService } from '@/dashboard/services/link.service';
 import { MenuService } from '@/dashboard/services/menu.service';
 import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
+import { linkTypeOptions } from '@/shared/interfaces/link';
 import type { Menu } from '@/shared/interfaces/menu';
 import { FormUtils } from '@/utils/form-utils';
+import { JsonPipe, KeyValuePipe } from '@angular/common';
 import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TreeNode } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
@@ -12,15 +18,8 @@ import { MessageModule } from 'primeng/message';
 import { SelectModule } from 'primeng/select';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { ToggleButtonModule } from 'primeng/togglebutton';
-import { MenuFormService } from '../../services/menu-form.service';
-import { CreateMenu } from '@/dashboard/interfaces/menu';
-import { LinkType } from '@/shared/mappers/link.mapper';
-import { FilterLinksByTypePipe } from '@/dashboard/pipes/filter-links-by-type-pipe';
-import { linkTypeOptions } from '@/shared/interfaces/link';
-import { JsonPipe, KeyValuePipe } from '@angular/common';
 import { TreeSelectModule } from 'primeng/treeselect';
-import { TreeNode } from 'primeng/api';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { MenuFormService } from '../../services/menu-form.service';
 
 @Component({
     selector: 'link-dialog-form',
@@ -83,7 +82,7 @@ export class DialogForm {
                 title: menuData.title!,
                 linkId: menuData.linkId!,
                 parentId: menuData.parentId ? (typeof menuData.parentId === 'object' ? (menuData.parentId as TreeNode).data : menuData.parentId) : null,
-                active: menuData.active === true
+             
             };
 
             if (this.selectedMenu()) {

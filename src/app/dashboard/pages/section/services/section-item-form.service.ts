@@ -37,7 +37,7 @@ export class SectionItemFormService {
         // categoryId: [null],
 
         showLink: [false],
-        typeLink: [LinkType.PAGE as LinkType | null], // true = internal, false = external
+        typeLink: [LinkType.PAGE as LinkType | null], 
         linkId: [null],
 
         inputType: [null as InputType | null],

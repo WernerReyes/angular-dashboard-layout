@@ -21,16 +21,26 @@ export class SectionFormService {
         title: ['', [Validators.required, FormUtils.noWhitespace(), Validators.maxLength(200)]],
         subtitle: ['', [Validators.maxLength(150)]],
         content: [''],
-        textButton: ['', [Validators.maxLength(50)]],
+        textButton: ['', [Validators.maxLength(100)]],
+
+        extraTextButton: ['', [Validators.maxLength(100)]],
 
         imageType: [ImageType.NONE],
         currentImage: [''],
         imageFile: [null, [Validators.maxLength(255)]],
         imageUrl: ['', [Validators.maxLength(255)]],
 
+        videoFile: [null, [Validators.maxLength(255)]],
+        currentVideo: [''],
+
         showLink: [false],
-        typeLink: [true],
+        typeLink: [LinkType.PAGE as LinkType | null],
         linkId: [null],
+
+        showExtraLink: [false],
+        extraLinkType: [LinkType.PAGE as LinkType | null],
+        extraLinkId: [null],
+
         active: [true, [Validators.required]],
 
         iconFile: ['', [Validators.maxLength(100)]],
@@ -112,9 +122,18 @@ export class SectionFormService {
             subtitle: section.subtitle!,
             content: section.description!,
             showLink: section.type === SectionType.CONTACT_US ? !!section.textButton : !!section.linkId,
+            
             textButton: section.textButton!,
-            typeLink: section.link ? (section.link.type === LinkType.PAGE ? true : false) : true,
+            extraTextButton: section.extraTextButton!,
+
+            typeLink: section.link?.type || null,
             linkId: section.linkId as any,
+
+            showExtraLink: !!section.extraLinkId,
+            extraLinkType: section.extraLink?.type || null,
+
+
+            extraLinkId: section.extraLinkId as any,
             active: section.pivotPages ? (section.pivotPages.find((pp) => pp.idPage === pageId)?.active ?? true) : true,
 
             imageFile: null,
@@ -126,6 +145,9 @@ export class SectionFormService {
             currentIconUrl: section.iconUrl || '',
             iconType: section.iconType || IconType.LIBRARY,
             icon: section.icon || null,
+
+            videoFile: null,
+            currentVideo:  section.video || '',
 
             machinesIds: this.setMachinesIds(section),
 

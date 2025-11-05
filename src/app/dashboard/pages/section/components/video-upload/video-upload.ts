@@ -22,6 +22,9 @@ export class VideoUpload {
     onFileSelect(event: FileSelectEvent) {
         const file = event.files[0];
         if (file) {
+            console.log(file);
+            this.form().get('videoFile')?.patchValue(file);
+            this.form().get('videoFile')?.markAsTouched();
         }
     }
 }

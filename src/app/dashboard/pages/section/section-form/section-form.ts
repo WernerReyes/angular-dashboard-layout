@@ -28,6 +28,7 @@ import { Preview } from './preview/preview';
 import { SelectMachine } from '../components/select-machine/select-machine';
 import { IconUpload } from '../components/icon-upload/icon-upload';
 import { VideoUpload } from '../components/video-upload/video-upload';
+import { InputList } from '../components/input-list/input-list';
 
 @Component({
     selector: 'section-form',
@@ -45,6 +46,7 @@ import { VideoUpload } from '../components/video-upload/video-upload';
         VideoUpload,
         JsonPipe,
         Preview,
+        InputList,
         ToggleSwitchModule,
         TextareaModule,
         SelectModule,
@@ -102,7 +104,9 @@ export class SectionForm {
                 subtitle: formValue.subtitle || null,
                 description: formValue.content || null,
                 textButton: formValue.showLink ? formValue.textButton || null : null,
+                extraTextButton: formValue.showExtraLink ? formValue.extraTextButton || null : null,
                 linkId: formValue.showLink ? (formValue.linkId as any) : null,
+                extraLinkId: formValue.showExtraLink ? (formValue.extraLinkId as any) : null,
                 active: formValue.active!,
                 pageId: this.selectedPageId(),
                 fileImage: formValue.imageType === ImageType.LOCAL ? (formValue.imageFile as any) : null,
@@ -116,6 +120,10 @@ export class SectionForm {
                 icon: formValue.icon || null,
                 iconType: formValue.iconType!,
 
+                fileVideo: formValue.videoFile,
+
+             
+
                 additionalInfoList: (formValue?.additionalInfoList?.length ?? 0 > 0) ? formValue.additionalInfoList! : null
             };
 
@@ -124,7 +132,8 @@ export class SectionForm {
                     .updateSection(this.selectedSection()!.id, {
                         ...sectionData,
                         type: this.selectedSection()!.type,
-                        currentImageUrl: formValue.currentImage || null
+                        currentImageUrl: formValue.currentImage || null,
+                        currentVideoUrl: formValue.currentVideo || null
                     })
                     .subscribe({
                         next: () => {

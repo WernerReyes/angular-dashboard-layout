@@ -1,5 +1,12 @@
-@let link = menuItem().link; @let activeStatus = menuActiveStatus[`${menuItem().active}`];
-<div class="bg-white dark:bg-surface-800 rounded-lg border border-surface-200 dark:border-surface-700">
+@let link = menuItem().link;
+<div
+    class="bg-white dark:bg-surface-800 rounded-lg border"
+    [ngClass]="{
+    'border-primary': currentMenu()?.id === menuItem().id,
+    'border-surface-200 dark:border-surface-700': currentMenu()?.id !== menuItem().id
+ }"
+    (contextmenu)="onContextMenu()($event, menuItem())"
+>
     <!-- Item principal -->
     <div class="p-4">
         <div class="flex items-center justify-between flex-wrap gap-4">
@@ -30,10 +37,8 @@
                     </div>
                 </div>
             </div>
-            <div class="flex items-center space-x-2">
-                <p-tag [value]="activeStatus.label" [severity]="activeStatus.severity" class="text-sm" />
-                <p-button icon="pi pi-pencil" text aria-label="Edit Menu Item" (click)="openDialogAndEdit()(menuItem())"></p-button>
-                <p-button icon="pi pi-trash" text severity="danger" aria-label="Delete Menu Item" (click)="confirmDeleteMenu()($event, menuItem())"></p-button>
+            <div class="md:items-end gap-8 mt-auto ml-auto">
+                <small class="text-sm pt-2 text-muted-color">Creado el {{ menuItem().createdAt | date: 'mediumDate' }}</small>
             </div>
         </div>
     </div>
@@ -43,7 +48,7 @@
     <!-- cdkDropList [cdkDropListData]="menuItem().children" (cdkDropListDropped)="drop($event, menuItem().children)" -->
     <div class="ml-9 border-t border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-900 p-2 flex flex-col space-y-2">
         @for (child of menuItem().children; track child.id) {
-        <menu-item [menuItem]="child" [confirmDeleteMenu]="confirmDeleteMenu().bind(this)" [openDialogAndEdit]="openDialogAndEdit().bind(this)"></menu-item>
+        <menu-item [menuItem]="child" [currentMenu]="currentMenu()" [onContextMenu]="onContextMenu().bind(this)"></menu-item>
         }
     </div>
     }

@@ -1,4 +1,3 @@
-import { SectionItem } from '@/shared/interfaces/section-item';
 import { Component, input, model, ViewChild } from '@angular/core';
 import { MenuItem, MenuItemCommandEvent } from 'primeng/api';
 import { ContextMenu, ContextMenuModule } from 'primeng/contextmenu';
@@ -42,6 +41,9 @@ export class ContextMenuCrud<T> {
         this.cm.target = event.currentTarget;
         this.cm.show(event);
         this.selected.set(item);
+
+        event.preventDefault();
+        event.stopPropagation();
     }
 
     onHide() {

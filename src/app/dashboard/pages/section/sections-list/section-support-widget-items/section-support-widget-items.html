@@ -1,0 +1,38 @@
+<!-- section-solutions-overview-items.html -->
+<section class="bg-gradient-to-br from-gray-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 py-20 transition-all duration-300">
+    <div class="container mx-auto px-4">
+        <div id="whatsapp-widget" class="mx-auto bg-red-500 w-fit bottom-6 right-6 z-50">
+            <!-- Botón redondo -->
+            <!-- <button id="whatsapp-button" (click)="isChatOpen.set(!isChatOpen())" class="bg-green-500 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:scale-105 transition-transform">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="w-8 h-8" />
+            </button> -->
+            <p-button
+             rounded
+             severity="success"
+            >
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="w-8 h-8" />
+            </p-button>
+
+            <!-- Cuadro de chat oculto -->
+            <p-card
+                
+                class="w-fit"
+                [class]="{
+                'block': isChatOpen(),
+                '!hidden': !isChatOpen()
+             }"
+            >
+                <div class="flex items-start gap-2">
+                    <img src="https://i.imgur.com/WjvA5XB.png" alt="Mascota" class="w-14 h-14" />
+                    <div class="bg-gray-100 rounded-xl px-3 py-2 text-sm">
+                        <p class="font-semibold">Estamos aquí para ayudarte!</p>
+                    </div>
+                </div>
+
+                <textarea pTextarea placeholder="Escribe tu mensaje..." fluid></textarea>
+
+                <p-button label="Enviar" styleClass="mt-3" fluid> </p-button>
+            </p-card>
+        </div>
+    </div>
+</section>

@@ -2,16 +2,17 @@ import { MenuService } from '@/dashboard/services/menu.service';
 import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
 import { DataViewSkeleton } from '@/shared/components/skeleton/data-view-skeleton/data-view-skeleton';
 import { linkTypeOptions } from '@/shared/interfaces/link';
-import { menuActiveStatusOptions, type Menu } from '@/shared/interfaces/menu';
+import { type Menu } from '@/shared/interfaces/menu';
 import { LinkType } from '@/shared/mappers/link.mapper';
 import { MessageService } from '@/shared/services/message.service';
-import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, inject, linkedSignal, output, signal } from '@angular/core';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { Component, inject, linkedSignal, output, signal, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ContextMenu, ContextMenuModule } from 'primeng/contextmenu';
 import { DividerModule } from 'primeng/divider';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
@@ -19,9 +20,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
 import { MessageModule } from 'primeng/message';
 import { TagModule } from 'primeng/tag';
-import { MenuUtils } from '../../../../utils/menu.utils';
 import { MenuFormService } from '../../services/menu-form.service';
 import { MenuItem } from './menu-item/menu-item';
+import type { MenuItemCommandEvent, MenuItem as PrimeMenuItem } from 'primeng/api';
 
 type MenuComponent = Menu & {
     expanded?: boolean;
@@ -29,7 +30,24 @@ type MenuComponent = Menu & {
 
 @Component({
     selector: 'menu-list',
-    imports: [ErrorBoundary, MenuItem, DataViewSkeleton, ConfirmDialogModule, MessageModule, DragDropModule, FormsModule, TagModule, DividerModule, BadgeModule, MenuModule, InputTextModule, InputGroupModule, InputGroupAddonModule, ButtonModule],
+    imports: [
+        ErrorBoundary,
+        ContextMenuModule,
+        MenuItem,
+        DataViewSkeleton,
+        ConfirmDialogModule,
+        MessageModule,
+        DragDropModule,
+        FormsModule,
+        TagModule,
+        DividerModule,
+        BadgeModule,
+        MenuModule,
+        InputTextModule,
+        InputGroupModule,
+        InputGroupAddonModule,
+        ButtonModule
+    ],
     templateUrl: './menu-list.html',
     providers: [ConfirmationService]
 })
@@ -40,19 +58,41 @@ export class MenuList {
     private readonly messageService = inject(MessageService);
 
     menuList = this.menuService.menuListResource;
+    linkTypeOptions = linkTypeOptions;
+    LinkType = LinkType;
 
     onDisplay = output<boolean>();
     onSelectedMenu = output<Menu>();
 
-    linkTypeOptions = linkTypeOptions;
-
-    menuActiveStatus = menuActiveStatusOptions;
-
-    LinkType = LinkType;
+    @ViewChild('cm') contextMenu!: ContextMenu;
 
     searchQuery = signal<string>('');
 
-    
+    currentMenu = signal<Menu | null>(null);
+
+    cmItems: PrimeMenuItem[] = [
+        {
+            label: 'Editar',
+            icon: 'pi pi-pencil',
+            command: () => {
+                const menu = this.currentMenu();
+                if (menu) {
+                    this.openDialogAndEdit(menu);
+                }
+            }
+        },
+        {
+            label: 'Eliminar',
+            icon: 'pi pi-trash',
+            command: (e) => {
+                const menu = this.currentMenu();
+                if (menu) {
+                    this.confirmDeleteMenu(e, menu);
+                }
+            }
+        }
+    ];
+
     filteredMenuList = linkedSignal<MenuComponent[]>(() => {
         const term = this.searchQuery().toLowerCase();
         const menus = this.menuList.hasValue() ? this.menuList.value() : [];
@@ -66,9 +106,13 @@ export class MenuList {
         return menuComponents.filter((menu) => menu.title.toLowerCase().includes(term) || (menu.children && menu.children.some((child) => child.title.toLowerCase().includes(term))));
     });
 
-    targetList = signal<MenuComponent[]>([]);
-
-    hasPositionChanged = signal(false);
+    onContextMenu(event: any, menu: Menu) {
+        this.contextMenu.show(event);
+        this.currentMenu.set(menu);
+        this.contextMenu.target = event.currentTarget;
+        event.stopPropagation();
+        event.preventDefault();
+    }
 
     openDialogAndEdit(menu: Menu) {
         this.onDisplay.emit(true);
@@ -77,17 +121,10 @@ export class MenuList {
         this.menuFormService.populateForm(menu);
     }
 
-   
-
-    
-   
-
-  
-
-    confirmDeleteMenu(event: Event, menu: Menu) {
+    confirmDeleteMenu(event: MenuItemCommandEvent, menu: Menu) {
         const message = menu.children && menu.children.length > 0 ? 'Esta acción eliminará el menú seleccionado y todos sus submenús. ¿Deseas continuar?' : 'Estás seguro de que deseas eliminar este menú?';
         this.confirmationService.confirm({
-            target: event.target as EventTarget,
+            target: event.originalEvent?.target!,
             message,
             header: 'Eliminar categoría',
             closable: true,

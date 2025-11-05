@@ -8,7 +8,9 @@ export interface CreateSection {
     subtitle: string | null;
     description: string | null;
     textButton: string | null;
+    extraTextButton: string | null;
     linkId: number | null;
+    extraLinkId: number | null;
     pageId: number | null;
     fileImage?: File | null;
     imageUrl?: string | null;
@@ -21,6 +23,8 @@ export interface CreateSection {
     icon: Icon | null;
     iconType: IconType | null;
 
+    fileVideo?: File | null;
+
     additionalInfoList: AdditionalInfo[] | null;
 }
 
@@ -31,4 +35,5 @@ export interface AssocieteSectionToPages {
 
 export interface UpdateSection extends Partial<CreateSection> {
     currentImageUrl: string | null;
+    currentVideoUrl: string | null;
 }

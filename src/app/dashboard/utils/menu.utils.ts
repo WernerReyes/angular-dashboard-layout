@@ -62,7 +62,7 @@ export class MenuUtils {
         // 2. Si el parentId no cambió, solo actualizamos los campos
         return list.map((item) => {
             if (item.id === updated.id) {
-                const fieldToUpdate: (keyof Menu)[] = ['title', 'linkId', 'active', 'parentId', 'link'];
+                const fieldToUpdate: (keyof Menu)[] = ['title', 'linkId', 'parentId', 'link'];
                 for (const field of fieldToUpdate) {
                     if (updated[field] !== undefined) {
                         (item as any)[field] = updated[field];
@@ -83,7 +83,7 @@ export class MenuUtils {
     private static updateChildMenu(list: Menu[], updated: Menu): Menu[] {
         return list.map((item) => {
             if (item.id === updated.id) {
-                const fieldToUpdate: (keyof Menu)[] = ['title', 'linkId', 'active', 'parentId', 'link'];
+                const fieldToUpdate: (keyof Menu)[] = ['title', 'linkId', 'parentId', 'link'];
                 for (const field of fieldToUpdate) {
                     if (updated[field] !== undefined) {
                         (item as any)[field] = updated[field];
@@ -241,38 +241,37 @@ export class MenuUtils {
     // }
 
     static buildReversedTree(menus: Menu[]): Menu[] {
-     const map = new Map<number, Menu>();
-    const allMenus: Menu[] = [];
+        const map = new Map<number, Menu>();
+        const allMenus: Menu[] = [];
 
-    // Función recursiva para aplanar jerarquía de padres
-    const flattenWithParents = (menu: Menu) => {
-        let current: Menu | null = menu;
-        while (current) {
-            if (!map.has(current.id)) {
-                map.set(current.id, { ...current, children: [] });
-                allMenus.push(map.get(current.id)!);
+        // Función recursiva para aplanar jerarquía de padres
+        const flattenWithParents = (menu: Menu) => {
+            let current: Menu | null = menu;
+            while (current) {
+                if (!map.has(current.id)) {
+                    map.set(current.id, { ...current, children: [] });
+                    allMenus.push(map.get(current.id)!);
+                }
+                current = current.parent;
             }
-            current = current.parent;
+        };
+
+        // Aplanar todos los menús con sus padres
+        for (const menu of menus) {
+            flattenWithParents(menu);
         }
-    };
 
-    // Aplanar todos los menús con sus padres
-    for (const menu of menus) {
-        flattenWithParents(menu);
-    }
-
-    // Enlazar padres e hijos
-    for (const menu of map.values()) {
-        if (menu.parentId && map.has(menu.parentId)) {
-            map.get(menu.parentId)!.children!.push(menu);
+        // Enlazar padres e hijos
+        for (const menu of map.values()) {
+            if (menu.parentId && map.has(menu.parentId)) {
+                map.get(menu.parentId)!.children!.push(menu);
+            }
         }
+
+        // Retornar solo las raíces
+        return Array.from(map.values()).filter((m) => !m.parentId);
     }
-
-    // Retornar solo las raíces
-    return Array.from(map.values()).filter(m => !m.parentId);
 }
-}
-
 
 // [
 //     {
@@ -341,7 +340,6 @@ export class MenuUtils {
 //         }
 //     }
 // ]
-
 
 // [
 //     {

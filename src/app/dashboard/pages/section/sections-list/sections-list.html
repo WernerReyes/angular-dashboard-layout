@@ -54,7 +54,7 @@
                             }
                             <div class="flex items-center gap-2 flex-wrap ml-auto">
                                 <p-tag [severity]="status.severity" class="text-sm" [value]="status.label"></p-tag>
-                                @if (![SectionType.MAIN_NAVIGATION_MENU, SectionType.CTA_BANNER, SectionType.MACHINE, SectionType.MACHINE_DETAILS, SectionType.MACHINES_CATALOG].includes(section.type)) {
+                                @if (![SectionType.MAIN_NAVIGATION_MENU, SectionType.CTA_BANNER, SectionType.MACHINE, SectionType.MACHINE_DETAILS, SectionType.MACHINES_CATALOG, SectionType.FOOTER, SectionType.PREVENTIVE_CORRECTIVE_MAINTENANCE].includes(section.type)) {
                                 <p-button icon="pi pi-plus" label="Agregar item" (click)="openDialogItem(section)"></p-button>
                                 }
                                 <!-- <p-button icon="pi pi-pencil" text (click)="openDialogAndEdit(section)"></p-button>

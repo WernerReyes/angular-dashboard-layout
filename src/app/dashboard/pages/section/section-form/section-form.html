@@ -140,15 +140,18 @@
                 </div>
                 <show-link-switch [form]="form"></show-link-switch>
                 } @case (SectionType.FOOTER) {
+                <navigation-menu-form></navigation-menu-form>
+                <div class="mt-2">
+                    <input-list label="Lista de información de contacto" [form]="form"></input-list>
+                </div>
                 <common-inputs
                     [form]="form"
                     [includeFields]="[{
-                    type: 'subtitle',
-                    label: 'Texto de copyright',
-                    placeholder: 'Texto de copyright',
-                }]"
+                        type: 'subtitle',
+                        label: 'Texto de copyright',
+                        placeholder: 'Texto de copyright',
+                    }]"
                 ></common-inputs>
-                <navigation-menu-form></navigation-menu-form>
                 } @case (SectionType.SUPPORT_MAINTENANCE) {
                 <common-inputs
                     [form]="form"
@@ -220,8 +223,57 @@
                     <show-link-switch [form]="form"></show-link-switch>
                 </div>
                 } @case (SectionType.PREVENTIVE_CORRECTIVE_MAINTENANCE) {
-                <video-upload [form]="form"></video-upload>
-                } }
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[
+                    {
+                        type: 'content',
+                        label: 'Descripción',
+                        placeholder: 'Descripción de la sección',
+                        isTextarea: true,
+                    }
+                ]"
+                ></common-inputs>
+
+                <div class="mt-2">
+                    <input-list label="Lista de beneficios" [form]="form"></input-list>
+                </div>
+
+                <div class="flex flex-col gap-2 mb-5">
+                    <label>Video referencial</label>
+                    <video-upload [form]="form"></video-upload>
+                </div>
+
+                <div class="flex flex-col gap-2 mb-5">
+                    <label>Imagen referencial</label>
+                    <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+                </div>
+
+                <show-link-switch [form]="form"></show-link-switch>
+
+                <show-link-switch [form]="form" [isExtraLink]="true"></show-link-switch>
+                } @case (SectionType.SUPPORT_WIDGET) {
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[
+                    {
+                        type: 'subtitle',
+                        label: 'Número de contacto',
+                        placeholder: 'Número de contacto',
+                    },
+                   
+                ]"
+                ></common-inputs>
+                <div class="flex flex-col mt-2">
+                    <label class="mb-3">Icono del widget</label>
+                    <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
+                </div>
+
+                <div class="flex flex-col gap-2 mt-4">
+                    <label>Imagen del widget</label>
+                <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+                </div>
+                }}
             </div>
 
             <p-togglebutton formControlName="active" onLabel="Activo" offLabel="Inactivo" onIcon="pi pi-check" offIcon="pi pi-times" onIcon="pi pi-lock-open" offIcon="pi pi-lock" class="w-36" ariaLabel="Do you confirm" />
@@ -232,8 +284,8 @@
         </div>
     </div>
 
-    <!-- TODO:
-    <pre>{{ form.value | json }}</pre> -->
+    TODO:
+    <pre>{{ form.value | json }}</pre>
 
     <ng-template #footer>
         <button pButton [loading]="loading()" type="submit" form="menu-form" icon="pi pi-save" [disabled]="form.invalid" label="Guardar"></button>

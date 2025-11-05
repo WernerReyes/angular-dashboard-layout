@@ -66,25 +66,24 @@ export class AuthTimerService {
         }
     }
 
-     onSessionRefresh() {
-    // Cerrar el diálogo si estaba abierto
-    this.dialog.visible.set(false);
-    this.dialog.stopCountdown();
-    this.alertShown.set(false);
+    onSessionRefresh() {
+        // Cerrar el diálogo si estaba abierto
+        this.dialog.visible.set(false);
+        this.dialog.stopCountdown();
+        this.alertShown.set(false);
 
-    // Detener el monitoreo anterior
-    this.stopMonitoring();
+        // Detener el monitoreo anterior
+        this.stopMonitoring();
 
-    // 🔹 Esperar unos milisegundos para asegurar que el nuevo token esté disponible
-    setTimeout(() => {
-        //TODO this.authService.token(); // Forzar la actualización del token
-        this.startMonitoring();
-        console.log('✅ Monitoring restarted with new token');
-    }, 500);
-}
+        // 🔹 Esperar unos milisegundos para asegurar que el nuevo token esté disponible
+        setTimeout(() => {
+            //TODO this.authService.token(); // Forzar la actualización del token
+            this.startMonitoring();
+            console.log('✅ Monitoring restarted with new token');
+        }, 500);
+    }
 
-
-     relogin() {
+    relogin() {
         this.authService.relogin().subscribe({
             next: () => {
                 this.dialog.visible.set(false);
@@ -95,7 +94,7 @@ export class AuthTimerService {
                 // this.hide();
                 // this.redirectToLogin();
 
-                 localStorage.setItem('session_refresh', Date.now().toString());
+                localStorage.setItem('session_refresh', Date.now().toString());
             }
         });
     }

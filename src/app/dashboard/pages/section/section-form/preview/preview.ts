@@ -29,6 +29,8 @@ import { SectionOperacionalBenefitsItems } from '../../sections-list/section-ope
 import { SectionMachineDetailsItems } from '../../sections-list/section-machine-details-items/section-machine-details-items';
 import { SectionMachinesCatalogItems } from '../../sections-list/section-machines-catalog-items/section-machines-catalog-items';
 import { SectionFullMaintenancePlanItems } from '../../sections-list/section-full-maintenance-plan-items/section-full-maintenance-plan-items';
+import { SectionPreventiveCorrectiveMaintenanceItems } from '../../sections-list/section-preventive-corrective-maintenance-items/section-preventive-corrective-maintenance-items';
+import { SectionSupportWidgetItems } from '../../sections-list/section-support-widget-items/section-support-widget-items';
 
 @Component({
     selector: 'preview',
@@ -53,6 +55,8 @@ import { SectionFullMaintenancePlanItems } from '../../sections-list/section-ful
         SectionMachineDetailsItems,
         SectionMachinesCatalogItems,
         SectionFullMaintenancePlanItems,
+        SectionPreventiveCorrectiveMaintenanceItems,
+        SectionSupportWidgetItems,
         JsonPipe
     ],
     templateUrl: './preview.html'
@@ -124,9 +128,12 @@ export class Preview {
             image: this.getImage(value),
             backgroundImage: this.getImageBackground(value),
             link: null,
+            extraLink: null,
             linksId: section?.linkId || null,
+            extraLinkId: section?.extraLinkId || null,
             textButton: value.showLink ? value.textButton || section?.textButton : null,
-            menus: value.menusIds?.map((menu: any) => this.buildRecursiveNode(menu)) || [],
+            extraTextButton: value.showExtraLink ? value.extraTextButton || section?.extraTextButton : null,
+            menus: value.menusIds?.map((menu: TreeNode) => this.buildRecursiveNode(menu)) || [],
             // textButton: value.showLink ? value.textButton || null : null,
             subtitle: value.subtitle ?? null,
             machines: this.getMachines(value).filter((machine) => (value.machinesIds || []).includes(machine.id)),
@@ -134,6 +141,8 @@ export class Preview {
             pages: [],
             pivotPages: [],
             additionalInfoList: (value?.additionalInfoList?.length ?? 0 > 0) ? value.additionalInfoList! : null,
+
+            video: value.videoFile ? this.getBlobUrl(value.videoFile) : section?.video || null,
 
             icon: value.icon || null,
             iconType: value.iconType || null,

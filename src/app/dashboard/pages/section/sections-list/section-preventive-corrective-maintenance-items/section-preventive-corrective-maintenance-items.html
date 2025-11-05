@@ -1,0 +1,103 @@
+<section class="bg-gradient-to-br from-gray-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 py-20 transition-all duration-300">
+    <div
+        class="container mx-auto px-4 flex flex-col justify-between items-center gap-8"
+        [class]="{
+        'lg:flex-row': !isPreview(),
+     }"
+    >
+        <!-- Imagen izquierda -->
+        <div
+            class="flex-shrink-0 w-full"
+            [class]="{
+        'lg:w-1/3': !isPreview(),
+     }"
+        >
+            <!-- <img src="assets/images/mantenimiento-tecnico.jpg" alt="Servicio Técnico" class="rounded-2xl shadow-lg w-full object-cover" /> -->
+            @if (section().video) {
+            <video
+                class="rounded-2xl shadow-lg object-cover"
+                controls
+                [ngClass]="{ 'h-64 md:h-80 lg:h-96 mx-auto': isPreview(),
+            'w-full h-auto': !isPreview()
+
+              }"
+            >
+                <source [src]="section().video" type="video/mp4" />
+                Tu navegador no soporta la reproducción de videos.
+            </video>
+            } @else {
+            <empty-field-message>
+                <ng-template #content>
+                    <div class="flex flex-col items-center justify-center py-8 text-surface-500">
+                        <i class="pi pi-video text-4xl mb-3"></i>
+                        <div class="font-semibold text-lg mb-1">Video no disponible</div>
+                        <div class="text-sm">No se ha proporcionado un video para este apartado.</div>
+                    </div>
+                </ng-template>
+            </empty-field-message>
+            }
+        </div>
+
+        <!-- Texto central -->
+        <div
+            class="w-full space-y-5"
+            [class]="{
+        'lg:w-1/2': !isPreview(),
+     }"
+        >
+            @if (section().title) {
+
+            <h2 class="!text-2xl md:!text-3xl font-semibold">Servicio de Mantenimiento Técnico Especializado</h2>
+            } @else {
+            <empty-field-message className="max-w-md mx-auto mb-4" textContent="Sin título"></empty-field-message>
+            } @if (section().description) {
+            <p class="text-gray-300 leading-relaxed">{{ section().description }}</p>
+            } @else {
+            <empty-field-message textContent="No hay descripción para mostrar"></empty-field-message>
+            } @if (section().additionalInfoList && section().additionalInfoList!.length > 0) {
+            <ul class="space-y-2 list-disc list-inside text-gray-300">
+                @for (info of section().additionalInfoList; track info.id) {
+                <li>{{ info.label }}</li>
+                }
+            </ul>
+            } @else {
+            <empty-field-message textContent="No hay información adicional para mostrar"></empty-field-message>
+            }
+
+            <!-- <ul class="space-y-2 list-disc list-inside text-gray-300">
+                <li>Diagnóstico integral y mantenimiento de hardware especializado.</li>
+                <li>Revisión y calibración de sensores, bandejas y mecanismos internos.</li>
+                <li>Soporte técnico post-servicio con repuestos originales y garantía.</li>
+            </ul> -->
+
+            @if (section().textButton) {
+            <p-button [label]="section().textButton || ''" icon="pi pi-arrow-right" styleClass="p-button-primary mt-4"></p-button>
+            } @else {
+            <empty-field-message textContent="No hay texto para el botón"></empty-field-message>
+            }
+        </div>
+
+        <!-- Tarjeta derecha -->
+        <div class="p-6 rounded-2xl shadow-lg text-center w-full lg:w-1/3 flex flex-col items-center gap-4 justify-between">
+            <!-- <img src="assets/images/cechriza-brochure.jpg" alt="Brochure CECHRIZA" class="rounded-lg shadow-md mb-4" /> -->
+            @if (section().image) {
+            <img [src]="section().image" alt="Brochure CECHRIZA" class="rounded-lg w-full shadow-md mb-4" />
+            } @else {
+            <empty-field-message>
+                <ng-template #content>
+                    <div class="flex flex-col items-center justify-center py-8 text-surface-500">
+                        <i class="pi pi-image text-4xl mb-3"></i>
+                        <div class="font-semibold text-lg mb-1">Imagen no disponible</div>
+                        <div class="text-sm">No se ha proporcionado una imagen para este apartado.</div>
+                    </div>
+                </ng-template>
+            </empty-field-message>
+            } @if (section().extraTextButton) {
+            <p-button [label]="section().extraTextButton || ''" icon="pi pi-download"></p-button>
+
+            } @else {
+            <empty-field-message textContent="No hay texto para el botón de descarga"></empty-field-message>
+            }
+        </div>
+    </div>
+</section>

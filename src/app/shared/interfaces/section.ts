@@ -21,10 +21,13 @@ export interface Section {
     subtitle: string | null;
     description: string | null;
     textButton: string | null;
+    extraTextButton: string | null;
     linkId: number | null;
+    extraLinkId: number | null;
     image: string | null;
     items: SectionItem[];
     link: Link | null;
+    extraLink: Link | null;
     menus: Menu[];
     pages: (Page & { pivot?: PivotPages })[] | null;
     pivotPages: PivotPages[] | null;
@@ -32,6 +35,7 @@ export interface Section {
     iconUrl: string | null;
     iconType: IconType | null;
     icon: Icon | null;
+    video: string | null;
     additionalInfoList: AdditionalInfo[] | null;
 }
 
@@ -82,7 +86,8 @@ export const sectionTypesOptions: Record<SectionType, SectionTypeOption> = {
     MACHINE_DETAILS: { label: 'Detalles de la máquina', value: SectionType.MACHINE_DETAILS, severity: 'success' },
     MACHINES_CATALOG: { label: 'Catálogo de Máquinas', value: SectionType.MACHINES_CATALOG, severity: 'contrast' },
     FULL_MAINTENANCE_PLAN: { label: 'Planes de Mantenimiento', value: SectionType.FULL_MAINTENANCE_PLAN, severity: 'info' },
-    PREVENTIVE_CORRECTIVE_MAINTENANCE: { label: 'Mantenimiento Preventivo y Correctivo', value: SectionType.PREVENTIVE_CORRECTIVE_MAINTENANCE, severity: 'warn' }
+    PREVENTIVE_CORRECTIVE_MAINTENANCE: { label: 'Mantenimiento Preventivo y Correctivo', value: SectionType.PREVENTIVE_CORRECTIVE_MAINTENANCE, severity: 'warn' },
+    SUPPORT_WIDGET: { label: 'Widget de Soporte', value: SectionType.SUPPORT_WIDGET, severity: 'info' }
 };
 
 export const sectionModeOptions: Record<SectionMode, SectionModeOption> = {

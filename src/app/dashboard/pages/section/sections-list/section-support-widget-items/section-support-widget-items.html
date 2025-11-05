@@ -1,7 +1,7 @@
 <!-- section-solutions-overview-items.html -->
 <section class="bg-gradient-to-br from-gray-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 py-20 transition-all duration-300">
     <div class="container mx-auto px-4">
-        <div id="whatsapp-widget" class="mx-auto bg-red-500 w-fit bottom-6 right-6 z-50">
+        <div id="whatsapp-widget" class="mx-auto  w-fit bottom-6 right-6 z-50">
             <!-- Botón redondo -->
             <!-- <button id="whatsapp-button" (click)="isChatOpen.set(!isChatOpen())" class="bg-green-500 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:scale-105 transition-transform">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="w-8 h-8" />
@@ -9,6 +9,10 @@
             <p-button
              rounded
              severity="success"
+             (click)="isChatOpen.set(!isChatOpen())"
+             [class]="{
+                '!size-2': isChatOpen()
+             }"
             >
                 <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="w-8 h-8" />
             </p-button>

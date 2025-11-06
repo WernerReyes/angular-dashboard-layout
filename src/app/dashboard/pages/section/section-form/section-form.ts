@@ -11,6 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
+import { TabsModule } from 'primeng/tabs';
 import { MessageModule } from 'primeng/message';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
@@ -48,6 +49,7 @@ import { InputList } from '../components/input-list/input-list';
         Preview,
         InputList,
         ToggleSwitchModule,
+        TabsModule,
         TextareaModule,
         SelectModule,
         DialogModule,

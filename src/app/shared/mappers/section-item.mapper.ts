@@ -21,10 +21,10 @@ export interface Icon {
     strokeWidth: number;
 }
 
-export interface AdditionalInfo {
-    label: string;
-    id: string;
-}
+    export interface AdditionalInfo {
+        label: string;
+        id: string;
+    }
 
 export interface SectionItemEntity {
     id_section_item: number;

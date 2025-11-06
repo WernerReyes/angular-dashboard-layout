@@ -6,10 +6,12 @@ import { CardModule } from 'primeng/card';
 import { TextareaModule } from 'primeng/textarea';
 import { ButtonModule } from 'primeng/button';
 import { NgClass } from '@angular/common';
+import { IconImage } from '../../components/icon-image/icon-image';
+import { EmptyFieldMessage } from '../../components/empty-field-message/empty-field-message';
 
 @Component({
     selector: 'section-support-widget-items',
-    imports: [NgClass, CardModule, TextareaModule, ButtonModule],
+    imports: [IconImage, EmptyFieldMessage, NgClass, CardModule, TextareaModule, ButtonModule],
     templateUrl: './section-support-widget-items.html'
 })
 export class SectionSupportWidgetItems {
@@ -17,5 +19,5 @@ export class SectionSupportWidgetItems {
     contextMenu = input<ContextMenuCrud<SectionItem>>();
     currentSectionItem = input<SectionItem | null>();
 
-    isChatOpen = signal(false);
+    isChatOpen = signal(true);
 }

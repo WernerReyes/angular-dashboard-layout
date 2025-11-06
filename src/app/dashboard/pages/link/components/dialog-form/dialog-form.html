@@ -9,17 +9,19 @@
 >
     <form id="link-form" class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="saveChanges()">
         @let type = form.controls['type'].value;
-        
+
         <div class="flex flex-col gap-2">
             <label for="link-type">Crear nuevo</label>
             <p-select id="link-type" formControlName="type" [options]="linkTypes" optionLabel="label" optionValue="value" placeholder="Selecciona el tipo de enlace"></p-select>
         </div>
-       
+
         <div class="flex flex-col gap-2">
             @if (type === LinkType.EXTERNAL) {
-                <label for="url">URL</label>
+            <label for="url">URL</label>
             <input id="url" type="text" pInputText formControlName="url" placeholder="https://example.com" />
-            } @else if (type === LinkType.PAGE) {
+            @if (form.controls['url'].errors) {
+            <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'url') }} </p-message>
+            } } @else if (type === LinkType.PAGE) {
 
             <label for="page">Página</label>
 
@@ -53,6 +55,9 @@
                             </div>
                         </ng-template>
                     </p-select>
+                    @if (form.controls['pageId'].errors) {
+                    <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'pageId') }} </p-message>
+                    }
                 </ng-template>
             </app-error-boundary>
             } @else if (type === LinkType.FILE) {
@@ -70,8 +75,7 @@
                 mode="advanced"
             >
                 <ng-template #empty>
-                    @let currentFileUrl = form.controls['currentFileUrl'].value;
-                    @if (currentFileUrl) {
+                    @let currentFileUrl = form.controls['currentFileUrl'].value; @if (currentFileUrl) {
                     <div class="flex flex-col items-center justify-center py-8 text-surface-500">
                         <i class="pi pi-file text-4xl mb-3"></i>
                         <div class="font-semibold text-lg mb-1">Archivo cargado</div>
@@ -102,13 +106,16 @@
                             </div>
                         </label>
                     </div>
-                }
+                    }
                 </ng-template>
             </p-fileUpload>
-            }
+            @if (form.controls['file'].errors) {
+            <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'file') }} </p-message>
+
+            } }
         </div>
 
-         <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-2">
             <label for="title">Titulo</label>
             <!-- <p-select id="title" formControlName="type" [options]="linkTypes()" optionLabel="label" optionValue="value" placeholder="Selecciona el tipo de enlace"></p-select> -->
             <input id="title" type="text" pInputText formControlName="title" placeholder="Título del enlace" />
@@ -116,9 +123,8 @@
             <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'title') }} </p-message>
             }
         </div>
-        
 
-        @if (type !== LinkType.FILE) {
+        <!-- @if (type !== LinkType.FILE) { -->
         <div class="flex flex-col gap-2">
             <label for="open-tab">Abrir en</label>
             <p-selectbutton formControlName="openInNewTab" id="open-tab" [options]="linkTargets" optionLabel="label" optionValue="value" aria-labelledby="open-tab"></p-selectbutton>
@@ -127,7 +133,7 @@
             }
         </div>
 
-        }
+        <!-- } -->
     </form>
 
     {{ form.value | json }}

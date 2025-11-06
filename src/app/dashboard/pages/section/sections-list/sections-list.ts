@@ -36,7 +36,7 @@ type DeleteSectionItemParams = {
 export type DeleteSectionItemFunction = (event: Event, params: DeleteSectionItemParams, accept?: () => void, reject?: () => void) => void;
 @Component({
     selector: 'sections-list',
-    imports: [SectionItemForm, FilterArrayByPipe, ErrorBoundary, PanelModule, CarouselModule, FilterByTermPipe, DragDropModule, NgTemplateOutlet, MessageModule, DataViewSkeleton, FieldsetModule, TagModule, ButtonModule, ContextMenuCrud, SectionItems, BadgeModule, FilterByPagePipe],
+    imports: [SectionItemForm, JsonPipe, FilterArrayByPipe, ErrorBoundary, PanelModule, CarouselModule, FilterByTermPipe, DragDropModule, NgTemplateOutlet, MessageModule, DataViewSkeleton, FieldsetModule, TagModule, ButtonModule, ContextMenuCrud, SectionItems, BadgeModule, FilterByPagePipe],
     templateUrl: './sections-list.html'
 })
 export class SectionsList {

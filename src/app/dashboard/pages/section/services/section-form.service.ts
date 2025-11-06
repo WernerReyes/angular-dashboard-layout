@@ -183,6 +183,10 @@ export class SectionFormService {
                 title = sectionTypesOptions[SectionType.FOOTER].label;
                 break;
 
+            case SectionType.SUPPORT_WIDGET:
+                title = sectionTypesOptions[SectionType.SUPPORT_WIDGET].label;
+                break;
+                
             default:
                 title = '';
                 break;

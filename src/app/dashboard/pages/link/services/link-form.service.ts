@@ -38,12 +38,17 @@ export class LinkFormService {
                 this.form.get('file')?.setValidators([Validators.required]);
                 this.form.get('file')?.updateValueAndValidity();
 
-                this.clearValidator(['pageId', 'url', 'openInNewTab']);
+                this.clearValidator(['pageId', 'url']);
                 // this.form.get('pageId')?.setValue(null);
             }
         });
-    }
 
+        this.form.get('currentFileUrl')?.valueChanges.subscribe((currentFileUrl) => {
+            if (currentFileUrl) {
+                this.clearValidator(['file']);
+            }
+        });
+    }
 
     private clearValidator(controls: string[]) {
         controls.forEach((control) => {
@@ -59,11 +64,19 @@ export class LinkFormService {
         } else if (link.type === LinkType.EXTERNAL) {
             this.form.get('url')?.setValidators([Validators.required, Validators.pattern(PatternsConst.URL)]);
             this.form.get('pageId')?.clearValidators();
-        } else if (link.type === LinkType.FILE) {
-            this.form.get('file')?.setValidators([Validators.required]);
-            this.form.get('pageId')?.clearValidators();
-            this.form.get('url')?.clearValidators();
-        }
+        } 
+        // else if (link.type === LinkType.FILE) {
+        //     if (link.fileUrl) {
+        //         this.clearValidator(['file']);
+        //     } else {
+        //         this.form.get('file')?.setValidators([Validators.required]);
+        //         this.form.get('file')?.updateValueAndValidity();
+        //         // this.form.get('url')?.clearValidators();
+        //         this.clearValidator(['url']);
+        //     }
+        //     // this.form.get('file')?.setValidators([Validators.required]);
+        //     // this.form.get('pageId')?.clearValidators();
+        // }
         this.form.patchValue({
             title: link.title,
             type: link.type,

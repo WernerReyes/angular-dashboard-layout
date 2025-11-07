@@ -96,9 +96,10 @@
                 <common-inputs
                     [form]="form"
                     [includeFields]="[{
-                    type: 'subtitle',
-                    label: 'Subtítulo',
-                    placeholder: 'Subtítulo de la sección',
+                    type: 'content',
+                    label: 'Descripción',
+                    placeholder: 'Descripción de la sección',
+                    isTextarea: true,
                 }]"
                 ></common-inputs>
                 } @case (SectionType.MISSION_VISION) {
@@ -284,8 +285,8 @@
         </div>
     </div>
 
-    TODO:
-    <pre>{{ form.value | json }}</pre>
+    <!-- TODO:
+    <pre>{{ form.value | json }}</pre> -->
 
     <ng-template #footer>
         <button pButton [loading]="loading()" type="submit" form="menu-form" icon="pi pi-save" [disabled]="form.invalid" label="Guardar"></button>

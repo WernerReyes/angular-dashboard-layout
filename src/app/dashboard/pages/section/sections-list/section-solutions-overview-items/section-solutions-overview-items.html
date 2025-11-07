@@ -10,11 +10,11 @@
                 <empty-field-message className="max-w-md mx-auto mb-4" textContent="Sin título"></empty-field-message>
             }
 
-            @if (section().subtitle) {
+            @if (section().description) {
 
-                <p class="text-lg md:text-xl text-slate-700 dark:text-slate-300 leading-relaxed">{{ section().subtitle }}</p>
+                <p class="text-lg md:text-xl text-slate-700 dark:text-slate-300 leading-relaxed">{{ section().description }}</p>
             } @else {
-                <empty-field-message className="mx-auto mb-4 max-w-lg" textContent="Sin subtítulo"></empty-field-message>
+                <empty-field-message className="mx-auto mb-4 max-w-lg" textContent="Sin descripción"></empty-field-message>
             }
         </div>
 

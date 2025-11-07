@@ -2,7 +2,7 @@
     <label>{{ label() }}</label>
     <app-error-boundary [resource]="machinesList" errorMessage="Ocurrió un error cargando las máquinas." emptyMessage="No hay máquinas disponibles. Por favor, crea una máquina primero.">
         <ng-template #content let-machines>
-            <div class="flex flex-wrap  gap-3 mb-2">
+            <!-- <div class="flex flex-wrap  gap-3 mb-2">
                 <p-selectbutton [options]="categoryTypesOptions" [formControl]="currentOptionControl" optionLabel="label" optionValue="value">
                     <ng-template #item let-option>
                         <div class="flex items-center gap-2">
@@ -31,7 +31,7 @@
                     </ng-template>
 
                 </app-error-boundary>
-            </div>
+            </div> -->
 
             <p-multiSelect
                 id="machine"

@@ -1,11 +1,8 @@
-{{ currentSectionItem() | json }}; @let preview = sectionPreview();
+@let preview = sectionPreview();
 <section class="rounded-2xl p-6 bg-white dark:bg-surface-800 shadow-md transition-all duration-300">
-    <!-- <pre>
-        {{ section()?.menus    | json }}
-        {{ preview.menus | json }}
-    </pre> -->
+  
 
-    @let type = preview.type; {{ type }} @switch (type) { @case (SectionType.HERO) { @if (level() === 'section') {
+    @let type = preview.type; @switch (type) { @case (SectionType.HERO) { @if (level() === 'section') {
     <span class="block p-message p-2 p-message-info">Los campos que llenen en esta sección no se ven visualmente. El contenido se verá a través de los slides.</span>
     }
     <div class="mt-4">

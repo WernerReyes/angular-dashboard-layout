@@ -57,7 +57,7 @@ import { SectionSupportWidgetItems } from '../../sections-list/section-support-w
         SectionFullMaintenancePlanItems,
         SectionPreventiveCorrectiveMaintenanceItems,
         SectionSupportWidgetItems,
-        JsonPipe
+        // JsonPipe
     ],
     templateUrl: './preview.html'
 })
@@ -175,7 +175,6 @@ export class Preview {
             return [];
         }
 
-        console.log('GET MACHINES', this.section()?.type);
         const machines = this.machineService.machinesListRs;
         return machines.hasValue() ? machines.value() : [];
     }

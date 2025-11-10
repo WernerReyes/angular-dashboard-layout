@@ -7,9 +7,10 @@ import { MenuModule } from 'primeng/menu';
 import { TagModule } from 'primeng/tag';
 import type { ContextMenuCrud } from '../../components/context-menu-crud/context-menu-crud';
 import { HeroItem } from './hero-item/hero-item';
+import { EmptyFieldMessage } from '../../components/empty-field-message/empty-field-message';
 @Component({
     selector: 'section-hero-items',
-    imports: [HeroItem, ButtonModule, TagModule, MenuModule, GalleriaModule, ImageError],
+    imports: [HeroItem, ButtonModule, EmptyFieldMessage, TagModule, MenuModule, GalleriaModule, ImageError],
     templateUrl: './section-hero-items.html'
 })
 export class SectionHeroItems {

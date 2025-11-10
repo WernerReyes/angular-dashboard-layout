@@ -26,16 +26,14 @@ import { ShowLinkSwitch } from '../../components/show-link-switch/show-link-swit
 import { SectionItemFormService } from '../../services/section-item-form.service';
 import { ContactUsForm } from './contact-us-form/contact-us-form';
 import { HeroForm } from './hero-form/hero-form';
-import { MachineForm } from './machine-form/machine-form';
 import { Preview } from '../../section-form/preview/preview';
 import { InputList } from '../../components/input-list/input-list';
 
 @Component({
     selector: 'section-item-form',
     imports: [
-        JsonPipe,
+        // JsonPipe,
         Preview,
-        MachineForm,
         ContactUsForm,
         CommonInputs,
         IconUpload,

@@ -15,7 +15,13 @@
             >
                 <icon-image [item]="item" imageClass="size-6 object-contain" [imageErrorClass]="{ iconClass: '!size-4', containerClass: '!size-6' }"></icon-image>
 
-                <span class="font-medium text-surface-600 dark:text-white"> {{ item.title }} </span>
+                @if (item.title) {
+
+                    <span class="font-medium text-surface-600 dark:text-white"> {{ item.title }} </span>
+                } @else {
+
+                    <empty-field-message className="!p-1" textContent="Sin título"></empty-field-message>
+                }
             </div>
 
             } }

@@ -47,7 +47,7 @@
         >
             @if (section().title) {
 
-            <h2 class="!text-2xl md:!text-3xl font-semibold">Servicio de Mantenimiento Técnico Especializado</h2>
+            <h2 class="!text-2xl md:!text-3xl font-semibold">{{ section().title }}</h2>
             } @else {
             <empty-field-message className="max-w-md mx-auto mb-4" textContent="Sin título"></empty-field-message>
             } @if (section().description) {
@@ -70,8 +70,8 @@
                 <li>Soporte técnico post-servicio con repuestos originales y garantía.</li>
             </ul> -->
 
-            @if (section().textButton) {
-            <p-button [label]="section().textButton || ''" icon="pi pi-arrow-right" styleClass="p-button-primary mt-4"></p-button>
+            @if (section().textButton || section().link) {
+            <p-button [label]="section().textButton || section().link?.title" icon="pi pi-arrow-right" styleClass="p-button-primary mt-4"></p-button>
             } @else {
             <empty-field-message textContent="No hay texto para el botón"></empty-field-message>
             }
@@ -92,8 +92,8 @@
                     </div>
                 </ng-template>
             </empty-field-message>
-            } @if (section().extraTextButton) {
-            <p-button [label]="section().extraTextButton || ''" icon="pi pi-download"></p-button>
+            } @if (section().extraTextButton || section().extraLink) {
+            <p-button [label]="section().extraTextButton || section().extraLink?.title" icon="pi pi-download"></p-button>
 
             } @else {
             <empty-field-message textContent="No hay texto para el botón de descarga"></empty-field-message>

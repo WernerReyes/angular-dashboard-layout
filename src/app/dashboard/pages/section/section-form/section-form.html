@@ -139,7 +139,19 @@
                     <label>Imagen</label>
                     <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
                 </div>
-                <show-link-switch [form]="form"></show-link-switch>
+                <common-inputs
+                    [form]="form"
+                    [includeFields]="[
+                    
+                    {
+                        type: 'textButton',
+                        label: 'Texto del botón',
+                        placeholder: 'Texto del botón',
+                        
+                    }
+                ]"
+                ></common-inputs>
+                <!-- <show-link-switch [form]="form"></show-link-switch> -->
                 } @case (SectionType.FOOTER) {
                 <navigation-menu-form></navigation-menu-form>
                 <div class="mt-2">
@@ -185,6 +197,9 @@
                     }
                 ]"
                 ></common-inputs>
+                <div class="mt-5">
+                    <show-link-switch [form]="form"></show-link-switch>
+                </div>
                 } @case (SectionType.MACHINES_CATALOG) {
                 <common-inputs
                     [form]="form"

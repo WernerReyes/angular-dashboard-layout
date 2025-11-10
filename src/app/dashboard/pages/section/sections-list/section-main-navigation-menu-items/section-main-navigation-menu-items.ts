@@ -20,8 +20,6 @@ export class SectionMainNavigationMenuItems {
             return [];
         }
 
-        console.log('sectionData.menus:', sectionData.menus);
-
         const menus = MenuUtils.buildReversedTree(sectionData.menus);
         
 

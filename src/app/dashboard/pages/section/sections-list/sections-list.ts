@@ -36,7 +36,7 @@ type DeleteSectionItemParams = {
 export type DeleteSectionItemFunction = (event: Event, params: DeleteSectionItemParams, accept?: () => void, reject?: () => void) => void;
 @Component({
     selector: 'sections-list',
-    imports: [SectionItemForm, JsonPipe, FilterArrayByPipe, ErrorBoundary, PanelModule, CarouselModule, FilterByTermPipe, DragDropModule, NgTemplateOutlet, MessageModule, DataViewSkeleton, FieldsetModule, TagModule, ButtonModule, ContextMenuCrud, SectionItems, BadgeModule, FilterByPagePipe],
+    imports: [SectionItemForm, FilterArrayByPipe, ErrorBoundary, PanelModule, CarouselModule, FilterByTermPipe, DragDropModule, NgTemplateOutlet, MessageModule, DataViewSkeleton, FieldsetModule, TagModule, ButtonModule, ContextMenuCrud, SectionItems, BadgeModule, FilterByPagePipe],
     templateUrl: './sections-list.html'
 })
 export class SectionsList {
@@ -172,12 +172,7 @@ export class SectionsList {
           return orderA - orderB;
         });
       });
-                // this.sectionList.update((sections) => {
-                //     if (!sections) return [];
-                //     console.log('SECTIONS BEFORE ORDER UPDATE', sections, this.targetList());
-                //     return sections
-                // });
-                // this.orginalSectionList.set(structuredClone(this.targetList()));
+        
                 this.hasPositionChanged.set(false);
             }
         });
@@ -188,7 +183,6 @@ export class SectionsList {
         const original = this.orginalSectionList().map((section, index) => ({ id: section.id, pageId: this.pageId(), order: index + 1 }));
         this.sectionsListRs.update((sections) => {
             if (!sections) return [];
-            console.log('CANCEL CHANGES - ORIGNAL', original);
             const orderMap = new Map(original.map(item => [item.id, item.order]));
 
         // Solo modificamos el order_num dentro de pivot_pages
@@ -228,7 +222,6 @@ export class SectionsList {
     }
 
     deleteSectionItemConfirmation(event: Event, { id, sectionId }: DeleteSectionItemParams, accept?: () => void, reject?: () => void) {
-        console.log('deleteSectionItemConfirmation called', { id, sectionId });
         this.confirmationDialog(
             event,
             '¿Estás seguro de que deseas eliminar este ítem de sección? Esta acción no se puede deshacer.',

@@ -1,20 +1,18 @@
+import { CategoryService } from '@/dashboard/services/category.service';
 import { MachineService } from '@/dashboard/services/machine.service';
 import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
+import { categoryTypesOptions } from '@/shared/interfaces/category';
+import { CategoryType } from '@/shared/mappers/category.mapper';
 import { Component, computed, inject, input } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { OverlayModeType } from 'primeng/api';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { categoryTypesOptions } from '@/shared/interfaces/category';
-import { FilterArrayByPipe } from '@/shared/pipes/filter-array-by-pipe';
-import { JsonPipe } from '@angular/common';
-import { CategoryType } from '@/shared/mappers/category.mapper';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { CategoryService } from '@/dashboard/services/category.service';
 
 @Component({
     selector: 'select-machine',
-    imports: [ErrorBoundary, ReactiveFormsModule, JsonPipe, FilterArrayByPipe, MultiSelectModule, SelectButtonModule],
+    imports: [ErrorBoundary, ReactiveFormsModule, MultiSelectModule, SelectButtonModule],
     templateUrl: './select-machine.html'
 })
 export class SelectMachine {

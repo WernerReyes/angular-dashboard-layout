@@ -11,7 +11,7 @@ import { EmptyFieldMessage } from '../../components/empty-field-message/empty-fi
 
 @Component({
     selector: 'section-support-widget-items',
-    imports: [IconImage, EmptyFieldMessage, NgClass, CardModule, TextareaModule, ButtonModule],
+    imports: [IconImage, EmptyFieldMessage, CardModule, TextareaModule, ButtonModule],
     templateUrl: './section-support-widget-items.html'
 })
 export class SectionSupportWidgetItems {

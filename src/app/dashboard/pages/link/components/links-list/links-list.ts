@@ -15,10 +15,12 @@ import { FormsModule } from '@angular/forms';
 import { ConfirmationService, MenuItem, MenuItemCommandEvent } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { type ContextMenu, ContextMenuModule } from 'primeng/contextmenu';
+import { SelectModule } from 'primeng/select';
+import { linkTypeOptions } from '@/shared/interfaces/link';
 
 @Component({
     selector: 'links-list',
-    imports: [ErrorBoundary, DataViewSkeleton, NgClass, DatePipe, ContextMenuModule, FormsModule, InputTextModule, InputGroupModule, InputGroupAddonModule, DataViewModule, ButtonModule, ConfirmDialogModule],
+    imports: [ErrorBoundary, DataViewSkeleton, NgClass, SelectModule, DatePipe, ContextMenuModule, FormsModule, InputTextModule, InputGroupModule, InputGroupAddonModule, DataViewModule, ButtonModule, ConfirmDialogModule],
     templateUrl: './links-list.html',
     providers: [ConfirmationService]
 })
@@ -29,23 +31,29 @@ export class LinksList {
 
     LinkType = LinkType;
     linksList = this.linkService.linksListResource;
+    linkTypeOptions = Object.values(linkTypeOptions);
 
     onDisplay = output<boolean>();
     onSelectedLink = output<Link>();
 
     @ViewChild('cm') contextMenu!: ContextMenu;
 
-    
     searchQuery = signal<string>('');
+    selectedLinkType = signal<LinkType | null>(null);
 
     currentLink = signal<Link | null>(null);
-    
-    
+
     filteredLinksList = computed(() => {
         const query = this.searchQuery().toLowerCase();
-        const links = this.linksList.hasValue() ? this.linksList.value() : [];
-        if (!query) return links;
-        return links.filter((link) => link.title.toLowerCase().includes(query));
+        let links = this.linksList.hasValue() ? this.linksList.value() : [];
+
+        links = links.filter((link) => link.title.toLowerCase().includes(query));
+
+        const selectedType = this.selectedLinkType();
+        if (selectedType !== null) {
+            links = links.filter((link) => link.type === selectedType);
+        }
+        return links;
     });
 
     cmItems: MenuItem[] = [
@@ -74,7 +82,6 @@ export class LinksList {
         this.contextMenu.show(event);
         this.contextMenu.target = event.currentTarget as HTMLElement;
     }
-
 
     private openDialogAndEdit(link: Link) {
         this.onDisplay.emit(true);

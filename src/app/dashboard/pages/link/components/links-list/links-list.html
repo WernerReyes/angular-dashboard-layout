@@ -7,12 +7,17 @@
 
     <p-dataview [paginator]="true" [totalRecords]="filteredLinksList().length" [rowsPerPageOptions]="[5, 10, 20]" [rows]="5" [value]="filteredLinksList()" layout="list">
         <ng-template #header>
-            <p-inputgroup>
-                <p-inputgroup-addon>
-                    <i class="pi pi-search cursor-pointer"></i>
-                </p-inputgroup-addon>
-                <input pInputText placeholder="Buscar enlace..." [(ngModel)]="searchQuery" />
-            </p-inputgroup>
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <p-inputgroup>
+                    <p-inputgroup-addon>
+                        <i class="pi pi-search cursor-pointer"></i>
+                    </p-inputgroup-addon>
+                    <input pInputText placeholder="Buscar enlace..." [(ngModel)]="searchQuery" />
+                </p-inputgroup>
+                <p-select [options]="linkTypeOptions" [(ngModel)]="selectedLinkType"
+                 [showClear]="true"
+                placeholder="Filtrar por tipo de enlace" optionLabel="label" optionValue="value"></p-select>
+            </div>
         </ng-template>
 
         <ng-template #emptymessage>

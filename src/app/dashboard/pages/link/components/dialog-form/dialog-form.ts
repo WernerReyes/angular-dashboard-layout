@@ -61,7 +61,6 @@ export class DialogForm {
     });
 
     onFileSelect(event: FileSelectEvent) {
-        console.log(event);
         const file = event.currentFiles[0];
 
         if (file) {
@@ -74,7 +73,6 @@ export class DialogForm {
         const formValue = this.form.value;
         Object.keys(this.form.controls).forEach((key) => {
             const control = this.form.get(key);
-            console.log(key, control?.errors);
         });
         if (this.form.valid && formValue) {
             const createLinkData: CreateLink = {

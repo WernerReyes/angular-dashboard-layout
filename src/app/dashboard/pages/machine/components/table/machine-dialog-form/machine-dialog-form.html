@@ -32,18 +32,48 @@
 
         <div class="flex flex-col gap-2">
             <label for="machine-category">Imágenes</label>
-
+<!-- invalidFileSizeMessageSummary: string;
+    /**
+     * Detail message of the invalid file size.
+     * @group Props
+     */
+    invalidFileSizeMessageDetail: string;
+    /**
+     * Summary message of the invalid file type.
+     * @group Props
+     */
+    invalidFileTypeMessageSummary: string;
+    /**
+     * Detail message of the invalid file type.
+     * @group Props
+     */
+    invalidFileTypeMessageDetail: string;
+    /**
+     * Detail message of the invalid file type.
+     * @group Props
+     */
+    invalidFileLimitMessageDetail: string;
+    /**
+     * Summary message of the invalid file type.
+     * @group Props
+     */
+    invalidFileLimitMessageSummary: string; -->
             <div>
                 <p-fileupload
                     #fileUp
                     invalidFileSizeMessageSummary="Archivo demasiado grande"
+                    invalidFileSizeMessageDetail="El tamaño máximo permitido es de 5MB."
+                    invalidFileTypeMessageSummary="Tipo de archivo inválido"
+                    invalidFileTypeMessageDetail="Solo se permiten archivos de imagen (SVG, PNG, JPG)."
+                    invalidFileLimitMessageSummary="Límite de archivos excedido"
+                    invalidFileLimitMessageDetail="Has excedido el número máximo de archivos permitidos."
                     [fileLimit]="fileLimit()"
                     [showCancelButton]="false"
                     (onSelect)="onImagesSelect($event)"
                     [showUploadButton]="false"
                     [multiple]="true"
                     [disabled]="isEditMode && (disabledUpload() || !optionSelectButton())"
-                    accept="image/*"
+                    accept=".svg,.png,.jpg"
                     maxFileSize="5000000"
                     mode="basic"
                     chooseLabel="Seleccionar imágenes"
@@ -53,7 +83,11 @@
                     <ng-template #content let-files let-removeFileCallback="removeFileCallback" let-messages="messages" let-index="index">
                         @if (messages && messages.length > 0) { @for (message of messages; let i = $index; track i) {
                         <p-message severity="error" size="small" [closable]="true"> {{ message.text }}</p-message>
-                        } } @if (isEditMode) {
+                        
+                        } } 
+                        
+                        
+                        @if (isEditMode) {
 
                         <p-selectbutton [formControl]="optionSelectButtonControl" optionDisabled="constant" [options]="updateImagesOptions()" optionLabel="label" class="mx-auto" optionValue="value" aria-labelledby="basic">
                             <ng-template #item let-option>
@@ -129,7 +163,7 @@
 
                         } }
                         <div class="flex flex-col gap-2">
-                            @for (file of files; let i = $index ; track file.name) { @let selectedImage = selectedImages()[i];
+                            @for (file of files; let i = $index ; track file.name) {
 
                             <div class="flex items-center justify-between p-2 rounded">
                                 <div class="flex items-center gap-2">
@@ -137,12 +171,9 @@
                                     <p-badge [value]="i + 1" severity="info" class="text-xs"></p-badge>
                                     <img [src]="file.objectURL" alt="Machine Image" class="size-8 object-cover rounded" />
                                     <span>{{ file.name }}</span>
-                                    <span>{{ getUuidFromFile(file) }}</span>
-                                    @if (selectedImage) {
-                                    <span>{{ selectedImage.type }}</span>
-
-                                    }
-                                    <p-button icon="pi pi-trash" text class="p-button-text p-button-plain p-button-sm" (click)="removeFile($event, index, file)"></p-button>
+                        
+                                   
+                                    <p-button icon="pi pi-trash" text class="p-button-text p-button-plain p-button-sm" (click)="removeFile($event, i, file)"></p-button>
                                 </div>
                             </div>
                             }
@@ -158,7 +189,7 @@
                                 <div class="flex flex-col items-center justify-center pt-5 pb-6">
                                     <i class="pi pi-cloud-upload !text-4xl text-gray-500 dark:text-gray-400"></i>
                                     <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Arrastrar</span> tu imagen aquí</p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG o GIF (5MB máx.)</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG (5MB máx.)</p>
                                 </div>
                             </label>
                         </div>
@@ -171,7 +202,7 @@
             <!-- } -->
         </div>
 
-        <pre>{{ form.value | json }}</pre>
+        <!-- <pre>{{ form.value | json }}</pre> -->
 
         <div class="flex flex-col gap-4 mt-5">
             <p-button type="button" icon="pi pi-plus" label="Agregar Especificaciones" class="ml-auto" (click)="displayTechnicalSpecifications.set(true)"></p-button>

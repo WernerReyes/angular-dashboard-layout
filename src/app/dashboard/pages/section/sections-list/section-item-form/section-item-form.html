@@ -109,10 +109,7 @@
                 }]"
                 ></common-inputs>
                 }
-                <!-- @case (SectionType.MACHINE) {
-                <machine-form></machine-form>
-                }  -->
-
+                
                 @case (SectionType.CONTACT_TOP_BAR) {
                 <common-inputs
                     [form]="form"
@@ -243,8 +240,8 @@
         </div>
     </div>
 
-    TODO
-    <pre>{{ form.value | json }}</pre>
+    <!-- TODO
+    <pre>{{ form.value | json }}</pre> -->
 
     <ng-template #footer>
         <button pButton type="submit" [loading]="loading()" form="menu-form" icon="pi pi-save" [disabled]="form.invalid" label="Guardar"></button>

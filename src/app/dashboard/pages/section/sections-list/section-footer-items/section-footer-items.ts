@@ -1,17 +1,14 @@
 import { MenuUtils } from '@/dashboard/utils/menu.utils';
 import type { Menu } from '@/shared/interfaces/menu';
 import { Section } from '@/shared/interfaces/section';
-import { SectionItem } from '@/shared/interfaces/section-item';
-import { NgClass } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { TieredMenuModule } from 'primeng/tieredmenu';
-import type { ContextMenuCrud } from '../../components/context-menu-crud/context-menu-crud';
 import { EmptyFieldMessage } from '../../components/empty-field-message/empty-field-message';
 @Component({
     selector: 'section-footer-items',
-    imports: [NgClass, EmptyFieldMessage, TieredMenuModule, ButtonModule],
+    imports: [ EmptyFieldMessage, TieredMenuModule, ButtonModule],
     templateUrl: './section-footer-items.html'
 })
 export class SectionFooterItems {

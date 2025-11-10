@@ -1,5 +1,4 @@
 import { Section } from '@/shared/interfaces/section';
-import { JsonPipe } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
@@ -9,7 +8,7 @@ import { EmptyFieldMessage } from '../../components/empty-field-message/empty-fi
 
 @Component({
     selector: 'section-machine-details-items',
-    imports: [CardModule, JsonPipe, GalleriaModule, EmptyFieldMessage, AccordionModule, ButtonModule],
+    imports: [CardModule, GalleriaModule, EmptyFieldMessage, AccordionModule, ButtonModule],
     templateUrl: './section-machine-details-items.html'
 })
 export class SectionMachineDetailsItems {

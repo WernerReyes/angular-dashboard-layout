@@ -1,15 +1,7 @@
 @if (sectionItems().length === 0) {
-<span class="text-muted-color">No hay items en esta sección</span>
-} @else {
-
-<!-- <div>
-    <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-rounded p-button-text p-button-plain" (click)="menu.toggle($event)"></button>
-    <p-menu #menu [popup]="true" [model]="items"></p-menu>
-</div> -->
-
-@if (sectionItems().length === 1) {
-<div
-(contextmenu)="contextMenu()?.onContextMenu($event, sectionItems()[0])">
+<empty-field-message textContent="No hay portadas agregados."></empty-field-message>
+} @else { @if (sectionItems().length === 1) {
+<div (contextmenu)="contextMenu()?.onContextMenu($event, sectionItems()[0])">
     <hero-item [item]="sectionItems()[0]"></hero-item>
 </div>
 } @else {
@@ -40,7 +32,4 @@
     </ng-template>
 </p-galleria>
 
-} 
-
-
-}
+} }

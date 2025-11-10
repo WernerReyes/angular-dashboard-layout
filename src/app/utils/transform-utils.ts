@@ -12,7 +12,7 @@ export class TransformUtils {
 
                 data[key].forEach((value: any) => {
                     let finalValue = value;
-                    console.log(value instanceof File, value);
+                  
                     if (!(value instanceof File) && typeof value === 'object') {
                         finalValue = JSON.stringify(value); 
                     }

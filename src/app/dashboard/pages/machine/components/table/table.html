@@ -57,7 +57,7 @@
                 } @else { @for (machine of category.machines; track machine.id) {
                 <tr [class.p-datatable-contextmenu-row-selected]="selectedMachine() && selectedMachine()!.id === machine.id" (contextmenu)="onContextMenu($event, machine)">
                     <td>{{machine.name}}</td>
-                    <td>{{machine.description}}</td>
+                    <td><div class="line-clamp-3">{{machine.description}}</div></td>
                     <td>
                         <div class="line-clamp-3">{{machine.longDescription}}</div>
                     </td>
@@ -76,7 +76,7 @@
                         }
                     </td>
                     <td>
-                        <p-button type="button" label="Ver" icon="pi pi-eye" text (click)="displaySpecifications($event, machine.technicalSpecifications)"></p-button>
+                        <p-button type="button" label="Ver" icon="pi pi-eye" text (click)="specifications.set(machine.technicalSpecifications)"></p-button>
                     </td>
                     <td>
                         @if (machine.manual) {
@@ -86,8 +86,9 @@
                         }
                     </td>
                     <td>
-                        @if (machine.link) {
-                        <a pButton icon="pi pi-external-link" class="p-button-text" [href]="machine.link.url" target="_blank" rel="noopener noreferrer"></a>
+                        @if (machine.linkId) {
+                        <!-- <a pButton icon="pi pi-external-link" class="p-button-text" [href]="machine.link.url" target="_blank" rel="noopener noreferrer"></a> -->
+                         <p-button  text  [label]="machine.textButton"></p-button>
                         } @else {
                         <span>No hay enlace</span>
                         }
@@ -98,9 +99,19 @@
                 } }
             </ng-template>
         </p-table>
-        <p-popover #op (onHide)="selectedMachine.set(null)">
-            <technical-specifications-table [specifications]="specifications()"></technical-specifications-table>
-        </p-popover>
+        <!-- <p-popover #op (onHide)="selectedMachine.set(null)"> -->
+
+            <!-- <technical-specifications-table [specifications]="specifications()"></technical-specifications-table> -->
+        <!-- </p-popover> -->
+
+       <p-dialog header="Especificaciones Técnicas" 
+        [visible]="specifications().length > 0"
+         (visibleChange)="specifications.set([])"
+        (onHide)="specifications.set([])"
+       [modal]="true" [style]="{ width: '600px' }" [closable]="true" [resizable]="false">
+            <technical-specifications-table [specifications]="specifications()" ></technical-specifications-table>
+        </p-dialog>
+
         <p-contextmenu #machineCm [model]="machineItems" (onHide)="selectedCategory.set(null)" />
 
         <machine-dialog-form [(display)]="dialogMachine"></machine-dialog-form>

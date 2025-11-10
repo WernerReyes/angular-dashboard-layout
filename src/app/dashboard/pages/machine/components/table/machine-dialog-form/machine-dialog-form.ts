@@ -44,7 +44,6 @@ import { MachineImages } from '@/shared/mappers/machine.mapper';
         SelectButtonModule,
         MessageModule,
         BadgeModule,
-        JsonPipe
     ],
     templateUrl: './machine-dialog-form.html'
 })
@@ -210,8 +209,8 @@ export class MachineDialogForm {
     removeFile(e: Event, index: number, file: File) {
         this.fileUpload.remove(e, index);
         const uuidFromFile = this.getUuidFromFile(file);
-        // const updatedImagesToUpdate = this.imagesToUpdate?.value?.filter((img) => img.id !== uuidFromFile);
-        // this.imagesToUpdate?.setValue(updatedImagesToUpdate ?? []);
+        const updatedImagesToUpdate = this.imagesToUpdate?.value?.filter((img) => img.id !== uuidFromFile);
+        this.imagesToUpdate?.setValue(updatedImagesToUpdate ?? []);
         // this.imagesToDelete?.setValue(
         //     this.imagesToDeleteSignal()?.map((img) => {
         //         if (img.id === uuidFromFile) {
@@ -220,7 +219,12 @@ export class MachineDialogForm {
         //         return img;
         //     }) ?? []
         // );
-        this.form.get('fileImages')?.setValue(this.form.get('fileImages')?.value?.filter((f: File) => this.getUuidFromFile(f) !== uuidFromFile) ?? null);
+        // const deleteByIndex =this.form.get('fileImages')?.value?.[index];
+        // if (deleteByIndex) {
+        console.log('Removing file at index:', index, 'with UUID:', uuidFromFile);
+            this.form.get('fileImages')?.setValue(this.form.get('fileImages')?.value?.filter((_: File, i: number) => i !== index)!);
+        // }
+        // this.form.get('fileImages')?.setValue(this.form.get('fileImages')?.value?.slice(0, index).concat(this.form.get('fileImages')?.value?.slice(index + 1)));
     }
 
     onManualSelect(event: FileSelectEvent) {
@@ -308,7 +312,6 @@ export class MachineDialogForm {
         this.imagesToUpdate?.setValue([]);
         this.fileUpload.clear();
         this.manualFileUpload.clear();
-        console.log('Resetting selected images');
     }
 
     saveChanges() {
@@ -330,8 +333,6 @@ export class MachineDialogForm {
             linkId: linkId || null,
             textButton: textButton || null
         };
-
-        console.log('Payload:', payload);
 
         if (this.isEditMode) {
             this.machineService.updateMachine({ id: id!, imagesToRemove: imagesToDelete!, imagesToUpdate: imagesToUpdate!, ...payload }).subscribe({

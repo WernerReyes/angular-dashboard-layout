@@ -1,23 +1,22 @@
+import { categoryTypesOptions } from '@/shared/interfaces/category';
+import { Machine } from '@/shared/interfaces/machine';
 import type { Section } from '@/shared/interfaces/section';
 import type { SectionItem } from '@/shared/interfaces/section-item';
+import { CategoryType } from '@/shared/mappers/category.mapper';
+import { NgClass } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { MenuModule } from 'primeng/menu';
+import { CardModule } from 'primeng/card';
 import { CarouselModule } from 'primeng/carousel';
+import { MenuModule } from 'primeng/menu';
+import { TagModule } from 'primeng/tag';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import type { ContextMenuCrud } from '../../components/context-menu-crud/context-menu-crud';
 import { EmptyFieldMessage } from '../../components/empty-field-message/empty-field-message';
-import { CardModule } from 'primeng/card';
-import { Machine } from '@/shared/interfaces/machine';
-import { TagModule } from 'primeng/tag';
-import { Category, categoryTypesOptions } from '@/shared/interfaces/category';
-import { CategoryType } from '@/shared/mappers/category.mapper';
-import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { NgClass } from '@angular/common';
-import { FilterArrayByPipe } from '@/shared/pipes/filter-array-by-pipe';
 
 @Component({
     selector: 'section-cash-processing-equipment-items',
-    imports: [EmptyFieldMessage, ButtonModule, MenuModule, FilterArrayByPipe, CarouselModule, CardModule, TagModule, ToggleSwitchModule, NgClass],
+    imports: [EmptyFieldMessage, ButtonModule, MenuModule, CarouselModule, CardModule, TagModule, ToggleSwitchModule, NgClass],
     templateUrl: './section-cash-processing-equipment-items.html'
 })
 export class SectionCashProcessingEquipmentItems {

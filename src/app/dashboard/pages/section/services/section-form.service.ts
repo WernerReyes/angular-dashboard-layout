@@ -61,10 +61,6 @@ export class SectionFormService {
             if (type === SectionType.MAIN_NAVIGATION_MENU || type === SectionType.FOOTER) {
                 menusIdsControl?.setValidators([Validators.required]);
 
-                console.log(this.form.get('currentImage')?.value);
-                if (!this.form.get('currentImage')?.value) {
-                    // imageFile?.setValidators([Validators.required]);
-                }
             } else {
                 menusIdsControl?.clearValidators();
                 imageFile?.clearValidators();
@@ -161,7 +157,6 @@ export class SectionFormService {
 
     private setDefaultDataAccordingToType(type: SectionType) {
         const titleControl = this.form.get('title');
-        console.log('SETTING DEFAULT DATA ACCORDING TO TYPE:', type);
         // if (titleControl?.value.trim()) return;
         let title = '';
         switch (type) {

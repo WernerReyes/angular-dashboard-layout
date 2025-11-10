@@ -22,12 +22,15 @@ import { TechnicalSpecificationsTable } from '../technical-specifications-table/
 import { MachineDialogForm } from './machine-dialog-form/machine-dialog-form';
 import { TecnicalSpecifications } from '@/shared/mappers/machine.mapper';
 import { MachineService } from '@/dashboard/services/machine.service';
+import { TechnicalSpecificationsDialogForm } from './machine-dialog-form/technical-specifications-dialog-form/technical-specifications-dialog-form';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
     selector: 'table-machine',
     imports: [
         MachineDialogForm,
         TechnicalSpecificationsTable,
+        DialogModule,
         DataViewSkeleton,
         ImageModule,
         TableModule,

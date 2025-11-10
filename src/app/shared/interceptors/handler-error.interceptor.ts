@@ -24,7 +24,7 @@ export function handlerErrorInterceptor(req: HttpRequest<unknown>, next: HttpHan
                 return throwError(() => error);
             }
 
-            console.log(error);
+          
 
             switch (code) {
                 case HttpStatusCode.UnprocessableEntity:
@@ -35,17 +35,7 @@ export function handlerErrorInterceptor(req: HttpRequest<unknown>, next: HttpHan
                     messageService.setError(array[0]);
                     break;
 
-                // case HttpStatusCode.BadRequest:
-                //     messageService.setError(error?.error?.message);
-                //     break;
-
-                // case HttpStatusCode.NotFound:
-                //     messageService.setError(error?.error?.message);
-                //     break;
-                
-                // case HttpStatusCode.InternalServerError: 
-                //     messageService.setError(error?.error?.message);
-                //     break;
+               
                 default:
                     messageService.setError(error?.error?.message)
                     break;

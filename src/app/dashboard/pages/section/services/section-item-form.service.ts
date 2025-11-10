@@ -102,18 +102,6 @@ export class SectionItemFormService {
                 break;
 
             case SectionType.CLIENT:
-                // const image = this.form.get('imageFile');
-                // const imageType = this.form.get('imageType');
-                // console.log('SETTING CLIENT SECTION TYPE', imageType?.value);
-                // if (imageType?.value === ImageType.LOCAL) {
-                //     image?.setValidators([Validators.required]);
-                // }  else if (imageType?.value === ImageType.URL) {
-                //     const imageUrl = this.form.get('imageUrl');
-                //     imageUrl?.setValidators([Validators.required, Validators.maxLength(255)]);
-                
-                //     image?.clearValidators();
-                // }
-                // image?.updateValueAndValidity();
                 this.disableFields(['subtitle', 'content', 'imageBackFile', 'currentImageBack', 'imageBackUrl', 'imageBackType', 'textButton', 'showLink', 'linkId', 'typeLink', 'iconFile', 'currentIconUrl', 'categoryId', 'inputType']);
                 break;
 
@@ -133,7 +121,7 @@ export class SectionItemFormService {
                 break;
                 
             case SectionType.CONTACT_US:
-                console.log('SETTING CONTACT US SECTION TYPE');
+                
                 const inputType = this.form.get('inputType');
                 inputType?.setValidators([Validators.required]);
                 inputType?.updateValueAndValidity();

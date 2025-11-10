@@ -6,7 +6,7 @@ import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-bo
 import { linkTypeOptions } from '@/shared/interfaces/link';
 import type { Menu } from '@/shared/interfaces/menu';
 import { FormUtils } from '@/utils/form-utils';
-import { JsonPipe, KeyValuePipe } from '@angular/common';
+import { KeyValuePipe } from '@angular/common';
 import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -23,7 +23,7 @@ import { MenuFormService } from '../../services/menu-form.service';
 
 @Component({
     selector: 'link-dialog-form',
-    imports: [FilterLinksByTypePipe, JsonPipe, DialogModule, ErrorBoundary, KeyValuePipe, FormsModule, ReactiveFormsModule, TreeSelectModule, ToggleButtonModule, InputTextModule, MessageModule, SelectModule, SelectButtonModule, ButtonModule],
+    imports: [FilterLinksByTypePipe, DialogModule, ErrorBoundary, KeyValuePipe, FormsModule, ReactiveFormsModule, TreeSelectModule, ToggleButtonModule, InputTextModule, MessageModule, SelectModule, SelectButtonModule, ButtonModule],
     templateUrl: './dialog-form.html'
 })
 export class DialogForm {

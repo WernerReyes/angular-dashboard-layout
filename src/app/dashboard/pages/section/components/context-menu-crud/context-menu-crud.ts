@@ -30,7 +30,6 @@ export class ContextMenuCrud<T> {
             label: 'Eliminar',
             icon: 'pi pi-fw pi-trash',
             command: (event: MenuItemCommandEvent) => {
-                console.log('delete command called', event);
                 this.deleteCommand()(event);
                
             }

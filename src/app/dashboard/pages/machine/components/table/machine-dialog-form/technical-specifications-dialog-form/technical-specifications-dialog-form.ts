@@ -13,9 +13,10 @@ import { ContextMenuModule } from 'primeng/contextmenu';
 import { TecnicalSpecifications } from '@/shared/mappers/machine.mapper';
 import { MenuItem } from 'primeng/api';
 import { TechnicalSpecificationsTable } from '../../../technical-specifications-table/technical-specifications-table';
+import { TextareaModule } from 'primeng/textarea';
 @Component({
     selector: 'technical-specifications-dialog-form',
-    imports: [JsonPipe, TechnicalSpecificationsTable, DialogModule, TableModule, InputTextModule, ButtonModule, IftaLabelModule, ReactiveFormsModule, MessageModule, ContextMenuModule],
+    imports: [TechnicalSpecificationsTable, DialogModule, TableModule, InputTextModule, TextareaModule, ButtonModule, ReactiveFormsModule, MessageModule, ContextMenuModule],
     templateUrl: './technical-specifications-dialog-form.html'
 })
 export class TechnicalSpecificationsDialogForm {

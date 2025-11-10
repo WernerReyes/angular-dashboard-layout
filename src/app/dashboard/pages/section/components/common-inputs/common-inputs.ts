@@ -5,7 +5,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { TextareaModule } from 'primeng/textarea';
 
-type Field = 'title' | 'subtitle' | 'content';
+type Field = 'title' | 'subtitle' | 'content' | 'textButton' | 'extraTextButton';
 
 
 export interface IncludeFields {

@@ -1,7 +1,6 @@
 import { MenuService } from '@/dashboard/services/menu.service';
 import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
 import { FormUtils } from '@/utils/form-utils';
-import { JsonPipe } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import type { TreeNode } from 'primeng/api';
@@ -12,7 +11,7 @@ import { SectionFormService } from '../../services/section-form.service';
 
 @Component({
     selector: 'navigation-menu-form',
-    imports: [ErrorBoundary, FileUpload, JsonPipe, ReactiveFormsModule, TreeSelectModule, MessageModule],
+    imports: [ErrorBoundary, FileUpload, ReactiveFormsModule, TreeSelectModule, MessageModule],
     templateUrl: './navigation-menu-form.html'
 })
 export class NavigationMenuForm {

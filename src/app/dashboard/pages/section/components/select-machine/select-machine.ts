@@ -12,6 +12,8 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 
 // categoryTypesOptions
 
+// TODO: When the machine is added for ay reason the type is null, so we need to handle that case
+
 @Component({
     selector: 'select-machine',
     imports: [ErrorBoundary, ReactiveFormsModule, MultiSelectModule, InputTextModule, SelectButtonModule],
@@ -35,6 +37,10 @@ export class SelectMachine {
 
     machines = linkedSignal(() => {
         const machines = this.machinesList.hasValue() ? this.machinesList.value() : [];
+
+        console.log({
+            machines
+        })
 
         return machines.map((machine) => {
             const category = {

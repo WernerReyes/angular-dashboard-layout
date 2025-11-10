@@ -6,6 +6,7 @@
     [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
     [style]="{ width: '25rem' }"
     [modal]="true"
+    [closable]="!linkService.loading()"
 >
     <form id="link-form" class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="saveChanges()">
         @let type = form.controls['type'].value;
@@ -36,6 +37,8 @@
                         formControlName="pageId"
                         [options]="pages"
                         [checkmark]="true"
+                        [filter]="true"
+                        filterBy="title,slug"
                         optionLabel="title"
                         optionValue="id"
                         placeholder="Selecciona una página"
@@ -65,12 +68,18 @@
             <p-fileUpload
                 id="file"
                 name="file"
+                invalidFileSizeMessageSummary="Archivo demasiado grande"
+                invalidFileSizeMessageDetail="El tamaño máximo permitido es de 5MB."
+                invalidFileTypeMessageSummary="Tipo de archivo inválido"
+                invalidFileTypeMessageDetail="Solo se permiten archivos PDF."
+                invalidFileLimitMessageSummary="Límite de archivos excedido"
+                invalidFileLimitMessageDetail="Has excedido el número máximo de archivos permitidos."
                 chooseLabel="Seleccionar archivo"
                 [showUploadButton]="false"
                 (onSelect)="onFileSelect($event)"
                 [showCancelButton]="false"
                 [multiple]="false"
-                accept="application/pdf"
+                accept=".pdf"
                 maxFileSize="5000000"
                 mode="advanced"
             >
@@ -139,6 +148,6 @@
     <!-- {{ form.value | json }} -->
 
     <ng-template #footer>
-        <button pButton icon="pi pi-save" type="submit" form="link-form" [disabled]="form.invalid" label="Guardar"></button>
+        <button pButton [loading]="linkService.loading()" icon="pi pi-save" type="submit" form="link-form" [disabled]="form.invalid" label="Guardar"></button>
     </ng-template>
 </p-dialog>

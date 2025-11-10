@@ -17,7 +17,7 @@ import { CreatePage } from '@/dashboard/interfaces/page';
     templateUrl: './dialog-form.html'
 })
 export class DialogForm {
-    private readonly pageService = inject(PageService);
+    readonly pageService = inject(PageService);
     private readonly pageFormService = inject(PageFormService);
 
     selectedPage = input<Page | null>();

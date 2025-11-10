@@ -28,7 +28,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class DialogForm {
     private readonly pageService = inject(PageService);
-    private readonly linkService = inject(LinkService);
+    readonly linkService = inject(LinkService);
     private readonly linkFormService = inject(LinkFormService);
 
     pagesList = this.pageService.pagesListResource;

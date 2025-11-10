@@ -6,6 +6,7 @@
     [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
     [style]="{ width: '25rem' }"
     [modal]="true"
+    [closable]="!pageService.loading()"
 >
     <form id="link-form" class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="saveChanges()">
         <div class="flex flex-col gap-2">
@@ -35,6 +36,6 @@
     </form>
 
     <ng-template #footer>
-        <button pButton icon="pi pi-save" type="submit" form="link-form" [disabled]="form.invalid" label="Guardar"></button>
+        <button [loading]="pageService.loading()" pButton icon="pi pi-save" type="submit" form="link-form" [disabled]="form.invalid" label="Guardar"></button>
     </ng-template>
 </p-dialog>

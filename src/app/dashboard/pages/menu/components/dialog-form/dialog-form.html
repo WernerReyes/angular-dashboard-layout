@@ -26,8 +26,11 @@
                                 inputClass="w-full my-auto"
                                 formControlName="linkId"
                                 [options]="filteredLinks"
+                                emptyMessage="No se encontraron enlaces."
+                                emptyFilterMessage="No se encontraron enlaces."
                                 [checkmark]="true"
                                 optionLabel="title"
+                                [filter]="true"
                                 optionValue="id"
                                 fluid
                                 placeholder="Selecciona una página"

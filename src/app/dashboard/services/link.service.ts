@@ -2,8 +2,8 @@ import type { ApiResponse } from '@/shared/interfaces/api-response';
 import type { Link } from '@/shared/interfaces/link';
 import { type LinkEntity, mapLinkEntityToLink } from '@/shared/mappers/link.mapper';
 import { HttpClient, httpResource } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { map, tap } from 'rxjs';
+import { inject, Injectable, signal } from '@angular/core';
+import { finalize, map, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { CreateLink } from '../interfaces/link';
 import { TransformUtils } from '@/utils/transform-utils';
@@ -14,7 +14,9 @@ import { TransformUtils } from '@/utils/transform-utils';
 export class LinkService {
     private readonly http = inject(HttpClient);
 
-    prefix = `${environment.apiUrl}/link`;
+    private readonly prefix = `${environment.apiUrl}/link`;
+
+    loading = signal<boolean>(false);
 
     linksListResource = httpResource<Link[]>(
         () => ({
@@ -31,12 +33,14 @@ export class LinkService {
     );
 
     createLink(create: CreateLink) {
+        this.loading.set(true);
         const formData = TransformUtils.toFormData(create);
         return this.http.post<ApiResponse<LinkEntity>>(this.prefix, formData).pipe(
             map(({ data }) => mapLinkEntityToLink(data)),
             tap((link) => {
                 this.linksListResource.update((links) => [link, ...links!]);
-            })
+            }),
+            finalize(() => this.loading.set(false))
         );
     }
 
@@ -46,7 +50,8 @@ export class LinkService {
             map(({ data }) => mapLinkEntityToLink(data)),
             tap((link) => {
                 this.linksListResource.update((links) => links!.map((l) => (l.id === link.id ? link : l)));
-            })
+            }),
+            finalize(() => this.loading.set(false))
         );
     }
 
@@ -54,7 +59,8 @@ export class LinkService {
         return this.http.delete<ApiResponse<null>>(`${this.prefix}/${id}`).pipe(
             tap(() => {
                 this.linksListResource.update((links) => links!.filter((l) => l.id !== id));
-            })
+            }),
+            finalize(() => this.loading.set(false))
         );
     }
 }

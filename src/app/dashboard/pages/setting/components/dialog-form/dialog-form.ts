@@ -28,7 +28,7 @@ export class DialogForm {
         const file = event.files[0];
         if (file) {
             this.form().patchValue({ profileFile: file as any });
-            this.form().get('profileFile')?.markAsDirty();
+            this.form().get('profileFile')?.markAsTouched();
         }
     }
 

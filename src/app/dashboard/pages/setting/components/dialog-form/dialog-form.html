@@ -73,7 +73,10 @@
         </div>
     </form>
 
-    <ng-template pTemplate="footer">
-        <button [disabled]="form().invalid || form().pristine || authService.loading()" form="user-form" pButton type="submit" label="Guardar" icon="pi pi-check"></button>
+    <ng-template #footer>
+
+        <button 
+         [loading]="authService.loading()"
+        [disabled]="form().invalid" form="user-form" pButton type="submit" label="Guardar" icon="pi pi-check"></button>
     </ng-template>
 </p-dialog>

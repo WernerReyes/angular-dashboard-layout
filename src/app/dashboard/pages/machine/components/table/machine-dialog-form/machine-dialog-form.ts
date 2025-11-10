@@ -26,7 +26,7 @@ import { MachineImages } from '@/shared/mappers/machine.mapper';
 @Component({
     selector: 'machine-dialog-form',
     imports: [
-        JsonPipe,
+        // JsonPipe,
         TechnicalSpecificationsDialogForm,
         TechnicalSpecificationsTable,
         ShowLinkSwitch,

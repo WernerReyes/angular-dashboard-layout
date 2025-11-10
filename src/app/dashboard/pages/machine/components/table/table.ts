@@ -1,18 +1,21 @@
 import { CategoryService } from '@/dashboard/services/category.service';
+import { MachineService } from '@/dashboard/services/machine.service';
 import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
 import { DataViewSkeleton } from '@/shared/components/skeleton/data-view-skeleton/data-view-skeleton';
 import { Category, categoryTypesOptions } from '@/shared/interfaces/category';
 import { Machine } from '@/shared/interfaces/machine';
 import { CategoryType } from '@/shared/mappers/category.mapper';
+import { TecnicalSpecifications } from '@/shared/mappers/machine.mapper';
 import { DatePipe } from '@angular/common';
 import { Component, inject, output, signal, ViewChild } from '@angular/core';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ContextMenu, ContextMenuModule } from 'primeng/contextmenu';
+import { DialogModule } from 'primeng/dialog';
 import { GalleriaModule, GalleriaResponsiveOptions } from 'primeng/galleria';
 import { ImageModule } from 'primeng/image';
-import { Popover, PopoverModule } from 'primeng/popover';
+import { Popover } from 'primeng/popover';
 import { RatingModule } from 'primeng/rating';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
@@ -20,10 +23,6 @@ import { ToastModule } from 'primeng/toast';
 import { MachineFormService } from '../../services/machine-form.service';
 import { TechnicalSpecificationsTable } from '../technical-specifications-table/technical-specifications-table';
 import { MachineDialogForm } from './machine-dialog-form/machine-dialog-form';
-import { TecnicalSpecifications } from '@/shared/mappers/machine.mapper';
-import { MachineService } from '@/dashboard/services/machine.service';
-import { TechnicalSpecificationsDialogForm } from './machine-dialog-form/technical-specifications-dialog-form/technical-specifications-dialog-form';
-import { DialogModule } from 'primeng/dialog';
 
 @Component({
     selector: 'table-machine',
@@ -40,7 +39,6 @@ import { DialogModule } from 'primeng/dialog';
         ToastModule,
         RatingModule,
         ButtonModule,
-        PopoverModule,
         ContextMenuModule,
         ConfirmDialogModule,
         GalleriaModule

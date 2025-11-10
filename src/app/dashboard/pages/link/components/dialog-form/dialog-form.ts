@@ -21,7 +21,9 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'link-dialog-form',
-    imports: [JsonPipe, DialogModule, ErrorBoundary, ReactiveFormsModule, FileUpload, InputTextModule, MessageModule, SkeletonModule, SelectModule, SelectButtonModule, ButtonModule],
+    imports: [
+        // JsonPipe, 
+        DialogModule, ErrorBoundary, ReactiveFormsModule, FileUpload, InputTextModule, MessageModule, SkeletonModule, SelectModule, SelectButtonModule, ButtonModule],
     templateUrl: './dialog-form.html'
 })
 export class DialogForm {

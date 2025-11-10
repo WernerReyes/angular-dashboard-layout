@@ -57,6 +57,13 @@
                 <common-inputs
                     [form]="form"
                     [includeFields]="[{
+                            type: 'subtitle',
+                            label: 'Frase destacada',
+                            placeholder: 'Frase destacada de la sección',
+                            
+                        }
+                    ,{
+                        
                     type: 'content',
                     label: 'Historia',
                     placeholder: 'Breve historia de la empresa',
@@ -126,7 +133,7 @@
                 <common-inputs
                     [form]="form"
                     [includeFields]="[
-                    
+                        
                     {
                         type: 'content',
                         label: 'Descripción',
@@ -287,7 +294,7 @@
 
                 <div class="flex flex-col gap-2 mt-4">
                     <label>Imagen del widget</label>
-                <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+                    <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
                 </div>
                 }}
             </div>

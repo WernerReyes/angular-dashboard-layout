@@ -8,9 +8,9 @@
                 <div class="space-y-6">
                     @if (section().title) {
 
-                        <h2 class="text-4xl md:text-5xl font-bold text-blue-700 dark:text-blue-400 transition-colors duration-300">{{ section().title }}</h2>
+                    <h2 class="text-4xl md:text-5xl font-bold text-blue-700 dark:text-blue-400 transition-colors duration-300">{{ section().title }}</h2>
                     } @else {
-                        <empty-field-message className="max-w-md mx-auto mb-4" textContent="Sin título"></empty-field-message>
+                    <empty-field-message className="max-w-md mx-auto mb-4" textContent="Sin título"></empty-field-message>
                     }
 
                     <!-- Texto descriptivo -->
@@ -68,20 +68,38 @@
                 <div class="relative group h-full">
                     <!-- Imagen principal -->
                     @if (section().image) {
-                    <img [src]="section().image" [alt]="section().title" class="w-full max-h-96 md:max-h-full h-full object-cover rounded-2xl shadow-2xl group-hover:scale-105 transition-all duration-500" />
+                    <div class="relative w-full h-full">
+                        <img [src]="section().image" [alt]="section().title" class="w-full max-h-96 md:max-h-full h-full object-cover rounded-2xl shadow-2xl group-hover:scale-105 transition-all duration-500" />
+
+                        @if (section().subtitle) {
+
+                        <span class="absolute top-2 left-1/2 transform -translate-x-1/2 uppercase font-extrabold text-white text-3xl">{{ section().subtitle }}</span>
+                        } @else {
+                        <empty-field-message className="absolute top-2 left-1/2 transform -translate-x-1/2" textContent="No hay frase destacada"></empty-field-message>
+                        }
+                    </div>
                     } @else {
                     <empty-field-message className="w-full h-full">
                         <ng-template #content>
-                            <div class="text-center my-auto text-gray-500 dark:text-gray-400 mx-auto">
-                                <svg class="w-16 h-16 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                    />
-                                </svg>
-                                <div class="text-sm font-medium">Sin referencial de la empresa</div>
+                            <div class="relative w-full h-full flex flex-col">
+                                <div class="text-center my-auto text-gray-500 dark:text-gray-400 mx-auto">
+                                    <svg class="w-16 h-16 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                        />
+                                    </svg>
+                                    <div class="text-sm font-medium">Sin referencial de la empresa</div>
+                                </div>
+
+                                @if (section().subtitle) {
+
+                                <span class="absolute top-2 left-1/2 transform -translate-x-1/2 uppercase font-extrabold text-white text-3xl">{{ section().subtitle }}</span>
+                                } @else {
+                                <empty-field-message className="absolute top-2 left-1/2 transform -translate-x-1/2" textContent="No hay frase destacada"></empty-field-message>
+                                }
                             </div>
                         </ng-template>
                     </empty-field-message>

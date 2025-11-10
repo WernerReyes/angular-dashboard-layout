@@ -16,7 +16,7 @@ import { JsonPipe } from '@angular/common';
     templateUrl: './dialog-form.html'
 })
 export class DialogForm {
-    private readonly authService = inject(AuthService);
+    readonly authService = inject(AuthService);
     @ViewChild('uploader') uploader!: FileUpload;
 
     form = input.required<FormGroup<any>>();

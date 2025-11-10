@@ -55,7 +55,6 @@ export class MenuList {
     private readonly confirmationService = inject(ConfirmationService);
     private readonly menuService = inject(MenuService);
     private readonly menuFormService = inject(MenuFormService);
-    private readonly messageService = inject(MessageService);
 
     menuList = this.menuService.menuListResource;
     linkTypeOptions = linkTypeOptions;
@@ -103,7 +102,12 @@ export class MenuList {
 
         if (!term) return menuComponents;
 
-        return menuComponents.filter((menu) => menu.title.toLowerCase().includes(term) || (menu.children && menu.children.some((child) => child.title.toLowerCase().includes(term))));
+        return menuComponents.filter(
+            (menu) =>
+                menu.title.toLowerCase().includes(term) ||
+                (menu.children && menu.children.some((child) => child.title.toLowerCase().includes(term))) ||
+                menu.children!.some((child) => child.children && child.children.some((grandChild) => grandChild.title.toLowerCase().includes(term)))
+        );
     });
 
     onContextMenu(event: any, menu: Menu) {

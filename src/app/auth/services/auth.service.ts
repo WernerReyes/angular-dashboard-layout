@@ -3,7 +3,7 @@ import { mapUserEntityToUser, UserEntity } from '@/shared/mappers/user.mapper';
 import { TransformUtils } from '@/utils/transform-utils';
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { catchError, map, of, tap, throwError } from 'rxjs';
+import { catchError, finalize, map, of, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ApiResponse } from '../../shared/interfaces/api-response';
 import type { LoginRequest, LoginResponse } from '../interfaces/login';
@@ -31,10 +31,12 @@ export class AuthService {
 
     user = signal<User | null>(null);
     token = signal<string | null>(null);
+    loading = signal<boolean>(false);
 
     isAuthenticated = computed(() => {
         return !!this.user;
     });
+
 
     constructor() {
         window.addEventListener('storage', (event) => {
@@ -114,6 +116,7 @@ export class AuthService {
     }
 
     updateProfile(update: UpdateProfile) {
+        this.loading.set(true);
         const formData = TransformUtils.toFormData(update);
         return this.http.post<ApiResponse<UserEntity>>(`${this.prefix}/update-profile`, formData).pipe(
             map(({ data }) => mapUserEntityToUser(data)),
@@ -122,7 +125,8 @@ export class AuthService {
             }),
             catchError((error) => {
                 return throwError(() => error);
-            })
+            }),
+            finalize(() => this.loading.set(false))
         );
     }
 

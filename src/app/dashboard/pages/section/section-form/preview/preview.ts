@@ -56,7 +56,7 @@ import { SectionSupportWidgetItems } from '../../sections-list/section-support-w
         SectionMachinesCatalogItems,
         SectionFullMaintenancePlanItems,
         SectionPreventiveCorrectiveMaintenanceItems,
-        SectionSupportWidgetItems,
+        SectionSupportWidgetItems
         // JsonPipe
     ],
     templateUrl: './preview.html'
@@ -131,7 +131,7 @@ export class Preview {
             extraLink: null,
             linksId: section?.linkId || null,
             extraLinkId: section?.extraLinkId || null,
-            textButton: value.showLink ? value.textButton || section?.textButton : null,
+            textButton: this.setTextButton(section, value),
             extraTextButton: value.showExtraLink ? value.extraTextButton || section?.extraTextButton : null,
             menus: value.menusIds?.map((menu: TreeNode) => this.buildRecursiveNode(menu)) || [],
             // textButton: value.showLink ? value.textButton || null : null,
@@ -147,10 +147,19 @@ export class Preview {
             icon: value.icon || null,
             iconType: value.iconType || null,
             iconUrl: value.iconFile ? this.getBlobUrl(value.iconFile) : section?.iconUrl || ''
-            
-
-        
         };
+    }
+
+    private setTextButton(section: Section | null, value: any) {
+        if (section?.type === SectionType.CONTACT_US || value.type === SectionType.CONTACT_US) {
+            return value.textButton || section?.textButton || null;
+        }
+
+        if (value.showLink) {
+            return value.textButton || section?.textButton;
+        }
+
+        return null;
     }
 
     private buildRecursiveNode(menu: TreeNode): Partial<Menu> {

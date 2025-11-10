@@ -2,7 +2,23 @@
     <form class="p-fluid flex flex-col gap-4" id="user-form" [formGroup]="form()" novalidate (ngSubmit)="onSubmit()">
         @let profile = form().controls['currentProfile'].value;
 
-        <p-fileupload #uploader chooseLabel="Seleccionar icono" [showUploadButton]="false" (onSelect)="onFileSelect($event)" [showCancelButton]="false" [multiple]="false" accept="image/*" maxFileSize="5000000" mode="advanced">
+        <p-fileupload
+            #uploader
+            invalidFileSizeMessageSummary="Archivo demasiado grande"
+            invalidFileSizeMessageDetail="El tamaño máximo permitido es de 5MB."
+            invalidFileTypeMessageSummary="Tipo de archivo inválido"
+            invalidFileTypeMessageDetail="Solo se permiten archivos de imagen (SVG, PNG, JPG)."
+            invalidFileLimitMessageSummary="Límite de archivos excedido"
+            invalidFileLimitMessageDetail="Has excedido el número máximo de archivos permitidos."
+            chooseLabel="Seleccionar icono"
+            [showUploadButton]="false"
+            (onSelect)="onFileSelect($event)"
+            [showCancelButton]="false"
+            [multiple]="false"
+            accept=".svg,.png,.jpg"
+            maxFileSize="5000000"
+            mode="advanced"
+        >
             <ng-template #empty>
                 @if (profile) {
                 <div class="flex items-center justify-center w-full">
@@ -26,7 +42,7 @@
                                 />
                             </svg>
                             <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Arrastrar</span> tu perfil aca</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 5MB)</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG (MAX. 5MB)</p>
                         </div>
                     </label>
                 </div>
@@ -58,6 +74,6 @@
     </form>
 
     <ng-template pTemplate="footer">
-        <button [disabled]="form().invalid || form().pristine" form="user-form" pButton type="submit" label="Guardar" icon="pi pi-check"></button>
+        <button [disabled]="form().invalid || form().pristine || authService.loading()" form="user-form" pButton type="submit" label="Guardar" icon="pi pi-check"></button>
     </ng-template>
 </p-dialog>

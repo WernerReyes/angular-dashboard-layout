@@ -1,53 +1,29 @@
-<div [formGroup]="form()" class="flex flex-col gap-2 mt-2">
+<div [formGroup]="form()" class="flex flex-col gap-2 mt-2 max-w-full">
     <label>{{ label() }}</label>
     <app-error-boundary [resource]="machinesList" errorMessage="Ocurrió un error cargando las máquinas." emptyMessage="No hay máquinas disponibles. Por favor, crea una máquina primero.">
-        <ng-template #content let-machines>
-            <!-- <div class="flex flex-wrap  gap-3 mb-2">
-                <p-selectbutton [options]="categoryTypesOptions" [formControl]="currentOptionControl" optionLabel="label" optionValue="value">
-                    <ng-template #item let-option>
-                        <div class="flex items-center gap-2">
-                            <i class="pi mr-2" [class]="option.icon"></i>
-                            <span>{{ option.label }}</span>
-                        </div>
-                    </ng-template>
-                </p-selectbutton>
-
-                <app-error-boundary [resource]="categoriesList" errorMessage="Ocurrió un error cargando las categorías de máquinas." emptyMessage="No hay categorías disponibles.">
-                    <ng-template #content let-categories>
-                        <p-multiSelect
-                            id="category"
-                            
-                            [formControl]="categoriesIdsControl"
-                            emptyMessage="No hay categorías disponibles"
-                            emptyFilterMessage="No se encontraron categorías"
-                            [options]="categories"
-                            formControlName="categoryId"
-                            optionLabel="title"
-                            optionValue="id"
-                            placeholder="Filtrar por categoría"
-                        ></p-multiSelect>
-                        
-                    
-                    </ng-template>
-
-                </app-error-boundary>
-            </div> -->
-
+        <ng-template #content>
             <p-multiSelect
                 id="machine"
-                class="w-full"
+                class="max-w-full"
                 [overlayOptions]="{
                     mode: mode()
                     }"
+                [maxSelectedLabels]="isMobile() ? 1 : 3"
+                selectedItemsLabel="{0} maquinas seleccionadas"
                 emptyMessage="No hay máquinas disponibles"
                 emptyFilterMessage="No se encontraron máquinas"
-                [options]="filteredMachinesList()"
+                [options]="machines()"
                 [selectionLimit]="multiple() ? null : 1"
                 formControlName="machinesIds"
                 optionLabel="name"
                 optionValue="id"
+                [filter]="true"
                 placeholder="Selecciona máquinas"
-            ></p-multiSelect>
+                filterBy="name,category.title,category.type.label"
+                
+                fluid
+            >
+            </p-multiSelect>
         </ng-template>
     </app-error-boundary>
 </div>

@@ -3,21 +3,21 @@
         <!-- Header Section -->
         <div class="text-center mb-12">
             @if (section().subtitle) {
-            <h3 class="!text-2xl md:text-3xl font-semibold text-surface-800 dark:text-surface-100 mb-6">{{ section().subtitle }}</h3>
+            <h3 class="!text-xl sm:!text-2xl md:text-3xl font-semibold text-surface-800 dark:text-surface-100 mb-6">{{ section().subtitle }}</h3>
             } @else {
             <empty-field-message className="max-w-lg mx-auto mb-4" textContent="Sin subtítulo"></empty-field-message>
             }
 
             @if (section().title) {
 
-                <h2 class="!text-3xl md:!text-4xl !font-bold text-primary-600 dark:text-primary-400 mb-4">{{ section().title }}</h2>
+                <h2 class="!text-2xl sm:!text-3xl md:!text-4xl !font-bold text-primary-600 dark:text-primary-400 mb-4">{{ section().title }}</h2>
             } @else {
                 <empty-field-message className="max-w-md mx-auto mb-4" textContent="Sin título"></empty-field-message>
             }
 
 
             @if (section().description) {
-            <p class="text-lg text-surface-600 dark:text-surface-300 mx-auto text-center leading-relaxed">{{ section().description }}</p>
+            <p class="max-sm:text-sm text-surface-600 dark:text-surface-300 mx-auto text-center leading-relaxed">{{ section().description }}</p>
             } @else {
             <empty-field-message className="max-w-lg mx-auto" textContent="Descripción pendiente"></empty-field-message>
             }
@@ -43,10 +43,10 @@
                     <icon-image [item]="item" imageClass="size-16 mx-auto dark:!text-red-500" [imageErrorClass]="{ iconClass: '!size-12', containerClass: '!size-16' }"></icon-image>
                 </div>
 
-                <h4 class="!text-xl font-semibold text-surface-800 dark:text-surface-100 mb-2">{{ item.title }}</h4>
+                <h4 class="!text-lg md:!text-xl font-semibold text-surface-800 dark:text-surface-100 mb-2">{{ item.title }}</h4>
 
                 @if (item.description) {
-                <p class="text-surface-600 dark:text-surface-300 leading-relaxed">{{ item.description }}</p>
+                <p class="max-sm:text-sm text-surface-600 dark:text-surface-300 leading-relaxed">{{ item.description }}</p>
                 } @else {
                 <empty-field-message className="w-full" textContent="Contenido pendiente"></empty-field-message>
                 }

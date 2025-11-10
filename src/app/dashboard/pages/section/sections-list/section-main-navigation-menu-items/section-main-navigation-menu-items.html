@@ -3,7 +3,7 @@
         <ng-template #start>
             @if (section().image) {
 
-            <img [src]="section().image" (error)="section().image = null" class="mr-2 h-10 w-auto object-cover" />
+            <img [src]="section().image" (error)="section().image = null" class="mr-2 h-4 sm:h-10 w-auto object-cover" />
             } @else {
             <app-image-error containerClass="!size-12" iconClass="!size-8"></app-image-error>
             }

@@ -6,7 +6,7 @@ import { ImageType } from '@/shared/interfaces/section-item';
 import { LinkType } from '@/shared/mappers/link.mapper';
 import { SectionMode, SectionType } from '@/shared/mappers/section.mapper';
 import { FormUtils } from '@/utils/form-utils';
-import { KeyValuePipe } from '@angular/common';
+import { JsonPipe, KeyValuePipe } from '@angular/common';
 import { Component, computed, inject, input, model, output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -34,6 +34,7 @@ import { VideoUpload } from '../components/video-upload/video-upload';
 @Component({
     selector: 'section-form',
     imports: [
+        JsonPipe,
         CommonInputs,
         ShowLinkSwitch,
         FileUpload,
@@ -101,7 +102,7 @@ export class SectionForm {
                 title: formValue.title!,
                 subtitle: formValue.subtitle || null,
                 description: formValue.content || null,
-                textButton: formValue.showLink ? formValue.textButton || null : null,
+                textButton: this.setTextButton(this.selectedSection()!, formValue),
                 extraTextButton: formValue.showExtraLink ? formValue.extraTextButton || null : null,
                 linkId: formValue.showLink ? (formValue.linkId as any) : null,
                 extraLinkId: formValue.showExtraLink ? (formValue.extraLinkId as any) : null,
@@ -148,4 +149,17 @@ export class SectionForm {
             });
         }
     }
+
+     private setTextButton(section: Section | null, value: any) {
+        if (section?.type === SectionType.CONTACT_US || value.type === SectionType.CONTACT_US) {
+            return value.textButton || section?.textButton || null;
+        }
+
+        if (value.showLink) {
+            return value.textButton || section?.textButton;
+        }
+
+        return null;
+    }
+
 }

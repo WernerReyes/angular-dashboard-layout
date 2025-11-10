@@ -24,7 +24,7 @@
         } @else {
         <div class="flex justify-end mb-3">
             <p-toggleswitch #tsSwitch>
-                <ng-template #handle  let-checked="checked">
+                <ng-template #handle let-checked="checked">
                     @let option = checked ? getOption(CategoryType.COIN) : getOption(CategoryType.BILL);
                     <!-- {{ option?.icon }} -->
                     <i [ngClass]="['!text-xs', option?.icon]" [style]="{ color: option?.color }"></i>
@@ -32,13 +32,21 @@
             </p-toggleswitch>
         </div>
 
-        @let filteredMachines = filterByCategoryType(tsSwitch.checked());
-
-        @if (filteredMachines.length === 0) {
+        @let filteredMachines = filterByCategoryType(tsSwitch.checked()); @if (filteredMachines.length === 0) {
         <empty-field-message className="max-w-lg mx-auto" textContent="No hay equipos disponibles para esta categoría"></empty-field-message>
         } @else {
 
-        <p-carousel [value]="filteredMachines" [numVisible]="isPreview() ? 1 : 3" [numScroll]="1" [circular]="true" [autoplayInterval]="5000" [responsiveOptions]="responsiveOptions()">
+        <p-carousel
+            [ngClass]="{
+            'max-w-72 sm:max-w-sm mx-auto': isPreview()
+        }"
+            [value]="filteredMachines"
+            [numVisible]="isPreview() ? 1 : 3"
+            [numScroll]="1"
+            [circular]="true"
+            [autoplayInterval]="5000"
+            [responsiveOptions]="responsiveOptions()"
+        >
             <ng-template #item let-machine>
                 <p-card class="mx-2">
                     <ng-template #header>
@@ -67,7 +75,7 @@
                 </p-card>
             </ng-template>
         </p-carousel>
-    }
-        }
+
+        } }
     </div>
 </section>

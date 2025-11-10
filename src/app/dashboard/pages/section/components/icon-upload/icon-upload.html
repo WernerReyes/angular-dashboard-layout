@@ -3,7 +3,23 @@
 
     @let icon = form().controls[currentIconUrlName()].value; @if (form().controls['iconType'].value === IconType.IMAGE) {
 
-    <p-fileupload #uploader chooseLabel="Seleccionar icono" [showUploadButton]="false" (onSelect)="onFileSelect($event)" [showCancelButton]="false" [multiple]="false" accept="image/svg+xml" maxFileSize="10000000" mode="advanced">
+    <p-fileupload
+        #uploader
+        invalidFileSizeMessageSummary="Archivo demasiado grande"
+        invalidFileSizeMessageDetail="El tamaño máximo permitido es de 5MB."
+        invalidFileTypeMessageSummary="Tipo de archivo inválido"
+        invalidFileTypeMessageDetail="Solo se permiten iconos de formato (SVG)."
+        invalidFileLimitMessageSummary="Límite de iconos excedido"
+        invalidFileLimitMessageDetail="Has excedido el número máximo de iconos permitidos."
+        chooseLabel="Seleccionar icono"
+        [showUploadButton]="false"
+        (onSelect)="onFileSelect($event)"
+        [showCancelButton]="false"
+        [multiple]="false"
+        accept=".svg"
+        maxFileSize="5000000"
+        mode="advanced"
+    >
         <ng-template #empty>
             @if (icon) {
             <div class="flex items-center justify-center w-full">

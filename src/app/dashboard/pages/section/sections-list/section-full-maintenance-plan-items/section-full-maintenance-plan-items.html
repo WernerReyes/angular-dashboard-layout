@@ -1,9 +1,9 @@
 <section class="bg-gradient-to-br from-gray-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 py-20 transition-all duration-300">
     <div class="container mx-auto px-4">
         <!-- Header -->
-        <div class="bg-green-600 text-white px-6 py-4 flex items-center rounded-2xl">
+        <div class="bg-green-600 text-white px-6 py-4 sm:flex items-center rounded-2xl">
             <!-- <i class="pi pi-infinity text-2xl mr-3"></i> -->
-            <div class="rounded-full bg-primary-300 p-3 mr-4 flex items-center justify-center">
+            <div class="rounded-full bg-primary-300 max-sm:size-20 mx-auto p-3 sm:mr-4 flex items-center justify-center">
                 <icon-image
                     [item]="section()"
                     [imageErrorClass]="{
@@ -14,7 +14,7 @@
             </div>
             <div>
                 @if (section().title) {
-                <h2 class="text-xl font-bold">{{ section().title }}</h2>
+                <h2 class="max-sm:!text-xl font-bold">{{ section().title }}</h2>
                 } @else {
                 <empty-field-message className="mx-auto max-w-sm" textContent="Título no disponible"></empty-field-message>
                 } @if (section().description) {
@@ -34,9 +34,9 @@
                     [src]="section().image"
                     alt="Mantenimiento Plan Completo"
                     class="rounded-xl shadow-md object-cover"
-                    [class]="{
-                    'w-full': isPreview(),
-                    'w-96': !isPreview()
+                    [ngClass]="{
+                    'w-52 sm:w-full': isPreview(),
+                    'w-48 sm:w-96': !isPreview()
                  }"
                 />
                 } @else {
@@ -63,7 +63,7 @@
                         'border border-primary p-4 rounded-2xl': currentSectionItem()?.id === item.id
                      }"
                 >
-                    <h3 class="flex items-center gap-2 text-xl font-semibold mb-2">
+                    <h3 class="flex max-sm:flex-col max-sm:text-center items-center gap-2 max-sm:!text-xl font-semibold mb-2">
                         <icon-image [item]="item" imageClass="mr-2 !text-2xl" [imageErrorClass]="{ iconClass: '!size-10', containerClass: 'h-auto' }"></icon-image>
                         @if (item.title) { {{ item.title }} } @else {
                         <empty-field-message className="mx-auto max-w-sm" textContent="Título no disponible"></empty-field-message>
@@ -96,47 +96,7 @@
                     <!-- <p class="!mt-3">Realizamos inspecciones técnicas periódicas para prevenir fallas y prolongar la vida útil de los equipos.</p> -->
                 </div>
                 } }
-                <!-- Preventivo -->
-                <!-- <div>
-                    <h3 class="flex items-center text-xl font-semibold mb-2">
-                        <i class="pi pi-shield mr-2 text-blue-600"></i>
-                        Mantenimiento Preventivo
-                    </h3>
-                    <p class="mb-3">Realizamos inspecciones técnicas periódicas para prevenir fallas y prolongar la vida útil de los equipos.</p>
-                    <ul class="list-disc list-inside space-y-1">
-                        <li>Limpieza interna y externa de sensores, rodillos y compartimentos.</li>
-                        <li>Verificación y calibración de precisión.</li>
-                        <li>Informe técnico de estado preventivo.</li>
-                        <li>Optimiza la operatividad diaria y minimiza costos por fallas acumulativas.</li>
-                    </ul>
-                    <p class="!mt-3">Realizamos inspecciones técnicas periódicas para prevenir fallas y prolongar la vida útil de los equipos.</p>
-                </div> -->
-
-                <!-- Correctivo -->
-                <!-- <div>
-                    <h3 class="flex items-center text-xl font-semibold mb-2">
-                        <i class="pi pi-wrench mr-2"></i>
-                        Mantenimiento Correctivo
-                    </h3>
-                    <p class="mb-3">Cuando ocurre una falla, nuestro equipo actúa con rapidez y precisión. El mantenimiento correctivo incluye:</p>
-                    <ul class="list-disc list-inside space-y-1">
-                        <li>Diagnóstico técnico especializado en menos de 4 horas.</li>
-                        <li>Reposición de piezas defectuosas con repuestos originales.</li>
-                        <li>Mano de obra y calibración final de equipos.</li>
-                        <li>Funcionamiento garantizado en el menor tiempo posible.</li>
-                    </ul>
-                </div> -->
-
-                <!-- Beneficios -->
-                <!-- <div class="">
-                    <h4 class="font-semibold text-green-700 mb-2">Beneficios de nuestro servicio técnico:</h4>
-                    <ul class="text-green-700 space-y-1">
-                        <li>✅ Cobertura nacional con técnicos capacitados</li>
-                        <li>✅ Protocolos certificados de mantenimiento</li>
-                        <li>✅ Registro histórico de cada equipo por cliente</li>
-                        <li>✅ Soporte remoto complementario 24/7</li>
-                    </ul>
-                </div> -->
+               
 
                 @if (section().textButton) {
                 <p-button [label]="section().textButton!"></p-button>

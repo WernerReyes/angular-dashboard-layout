@@ -2,20 +2,23 @@ import { CategoryService } from '@/dashboard/services/category.service';
 import { MachineService } from '@/dashboard/services/machine.service';
 import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
 import { categoryTypesOptions } from '@/shared/interfaces/category';
-import { CategoryType } from '@/shared/mappers/category.mapper';
-import { Component, computed, inject, input } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { Component, inject, input, linkedSignal, signal } from '@angular/core';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { OverlayModeType } from 'primeng/api';
-import { MultiSelectModule } from 'primeng/multiselect';
+import { InputTextModule } from 'primeng/inputtext';
+import { MultiSelectFilterEvent, MultiSelectModule } from 'primeng/multiselect';
 import { SelectButtonModule } from 'primeng/selectbutton';
+
+// categoryTypesOptions
 
 @Component({
     selector: 'select-machine',
-    imports: [ErrorBoundary, ReactiveFormsModule, MultiSelectModule, SelectButtonModule],
+    imports: [ErrorBoundary, ReactiveFormsModule, MultiSelectModule, InputTextModule, SelectButtonModule],
     templateUrl: './select-machine.html'
 })
 export class SelectMachine {
+    private readonly breakpointObserver = inject(BreakpointObserver);
     private readonly categoryService = inject(CategoryService);
     private readonly machineService = inject(MachineService);
 
@@ -28,26 +31,38 @@ export class SelectMachine {
     multiple = input<boolean>(false);
     mode = input<OverlayModeType>('overlay');
 
-    currentOptionControl = new FormControl<CategoryType | null>(null);
-    categoriesIdsControl = new FormControl<number[]>([]);
+    isMobile = signal<boolean>(false);
 
-    private currentOptionValue = toSignal(this.currentOptionControl.valueChanges, { initialValue: this.currentOptionControl.value });
-    private categoriesIdsValue = toSignal(this.categoriesIdsControl.valueChanges, { initialValue: this.categoriesIdsControl.value });
-
-    filteredMachinesList = computed(() => {
-        const currentValue = this.currentOptionValue();
-        const currentCategoriesIds = this.categoriesIdsValue();
+    machines = linkedSignal(() => {
         const machines = this.machinesList.hasValue() ? this.machinesList.value() : [];
 
-        let filteredMachines = machines;
+        return machines.map((machine) => {
+            const category = {
+                ...machine.category,
+                type: categoryTypesOptions[machine.category!.type]
+            };
 
-        if (currentValue) {
-            filteredMachines = filteredMachines.filter((machine) => machine.category?.type === currentValue);
-        }
-        if (currentCategoriesIds?.length ?? 0 > 0) {
-            filteredMachines = filteredMachines.filter((machine) => currentCategoriesIds?.includes(machine.category!.id));
-        }
-
-        return filteredMachines;
+            return {
+                ...machine,
+                category
+            };
+        });
     });
+
+
+    constructor() {
+        this.breakpointObserver
+            .observe(['(max-width: 30rem)']) // también puedes usar '(max-width: 768px)'
+            .subscribe((result) => {
+                this.isMobile.set(result.matches);
+            });
+    }
+
+    onFilter(event: MultiSelectFilterEvent) {
+        console.log(event);
+        const filteredMachines = this.machines().filter((machine) => machine.name.toLowerCase().includes(event.filter!.toLowerCase()) || machine.category?.title?.toLowerCase().includes(event.filter!.toLowerCase()));
+        this.machines.set(filteredMachines);
+    }
+
+    
 }

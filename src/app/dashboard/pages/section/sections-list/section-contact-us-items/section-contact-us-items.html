@@ -12,7 +12,7 @@
             [alt]="section().title"
             class="h-auto m-auto"
             [ngClass]="{
-                'w-56 lg:w-full': !isPreview(),
+                'w-48 sm:w-56 lg:w-full': !isPreview(),
                 'w-52': isPreview()
             }"
         />
@@ -51,7 +51,7 @@
             (contextmenu)="contextMenu()?.onContextMenu($event, input)"
         >
             <label for="name">{{input.title}}</label>
-            <input pInputText type="text" placeholder="{{input.subtitle}}" fluid />
+            <input pInputText type="text" [placeholder]="[input.subtitle]" fluid />
         </div>
         } @case (InputType.EMAIL) {
         <div
@@ -62,7 +62,7 @@
             (contextmenu)="contextMenu()?.onContextMenu($event, input)"
         >
             <label for="email">{{input.title}}</label>
-            <input pInputText type="email" placeholder="{{input.subtitle}}" fluid />
+            <input pInputText type="email" [placeholder]="[input.subtitle]" fluid />
         </div>
         } @case (InputType.TEXTAREA) {
         <div
@@ -73,10 +73,14 @@
             (contextmenu)="contextMenu()?.onContextMenu($event, input)"
         >
             <label for="message">{{input.title}}</label>
-            <textarea pTextarea placeholder="{{input.subtitle}}" rows="3" [autoResize]="true" fluid></textarea>
+            <textarea pTextarea [placeholder]="[input.subtitle]" rows="3" [autoResize]="true" fluid></textarea>
         </div>
-        } } } } @if (section().textButton) {
-        <button pButton type="button" class="mt-5 w-fit" label="{{section().textButton}}"></button>
+        } } } } 
+        {{section().textButton}}
+        @if (section().textButton) {
+        <button pButton type="button" class="mt-5 w-fit" [label]="section().textButton ?? ''"></button>
+        } @else {
+        <empty-field-message className="mx-auto mt-4 max-w-lg" textContent="Sin texto de botón"></empty-field-message>
         }
     </form>
 </div>

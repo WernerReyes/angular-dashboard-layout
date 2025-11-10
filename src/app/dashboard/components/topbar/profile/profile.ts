@@ -29,6 +29,13 @@ export class Profile {
             label: 'Opciones',
             items: [
                 {
+                    label: 'Configuración',
+                    icon: 'pi pi-cog',
+                    command: () => {
+                        this.router.navigateByUrl('/dashboard/settings');
+                    }
+                },
+                {
                     label: 'Cerrar sesión',
                     icon: 'pi pi-sign-out',
                     command: () => {
@@ -39,13 +46,6 @@ export class Profile {
                         });
                     }
                 },
-                {
-                    label: 'Configuración',
-                    icon: 'pi pi-cog',
-                    command: () => {
-                        this.router.navigateByUrl('/dashboard/settings');
-                    }
-                }
             ]
         }
     ];

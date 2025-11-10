@@ -34,7 +34,7 @@ import { VideoUpload } from '../components/video-upload/video-upload';
 @Component({
     selector: 'section-form',
     imports: [
-        JsonPipe,
+        // JsonPipe,
         CommonInputs,
         ShowLinkSwitch,
         FileUpload,

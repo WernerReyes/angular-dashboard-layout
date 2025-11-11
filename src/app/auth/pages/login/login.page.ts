@@ -8,6 +8,8 @@ import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AuthService } from '@/auth/services/auth.service';
 import type { LoginRequest } from '@/auth/interfaces/login';
+import { AppConfigurator } from '@/shared/components/configurator/configurator';
+import { CompanyLogo } from '@/shared/components/company-logo/company-logo';
 
 @Component({
     selector: 'app-login-page',
@@ -19,7 +21,9 @@ import type { LoginRequest } from '@/auth/interfaces/login';
         FormsModule,
         RouterModule,
         ReactiveFormsModule,
-        RippleModule
+        RippleModule,
+        AppConfigurator,
+        CompanyLogo
         // AppFloatingConfigurator
     ],
     templateUrl: './login.page.html',

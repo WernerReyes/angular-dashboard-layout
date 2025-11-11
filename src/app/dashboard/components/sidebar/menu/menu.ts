@@ -18,7 +18,7 @@ export class Menu {
                 items: [
                     { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/dashboard'] },
                     {
-                        label: 'Pages',
+                        label: 'Páginas',
                         icon: 'pi pi-fw pi-file',
                         routerLink: ['/dashboard/pages']
                     },

@@ -152,6 +152,11 @@ export class MachineService {
 
         return this.http.delete<ApiResponse<null>>(`${this.prefix}/${machineId}`).pipe(
             tap(() => {
+                this.machinesListRs.update((machines) => {
+                    if (!machines) return [];
+                    return machines.filter((machine) => machine.id !== machineId);
+                });
+
                 this.categoryService.categoryListResource.update((categories) => {
                     if (!categories) return [];
                     return categories.map((category) => {

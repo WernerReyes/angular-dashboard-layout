@@ -32,7 +32,7 @@
 
         <div class="flex flex-col gap-2">
             <label for="machine-category">Imágenes</label>
-<!-- invalidFileSizeMessageSummary: string;
+            <!-- invalidFileSizeMessageSummary: string;
     /**
      * Detail message of the invalid file size.
      * @group Props
@@ -83,11 +83,8 @@
                     <ng-template #content let-files let-removeFileCallback="removeFileCallback" let-messages="messages" let-index="index">
                         @if (messages && messages.length > 0) { @for (message of messages; let i = $index; track i) {
                         <p-message severity="error" size="small" [closable]="true"> {{ message.text }}</p-message>
-                        
-                        } } 
-                        
-                        
-                        @if (isEditMode) {
+
+                        } } @if (isEditMode) {
 
                         <p-selectbutton [formControl]="optionSelectButtonControl" optionDisabled="constant" [options]="updateImagesOptions()" optionLabel="label" class="mx-auto" optionValue="value" aria-labelledby="basic">
                             <ng-template #item let-option>
@@ -115,7 +112,11 @@
                                 }"
                                 (click)="optionSelectButton() === 'update' ? onSelectedImage($event, value!.image.url) : null"
                             >
-                                <img [src]="value!.image.url" (contextmenu)="!value!.image.isMain ? onContextMenu($event, value!.image) : null;" alt="Machine Image" class="size-20 object-cover rounded" />
+                                <!-- sizes="(max-width: 600px) 480px, 1080px" -->
+                                <img [ngSrc]="value!.image.url" width="80" height="80"
+                                
+                                (contextmenu)="!value!.image.isMain ? onContextMenu($event, value!.image) : null;" 
+                                alt="Machine Image" priority="false" class="w-20 h-20 object-cover rounded" />
 
                                 @if (value!.image.isMain) {
                                 <p-badge value="Principal" severity="success" class="absolute bottom-1 left-1/2 transform -translate-x-1/2 text-xs"></p-badge>
@@ -169,10 +170,9 @@
                                 <div class="flex items-center gap-2">
                                     <!-- <i class="pi pi-image !text-2xl text-blue-600"></i> -->
                                     <p-badge [value]="i + 1" severity="info" class="text-xs"></p-badge>
-                                    <img [src]="file.objectURL" alt="Machine Image" class="size-8 object-cover rounded" />
+                                    <img [src]="file.objectURL" alt="Machine Image" class="size-8 object-cover rounded" width="32" height="32" priority="false" />
                                     <span>{{ file.name }}</span>
-                        
-                                   
+
                                     <p-button icon="pi pi-trash" text class="p-button-text p-button-plain p-button-sm" (click)="removeFile($event, i, file)"></p-button>
                                 </div>
                             </div>

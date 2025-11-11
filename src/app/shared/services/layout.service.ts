@@ -28,7 +28,7 @@ interface MenuChangeEvent {
 export class LayoutService {
     _config: layoutConfig = {
         preset: 'Aura',
-        primary: 'emerald',
+        primary: 'blue',
         surface: null,
         darkTheme: localStorage.getItem('darkMode') ? JSON.parse(localStorage.getItem('darkMode')!) : false,
         menuMode: 'static'

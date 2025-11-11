@@ -2,7 +2,7 @@ import { CreateMachine } from '@/dashboard/interfaces/machine';
 import { ShowLinkSwitch } from '@/dashboard/pages/section/components/show-link-switch/show-link-switch';
 import { MachineService } from '@/dashboard/services/machine.service';
 import { FormUtils } from '@/utils/form-utils';
-import { JsonPipe, NgClass } from '@angular/common';
+import { JsonPipe, NgClass, NgOptimizedImage } from '@angular/common';
 import { Component, computed, inject, linkedSignal, model, type Signal, signal, ViewChild } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -27,6 +27,7 @@ import { MachineImages } from '@/shared/mappers/machine.mapper';
     selector: 'machine-dialog-form',
     imports: [
         // JsonPipe,
+        NgOptimizedImage,
         TechnicalSpecificationsDialogForm,
         TechnicalSpecificationsTable,
         ShowLinkSwitch,
@@ -89,6 +90,8 @@ export class MachineDialogForm {
             type: 'update' | 'delete' | 'new';
         }[]
     >([]);
+
+   
 
     currentImages = linkedSignal(() => {
         const images = this.images() || [];

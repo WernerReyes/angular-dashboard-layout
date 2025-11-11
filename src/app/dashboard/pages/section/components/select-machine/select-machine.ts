@@ -38,10 +38,7 @@ export class SelectMachine {
     machines = linkedSignal(() => {
         const machines = this.machinesList.hasValue() ? this.machinesList.value() : [];
 
-        console.log({
-            machines
-        })
-
+       
         return machines.map((machine) => {
             const category = {
                 ...machine.category,
@@ -64,11 +61,7 @@ export class SelectMachine {
             });
     }
 
-    onFilter(event: MultiSelectFilterEvent) {
-        console.log(event);
-        const filteredMachines = this.machines().filter((machine) => machine.name.toLowerCase().includes(event.filter!.toLowerCase()) || machine.category?.title?.toLowerCase().includes(event.filter!.toLowerCase()));
-        this.machines.set(filteredMachines);
-    }
+   
 
     
 }

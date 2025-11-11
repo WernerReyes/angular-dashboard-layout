@@ -1,7 +1,7 @@
 <!-- section-solutions-overview-items.html -->
 <section class="bg-gradient-to-br from-gray-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 py-20 transition-all duration-300">
-    <div class="container mx-auto  px-4 flex justify-center items-center">
-        <div id="whatsapp-widget" class="  w-fit   bottom-6 right-6 z-50">
+    <div class="container mx-auto px-4 flex justify-center items-center">
+        <div id="whatsapp-widget" class="relative w-fit m-auto z-50">
             <p-button
                 [rounded]="true"
                 severity="success"
@@ -13,13 +13,20 @@
             >
                 <ng-template #icon>
                     <!-- <i class="pi pi-whatsapp text-2xl"></i> -->
-                     <icon-image imageClass="size-12" [item]="section()" />
+                    <icon-image
+                        imageClass="size-12"
+                        [imageErrorClass]="{
+                        iconClass: '!size-8',
+                        containerClass: '!size-10'
+                      }"
+                        [item]="section()"
+                    />
                 </ng-template>
             </p-button>
 
             <!-- Cuadro de chat oculto -->
             <p-card
-                class="w-fit max-sm:w-48  mx-auto"
+                class="w-fit max-sm:w-48 mx-auto"
                 [class]="{
                 'block': isChatOpen(),
                 '!hidden': !isChatOpen()
@@ -27,15 +34,15 @@
             >
                 <div class="flex justify-center p-4">
                     <!-- <img src="https://dev.cechriza.com/img/icono.png" alt="Mascota" class="w-48 mx-auto" /> -->
-                     @if (section().image) {
-                        <img [src]="section().image" alt="Mascota" class="w-48 mx-auto" />
-                     } @else {
-                        <empty-field-message className="">
-                            <ng-template #content>
-                                <p class="text-center text-gray-500">No hay imagen disponible</p>
-                            </ng-template>
-                        </empty-field-message>
-                     }
+                    @if (section().image) {
+                    <img [src]="section().image" alt="Mascota" class="w-48 mx-auto" />
+                    } @else {
+                    <empty-field-message className="">
+                        <ng-template #content>
+                            <p class="text-center text-gray-500">No hay imagen disponible</p>
+                        </ng-template>
+                    </empty-field-message>
+                    }
                 </div>
 
                 <textarea pTextarea placeholder="Escribe tu mensaje..." fluid></textarea>

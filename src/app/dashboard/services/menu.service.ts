@@ -22,7 +22,6 @@ export class MenuService {
             url: this.prefix,
             method: 'GET',
             cache: 'reload',
-            withCredentials: true
         }),
         {
             parse: (value) => {
@@ -34,9 +33,7 @@ export class MenuService {
 
     createMenu(create: CreateMenu) {
         return this.http
-            .post<ApiResponse<MenuEntity>>(`${this.prefix}`, create, {
-                withCredentials: true
-            })
+            .post<ApiResponse<MenuEntity>>(`${this.prefix}`, create)
             .pipe(
                 map(({ data }) => mapMenuEntityToMenu(data)),
                 tap((menu) => {
@@ -51,9 +48,7 @@ export class MenuService {
 
     updateMenu(id: number, update: Partial<CreateMenu>) {
         return this.http
-            .put<ApiResponse<MenuEntity>>(`${this.prefix}/${id}`, update, {
-                withCredentials: true
-            })
+            .put<ApiResponse<MenuEntity>>(`${this.prefix}/${id}`, update)
             .pipe(
                 map(({ data }) => mapMenuEntityToMenu(data)),
                 tap((menu) => {

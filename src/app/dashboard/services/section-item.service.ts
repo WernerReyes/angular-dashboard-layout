@@ -25,11 +25,7 @@ export class SectionItemService {
         this.loading.set(true);
 
         const formData = TransformUtils.toFormData(sectionItem);
-        // Object.entries(sectionItem).forEach(([key, value]) => {
-        //     if (value !== null && value !== undefined) {
-        //         formData.append(key, value as string | Blob);
-        //     }
-        // });
+        
 
         return this.http.post<ApiResponse<SectionItemEntity>>(this.prefix, formData).pipe(
             map(({ data }) => mapSectionItemEntityToSectionItem(data)),
@@ -39,15 +35,7 @@ export class SectionItemService {
                     return SectionUtils.insertSectionItemInSectionList(sections, sectionItem);
                 });
 
-                // this.loading.set(false);
-                // this.pageService.getPageByIdRs.update((page) => {
-                //     if (!page) return null;
-                //     const updatedSections = SectionUtils.insertSectionItemInSectionList(page.sections || [], sectionItem);
-                //     return {
-                //         ...page,
-                //         sections: updatedSections
-                //     };
-                // });
+               
             }),
             finalize(() => this.loading.set(false))
         );
@@ -57,30 +45,17 @@ export class SectionItemService {
         this.loading.set(true);
 
         const formData = TransformUtils.toFormData(section);
-        // Object.entries(section).forEach(([key, value]) => {
-        //     if (value !== null && value !== undefined) {
-        //         formData.append(key, value as string | Blob);
-        //     }
-        // });
+       
         return this.http.post<ApiResponse<SectionItemEntity>>(`${this.prefix}/${id}`, formData).pipe(
             map(({ data }) => mapSectionItemEntityToSectionItem(data)),
             tap((sectionItem) => {
-                // this.messageService.setSuccess(message);
+               
                 this.sectionService.sectionListResource.update((sections) => {
                     if (!sections) return [];
                     return SectionUtils.updateSectionItemInSectionList(sections, sectionItem);
                 });
 
-                // this.loading.set(false);
-
-                // this.pageService.getPageByIdRs.update((page) => {
-                //     if (!page) return null;
-                //     const updatedSections = SectionUtils.updateSectionItemInSectionList(page.sections || [], sectionItem);
-                //     return {
-                //         ...page,
-                //         sections: updatedSections
-                //     };
-                // });
+               
             }),
             finalize(() => this.loading.set(false))
             
@@ -96,16 +71,7 @@ export class SectionItemService {
                     return SectionUtils.removeSectionItemFromSectionList(sections, id, sectionId);
                 });
 
-                // this.loading.set(false);
-
-                // this.pageService.getPageByIdRs.update((page) => {
-                //     if (!page) return null;
-                //     const updatedSections = SectionUtils.removeSectionItemFromSectionList(page.sections || [], id, sectionId);
-                //     return {
-                //         ...page,
-                //         sections: updatedSections
-                //     };
-                // });
+               
             }),
             finalize(() => this.loading.set(false))
         );

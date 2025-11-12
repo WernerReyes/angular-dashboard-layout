@@ -4,8 +4,8 @@
         <div class="sticky top-16 bg-[var(--surface-card)] pb-2 z-20">
             <div class="flex justify-between items-center flex-wrap gap-4 mb-4">
                 <div class="flex flex-col gap-0">
-                    <h5 class="!text-4xl !font-extrabold !m-0">Plantillas reutilizables</h5>
-                    <span class="text-muted-color text-xl">Gestiona las secciones de tipo layout</span>
+                    <h5 class="!text-4xl !font-extrabold !m-0">Secciones reutilizables</h5>
+                    <span class="text-muted-color text-xl">Gestiona las secciones reutilizables y sus items</span>
                 </div>
 
                 <div class="flex items-center- flex-wrap gap-2">
@@ -28,14 +28,15 @@
                     emptyFilterMessage="No se encontraron tipos"
                     emptyMessage="No hay tipos disponibles"
                     placeholder="Filtrar por tipo"
+                    filterPlaceHolder="Filtrar tipos"
                     optionLabel="value.label"
                     optionValue="key"
                     display="chip"
                     fluid
                     #selectedTypes
                 >
-                    <ng-template let-country #item>
-                        <p-tag [severity]="country.value.severity" class="text-sm" [value]="country.value.label"></p-tag>
+                    <ng-template let-type #item>
+                        <p-tag [severity]="type.value.severity" class="text-sm" [value]="type.value.label"></p-tag>
                     </ng-template>
                 </p-multiSelect>
             </div>

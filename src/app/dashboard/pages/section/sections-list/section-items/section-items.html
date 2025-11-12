@@ -54,12 +54,6 @@
     <section-preventive-corrective-maintenance-items [section]="section()"></section-preventive-corrective-maintenance-items>
     } @case (SectionType.SUPPORT_WIDGET) {
     <section-support-widget-items [section]="section()" [contextMenu]="contextMenu"></section-support-widget-items>
-    } @default {
-    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-12">
-        @for (item of section().items; track item.id) {
-        <section-item [sectionItem]="item" (onSelectSectionItem)="open(item)"></section-item>
-        }
-    </div>
     } }
 
     <context-menu-crud [editCommand]="edit" [deleteCommand]="delete" [(selected)]="selectedItem"> </context-menu-crud>

@@ -17,7 +17,6 @@ import { SectionContactUsItems } from '../section-contact-us-items/section-conta
 import { SectionFooterItems } from '../section-footer-items/section-footer-items';
 import { DeleteSectionItemFunction } from '../sections-list';
 import type { SectionItem as ISectionItem } from '@/shared/interfaces/section-item';
-import { SectionItem } from '../section-item/section-item';
 import { SectionCashProcessingEquipmentItems } from '../section-cash-processing-equipment-items/section-cash-processing-equipment-items';
 import { SectionAdvantagesItems } from '../section-advantages-items/section-advantages-items';
 import { SectionSupportMaintenanceItems } from '../section-support-maintenance-items/section-support-maintenance-items';
@@ -55,7 +54,6 @@ import { SectionSupportWidgetItems } from '../section-support-widget-items/secti
         SectionFullMaintenancePlanItems,
         SectionPreventiveCorrectiveMaintenanceItems,
         SectionSupportWidgetItems,
-        SectionItem,
         PanelModule,
         ContextMenuCrud
     ],

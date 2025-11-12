@@ -1,5 +1,5 @@
 <!-- {{currentPageRs}} -->
-@if (selectedPage()) { 
+@if (selectedPage()) {
 <app-error-boundary [resource]="sectionsListRs" [errorMessage]="'No se pudieron cargar las secciones.'" [emptyMessage]="'No hay secciones disponibles.'">
     <ng-template #loading>
         <app-data-view-skeleton></app-data-view-skeleton>
@@ -50,11 +50,12 @@
 
                         <div class="flex flex-col items-center gap-5 flex-wrap ml-auto">
                             @if (isSectionLayout(section)) {
-                            <p-tag severity="info" class="text-sm ml-auto" value="Plantilla asociada"></p-tag>
+                            <p-tag severity="info" class="text-sm ml-auto" value="Sección reutilizable"></p-tag>
                             }
                             <div class="flex items-center gap-2 flex-wrap ml-auto">
                                 <p-tag [severity]="status.severity" class="text-sm" [value]="status.label"></p-tag>
-                                @if (![SectionType.MAIN_NAVIGATION_MENU, SectionType.CTA_BANNER, SectionType.MACHINE, SectionType.MACHINE_DETAILS, SectionType.MACHINES_CATALOG, SectionType.FOOTER, SectionType.PREVENTIVE_CORRECTIVE_MAINTENANCE].includes(section.type)) {
+                                @if (![SectionType.MAIN_NAVIGATION_MENU, SectionType.CTA_BANNER, SectionType.MACHINE, SectionType.MACHINE_DETAILS, SectionType.MACHINES_CATALOG, SectionType.FOOTER,
+                                SectionType.PREVENTIVE_CORRECTIVE_MAINTENANCE].includes(section.type)) {
                                 <p-button icon="pi pi-plus" label="Agregar item" (click)="openDialogItem(section)"></p-button>
                                 }
                                 <!-- <p-button icon="pi pi-pencil" text (click)="openDialogAndEdit(section)"></p-button>
@@ -81,10 +82,10 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2 flex-wrap ml-auto">
-                         @if (![SectionType.MAIN_NAVIGATION_MENU, SectionType.CTA_BANNER, SectionType.MACHINE, SectionType.MACHINE_DETAILS, SectionType.MACHINES_CATALOG, SectionType.FOOTER, SectionType.PREVENTIVE_CORRECTIVE_MAINTENANCE].includes(section.type)) {
-                                <p-button icon="pi pi-plus" label="Agregar item" (click)="openDialogItem(section)"></p-button>
-                                }
-                                 @if (associatedPageTemplate) {
+                        @if (![SectionType.MAIN_NAVIGATION_MENU, SectionType.CTA_BANNER, SectionType.MACHINE, SectionType.MACHINE_DETAILS, SectionType.MACHINES_CATALOG, SectionType.FOOTER,
+                        SectionType.PREVENTIVE_CORRECTIVE_MAINTENANCE].includes(section.type)) {
+                        <p-button icon="pi pi-plus" label="Agregar item" (click)="openDialogItem(section)"></p-button>
+                        } @if (associatedPageTemplate) {
 
                         <ng-container *ngTemplateOutlet="associatedPageTemplate; context: { $implicit: section }"></ng-container>
                         }

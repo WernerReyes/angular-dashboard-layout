@@ -7,7 +7,7 @@ import { Machine } from '@/shared/interfaces/machine';
 import { CategoryType } from '@/shared/mappers/category.mapper';
 import { MachineImages, TecnicalSpecifications } from '@/shared/mappers/machine.mapper';
 import { DatePipe } from '@angular/common';
-import { Component, inject, output, signal, ViewChild } from '@angular/core';
+import { Component, computed, inject, output, signal, ViewChild } from '@angular/core';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -18,6 +18,7 @@ import { ImageModule } from 'primeng/image';
 import { InputTextModule } from 'primeng/inputtext';
 import { Popover } from 'primeng/popover';
 import { RatingModule } from 'primeng/rating';
+import { SelectButtonModule } from 'primeng/selectbutton';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
@@ -38,7 +39,7 @@ import { MachineDialogForm } from './machine-dialog-form/machine-dialog-form';
         InputTextModule,
         DatePipe,
         TagModule,
-        
+        SelectButtonModule,
         ToastModule,
         RatingModule,
         ButtonModule,
@@ -75,7 +76,23 @@ export class Table {
     specifications = signal<TecnicalSpecifications[]>([]);
     selectedMachine = signal<Machine | null>(null);
 
+    categoryTypeFilter = signal<CategoryType | null>(null);
+    categorySearchQuery = signal<string>('');
     searchMachine = signal<Record<string, string> | null>(null);
+
+    categoriesFiltered = computed(() => {
+        let categories = this.categoriesList.hasValue() ? this.categoriesList.value() : [];
+
+        const typeFilter = this.categoryTypeFilter();
+        if (typeFilter !== null) {
+            categories = categories.filter((category) => category.type === typeFilter);
+        }
+        const searchQuery = this.categorySearchQuery().toLowerCase();
+        if (searchQuery) {
+            categories = categories.filter((category) => category.title.toLowerCase().includes(searchQuery));
+        }
+        return categories;
+    });
 
     items: MenuItem[] = [
         {

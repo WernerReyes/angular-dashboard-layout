@@ -81,6 +81,7 @@ export class SectionForm {
     FormUtils = FormUtils;
     SectionType = SectionType;
     LinkType = LinkType;
+    SectionMode = SectionMode;
 
     closeDialog() {
         this.onCloseDialog.emit();

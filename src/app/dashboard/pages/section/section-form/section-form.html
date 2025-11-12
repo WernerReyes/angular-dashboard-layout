@@ -9,10 +9,6 @@
     [modal]="true"
     [maximizable]="true"
 >
-    <!-- <p-button
-    icon="pi pi-question-circle"
-    (click)="startTour()"
-></p-button> -->
     <div class="grid lg:grid-cols-3 gap-4">
         <form class="flex flex-col gap-4" [formGroup]="form" id="menu-form" (ngSubmit)="saveChanges()">
             @let type = form.controls['type'].value; @let imageType = form.controls['imageType'].value;
@@ -318,8 +314,7 @@
             </div>
 
             @if (mode() === SectionMode.CUSTOM) {
-
-                <p-togglebutton formControlName="active" onLabel="Activo" offLabel="Inactivo" onIcon="pi pi-check" offIcon="pi pi-times" onIcon="pi pi-lock-open" offIcon="pi pi-lock" class="w-36" ariaLabel="Do you confirm" />
+            <p-togglebutton formControlName="active" onLabel="Activo" offLabel="Inactivo" onIcon="pi pi-check" offIcon="pi pi-times" onIcon="pi pi-lock-open" offIcon="pi pi-lock" class="w-36" ariaLabel="Do you confirm" />
             }
         </form>
 

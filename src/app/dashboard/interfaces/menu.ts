@@ -18,11 +18,6 @@ export interface CreateMenu {
 
 
 
-export interface UpdateMenuOrder {
-    readonly id: number;
-    readonly order: number;
-    readonly parentId: number | null;
-}
 
 export interface DropdownMenu {
     readonly title: string;
@@ -32,10 +27,3 @@ export interface DropdownMenu {
     readonly url: string | null;
 }
 
-//  parentId: [null, [Validators.required]],
-//             title: ['', [Validators.required, Validators.minLength(3)]],
-//             order: [1, [Validators.required, Validators.min(1)]],
-//             active: [true, [Validators.required]],
-//             menuType: ['', [Validators.required]],
-//             pageId: [null],
-//             url: [null]

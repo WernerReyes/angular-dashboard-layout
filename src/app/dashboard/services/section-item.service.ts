@@ -8,15 +8,13 @@ import { mapSectionItemEntityToSectionItem, SectionItemEntity } from '../../shar
 import { CreateSectionItem, UpdateSectionItem } from '../interfaces/section-item';
 import { SectionUtils } from '../utils/section.utils';
 import { SectionService } from './section.service';
-import { PageService } from './page.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class SectionItemService {
     private readonly sectionService = inject(SectionService);
-    private readonly pageService = inject(PageService);
-
+    
     private readonly http = inject(HttpClient);
     private readonly prefix = `${environment.apiUrl}/section-item`;
 

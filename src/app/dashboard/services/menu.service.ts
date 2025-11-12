@@ -5,7 +5,7 @@ import { HttpClient, httpResource } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import type { CreateMenu, UpdateMenuOrder } from '../interfaces/menu';
+import type { CreateMenu } from '../interfaces/menu';
 import { MenuUtils } from '../utils/menu.utils';
 
 @Injectable({
@@ -65,9 +65,7 @@ export class MenuService {
             );
     }
 
-    updateOrder(menus: UpdateMenuOrder[]) {
-        return this.http.put<ApiResponse<null>>(`${this.prefix}/order`, { menuOrderArray: menus });
-    }
+   
 
     deleteMenu(id: number, parentId: number | null) {
         return this.http.delete<ApiResponse<null>>(`${this.prefix}/${id}`).pipe(

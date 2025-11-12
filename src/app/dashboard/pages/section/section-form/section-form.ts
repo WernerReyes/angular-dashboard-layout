@@ -152,7 +152,7 @@ export class SectionForm {
 
      private setTextButton(section: Section | null, value: any) {
         const type = section ? section.type : value.type;
-        if (type === SectionType.CONTACT_US) {
+        if (type === SectionType.CONTACT_US || type === SectionType.SUPPORT_WIDGET) {
             return value.textButton || section?.textButton || null;
         }
 

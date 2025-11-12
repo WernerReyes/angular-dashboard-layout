@@ -47,6 +47,7 @@ export class AuthService {
     }
 
     login(loginRequest: LoginRequest) {
+        this.loading.set(true);
         return this.http
             .post<ApiResponse<LoginResponse>>(`${this.prefix}/login`, loginRequest, {
                 withCredentials: true
@@ -60,11 +61,13 @@ export class AuthService {
                 tap((res) => this.handleAuthSuccess(res.user, res.token)),
                 catchError((error) => {
                     return this.handleAuthError(error);
-                })
+                }),
+                finalize(() => this.loading.set(false))
             );
     }
 
     relogin() {
+        this.loading.set(true);
         return this.http
             .post<ApiResponse<LoginResponse>>(`${this.prefix}/relogin`, null, {
                 withCredentials: true
@@ -78,8 +81,10 @@ export class AuthService {
                 tap((res) => {
                     this.handleAuthSuccess(res.user, res.token);
                 }),
-                catchError((error) => this.handleAuthError(error))
+                catchError((error) => this.handleAuthError(error)),
+                finalize(() => this.loading.set(false))
             );
+          
     }
 
     me() {

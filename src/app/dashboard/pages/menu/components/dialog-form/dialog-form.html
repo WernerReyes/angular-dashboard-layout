@@ -15,7 +15,7 @@
             <app-error-boundary skeletonHeight="2.5rem" [resource]="linksList" errorMessage="Ocurrió un error cargando los enlaces.">
                 <ng-template #content let-links>
                     @let linkType = form.controls['linkType'].value; @let filteredLinks = links | filterLinksByType: linkType;
-                    <div class="flex flex-wrap md:flex-nowrap gap-2 items-center">
+                    <div class="flex flex-wrap gap-2 items-center">
                         <div class="flex-grow">
                             <p-select
                                 [overlayOptions]="{

@@ -30,7 +30,7 @@ import { CompanyLogo } from '@/shared/components/company-logo/company-logo';
    
 })
 export default class LoginPage {
-    private readonly authService = inject(AuthService);
+    readonly authService = inject(AuthService);
     private readonly router = inject(Router);
 
     loginForm = new FormGroup({

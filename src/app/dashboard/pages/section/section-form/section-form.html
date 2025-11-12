@@ -139,6 +139,11 @@
                         label: 'Descripción',
                         placeholder: 'Descripción de la sección',
                         isTextarea: true,
+                    }, {
+                        type: 'subtitle',
+                        inputType: 'email',
+                        label: 'Correo electrónico',
+                        placeholder: 'Correo electrónico de contacto',
                     }
                 ]"
                 ></common-inputs>
@@ -281,9 +286,22 @@
                     [includeFields]="[
                     {
                         type: 'subtitle',
+                        inputType: 'number',
                         label: 'Número de contacto',
                         placeholder: 'Número de contacto',
+                        
                     },
+                    {
+                        type: 'content',
+                        label: 'Placeholder',
+                        placeholder: 'Placeholder del input',
+                        
+                    }, {
+                        type: 'textButton',
+                        label: 'Texto del botón',
+                        placeholder: 'Texto del botón',
+                        
+                    }
                    
                 ]"
                 ></common-inputs>

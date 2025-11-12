@@ -9,6 +9,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import type { TreeNode } from 'primeng/api';
 import { sectionTypesOptions } from '../../../../shared/interfaces/section';
 import { AdditionalInfo, Icon, IconType } from '@/shared/mappers/section-item.mapper';
+import { PatternsConst } from '@/shared/constants/patterns';
 
 @Injectable({
     providedIn: 'root'
@@ -58,6 +59,7 @@ export class SectionFormService {
         this.form.get('type')?.valueChanges.subscribe((type) => {
             const menusIdsControl = this.form.get('menusIds');
             const imageFile = this.form.get('imageFile');
+            const subtitleControl = this.form.get('subtitle');
             if (type === SectionType.MAIN_NAVIGATION_MENU || type === SectionType.FOOTER) {
                 menusIdsControl?.setValidators([Validators.required]);
 
@@ -65,7 +67,15 @@ export class SectionFormService {
                 menusIdsControl?.clearValidators();
                 imageFile?.clearValidators();
             }
+
+            if (type === SectionType.CONTACT_US) {
+                subtitleControl?.setValidators([Validators.required, FormUtils.noWhitespace(), Validators.pattern(PatternsConst.EMAIL)]);
+            } else {
+                subtitleControl?.clearValidators();
+            }
+
             imageFile?.updateValueAndValidity();
+            subtitleControl?.updateValueAndValidity();
             menusIdsControl?.updateValueAndValidity();
 
             this.setDefaultDataAccordingToType(type);

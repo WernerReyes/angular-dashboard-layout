@@ -45,9 +45,14 @@
                     }
                 </div>
 
-                <textarea pTextarea placeholder="Escribe tu mensaje..." fluid></textarea>
+                <textarea pTextarea [placeholder]="section().description || 'Sin placeholder'" fluid></textarea>
 
-                <p-button label="Enviar" styleClass="mt-3" fluid> </p-button>
+                @if (section().textButton) {
+
+                    <p-button [label]="section().textButton || ''" styleClass="mt-3" fluid> </p-button>
+                } @else {
+                    <empty-field-message textContent="No hay texto para el botón disponible" className="mt-3"></empty-field-message>
+                }
             </p-card>
         </div>
     </div>

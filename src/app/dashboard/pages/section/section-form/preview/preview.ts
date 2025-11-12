@@ -151,7 +151,8 @@ export class Preview {
     }
 
     private setTextButton(section: Section | null, value: any) {
-        if (section?.type === SectionType.CONTACT_US || value.type === SectionType.CONTACT_US) {
+        const type = section ? section.type : value.type;
+        if (type === SectionType.CONTACT_US || type === SectionType.SUPPORT_WIDGET) {
             return value.textButton || section?.textButton || null;
         }
 

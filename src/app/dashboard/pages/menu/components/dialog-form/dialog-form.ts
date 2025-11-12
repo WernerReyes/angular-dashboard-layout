@@ -65,6 +65,7 @@ export class DialogForm {
     });
 
     private setDefaultMenuTitle = effect(() => {
+        if (this.selectedMenu()) return;
         const linkId = this.linkId();
         const currentTitle = this.form.get('title')!;
         // if (!currentTitle || currentTitle.value.trim() === '') {

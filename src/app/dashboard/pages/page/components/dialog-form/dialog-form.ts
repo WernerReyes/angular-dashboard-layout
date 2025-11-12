@@ -9,7 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { TextareaModule } from 'primeng/textarea';
 import { PageFormService } from '../../services/page-form.service';
-import { CreatePage } from '@/dashboard/interfaces/page';
+import type { CreatePage } from '@/dashboard/interfaces/page';
 
 @Component({
     selector: 'dialog-form',

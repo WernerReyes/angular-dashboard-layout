@@ -49,6 +49,7 @@ export class DialogForm {
     private type = toSignal(this.form.get('type')!.valueChanges, { initialValue: this.form.get('type')!.value });
 
     private setDefaultLinkTitle = effect(() => {
+        if (this.selectedLink()) return;
         const type = this.type();
         const currentTitle = this.form.get('title')!;
         // if (!currentTitle || currentTitle.value.trim() === '') {

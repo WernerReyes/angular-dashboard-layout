@@ -37,10 +37,11 @@
                     optionValue="id"
                     placeholder="Selecciona un enlace"
                     emptyMessage="No se encontraron enlaces"
+                    emptyFilterMessage="No se encontraron enlaces"
+                    [filter]="true"
+                    filterPlaceholder="Buscar por nombre"
                 ></p-select>
-                @if (
-    isExtraLink() ? form().controls['extraLinkId'].errors : form().controls['linkId'].errors
-                ) {
+                @if ( isExtraLink() ? form().controls['extraLinkId'].errors : form().controls['linkId'].errors ) {
                 <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form(), isExtraLink() ? 'extraLinkId' : 'linkId') }} </p-message>
                 }
             </div>

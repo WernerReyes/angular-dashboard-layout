@@ -6,7 +6,7 @@ import { ImageType } from '@/shared/interfaces/section-item';
 import { LinkType } from '@/shared/mappers/link.mapper';
 import { SectionMode, SectionType } from '@/shared/mappers/section.mapper';
 import { FormUtils } from '@/utils/form-utils';
-import { JsonPipe, KeyValuePipe } from '@angular/common';
+import { KeyValuePipe } from '@angular/common';
 import { Component, computed, inject, input, model, output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -151,7 +151,8 @@ export class SectionForm {
     }
 
      private setTextButton(section: Section | null, value: any) {
-        if (section?.type === SectionType.CONTACT_US || value.type === SectionType.CONTACT_US) {
+        const type = section ? section.type : value.type;
+        if (type === SectionType.CONTACT_US) {
             return value.textButton || section?.textButton || null;
         }
 

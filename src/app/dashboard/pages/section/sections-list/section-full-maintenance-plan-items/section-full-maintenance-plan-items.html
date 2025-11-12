@@ -3,7 +3,7 @@
         <!-- Header -->
         <div class="bg-green-600 text-white px-6 py-4 sm:flex items-center rounded-2xl">
             <!-- <i class="pi pi-infinity text-2xl mr-3"></i> -->
-            <div class="rounded-full bg-primary-300 max-sm:size-20 mx-auto p-3 sm:mr-4 flex items-center justify-center">
+            <div class="rounded-full max-sm:size-20 mx-auto p-3 sm:mr-4 flex items-center justify-center">
                 <icon-image
                     [item]="section()"
                     [imageErrorClass]="{
@@ -12,7 +12,7 @@
                  }"
                 ></icon-image>
             </div>
-            <div>
+            <div class="w-full flex flex-col gap-2">
                 @if (section().title) {
                 <h2 class="max-sm:!text-xl font-bold">{{ section().title }}</h2>
                 } @else {
@@ -28,7 +28,7 @@
         <!-- Body -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 items-center">
             <!-- Imagen -->
-            <div class="flex justify-center">
+            <div class="flex  justify-center">
                 @if (section().image) {
                 <img
                     [src]="section().image"

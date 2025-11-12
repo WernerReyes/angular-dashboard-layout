@@ -1,9 +1,9 @@
+import { Machine } from '@/shared/interfaces/machine';
 import type { Section } from '@/shared/interfaces/section';
+import { NgClass } from '@angular/common';
 import { Component, input } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { NgClass } from '@angular/common';
-import { Machine } from '@/shared/interfaces/machine';
 import { EmptyFieldMessage } from '../../components/empty-field-message/empty-field-message';
 
 @Component({

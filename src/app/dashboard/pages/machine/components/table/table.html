@@ -33,28 +33,35 @@
 
             <ng-template #groupheader let-category let-rowIndex="rowIndex" let-expanded="expanded">
                 <tr [pContextMenuRow]="category">
-                    <td colspan="7" class="w-full">
-                        <button type="button" pButton pRipple [pRowToggler]="category" text rounded plain class="mr-2" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-                        @let type = getType(category.type);
+                    <td colspan="9" class="w-full">
+                        <div>
+                            <button type="button" pButton pRipple [pRowToggler]="category" text rounded plain class="mr-2" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                            @let type = getType(category.type);
 
-                        <span class="font-bold ml-2">{{category.title}}</span>
+                            <span class="font-bold ml-2">{{category.title}}</span>
 
-                        <p-tag class="ml-4" [value]="type.label" [severity]="type.severity" [icon]="type.icon"></p-tag>
+                            <p-tag class="mx-4" [value]="type.label" [severity]="type.severity" [icon]="type.icon"></p-tag>
+                            @if (category.machines.length > 0) {
+
+                            <input type="text" class="w-fit" pInputText placeholder="Buscar máquina" (input)="setQuery($event, category)" />
+                            }
+                        </div>
                     </td>
                 </tr>
             </ng-template>
             <ng-template #groupfooter let-category>
                 <tr class="p-rowgroup-footer">
-                    <td colspan="6" style="text-align: right">Total de máquinas</td>
+                    <td colspan="8" style="text-align: right">Total de máquinas</td>
                     <td>{{category.machines.length}}</td>
                 </tr>
             </ng-template>
             <ng-template #expandedrow let-category>
-                @if (category.machines.length === 0) {
+                @let machines = getFilteredMachines(category); @if (machines.length === 0) {
+
                 <tr>
                     <td colspan="7" class="text-center">No hay máquinas en esta categoría.</td>
                 </tr>
-                } @else { @for (machine of category.machines; track machine.id) {
+                } @else { @for (machine of machines; track machine.id) {
                 <tr [class.p-datatable-contextmenu-row-selected]="selectedMachine() && selectedMachine()!.id === machine.id" (contextmenu)="onContextMenu($event, machine)">
                     <td>{{machine.name}}</td>
                     <td><div class="line-clamp-3">{{machine.description}}</div></td>
@@ -76,7 +83,7 @@
                         }
                     </td>
                     <td>
-                        <p-button type="button" label="Ver" icon="pi pi-eye" text (click)="specifications.set(machine.technicalSpecifications)"></p-button>
+                        <p-button type="button" label="Ver" icon="pi pi-eye" text (click)="specifications.set(machine.technicalSpecifications!)"></p-button>
                     </td>
                     <td>
                         @if (machine.manual) {
@@ -88,7 +95,7 @@
                     <td>
                         @if (machine.linkId) {
                         <!-- <a pButton icon="pi pi-external-link" class="p-button-text" [href]="machine.link.url" target="_blank" rel="noopener noreferrer"></a> -->
-                         <p-button  text  [label]="machine.textButton"></p-button>
+                        <p-button text [label]="machine?.textButton || ''"></p-button>
                         } @else {
                         <span>No hay enlace</span>
                         }
@@ -101,15 +108,11 @@
         </p-table>
         <!-- <p-popover #op (onHide)="selectedMachine.set(null)"> -->
 
-            <!-- <technical-specifications-table [specifications]="specifications()"></technical-specifications-table> -->
+        <!-- <technical-specifications-table [specifications]="specifications()"></technical-specifications-table> -->
         <!-- </p-popover> -->
 
-       <p-dialog header="Especificaciones Técnicas" 
-        [visible]="specifications().length > 0"
-         (visibleChange)="specifications.set([])"
-        (onHide)="specifications.set([])"
-       [modal]="true" [style]="{ width: '600px' }" [closable]="true" [resizable]="false">
-            <technical-specifications-table [specifications]="specifications()" ></technical-specifications-table>
+        <p-dialog header="Especificaciones Técnicas" [visible]="specifications().length > 0" (visibleChange)="specifications.set([])" (onHide)="specifications.set([])" [modal]="true" [style]="{ width: '600px' }" [closable]="true" [resizable]="false">
+            <technical-specifications-table [specifications]="specifications()"></technical-specifications-table>
         </p-dialog>
 
         <p-contextmenu #machineCm [model]="machineItems" (onHide)="selectedCategory.set(null)" />

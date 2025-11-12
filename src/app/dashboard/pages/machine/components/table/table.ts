@@ -5,7 +5,7 @@ import { DataViewSkeleton } from '@/shared/components/skeleton/data-view-skeleto
 import { Category, categoryTypesOptions } from '@/shared/interfaces/category';
 import { Machine } from '@/shared/interfaces/machine';
 import { CategoryType } from '@/shared/mappers/category.mapper';
-import { TecnicalSpecifications } from '@/shared/mappers/machine.mapper';
+import { MachineImages, TecnicalSpecifications } from '@/shared/mappers/machine.mapper';
 import { DatePipe } from '@angular/common';
 import { Component, inject, output, signal, ViewChild } from '@angular/core';
 import { ConfirmationService, MenuItem } from 'primeng/api';
@@ -15,6 +15,7 @@ import { ContextMenu, ContextMenuModule } from 'primeng/contextmenu';
 import { DialogModule } from 'primeng/dialog';
 import { GalleriaModule, GalleriaResponsiveOptions } from 'primeng/galleria';
 import { ImageModule } from 'primeng/image';
+import { InputTextModule } from 'primeng/inputtext';
 import { Popover } from 'primeng/popover';
 import { RatingModule } from 'primeng/rating';
 import { TableModule } from 'primeng/table';
@@ -34,8 +35,10 @@ import { MachineDialogForm } from './machine-dialog-form/machine-dialog-form';
         ImageModule,
         TableModule,
         ErrorBoundary,
+        InputTextModule,
         DatePipe,
         TagModule,
+        
         ToastModule,
         RatingModule,
         ButtonModule,
@@ -68,9 +71,11 @@ export class Table {
 
     selectedCategory = signal<Category | null>(null);
     onDisplayCategoryDialog = output<void>();
-    imagesGallery = signal<string[]>([]);
+    imagesGallery = signal<MachineImages[]>([]);
     specifications = signal<TecnicalSpecifications[]>([]);
     selectedMachine = signal<Machine | null>(null);
+
+    searchMachine = signal<Record<string, string> | null>(null);
 
     items: MenuItem[] = [
         {
@@ -136,6 +141,24 @@ export class Table {
             numVisible: 1
         }
     ];
+
+    setQuery(event: Event, category: Category) {
+        const query = (event.target as HTMLInputElement).value.toLowerCase();
+        this.searchMachine.update((current) => {
+            return {
+                ...current,
+                [category.id]: query
+            };
+        });
+    }
+
+    getFilteredMachines(category: Category): Machine[] {
+        const search = this.searchMachine()?.[category.id];
+        if (search) {
+            return category.machines.filter((machine) => machine.name.toLowerCase().includes(search));
+        }
+        return category.machines;
+    }
 
     displaySpecifications(event: Event, specifications: TecnicalSpecifications[]) {
         const isSameSelectedMachine =

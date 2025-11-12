@@ -42,7 +42,7 @@
                             <div class="flex flex-col">
                                 <h6 class="!text-xl !m-0 max-w-3xl">{{ section.title }}</h6>
                                 <div class="flex items-center gap-2 flex-wrap">
-                                    <p-badge value="{{ typeOption.label }}" [severity]="typeOption.severity" class="text-sm mb-1 w-fit"></p-badge>
+                                    <p-badge [value]="typeOption.label" [severity]="typeOption.severity" class="text-sm mb-1 w-fit"></p-badge>
                                     <span class="text-muted-color text-sm">{{ section.items.length }} item{{ section.items.length === 1 ? '' : 's' }} • </span>
                                 </div>
                             </div>
@@ -75,16 +75,16 @@
                         <div class="flex flex-col">
                             <h6 class="!text-xl !m-0 max-w-3xl">{{ section.title }}</h6>
                             <div class="flex items-center gap-2 flex-wrap">
-                                <p-badge value="{{ typeOption.label }}" [severity]="typeOption.severity" class="text-sm mb-1 w-fit"></p-badge>
+                                <p-badge [value]="typeOption.label" [severity]="typeOption.severity" class="text-sm mb-1 w-fit"></p-badge>
                                 <span class="text-muted-color text-sm">{{ section.items.length }} item{{ section.items.length === 1 ? '' : 's' }} • </span>
                             </div>
                         </div>
                     </div>
                     <div class="flex items-center gap-2 flex-wrap ml-auto">
-                        @if (![SectionType.MAIN_NAVIGATION_MENU, SectionType.CTA_BANNER].includes(section.type)) {
-                        <p-button icon="pi pi-plus" label="Agregar item" (click)="openDialogItem(section)"></p-button>
-
-                        } @if (associatedPageTemplate) {
+                         @if (![SectionType.MAIN_NAVIGATION_MENU, SectionType.CTA_BANNER, SectionType.MACHINE, SectionType.MACHINE_DETAILS, SectionType.MACHINES_CATALOG, SectionType.FOOTER, SectionType.PREVENTIVE_CORRECTIVE_MAINTENANCE].includes(section.type)) {
+                                <p-button icon="pi pi-plus" label="Agregar item" (click)="openDialogItem(section)"></p-button>
+                                }
+                                 @if (associatedPageTemplate) {
 
                         <ng-container *ngTemplateOutlet="associatedPageTemplate; context: { $implicit: section }"></ng-container>
                         }

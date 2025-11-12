@@ -142,6 +142,22 @@ export class MachineService {
                     });
                 });
 
+
+                this.sectionService.sectionListResource.update((sections) => {
+                    if (!sections) return [];
+
+                    return sections.map((section) => {
+                        return {
+                            ...section,
+                            machines: section.machines
+                                ? section.machines.map((machine) =>
+                                      machine.id === machineId ? { ...machine, images: machine.images?.map((img) => ({ ...img, isMain: img.url === imageUrl })) || [] } : machine
+                                  )
+                                : []
+                        };
+                    });
+                });
+
             }),
             finalize(() => this.loading.set(false))
         );

@@ -4,10 +4,10 @@ import { DataViewSkeleton } from '@/shared/components/skeleton/data-view-skeleto
 import { linkTypeOptions } from '@/shared/interfaces/link';
 import { type Menu } from '@/shared/interfaces/menu';
 import { LinkType } from '@/shared/mappers/link.mapper';
-import { MessageService } from '@/shared/services/message.service';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { Component, inject, linkedSignal, output, signal, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import type { MenuItemCommandEvent, MenuItem as PrimeMenuItem } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
 import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
@@ -22,7 +22,6 @@ import { MessageModule } from 'primeng/message';
 import { TagModule } from 'primeng/tag';
 import { MenuFormService } from '../../services/menu-form.service';
 import { MenuItem } from './menu-item/menu-item';
-import type { MenuItemCommandEvent, MenuItem as PrimeMenuItem } from 'primeng/api';
 
 type MenuComponent = Menu & {
     expanded?: boolean;

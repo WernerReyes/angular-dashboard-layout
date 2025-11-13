@@ -5,7 +5,7 @@ import { categoryTypesOptions } from '@/shared/interfaces/category';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, inject, input, linkedSignal, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { OverlayModeType } from 'primeng/api';
+import type { OverlayModeType } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectButtonModule } from 'primeng/selectbutton';

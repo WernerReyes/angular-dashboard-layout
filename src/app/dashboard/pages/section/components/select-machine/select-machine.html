@@ -6,7 +6,7 @@
                 id="machine"
                 class="max-w-full"
                 [overlayOptions]="{
-                    mode: mode()
+                    mode: machines().length < 10 ? mode() : 'modal'
                     }"
                 [maxSelectedLabels]="isMobile() ? 1 : 3"
                 selectedItemsLabel="{0} maquinas seleccionadas"

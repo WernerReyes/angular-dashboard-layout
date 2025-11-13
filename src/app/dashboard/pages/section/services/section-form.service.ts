@@ -62,7 +62,6 @@ export class SectionFormService {
             const subtitleControl = this.form.get('subtitle');
             if (type === SectionType.MAIN_NAVIGATION_MENU || type === SectionType.FOOTER) {
                 menusIdsControl?.setValidators([Validators.required]);
-
             } else {
                 menusIdsControl?.clearValidators();
                 imageFile?.clearValidators();
@@ -71,7 +70,17 @@ export class SectionFormService {
             if (type === SectionType.CONTACT_US) {
                 subtitleControl?.setValidators([Validators.required, FormUtils.noWhitespace(), Validators.pattern(PatternsConst.EMAIL)]);
             } else {
-                subtitleControl?.clearValidators();
+                if (type !== SectionType.SUPPORT_WIDGET) {
+                    subtitleControl?.clearValidators();
+                }
+            }
+
+            if (type === SectionType.SUPPORT_WIDGET) {
+                subtitleControl?.setValidators([Validators.required, FormUtils.noWhitespace(), Validators.minLength(9), Validators.maxLength(9)]);
+            } else {
+                if (type !== SectionType.CONTACT_US) {
+                    subtitleControl?.clearValidators();
+                }
             }
 
             imageFile?.updateValueAndValidity();
@@ -115,6 +124,13 @@ export class SectionFormService {
                 machinesIdsControl?.setValue([machines], { emitEvent: false });
             }
         });
+
+        this.form.get('subtitle')?.valueChanges.subscribe((subtitle) => {
+            const type = this.form.get('type');
+            if (type?.value === SectionType.SUPPORT_WIDGET && !isNaN(Number(subtitle))) {
+                this.form.get('subtitle')?.setValue(subtitle?.toString(), { emitEvent: false });
+            }
+        });
     }
 
     populateForm(section: Section, pageId: number) {
@@ -128,7 +144,7 @@ export class SectionFormService {
             subtitle: section.subtitle!,
             content: section.description!,
             showLink: section.type === SectionType.CONTACT_US ? !!section.textButton : !!section.linkId,
-            
+
             textButton: section.textButton!,
             extraTextButton: section.extraTextButton!,
 
@@ -137,7 +153,6 @@ export class SectionFormService {
 
             showExtraLink: !!section.extraLinkId,
             extraLinkType: section.extraLink?.type || null,
-
 
             extraLinkId: section.extraLinkId as any,
             active: section.pivotPages ? (section.pivotPages.find((pp) => pp.idPage === pageId)?.active ?? true) : true,
@@ -153,7 +168,7 @@ export class SectionFormService {
             icon: section.icon || null,
 
             videoFile: null,
-            currentVideo:  section.video || '',
+            currentVideo: section.video || '',
 
             machinesIds: this.setMachinesIds(section),
 
@@ -191,7 +206,7 @@ export class SectionFormService {
             case SectionType.SUPPORT_WIDGET:
                 title = sectionTypesOptions[SectionType.SUPPORT_WIDGET].label;
                 break;
-                
+
             default:
                 title = '';
                 break;

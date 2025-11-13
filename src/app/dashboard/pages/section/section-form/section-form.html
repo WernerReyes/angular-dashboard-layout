@@ -124,23 +124,25 @@
                 </div>
 
                 } @case (SectionType.MACHINE) {
-                <select-machine [form]="form" label="Selecciona las Máquinas" [multiple]="true"></select-machine>
+                    <select-machine [form]="form" label="Selecciona las Máquinas" [multiple]="true"></select-machine>
                 } @case (SectionType.CONTACT_US) {
+                    <!-- {
+                        type: 'subtitle',
+                        inputType: 'email',
+                        label: 'Correo electrónico',
+                        placeholder: 'Correo electrónico de contacto',
+                    } -->
                 <common-inputs
-                    [form]="form"
-                    [includeFields]="[
+                [form]="form"
+                [includeFields]="[
                         
                     {
                         type: 'content',
                         label: 'Descripción',
                         placeholder: 'Descripción de la sección',
                         isTextarea: true,
-                    }, {
-                        type: 'subtitle',
-                        inputType: 'email',
-                        label: 'Correo electrónico',
-                        placeholder: 'Correo electrónico de contacto',
-                    }
+                    }, 
+                    
                 ]"
                 ></common-inputs>
                 <div class="flex flex-col gap-2">

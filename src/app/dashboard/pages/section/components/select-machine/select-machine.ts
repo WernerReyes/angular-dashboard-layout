@@ -7,12 +7,9 @@ import { Component, inject, input, linkedSignal, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { OverlayModeType } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
-import { MultiSelectFilterEvent, MultiSelectModule } from 'primeng/multiselect';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectButtonModule } from 'primeng/selectbutton';
 
-// categoryTypesOptions
-
-// TODO: When the machine is added for ay reason the type is null, so we need to handle that case
 
 @Component({
     selector: 'select-machine',
@@ -37,7 +34,6 @@ export class SelectMachine {
 
     machines = linkedSignal(() => {
         const machines = this.machinesList.hasValue() ? this.machinesList.value() : [];
-
        
         return machines.map((machine) => {
             const category = {

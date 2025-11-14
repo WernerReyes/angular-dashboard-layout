@@ -45,7 +45,8 @@ import { MachineDialogForm } from './machine-dialog-form/machine-dialog-form';
         ButtonModule,
         ContextMenuModule,
         ConfirmDialogModule,
-        GalleriaModule
+        GalleriaModule,
+      
     ],
     templateUrl: './table.html',
     providers: [ConfirmationService],
@@ -79,33 +80,17 @@ export class Table {
     categoryTypeFilter = signal<CategoryType | null>(null);
     querySearch = signal<string>('');
 
-    categorySearchQuery = computed(() => {
-        const queries = this.querySearch().toLowerCase().trim().split(',');
-        return queries.length > 0 ? queries[0] : '';
-    });
-    machineSearchQuery = computed(() => {
-        const queries = this.querySearch().toLowerCase().trim().split(',');
-        return queries.length > 1 ? queries[1] : '';
-    });
-   
     categoriesFiltered = computed(() => {
         let categories = this.categoriesList.hasValue() ? this.categoriesList.value() : [];
-
-
 
         const typeFilter = this.categoryTypeFilter();
         if (typeFilter !== null) {
             categories = categories.filter((category) => category.type === typeFilter);
         }
-        const categoryQuery = this.categorySearchQuery();
-        const machineQuery = this.machineSearchQuery();
+        const query = this.querySearch().toLowerCase().trim();
 
-        if (categoryQuery || machineQuery) {
-            categories = categories.filter((category) => category.title.toLowerCase().includes(categoryQuery) &&
-                (machineQuery
-                    ? category.machines.some((machine) => machine.name.toLowerCase().includes(machineQuery))
-                    : true));
-
+        if (query) {
+            categories = categories.filter((category) => category.title.toLowerCase().includes(query) || category.machines.some((machine) => machine.name.toLowerCase().includes(query)));
         }
         return categories;
     });
@@ -174,7 +159,6 @@ export class Table {
             numVisible: 1
         }
     ];
-
 
     displaySpecifications(event: Event, specifications: TecnicalSpecifications[]) {
         const isSameSelectedMachine =

@@ -3,140 +3,142 @@
         <app-data-view-skeleton></app-data-view-skeleton>
     </ng-template>
 
-    <p-confirm-dialog />
-    <p-contextmenu #cm [model]="items" (onHide)="selectedCategory.set(null)" />
-    <p-table [value]="categoriesFiltered()" [(contextMenuSelection)]="selectedCategory" [contextMenu]="cm" sortField="title" sortMode="single" dataKey="id" rowGroupMode="subheader" groupRowsBy="id" [tableStyle]="{'min-width': '70rem'}">
-        <ng-template #caption>
-            <div class="flex items-center gap-4 max-sm:flex-wrap justify-between">
-                <input pInputText type="text" placeholder="Buscar categoría, máquina" class="w-24 md:w-48" fluid (input)="querySearch.set($any($event.target).value)" />
-                <p-select-button [options]="categoryTypesOptions | keyvalue" (onChange)="categoryTypeFilter.set($event.value)" optionLabel="value.label" optionValue="key" aria-labelledby="basic">
-                    <ng-template #item let-option>
-                        <i [class]="option.value.icon"></i>
-                    </ng-template>
-                </p-select-button>
-            </div>
-        </ng-template>
+    <ng-template #content let-categories>
+        <p-confirm-dialog />
+        <p-contextmenu #cm [model]="items" (onHide)="selectedCategory.set(null)" />
+        <p-table [value]="categoriesFiltered()" [(contextMenuSelection)]="selectedCategory" [contextMenu]="cm" sortField="title" sortMode="single" dataKey="id" rowGroupMode="subheader" groupRowsBy="id" [tableStyle]="{'min-width': '70rem'}">
+            <ng-template #caption>
+                <div class="flex items-center gap-4 max-sm:flex-wrap justify-between">
+                    <input pInputText type="text" placeholder="Buscar categoría o máquina" class="w-24 md:w-48" fluid (input)="querySearch.set($any($event.target).value)" />
+                    <p-select-button [options]="categoryTypesOptions | keyvalue" (onChange)="categoryTypeFilter.set($event.value)" optionLabel="value.label" optionValue="key" aria-labelledby="basic">
+                        <ng-template #item let-option>
+                            <i [class]="option.value.icon"></i>
+                        </ng-template>
+                    </p-select-button>
+                </div>
+            </ng-template>
 
-        <ng-template #header>
-            <tr>
-                <th style="width: 10%">Nombre</th>
-                <th style="width: 20%">Breve Descripción</th>
-                <th style="width: 30%">Descripción completa</th>
-                <th style="width: 10%">Imagenes</th>
-                <th style="width: 10%">Especificaciones Técnicas</th>
-                <th style="width: 10%">Manual</th>
-                <th style="width: 10%">Enlace</th>
-                <th style="width: 10%">Creación</th>
-                <th style="width: 20%">Última Modificación</th>
-            </tr>
-        </ng-template>
+            <ng-template #header>
+                <tr>
+                    <th style="width: 10%">Nombre</th>
+                    <th style="width: 20%">Breve Descripción</th>
+                    <th style="width: 30%">Descripción completa</th>
+                    <th style="width: 10%">Imagenes</th>
+                    <th style="width: 10%">Especificaciones Técnicas</th>
+                    <th style="width: 10%">Manual</th>
+                    <th style="width: 10%">Enlace</th>
+                    <th style="width: 10%">Creación</th>
+                    <th style="width: 20%">Última Modificación</th>
+                </tr>
+            </ng-template>
 
-        <ng-template #emptymessage>
-            <!-- <tr class="flex flex-col items-center bg-red-400 justify-center py-8 text-surface-500">                   -->
-            <td colspan="7" class="text-center p-4">
-                <i class="pi pi-inbox text-4xl mb-3"></i>
-                <div class="font-semibold text-lg mb-1">No se encontraron categorías</div>
-                <div class="text-sm">Intenta ajustar tu búsqueda o crea una nueva categoría para comenzar.</div>
-            </td>
-            <!-- </tr>      -->
-        </ng-template>
-
-        <ng-template #groupheader let-category let-rowIndex="rowIndex" let-expanded="expanded">
-            <tr [pContextMenuRow]="category">
-                <td colspan="9" class="w-full">
-                    <div>
-                        <button type="button" pButton pRipple [pRowToggler]="category" text rounded plain class="mr-2" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-                        @let type = getType(category.type);
-
-                        <span class="font-bold ml-2">{{category.title}}</span>
-
-                        <p-tag class="mx-4" [value]="type.label" [severity]="type.severity" [icon]="type.icon"></p-tag>
-                    </div>
+            <ng-template #emptymessage>
+                <!-- <tr class="flex flex-col items-center bg-red-400 justify-center py-8 text-surface-500">                   -->
+                <td colspan="7" class="text-center p-4">
+                    <i class="pi pi-inbox text-4xl mb-3"></i>
+                    <div class="font-semibold text-lg mb-1">No se encontraron categorías</div>
+                    <div class="text-sm">Intenta ajustar tu búsqueda o crea una nueva categoría para comenzar.</div>
                 </td>
-            </tr>
-        </ng-template>
-        <ng-template #groupfooter let-category>
-            <tr class="p-rowgroup-footer">
-                <td colspan="8" style="text-align: right">Total de máquinas</td>
-                <td>{{category.machines.length}}</td>
-            </tr>
-        </ng-template>
-        <ng-template #expandedrow let-category>
-            @let machines = category.machines; @if (machines.length === 0) {
+                <!-- </tr>      -->
+            </ng-template>
 
-            <tr>
-                <td colspan="7" class="text-center">No hay máquinas en esta categoría.</td>
-            </tr>
-            } @else { @for (machine of machines; track machine.id) {
-            <tr
-                [class.p-datatable-contextmenu-row-selected]="(selectedMachine() && selectedMachine()!.id === machine.id
-                || machineSearchQuery().length > 0 && machine.name.toLowerCase().includes(machineSearchQuery().toLowerCase())
-        )"
-                (contextmenu)="onContextMenu($event, machine)"
-            >
-                <td>{{machine.name}}</td>
-                <td><div class="line-clamp-3">{{machine.description}}</div></td>
-                <td>
-                    <div class="line-clamp-3">{{machine.longDescription}}</div>
-                </td>
-                <td>
-                    @if (machine.images && machine.images.length > 0) {
+            <ng-template #groupheader let-category let-rowIndex="rowIndex" let-expanded="expanded">
+                <tr [pContextMenuRow]="category">
+                    <td colspan="9" class="w-full">
+                        <div>
+                            <button type="button" pButton pRipple [pRowToggler]="category" text rounded plain class="mr-2" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                            @let type = getType(category.type);
 
-                    <div class="flex gap-2">
-                        <div class="relative" (mouseenter)="showMore.classList.remove('!hidden')" (mouseleave)="showMore.classList.add('!hidden')">
-                            <img [src]="getMainImageUrl(machine)" alt="Machine Image" class="w-16 h-16 object-cover rounded cursor-pointer hover:opacity-75" />
-                            <i #showMore class="!hidden pi pi-search absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white cursor-pointer" (click)="imagesGallery.set(machine.images)"></i>
+                            <span class="font-bold ml-2">{{category.title}}</span>
+
+                            <p-tag class="mx-4" [value]="type.label" [severity]="type.severity" [icon]="type.icon"></p-tag>
                         </div>
-                    </div>
-                    } @else {
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template #groupfooter let-category>
+                <tr class="p-rowgroup-footer">
+                    <td colspan="8" style="text-align: right">Total de máquinas</td>
+                    <td>{{category.machines.length}}</td>
+                </tr>
+            </ng-template>
+            <ng-template #expandedrow let-category>
+                @let machines = category.machines; @if (machines.length === 0) {
 
-                    <span>No hay imágenes</span>
-                    }
-                </td>
-                <td>
-                    <p-button type="button" label="Ver" icon="pi pi-eye" text (click)="specifications.set(machine.technicalSpecifications!)"></p-button>
-                </td>
-                <td>
-                    @if (machine.manual) {
-                    <a pButton icon="pi pi-download" class="p-button-text" [href]="machine.manual" target="_blank" rel="noopener noreferrer" download></a>
-                    } @else {
-                    <span>No hay manual</span>
-                    }
-                </td>
-                <td>
-                    @if (machine.linkId) {
-                    <p-button text [label]="machine?.textButton || ''"></p-button>
-                    } @else {
-                    <span>No hay enlace</span>
-                    }
-                </td>
-                <td>{{ machine.createdAt | date: 'short' }}</td>
-                <td>{{ machine.updatedAt | date: 'short' }}</td>
-            </tr>
-            } }
-        </ng-template>
-    </p-table>
+                <tr>
+                    <td colspan="7" class="text-center">No hay máquinas en esta categoría.</td>
+                </tr>
+                } @else { @for (machine of machines; track machine.id) {
+                <tr
+                    [class.p-datatable-contextmenu-row-selected]="(selectedMachine() && selectedMachine()!.id === machine.id
+                || querySearch().length > 0 && machine.name.toLowerCase().includes(querySearch().toLowerCase())
+        )"
+                    (contextmenu)="onContextMenu($event, machine)"
+                >
+                    <td>{{machine.name}}</td>
+                    <td><div class="line-clamp-3">{{machine.description}}</div></td>
+                    <td>
+                        <div class="line-clamp-3">{{machine.longDescription}}</div>
+                    </td>
+                    <td>
+                        @if (machine.images && machine.images.length > 0) {
 
-    <p-dialog header="Especificaciones Técnicas" [visible]="specifications().length > 0" (visibleChange)="specifications.set([])" (onHide)="specifications.set([])" [modal]="true" [style]="{ width: '600px' }" [closable]="true" [resizable]="false">
-        <technical-specifications-table [specifications]="specifications()"></technical-specifications-table>
-    </p-dialog>
+                        <div class="flex gap-2">
+                            <div class="relative" (mouseenter)="showMore.classList.remove('!hidden')" (mouseleave)="showMore.classList.add('!hidden')">
+                                <img [src]="getMainImageUrl(machine)" alt="Machine Image" class="w-16 h-16 object-cover rounded cursor-pointer hover:opacity-75" />
+                                <i #showMore class="!hidden pi pi-search absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white cursor-pointer" (click)="imagesGallery.set(machine.images)"></i>
+                            </div>
+                        </div>
+                        } @else {
 
-    <p-contextmenu #machineCm [model]="machineItems" (onHide)="selectedCategory.set(null); selectedMachine.set(null)" />
+                        <span>No hay imágenes</span>
+                        }
+                    </td>
+                    <td>
+                        <p-button type="button" label="Ver" icon="pi pi-eye" text (click)="specifications.set(machine.technicalSpecifications!)"></p-button>
+                    </td>
+                    <td>
+                        @if (machine.manual) {
+                        <a pButton icon="pi pi-download" class="p-button-text" [href]="machine.manual" target="_blank" rel="noopener noreferrer" download></a>
+                        } @else {
+                        <span>No hay manual</span>
+                        }
+                    </td>
+                    <td>
+                        @if (machine.linkId) {
+                        <p-button text [label]="machine?.textButton || ''"></p-button>
+                        } @else {
+                        <span>No hay enlace</span>
+                        }
+                    </td>
+                    <td>{{ machine.createdAt | date: 'short' }}</td>
+                    <td>{{ machine.updatedAt | date: 'short' }}</td>
+                </tr>
+                } }
+            </ng-template>
+        </p-table>
 
-    <machine-dialog-form [(display)]="dialogMachine"></machine-dialog-form>
+        <p-dialog header="Especificaciones Técnicas" [visible]="specifications().length > 0" (visibleChange)="specifications.set([])" (onHide)="specifications.set([])" [modal]="true" [style]="{ width: '600px' }" [closable]="true" [resizable]="false">
+            <technical-specifications-table [specifications]="specifications()"></technical-specifications-table>
+        </p-dialog>
 
-    <p-galleria
-        #galleria
-        [value]="imagesGallery()"
-        [showThumbnails]="false"
-        [visible]="imagesGallery().length > 0"
-        (visibleChange)="imagesGallery.set([]); galleria.activeIndex = 0"
-        [responsiveOptions]="responsiveOptions"
-        [fullScreen]="true"
-        [showItemNavigators]="true"
-    >
-        <ng-template #item let-item>
-            <img [src]="item.url" class="max-2xl:w-10/12 2xl:h-screen" />
-        </ng-template>
-    </p-galleria>
+        <p-contextmenu #machineCm [model]="machineItems" (onHide)="selectedCategory.set(null); selectedMachine.set(null)" />
+
+        <machine-dialog-form [(display)]="dialogMachine"></machine-dialog-form>
+
+        <p-galleria
+            #galleria
+            [value]="imagesGallery()"
+            [showThumbnails]="false"
+            [visible]="imagesGallery().length > 0"
+            (visibleChange)="imagesGallery.set([]); galleria.activeIndex = 0"
+            [responsiveOptions]="responsiveOptions"
+            [fullScreen]="true"
+            [showItemNavigators]="true"
+        >
+            <ng-template #item let-item>
+                <img [src]="item.url" class="max-2xl:w-10/12 2xl:h-screen" />
+            </ng-template>
+        </p-galleria>
+    </ng-template>
 </app-error-boundary>

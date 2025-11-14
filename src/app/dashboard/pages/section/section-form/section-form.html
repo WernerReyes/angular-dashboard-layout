@@ -27,6 +27,7 @@
                     optionLabel="value.label"
                     optionValue="value.value"
                     placeholder="Selecciona el tipo de sección"
+                    filterPlaceHolder="Buscar por tipo"
                 ></p-select>
                 @if (form.controls['type'].errors) {
                 <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'type') }} </p-message>

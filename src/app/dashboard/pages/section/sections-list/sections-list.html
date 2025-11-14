@@ -57,9 +57,10 @@
                                 @if (![SectionType.MAIN_NAVIGATION_MENU, SectionType.CTA_BANNER, SectionType.MACHINE, SectionType.MACHINE_DETAILS, SectionType.MACHINES_CATALOG, SectionType.FOOTER,
                                 SectionType.PREVENTIVE_CORRECTIVE_MAINTENANCE].includes(section.type)) {
                                 <p-button icon="pi pi-plus" label="Agregar item" (click)="openDialogItem(section)"></p-button>
+                                } @if (associatedPageTemplate) {
+
+                                <ng-container *ngTemplateOutlet="associatedPageTemplate; context: { $implicit: section }"></ng-container>
                                 }
-                                <!-- <p-button icon="pi pi-pencil" text (click)="openDialogAndEdit(section)"></p-button>
-                                <p-button icon="pi pi-trash" text severity="danger" (click)="deleteSection($event, section)"></p-button> -->
                             </div>
                         </div>
                     </div>

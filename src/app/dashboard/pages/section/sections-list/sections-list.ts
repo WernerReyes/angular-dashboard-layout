@@ -27,6 +27,9 @@ import { SectionItemForm } from './section-item-form/section-item-form';
 import { SectionItems } from './section-items/section-items';
 
 import { FilterArrayByPipe } from '@/shared/pipes/filter-array-by-pipe';
+import { SelectModule } from 'primeng/select';
+import { PopoverModule } from 'primeng/popover';
+import { PageService } from '@/dashboard/services/page.service';
 
 type DeleteSectionItemParams = {
     id: number;
@@ -36,11 +39,31 @@ type DeleteSectionItemParams = {
 export type DeleteSectionItemFunction = (event: Event, params: DeleteSectionItemParams, accept?: () => void, reject?: () => void) => void;
 @Component({
     selector: 'sections-list',
-    imports: [SectionItemForm, FilterArrayByPipe, ErrorBoundary, PanelModule, CarouselModule, FilterByTermPipe, DragDropModule, NgTemplateOutlet, MessageModule, DataViewSkeleton, FieldsetModule, TagModule, ButtonModule, ContextMenuCrud, SectionItems, BadgeModule, FilterByPagePipe],
+    imports: [
+        SectionItemForm,
+        FilterArrayByPipe,
+        ErrorBoundary,
+        PanelModule,
+        CarouselModule,
+        FilterByTermPipe,
+        DragDropModule,
+        NgTemplateOutlet,
+
+        SelectModule,
+        MessageModule,
+        DataViewSkeleton,
+        FieldsetModule,
+        TagModule,
+        PopoverModule,
+        ButtonModule,
+        ContextMenuCrud,
+        SectionItems,
+        BadgeModule,
+        FilterByPagePipe
+    ],
     templateUrl: './sections-list.html'
 })
 export class SectionsList {
-    // private readonly pageService = inject(PageService);
     private readonly sectionService = inject(SectionService);
     private readonly sectionItemService = inject(SectionItemService);
     private readonly sectionFormService = inject(SectionFormService);
@@ -74,14 +97,14 @@ export class SectionsList {
     SectionType = SectionType;
     SectionMode = SectionMode;
 
-    // currentPageRs = this.pageService.getPageByIdRs;
+
 
     sectionsListRs = this.sectionService.sectionListResource;
+   
 
     displayItemDialog = signal<boolean>(false);
     currentSection = signal<Section | null>(null);
     selectedSectionItem = signal<ISectionItem | null>(null);
-
 
     orginalSectionList = linkedSignal<Section[]>(() => {
         const sectionList = this.sectionsListRs.hasValue() ? this.sectionsListRs.value() : [];
@@ -152,54 +175,53 @@ export class SectionsList {
         this.sectionService.updateSectionsOrder({ orderArray: newOrder }).subscribe({
             next: () => {
                 this.sectionsListRs.update((sections) => {
-        if (!sections) return [];
+                    if (!sections) return [];
 
-        const orderMap = new Map(newOrder.map(item => [item.id, item.order]));
+                    const orderMap = new Map(newOrder.map((item) => [item.id, item.order]));
 
-        // Solo modificamos el order_num dentro de pivot_pages
-        const updatedSections = sections.map(section => {
-          const pivot = section.pivotPages?.find(p => p.idPage === this.pageId());
-          if (pivot && orderMap.has(section.id)) {
-            pivot.orderNum = orderMap.get(section.id)!;
-          }
-          return section;
-        });
+                    // Solo modificamos el order_num dentro de pivot_pages
+                    const updatedSections = sections.map((section) => {
+                        const pivot = section.pivotPages?.find((p) => p.idPage === this.pageId());
+                        if (pivot && orderMap.has(section.id)) {
+                            pivot.orderNum = orderMap.get(section.id)!;
+                        }
+                        return section;
+                    });
 
-        // Reordenar secciones por su nuevo order_num
-        return [...updatedSections].sort((a, b) => {
-          const orderA = a.pivotPages?.find(p => p.idPage === this.pageId())?.orderNum ?? 9999;
-          const orderB = b.pivotPages?.find(p => p.idPage === this.pageId())?.orderNum ?? 9999;
-          return orderA - orderB;
-        });
-      });
-        
+                    // Reordenar secciones por su nuevo order_num
+                    return [...updatedSections].sort((a, b) => {
+                        const orderA = a.pivotPages?.find((p) => p.idPage === this.pageId())?.orderNum ?? 9999;
+                        const orderB = b.pivotPages?.find((p) => p.idPage === this.pageId())?.orderNum ?? 9999;
+                        return orderA - orderB;
+                    });
+                });
+
                 this.hasPositionChanged.set(false);
             }
         });
     }
 
     cancelChanges() {
-        
         const original = this.orginalSectionList().map((section, index) => ({ id: section.id, pageId: this.pageId(), order: index + 1 }));
         this.sectionsListRs.update((sections) => {
             if (!sections) return [];
-            const orderMap = new Map(original.map(item => [item.id, item.order]));
+            const orderMap = new Map(original.map((item) => [item.id, item.order]));
 
-        // Solo modificamos el order_num dentro de pivot_pages
-        const updatedSections = sections.map(section => {
-          const pivot = section.pivotPages?.find(p => p.idPage === this.pageId());
-          if (pivot && orderMap.has(section.id)) {
-            pivot.orderNum = orderMap.get(section.id)!;
-          }
-          return section;
-        });
+            // Solo modificamos el order_num dentro de pivot_pages
+            const updatedSections = sections.map((section) => {
+                const pivot = section.pivotPages?.find((p) => p.idPage === this.pageId());
+                if (pivot && orderMap.has(section.id)) {
+                    pivot.orderNum = orderMap.get(section.id)!;
+                }
+                return section;
+            });
 
-        // Reordenar secciones por su nuevo order_num
-        return [...updatedSections].sort((a, b) => {
-          const orderA = a.pivotPages?.find(p => p.idPage === this.pageId())?.orderNum ?? 9999;
-          const orderB = b.pivotPages?.find(p => p.idPage === this.pageId())?.orderNum ?? 9999;
-          return orderA - orderB;
-        });
+            // Reordenar secciones por su nuevo order_num
+            return [...updatedSections].sort((a, b) => {
+                const orderA = a.pivotPages?.find((p) => p.idPage === this.pageId())?.orderNum ?? 9999;
+                const orderB = b.pivotPages?.find((p) => p.idPage === this.pageId())?.orderNum ?? 9999;
+                return orderA - orderB;
+            });
         });
         this.hasPositionChanged.set(false);
 

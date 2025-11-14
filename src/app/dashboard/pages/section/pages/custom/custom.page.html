@@ -8,7 +8,7 @@
             </div>
 
             <div class="flex items-center- flex-wrap gap-2">
-                <app-error-boundary [resource]="pageList" errorMessage="No se pudieron cargar las páginas." emptyMessage="No hay páginas disponibles.">
+                <app-error-boundary [resource]="pagesListRs" errorMessage="No se pudieron cargar las páginas." emptyMessage="No hay páginas disponibles.">
                     <ng-template #content let-pages>
                         <p-select
                             [checkmark]="true"
@@ -29,7 +29,48 @@
             </div>
         </div>
 
-        <sections-list [type]="SectionMode.CUSTOM" [selectedPage]="selectedPage()" (onDisplay)="display.set($event)" (onSelectedSection)="selectedSection.set($event)"></sections-list>
+        <sections-list [type]="SectionMode.CUSTOM" [selectedPage]="selectedPage()" (onDisplay)="display.set($event)" (onSelectedSection)="selectedSection.set($event)">
+            <ng-template #associatedPage let-section>
+                <p-button label="Mover a" icon="pi pi-file" class="ml-auto" variant="outlined" (click)="op.toggle($event)"> </p-button>
+                <p-popover #op>
+                    <div class="flex flex-col gap-4 w-xs">
+                        <app-error-boundary [resource]="pagesListRs" emptyMessage="No hay páginas disponibles para mover" errorMessage="Hubo un error al cargar las páginas">
+                            <!-- (onChange)="op.hide()" -->
+                            <p-select
+                                #pageSelect
+                                size="small"
+                                
+                                emptyMessage="No hay páginas disponibles para mover"
+                                emptyFilterMessage="No se encontraron páginas"
+                                [options]="pages()"
+                                (onChange)="moveToPage($event, section, $event.value); op.hide()"
+                               [resetFilterOnHide]="true"
+                                optionLabel="title"
+                                optionValue="id"
+                                placeholder="Selecciona páginas para asociar"
+                                filterPlaceHolder="Buscar páginas"
+                                display="chip"
+                                fluid
+                            >
+                                <!-- <ng-template #footer>
+                                    <div class="p-3 flex justify-end">
+                                        <p-button
+                                            label="Guardar"
+                                            severity="secondary"
+                                            
+                                            text
+                                            size="small"
+                                            icon="pi pi-save"
+                                            (click)="moveToPage(section, pageSelect.value); op.hide()"
+                                        />
+                                    </div>
+                                </ng-template> -->
+                            </p-select>
+                        </app-error-boundary>
+                    </div>
+                </p-popover>
+            </ng-template>
+        </sections-list>
 
         <section-form [mode]="SectionMode.CUSTOM" [display]="display()" (onCloseDialog)="display.set(false)" [selectedPageId]="selectedPage()?.id!" [(selectedSection)]="selectedSection"></section-form>
     </div>

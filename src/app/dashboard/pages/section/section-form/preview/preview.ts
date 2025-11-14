@@ -1,36 +1,36 @@
+import { MachineService } from '@/dashboard/services/machine.service';
+import { Machine } from '@/shared/interfaces/machine';
+import type { Menu } from '@/shared/interfaces/menu';
 import { Section } from '@/shared/interfaces/section';
 import { ImageType, SectionItem } from '@/shared/interfaces/section-item';
 import { SectionType } from '@/shared/mappers/section.mapper';
-import { JsonPipe } from '@angular/common';
 import { Component, computed, inject, input } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import type { TreeNode } from 'primeng/api';
+import { SectionAdvantagesItems } from '../../sections-list/section-advantages-items/section-advantages-items';
 import { SectionCashProcessingEquipmentItems } from '../../sections-list/section-cash-processing-equipment-items/section-cash-processing-equipment-items';
 import { SectionClientItems } from '../../sections-list/section-client-items/section-client-items';
 import { SectionContactTopBarItems } from '../../sections-list/section-contact-top-bar-items/section-contact-top-bar-items';
 import { SectionContactUsItems } from '../../sections-list/section-contact-us-items/section-contact-us-items';
 import { SectionCtaBannerItems } from '../../sections-list/section-cta-banner-items/section-cta-banner-items';
+import { SectionFooterItems } from '../../sections-list/section-footer-items/section-footer-items';
+import { SectionFullMaintenancePlanItems } from '../../sections-list/section-full-maintenance-plan-items/section-full-maintenance-plan-items';
 import { SectionHeroItems } from '../../sections-list/section-hero-items/section-hero-items';
+import { SectionMachineDetailsItems } from '../../sections-list/section-machine-details-items/section-machine-details-items';
 import { SectionMachineItems } from '../../sections-list/section-machine-items/section-machine-items';
+import { SectionMachinesCatalogItems } from '../../sections-list/section-machines-catalog-items/section-machines-catalog-items';
 import { SectionMainNavigationMenuItems } from '../../sections-list/section-main-navigation-menu-items/section-main-navigation-menu-items';
+import { SectionMissionVisionItems } from '../../sections-list/section-mission-vision-items/section-mission-vision-items';
+import { SectionOperacionalBenefitsItems } from '../../sections-list/section-operacional-benefits-items/section-operacional-benefits-items';
 import { SectionOurCompanyItems } from '../../sections-list/section-our-company-items/section-our-company-items';
+import { SectionPreventiveCorrectiveMaintenanceItems } from '../../sections-list/section-preventive-corrective-maintenance-items/section-preventive-corrective-maintenance-items';
 import { SectionSolutionsOverviewItems } from '../../sections-list/section-solutions-overview-items/section-solutions-overview-items';
+import { SectionSupportMaintenanceItems } from '../../sections-list/section-support-maintenance-items/section-support-maintenance-items';
+import { SectionSupportWidgetItems } from '../../sections-list/section-support-widget-items/section-support-widget-items';
 import { SectionValuePropositionItems } from '../../sections-list/section-value-proposition-items/section-value-proposition-items';
 import { SectionWhyUsItems } from '../../sections-list/section-why-us-items/section-why-us-items';
 import { SectionFormService } from '../../services/section-form.service';
 import { SectionItemFormService } from '../../services/section-item-form.service';
-import { SectionMissionVisionItems } from '../../sections-list/section-mission-vision-items/section-mission-vision-items';
-import { SectionFooterItems } from '../../sections-list/section-footer-items/section-footer-items';
-import { SectionAdvantagesItems } from '../../sections-list/section-advantages-items/section-advantages-items';
-import { SectionSupportMaintenanceItems } from '../../sections-list/section-support-maintenance-items/section-support-maintenance-items';
-import { MachineService } from '@/dashboard/services/machine.service';
-import type { TreeNode } from 'primeng/api';
-import type { Menu } from '@/shared/interfaces/menu';
-import { SectionOperacionalBenefitsItems } from '../../sections-list/section-operacional-benefits-items/section-operacional-benefits-items';
-import { SectionMachineDetailsItems } from '../../sections-list/section-machine-details-items/section-machine-details-items';
-import { SectionMachinesCatalogItems } from '../../sections-list/section-machines-catalog-items/section-machines-catalog-items';
-import { SectionFullMaintenancePlanItems } from '../../sections-list/section-full-maintenance-plan-items/section-full-maintenance-plan-items';
-import { SectionPreventiveCorrectiveMaintenanceItems } from '../../sections-list/section-preventive-corrective-maintenance-items/section-preventive-corrective-maintenance-items';
-import { SectionSupportWidgetItems } from '../../sections-list/section-support-widget-items/section-support-widget-items';
 
 @Component({
     selector: 'preview',
@@ -119,6 +119,9 @@ export class Preview {
     private sectionPreviewDefault() {
         const value = this.sectionFormValue() as any;
         const section = this.section();
+
+        const ids = value.machinesIds || [];
+
         return {
             id: 0,
             description: value.content ?? null,
@@ -136,7 +139,7 @@ export class Preview {
             menus: value.menusIds?.map((menu: TreeNode) => this.buildRecursiveNode(menu)) || [],
             // textButton: value.showLink ? value.textButton || null : null,
             subtitle: value.subtitle ?? null,
-            machines: this.getMachines(value).filter((machine) => (value.machinesIds || []).includes(machine.id)),
+            machines: ids.map((id: number) => this.getMachines(value).find((machine) => machine.id === id)).filter((m: Machine) => !!m),
             linkId: value.showLink ? value.linkId || null : null,
             pages: [],
             pivotPages: [],
@@ -230,10 +233,6 @@ export class Preview {
             order: 0,
             link: null,
             iconUrl: value.iconFile ? this.getBlobUrl(value.iconFile) : ''
-
-            // description: value.content ?? '',
-            // icon: this.getImage,
-            // image: this.getImage
         };
 
         return newItem;

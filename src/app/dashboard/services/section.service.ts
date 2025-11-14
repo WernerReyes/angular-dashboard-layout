@@ -43,15 +43,6 @@ export class SectionService {
         return this.http.post<ApiResponse<SectionEntity>>(this.prefix, formData).pipe(
             map(({ data }) => mapSectionEntityToSection(data)),
             tap((createdSection) => {
-                // this.pageService.getPageByIdRs.update((page) => {
-                //     if (!page) return null;
-                //     const updatedPage = {
-                //         ...page,
-                //         sections: page.sections ? [...page.sections, createdSection] : [createdSection]
-                //     };
-                //     return updatedPage;
-                // });
-
                 this.sectionListResource.update((sections) => {
                     if (!sections) return [createdSection];
                     return [...sections, createdSection];
@@ -70,30 +61,9 @@ export class SectionService {
         const formData = TransformUtils.toFormData(section);
         this.isUpdating.set(true);
 
-        // Object.entries(section).forEach(([key, value]) => {
-        //     if (value === null || value === undefined) return;
-
-        //     if (Array.isArray(value)) {
-        //         // ✅ Enviar cada valor del array con sufijo []
-        //         value.forEach((v) => {
-        //             formData.append(`${key}[]`, v.toString());
-        //         });
-        //     } else {
-        //         formData.append(key, value as string | Blob);
-        //     }
-        // });
         return this.http.post<ApiResponse<SectionEntity>>(`${this.prefix}/${id}`, formData).pipe(
             map(({ data }) => mapSectionEntityToSection(data)),
             tap((section) => {
-                // this.pageService.getPageByIdRs.update((page) => {
-                //     if (!page) return null;
-                //     const updatedPage = {
-                //         ...page,
-                //         sections: page.sections ? page.sections.map((s) => (s.id === section.id ? { ...section, items: s.items } : s)) : []
-                //     };
-                //     return updatedPage;
-                // });
-
                 this.sectionListResource.update((sections) => {
                     if (!sections) return [];
                     return sections.map((s) => (s.id === section.id ? { ...section, items: s.items } : s));
@@ -104,6 +74,55 @@ export class SectionService {
             catchError((error) => {
                 this.isUpdating.set(false);
                 return throwError(() => error);
+            })
+        );
+    }
+
+    moveSectionToPage(sectionId: number, fromPageId: number, toPageId: number) {
+        return this.http.post<ApiResponse<SectionEntity>>(`${this.prefix}/${sectionId}/move-to-page`, { fromPageId, toPageId }).pipe(
+            map(({ data }) => mapSectionEntityToSection(data)),
+            tap((movedSection) => {
+                this.sectionListResource.update((sections) => {
+                    if (!sections) return [];
+                    return sections.map((section) => {
+                        if (section.id === movedSection.id) {
+                            return {
+                                ...movedSection,
+                                pages:
+                                    section.pages?.map((page) => {
+                                        if (page.id === fromPageId) {
+                                            return {
+                                                ...page,
+                                                id: toPageId
+                                            };
+                                        }
+                                        return page;
+                                    }) || [],
+
+                                items: section.items
+                            };
+                        }
+                        return section;
+                    });
+                });
+                // this.pageService.pagesListResource.update((pages) => {
+                //     if (!pages) return [];
+                //     return pages.map((page) => {
+                //         if (page.id === toPageId) {
+                //             return {
+                //                 ...page,
+                //                 sections: page.sections ? [...page.sections, movedSection] : [movedSection]
+                //             };
+                //         }
+                //         if (page.id === fromPageId) {
+                //             return {
+                //                 ...page,
+                //                 sections: page.sections ? page.sections.filter((s) => s.id !== movedSection.id) : []
+                //             };
+                //         }
+                //         return page;
+                //     });
+                // });
             })
         );
     }
@@ -136,7 +155,7 @@ export class SectionService {
                     this.sectionListResource.update((sections) => {
                         if (!sections) return [];
                         if (pageId) {
-                        return sections.map((section) => {
+                            return sections.map((section) => {
                                 if (section.id === id) {
                                     return {
                                         ...section,
@@ -150,14 +169,6 @@ export class SectionService {
 
                         return sections.filter((section) => section.id !== id);
                     });
-                    // this.pageService.getPageByIdRs.update((page) => {
-                    //     if (!page) return null;
-                    //     const updatedPage = {
-                    //         ...page,
-                    //         sections: page.sections ? page.sections.filter((s) => s.id !== id) : []
-                    //     };
-                    //     return updatedPage;
-                    // });
                 })
             );
     }

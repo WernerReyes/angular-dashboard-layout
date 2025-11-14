@@ -7,16 +7,14 @@
 
     <ng-template #header>
         <tr>
-            <th>Nombre</th>
-            <th>Detalle</th>
+            <th style="width: 20%">Nombre</th>
+            <th style="width: 80%">Detalle</th>
         </tr>
     </ng-template>
     <ng-template let-specification let-i="rowIndex" #body>
         <tr [pContextMenuRow]="specification">
             <td>{{specification.title}}</td>
-            <td
-              class="max-w-sm"
-            >{{specification.description}}</td>
+            <td class="max-w-sm">{{specification.description}}</td>
         </tr>
     </ng-template>
 </p-table>

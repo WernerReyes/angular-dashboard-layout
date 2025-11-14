@@ -77,19 +77,35 @@ export class Table {
     selectedMachine = signal<Machine | null>(null);
 
     categoryTypeFilter = signal<CategoryType | null>(null);
-    categorySearchQuery = signal<string>('');
-    searchMachine = signal<Record<string, string> | null>(null);
+    querySearch = signal<string>('');
 
+    categorySearchQuery = computed(() => {
+        const queries = this.querySearch().toLowerCase().trim().split(',');
+        return queries.length > 0 ? queries[0] : '';
+    });
+    machineSearchQuery = computed(() => {
+        const queries = this.querySearch().toLowerCase().trim().split(',');
+        return queries.length > 1 ? queries[1] : '';
+    });
+   
     categoriesFiltered = computed(() => {
         let categories = this.categoriesList.hasValue() ? this.categoriesList.value() : [];
+
+
 
         const typeFilter = this.categoryTypeFilter();
         if (typeFilter !== null) {
             categories = categories.filter((category) => category.type === typeFilter);
         }
-        const searchQuery = this.categorySearchQuery().toLowerCase();
-        if (searchQuery) {
-            categories = categories.filter((category) => category.title.toLowerCase().includes(searchQuery));
+        const categoryQuery = this.categorySearchQuery();
+        const machineQuery = this.machineSearchQuery();
+
+        if (categoryQuery || machineQuery) {
+            categories = categories.filter((category) => category.title.toLowerCase().includes(categoryQuery) &&
+                (machineQuery
+                    ? category.machines.some((machine) => machine.name.toLowerCase().includes(machineQuery))
+                    : true));
+
         }
         return categories;
     });
@@ -159,23 +175,6 @@ export class Table {
         }
     ];
 
-    setQuery(event: Event, category: Category) {
-        const query = (event.target as HTMLInputElement).value.toLowerCase();
-        this.searchMachine.update((current) => {
-            return {
-                ...current,
-                [category.id]: query
-            };
-        });
-    }
-
-    getFilteredMachines(category: Category): Machine[] {
-        const search = this.searchMachine()?.[category.id];
-        if (search) {
-            return category.machines.filter((machine) => machine.name.toLowerCase().includes(search));
-        }
-        return category.machines;
-    }
 
     displaySpecifications(event: Event, specifications: TecnicalSpecifications[]) {
         const isSameSelectedMachine =

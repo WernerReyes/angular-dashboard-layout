@@ -214,17 +214,7 @@ export class MachineDialogForm {
         const uuidFromFile = this.getUuidFromFile(file);
         const updatedImagesToUpdate = this.imagesToUpdate?.value?.filter((img) => img.id !== uuidFromFile);
         this.imagesToUpdate?.setValue(updatedImagesToUpdate ?? []);
-        // this.imagesToDelete?.setValue(
-        //     this.imagesToDeleteSignal()?.map((img) => {
-        //         if (img.id === uuidFromFile) {
-        //             return { ...img, newFile: null };
-        //         }
-        //         return img;
-        //     }) ?? []
-        // );
-        // const deleteByIndex =this.form.get('fileImages')?.value?.[index];
-        // if (deleteByIndex) {
-        console.log('Removing file at index:', index, 'with UUID:', uuidFromFile);
+        
             this.form.get('fileImages')?.setValue(this.form.get('fileImages')?.value?.filter((_: File, i: number) => i !== index)!);
         // }
         // this.form.get('fileImages')?.setValue(this.form.get('fileImages')?.value?.slice(0, index).concat(this.form.get('fileImages')?.value?.slice(index + 1)));

@@ -227,7 +227,7 @@
                     class="w-full"
                     mode="advanced"
                 >
-                    <ng-template #content let-files let-uploadedFiles="uploadedFiles" let-removeFileCallback="removeFileCallback" let-removeUploadedFileCallback="removeUploadedFileCallback">
+                    <ng-template #content let-files  let-uploadedFiles="uploadedFiles" let-removeFileCallback="removeFileCallback" let-removeUploadedFileCallback="removeUploadedFileCallback">
                         <div class="flex flex-col gap-2">
                             @for (file of files; track file.name) {
                             <div class="flex items-center justify-between p-2 rounded">

@@ -4,13 +4,13 @@ import { SectionItemService } from '@/dashboard/services/section-item.service';
 import { SectionService } from '@/dashboard/services/section.service';
 import { ErrorBoundary } from '@/shared/components/error/error-boundary/error-boundary';
 import { DataViewSkeleton } from '@/shared/components/skeleton/data-view-skeleton/data-view-skeleton';
-import { Page } from '@/shared/interfaces/page';
+import type { Page } from '@/shared/interfaces/page';
 import { Section, sectionStatusOptions, sectionTypesOptions } from '@/shared/interfaces/section';
 import type { SectionItem as ISectionItem } from '@/shared/interfaces/section-item';
 import { SectionMode, SectionType } from '@/shared/mappers/section.mapper';
 import { MessageService } from '@/shared/services/message.service';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { JsonPipe, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import { Component, computed, ContentChild, inject, input, linkedSignal, output, signal, TemplateRef, ViewChild } from '@angular/core';
 import { ConfirmationService, MenuItemCommandEvent } from 'primeng/api';
 import { BadgeModule } from 'primeng/badge';
@@ -27,9 +27,8 @@ import { SectionItemForm } from './section-item-form/section-item-form';
 import { SectionItems } from './section-items/section-items';
 
 import { FilterArrayByPipe } from '@/shared/pipes/filter-array-by-pipe';
-import { SelectModule } from 'primeng/select';
 import { PopoverModule } from 'primeng/popover';
-import { PageService } from '@/dashboard/services/page.service';
+import { SelectModule } from 'primeng/select';
 
 type DeleteSectionItemParams = {
     id: number;
@@ -48,7 +47,6 @@ export type DeleteSectionItemFunction = (event: Event, params: DeleteSectionItem
         FilterByTermPipe,
         DragDropModule,
         NgTemplateOutlet,
-
         SelectModule,
         MessageModule,
         DataViewSkeleton,
@@ -97,10 +95,7 @@ export class SectionsList {
     SectionType = SectionType;
     SectionMode = SectionMode;
 
-
-
     sectionsListRs = this.sectionService.sectionListResource;
-   
 
     displayItemDialog = signal<boolean>(false);
     currentSection = signal<Section | null>(null);
@@ -134,6 +129,14 @@ export class SectionsList {
 
         this.sectionFormService.populateForm(section!, this.pageId());
     };
+
+
+    duplicate = () => {
+        const section = this.currentSection();
+        if (!section) return;
+
+        this.sectionService.duplicateSection(section.id, this.pageId()).subscribe();
+    }
 
     delete = ($event: MenuItemCommandEvent) => {
         const section = this.currentSection();
@@ -176,24 +179,7 @@ export class SectionsList {
             next: () => {
                 this.sectionsListRs.update((sections) => {
                     if (!sections) return [];
-
-                    const orderMap = new Map(newOrder.map((item) => [item.id, item.order]));
-
-                    // Solo modificamos el order_num dentro de pivot_pages
-                    const updatedSections = sections.map((section) => {
-                        const pivot = section.pivotPages?.find((p) => p.idPage === this.pageId());
-                        if (pivot && orderMap.has(section.id)) {
-                            pivot.orderNum = orderMap.get(section.id)!;
-                        }
-                        return section;
-                    });
-
-                    // Reordenar secciones por su nuevo order_num
-                    return [...updatedSections].sort((a, b) => {
-                        const orderA = a.pivotPages?.find((p) => p.idPage === this.pageId())?.orderNum ?? 9999;
-                        const orderB = b.pivotPages?.find((p) => p.idPage === this.pageId())?.orderNum ?? 9999;
-                        return orderA - orderB;
-                    });
+                    return this.localOrder(sections, newOrder);
                 });
 
                 this.hasPositionChanged.set(false);
@@ -205,27 +191,38 @@ export class SectionsList {
         const original = this.orginalSectionList().map((section, index) => ({ id: section.id, pageId: this.pageId(), order: index + 1 }));
         this.sectionsListRs.update((sections) => {
             if (!sections) return [];
-            const orderMap = new Map(original.map((item) => [item.id, item.order]));
-
-            // Solo modificamos el order_num dentro de pivot_pages
-            const updatedSections = sections.map((section) => {
-                const pivot = section.pivotPages?.find((p) => p.idPage === this.pageId());
-                if (pivot && orderMap.has(section.id)) {
-                    pivot.orderNum = orderMap.get(section.id)!;
-                }
-                return section;
-            });
-
-            // Reordenar secciones por su nuevo order_num
-            return [...updatedSections].sort((a, b) => {
-                const orderA = a.pivotPages?.find((p) => p.idPage === this.pageId())?.orderNum ?? 9999;
-                const orderB = b.pivotPages?.find((p) => p.idPage === this.pageId())?.orderNum ?? 9999;
-                return orderA - orderB;
-            });
+            return this.localOrder(sections, original);
         });
         this.hasPositionChanged.set(false);
 
         this.messageService.setSuccess('Los cambios han sido descartados correctamente.');
+    }
+
+    private localOrder(
+        sections: Section[],
+        orderList: {
+            id: number;
+            pageId: number;
+            order: number;
+        }[]
+    ) {
+        const orderMap = new Map(orderList.map((item) => [item.id, item.order]));
+
+        // Solo modificamos el order_num dentro de pivot_pages
+        const updatedSections = sections.map((section) => {
+            const pivot = section.pivotPages?.find((p) => p.idPage === this.pageId());
+            if (pivot && orderMap.has(section.id)) {
+                pivot.orderNum = orderMap.get(section.id)!;
+            }
+            return section;
+        });
+
+        // Reordenar secciones por su nuevo order_num
+        return [...updatedSections].sort((a, b) => {
+            const orderA = a.pivotPages?.find((p) => p.idPage === this.pageId())?.orderNum ?? 9999;
+            const orderB = b.pivotPages?.find((p) => p.idPage === this.pageId())?.orderNum ?? 9999;
+            return orderA - orderB;
+        });
     }
 
     hasOrderChanged(currentList: Section[]): boolean {

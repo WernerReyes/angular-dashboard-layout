@@ -31,40 +31,27 @@
 
         <sections-list [type]="SectionMode.CUSTOM" [selectedPage]="selectedPage()" (onDisplay)="display.set($event)" (onSelectedSection)="selectedSection.set($event)">
             <ng-template #associatedPage let-section>
-                <p-button label="Mover a" icon="pi pi-file" class="ml-auto" variant="outlined" (click)="op.toggle($event)"> </p-button>
+                <p-button label="Mover a" icon="pi pi-file" [disabled]="sectionService.loading()" class="ml-auto" variant="outlined" (click)="op.toggle($event)"> </p-button>
                 <p-popover #op>
                     <div class="flex flex-col gap-4 w-xs">
                         <app-error-boundary [resource]="pagesListRs" emptyMessage="No hay páginas disponibles para mover" errorMessage="Hubo un error al cargar las páginas">
-                            <!-- (onChange)="op.hide()" -->
                             <p-select
                                 #pageSelect
                                 size="small"
-                                
+                                [loading]="sectionService.loading()"
                                 emptyMessage="No hay páginas disponibles para mover"
                                 emptyFilterMessage="No se encontraron páginas"
                                 [options]="pages()"
                                 (onChange)="moveToPage($event, section, $event.value); op.hide()"
-                               [resetFilterOnHide]="true"
+                                (onHide)="pageSelect.updateModel(null); pageSelect.value = null"
                                 optionLabel="title"
                                 optionValue="id"
-                                placeholder="Selecciona páginas para asociar"
-                                filterPlaceHolder="Buscar páginas"
+                                placeholder="Selecciona la página destino"
+                                [filter]="true"
+                                filterPlaceholder="Buscar páginas"
                                 display="chip"
                                 fluid
                             >
-                                <!-- <ng-template #footer>
-                                    <div class="p-3 flex justify-end">
-                                        <p-button
-                                            label="Guardar"
-                                            severity="secondary"
-                                            
-                                            text
-                                            size="small"
-                                            icon="pi pi-save"
-                                            (click)="moveToPage(section, pageSelect.value); op.hide()"
-                                        />
-                                    </div>
-                                </ng-template> -->
                             </p-select>
                         </app-error-boundary>
                     </div>

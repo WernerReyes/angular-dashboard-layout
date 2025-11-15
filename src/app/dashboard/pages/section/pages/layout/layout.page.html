@@ -55,6 +55,7 @@
                                 <p-multiSelect
                                     formControlName="pagesIds"
                                     size="small"
+                                    [loading]="sectionService.loading()"
                                     emptyMessage="No hay páginas disponibles para asociar"
                                     emptyFilterMessage="No se encontraron páginas"
                                     selectedItemsLabel="{0} páginas seleccionadas"

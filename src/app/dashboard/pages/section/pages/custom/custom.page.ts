@@ -7,13 +7,13 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { SelectChangeEvent, SelectModule } from 'primeng/select';
 
+import { SectionService } from '@/dashboard/services/section.service';
 import { SectionMode } from '@/shared/mappers/section.mapper';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { PopoverModule } from 'primeng/popover';
 import { SectionForm } from '../../section-form/section-form';
 import { SectionsList } from '../../sections-list/sections-list';
-import { SectionService } from '@/dashboard/services/section.service';
 
 @Component({
     selector: 'app-custom-page',
@@ -23,7 +23,7 @@ import { SectionService } from '@/dashboard/services/section.service';
 })
 export default class CustomPage {
     private readonly confirmationService = inject(ConfirmationService);
-    private readonly sectionService = inject(SectionService);
+    readonly sectionService = inject(SectionService);
     private readonly pageService = inject(PageService);
 
     selectedSection = signal<Section | null>(null);

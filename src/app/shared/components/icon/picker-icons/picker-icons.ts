@@ -13,10 +13,11 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
 import { PopoverModule } from 'primeng/popover';
 import { SliderModule } from 'primeng/slider';
-
+import { InputNumberModule } from 'primeng/inputnumber';
+import { TooltipModule } from 'primeng/tooltip';
 @Component({
     selector: 'app-picker-icons',
-    imports: [FilterByPipe, FormsModule, SanitizerHtmlPipe, InputTextModule, ButtonModule, InputGroupAddonModule, InputGroupModule, SliderModule, ColorPickerModule, PopoverModule],
+    imports: [FilterByPipe, FormsModule, SanitizerHtmlPipe, InputTextModule, TooltipModule, InputNumberModule, ButtonModule, InputGroupAddonModule, InputGroupModule, SliderModule, ColorPickerModule, PopoverModule],
     templateUrl: './picker-icons.html'
 })
 export class PickerIcons {

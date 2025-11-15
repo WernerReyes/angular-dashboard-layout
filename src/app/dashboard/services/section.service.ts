@@ -8,7 +8,6 @@ import { catchError, finalize, map, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UpdateOrder } from '../interfaces/common';
 import type { AssocieteSectionToPages, CreateSection, UpdateSection } from '../interfaces/section';
-import { PageService } from './page.service';
 
 @Injectable({
     providedIn: 'root'
@@ -78,30 +77,39 @@ export class SectionService {
         );
     }
 
+    duplicateSection(id: number, pageId: number) {
+        this.loading.set(true);
+        return this.http.post<ApiResponse<SectionEntity>>(`${this.prefix}/${id}/duplicate`, {
+            pageId
+        }).pipe(
+            map(({ data }) => mapSectionEntityToSection(data)),
+            tap((duplicatedSection) => {
+                this.sectionListResource.update((sections) => {
+                    if (!sections) return [duplicatedSection];
+                    return [...sections, duplicatedSection];
+                });
+            }),
+            finalize(() => this.loading.set(false))
+        );
+    }
+
     moveSectionToPage(sectionId: number, fromPageId: number, toPageId: number) {
+        console.log('Moving section', { sectionId, fromPageId, toPageId });
         return this.http.post<ApiResponse<SectionEntity>>(`${this.prefix}/${sectionId}/move-to-page`, { fromPageId, toPageId }).pipe(
             map(({ data }) => mapSectionEntityToSection(data)),
-            tap((movedSection) => {
+            tap((sectionUpdated) => {
                 this.sectionListResource.update((sections) => {
                     if (!sections) return [];
                     return sections.map((section) => {
-                        if (section.id === movedSection.id) {
+                        if (section.id === sectionId) {
                             return {
-                                ...movedSection,
-                                pages:
-                                    section.pages?.map((page) => {
-                                        if (page.id === fromPageId) {
-                                            return {
-                                                ...page,
-                                                id: toPageId
-                                            };
-                                        }
-                                        return page;
-                                    }) || [],
-
-                                items: section.items
+                                ...sectionUpdated,
+                                items: section.items,
+                                machines: section.machines,
+                                menus: section.menus
                             };
                         }
+
                         return section;
                     });
                 });

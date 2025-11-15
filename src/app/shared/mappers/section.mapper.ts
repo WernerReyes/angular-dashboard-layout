@@ -70,6 +70,7 @@ export interface SectionEntity {
 }
 
 export const mapSectionEntityToSection = (entity: SectionEntity): Section => {
+   
     return {
         id: entity.id_section,
         type: entity.type,

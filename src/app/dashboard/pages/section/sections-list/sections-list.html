@@ -97,7 +97,7 @@
             </div>
             } } }
 
-            <context-menu-crud [(selected)]="currentSection" [editCommand]="edit" [deleteCommand]="delete"></context-menu-crud>
+            <context-menu-crud [(selected)]="currentSection" [editCommand]="edit" [deleteCommand]="delete" [duplicateCommand]="duplicate"></context-menu-crud>
         </div>
 
         <section-item-form [display]="displayItemDialog()" (onCloseDialog)="displayItemDialog.set(false)" [(selectedSectionItem)]="selectedSectionItem" [selectedSection]="currentSection()"></section-item-form>

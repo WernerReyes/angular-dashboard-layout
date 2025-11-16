@@ -1,12 +1,11 @@
 <!-- {{currentPageRs}} -->
-@if (selectedPage()) {
 <app-error-boundary [resource]="sectionsListRs" [errorMessage]="'No se pudieron cargar las secciones.'" [emptyMessage]="'No hay secciones disponibles.'">
     <ng-template #loading>
         <app-data-view-skeleton></app-data-view-skeleton>
     </ng-template>
 
     <ng-template #content let-sections>
-        @let filteredSections = sections | filterByPage: { idPage: selectedPage()!.id, type: type() } : ['idPage', 'type'] | filterByTerm :'title': searchTerm() | filterArrayBy: 'type': filterByType();
+        @let filteredSections = sections | filterByPage: { idPage: selectedPage()?.id, type: type() } : ['idPage', 'type'] | filterByTerm :'title': searchTerm() | filterArrayBy: 'type': filterByType();
         <div class="mt-4 flex flex-col gap-4">
             @if (filteredSections.length === 0) {
             <div class="flex flex-col items-center justify-center py-8 text-surface-500">
@@ -27,7 +26,7 @@
                 </p-message>
             </div>
 
-            }
+            } @if (selectedPage()) {
 
             <div cdkDropList [cdkDropListData]="filteredSections" (cdkDropListDropped)="drop($event, filteredSections)" class="flex flex-col gap-4">
                 @for (section of filteredSections; track section.id) { @let status = getSectionStatus(section); @let typeOption = getSectionType(section);
@@ -65,12 +64,22 @@
                         </div>
                     </div>
 
-                    <section-items [section]="section" (onSelectSectionItem)="openDialogItem(section, $event)" [deleteItemConfirmation]="deleteSectionItemConfirmation.bind(this)"></section-items>
+                    <section-items
+                        [section]="section"
+                        (onSelectSectionItem)="openDialogItem(section, $event)"
+                        [deleteItemConfirmation]="deleteSectionItemConfirmation.bind(this)"
+                        [duplicateSectionItem]="duplicateSectionItem.bind(this)"
+                    ></section-items>
                 </div>
                 }
             </div>
 
-            } @else { @for (section of filteredSections; track section.id) { @let typeOption = getSectionType(section);
+            } @else {
+            <div class="alert alert-info" style="text-align: center; margin-top: 2rem">
+                <h2>Seleccione una página</h2>
+                <p>Por favor, elija una página de la lista para ver su contenido.</p>
+            </div>
+            } } @else { @for (section of filteredSections; track section.id) { @let typeOption = getSectionType(section);
             <div class="bg-white dark:bg-surface-800 rounded-lg border border-surface-200 dark:border-surface-700 p-5" (contextmenu)="contextMenu.onContextMenu($event, section)">
                 <div class="flex items-center justify-between mb-5 flex-wrap gap-3">
                     <div class="flex items-center gap-3">
@@ -93,7 +102,7 @@
                     </div>
                 </div>
 
-                <section-items [section]="section" (onSelectSectionItem)="openDialogItem(section, $event)" [deleteItemConfirmation]="deleteSectionItemConfirmation.bind(this)"></section-items>
+                <section-items [section]="section" (onSelectSectionItem)="openDialogItem(section, $event)" [deleteItemConfirmation]="deleteSectionItemConfirmation.bind(this)" [duplicateSectionItem]="duplicateSectionItem.bind(this)"></section-items>
             </div>
             } } }
 
@@ -103,10 +112,3 @@
         <section-item-form [display]="displayItemDialog()" (onCloseDialog)="displayItemDialog.set(false)" [(selectedSectionItem)]="selectedSectionItem" [selectedSection]="currentSection()"></section-item-form>
     </ng-template>
 </app-error-boundary>
-
-} @else {
-<div class="alert alert-info" style="text-align: center; margin-top: 2rem">
-    <h2>Seleccione una página</h2>
-    <p>Por favor, elija una página de la lista para ver su contenido.</p>
-</div>
-}

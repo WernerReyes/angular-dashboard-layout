@@ -9,6 +9,7 @@ export class FilterByPagePipe implements PipeTransform {
     transform(sections: Section[], searchObj: Partial<Record<keyof PivotPages, any>>, keys: (keyof PivotPages)[]): Section[] {
         if (!sections || !keys || keys.length === 0) return sections;
 
+
         return sections.filter((section) => {
             const type = keys.includes('type') ? searchObj['type'] : null;
 

@@ -6,7 +6,7 @@ import { ImageType } from '@/shared/interfaces/section-item';
 import { LinkType } from '@/shared/mappers/link.mapper';
 import { SectionMode, SectionType } from '@/shared/mappers/section.mapper';
 import { FormUtils } from '@/utils/form-utils';
-import { JsonPipe, KeyValuePipe } from '@angular/common';
+import { KeyValuePipe } from '@angular/common';
 import { Component, computed, inject, input, model, output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -34,7 +34,7 @@ import { VideoUpload } from '../components/video-upload/video-upload';
 @Component({
     selector: 'section-form',
     imports: [
-        JsonPipe,
+        // JsonPipe,
         CommonInputs,
         ShowLinkSwitch,
         FileUpload,

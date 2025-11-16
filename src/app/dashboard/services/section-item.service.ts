@@ -62,6 +62,20 @@ export class SectionItemService {
         );
     }
 
+    duplicate(id: number) {
+        this.loading.set(true);
+        return this.http.post<ApiResponse<SectionItemEntity>>(`${this.prefix}/${id}/duplicate`, {}).pipe(
+            map(({ data }) => mapSectionItemEntityToSectionItem(data)),
+            tap((sectionItem) => {
+                this.sectionService.sectionListResource.update((sections) => {
+                    if (!sections) return [];
+                    return SectionUtils.insertSectionItemInSectionList(sections, sectionItem);
+                });
+            }),
+            finalize(() => this.loading.set(false))
+        );
+    }
+
     delete(id: number, sectionId: number) {
         this.loading.set(true);
         return this.http.delete<ApiResponse<void>>(`${this.prefix}/${id}`).pipe(

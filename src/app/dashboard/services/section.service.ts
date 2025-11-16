@@ -77,7 +77,7 @@ export class SectionService {
         );
     }
 
-    duplicateSection(id: number, pageId: number) {
+    duplicateSection(id: number, pageId: number | null) {
         this.loading.set(true);
         return this.http.post<ApiResponse<SectionEntity>>(`${this.prefix}/${id}/duplicate`, {
             pageId

@@ -132,10 +132,14 @@ export class SectionsList {
 
 
     duplicate = () => {
+        let id: number | null = this.pageId();
+        if (this.type() === SectionMode.LAYOUT) {
+            id = null; 
+        }
         const section = this.currentSection();
         if (!section) return;
 
-        this.sectionService.duplicateSection(section.id, this.pageId()).subscribe();
+        this.sectionService.duplicateSection(section.id, id).subscribe();
     }
 
     delete = ($event: MenuItemCommandEvent) => {
@@ -257,6 +261,10 @@ export class SectionsList {
 
     isSectionLayout(section: Section): boolean {
         return section.pivotPages?.some((pivot) => pivot.type === SectionMode.LAYOUT) ?? false;
+    }
+
+    duplicateSectionItem = (sectionItem: ISectionItem) => {
+        this.sectionItemService.duplicate(sectionItem.id).subscribe();
     }
 
     private confirmationDialog = (event: Event, message: string, header: string, accept: () => void, reject: () => void) => {

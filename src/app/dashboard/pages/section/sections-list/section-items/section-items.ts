@@ -62,6 +62,7 @@ import { SectionSupportWidgetItems } from '../section-support-widget-items/secti
 export class SectionItems {
     section = input.required<Section>();
     deleteItemConfirmation = input.required<DeleteSectionItemFunction>();
+    duplicateSectionItem = input.required<(sectionItem: ISectionItem) => void>();
     onSelectSectionItem = output<ISectionItem>();
 
     @ViewChild(ContextMenuCrud) contextMenu!: ContextMenuCrud<ISectionItem>;
@@ -89,6 +90,10 @@ export class SectionItems {
                 this.selectedItem.set(null);
             }
         );
+    }
+
+    duplicate = () => {
+        this.duplicateSectionItem()(this.selectedItem()!);
     }
 
 }

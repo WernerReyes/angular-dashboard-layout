@@ -2,7 +2,9 @@
     @let imageType = form.controls['imageType'].value;
     <div class="flex flex-col gap-2">
         <label>Logo de la empresa</label>
-        <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+        <file-upload currentImageName="currentImage"
+        imageSizePX="250x50px"
+        imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
     </div>
 
     <div class="flex flex-col gap-2 mt-1">

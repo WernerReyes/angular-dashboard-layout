@@ -69,7 +69,18 @@
                 ></common-inputs>
                 <div class="flex flex-col gap-2">
                     <label>Imagen referencial</label>
-                    <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+                    <file-upload
+                        imageSizePX="800x700px"
+                        currentImageName="currentImage"
+                        imageSelector="image"
+                        [form]="form"
+                        label="URL de la imagen"
+                        imageTypeName="imageType"
+                        [imageType]="imageType"
+                        imageFieldName="imageFile"
+                        imageURLName="imageUrl"
+                    >
+                    </file-upload>
                 </div>
                 } @case(SectionType.MAIN_NAVIGATION_MENU) {
                 <navigation-menu-form></navigation-menu-form>
@@ -92,7 +103,18 @@
 
                 <div class="flex flex-col gap-2">
                     <label>Imagen de Fondo</label>
-                    <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+                    <file-upload
+                        imageSizePX="1200x400px"
+                        currentImageName="currentImage"
+                        imageSelector="image"
+                        [form]="form"
+                        label="URL de la imagen"
+                        imageTypeName="imageType"
+                        [imageType]="imageType"
+                        imageFieldName="imageFile"
+                        imageURLName="imageUrl"
+                    >
+                    </file-upload>
                 </div>
 
                 <show-link-switch [form]="form"></show-link-switch>
@@ -121,21 +143,32 @@
                 ></common-inputs>
                 <div class="flex flex-col gap-2">
                     <label>Imagen</label>
-                    <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+                    <file-upload
+                        imageSizePX="900x700px"
+                        currentImageName="currentImage"
+                        imageSelector="image"
+                        [form]="form"
+                        label="URL de la imagen"
+                        imageTypeName="imageType"
+                        [imageType]="imageType"
+                        imageFieldName="imageFile"
+                        imageURLName="imageUrl"
+                    >
+                    </file-upload>
                 </div>
 
                 } @case (SectionType.MACHINE) {
-                    <select-machine [form]="form" label="Selecciona las Máquinas" [multiple]="true"></select-machine>
+                <select-machine [form]="form" label="Selecciona las Máquinas" [multiple]="true"></select-machine>
                 } @case (SectionType.CONTACT_US) {
-                    <!-- {
+                <!-- {
                         type: 'subtitle',
                         inputType: 'email',
                         label: 'Correo electrónico',
                         placeholder: 'Correo electrónico de contacto',
                     } -->
                 <common-inputs
-                [form]="form"
-                [includeFields]="[
+                    [form]="form"
+                    [includeFields]="[
                         
                     {
                         type: 'content',
@@ -148,7 +181,9 @@
                 ></common-inputs>
                 <div class="flex flex-col gap-2">
                     <label>Imagen</label>
-                    <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+                    <file-upload
+                        imageSizePX="1200x800px"
+                    currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
                 </div>
                 <common-inputs
                     [form]="form"
@@ -241,7 +276,9 @@
                 ></common-inputs>
                 <div class="flex flex-col gap-2 mb-5">
                     <label>Imagen referencial</label>
-                    <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+                    <file-upload 
+                        imageSizePX="800x1200px"
+                    currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
                 </div>
 
                 <icon-upload [display]="display()" [form]="form" iconFileName="iconFile" currentIconUrlName="currentIconUrl"></icon-upload>
@@ -273,7 +310,9 @@
 
                 <div class="flex flex-col gap-2 mb-5">
                     <label>Imagen referencial</label>
-                    <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+                    <file-upload 
+                        imageSizePX="300x400px"
+                    currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
                 </div>
 
                 <show-link-switch [form]="form"></show-link-switch>
@@ -311,7 +350,9 @@
 
                 <div class="flex flex-col gap-2 mt-4">
                     <label>Imagen del widget</label>
-                    <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+                    <file-upload
+                        imageSizePX="200x120px"
+                    currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
                 </div>
                 }}
             </div>

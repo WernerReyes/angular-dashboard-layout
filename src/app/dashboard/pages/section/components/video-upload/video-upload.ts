@@ -22,4 +22,9 @@ export class VideoUpload {
             this.form().get('videoFile')?.markAsTouched();
         }
     }
+
+    removeFileSelect() {
+        this.form().get('videoFile')?.patchValue(null);
+        this.form().get('videoFile')?.markAsTouched();
+    }
 }

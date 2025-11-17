@@ -6,25 +6,29 @@ import { FormsModule } from '@angular/forms';
 import { type IconName, Icons } from '@/shared/constants/icons';
 import type { Icon } from '@/shared/mappers/section-item.mapper';
 import { SanitizerHtmlPipe } from '@/shared/pipes/sanitizer-html-pipe';
+import { AsyncPipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { PopoverModule } from 'primeng/popover';
+import { SkeletonModule } from 'primeng/skeleton';
 import { SliderModule } from 'primeng/slider';
-import { InputNumberModule } from 'primeng/inputnumber';
 import { TooltipModule } from 'primeng/tooltip';
 @Component({
     selector: 'app-picker-icons',
-    imports: [FilterByPipe, FormsModule, SanitizerHtmlPipe, InputTextModule, TooltipModule, InputNumberModule, ButtonModule, InputGroupAddonModule, InputGroupModule, SliderModule, ColorPickerModule, PopoverModule],
+    imports: [FilterByPipe, SkeletonModule, FormsModule, AsyncPipe, SanitizerHtmlPipe, InputTextModule, TooltipModule, InputNumberModule, ButtonModule, InputGroupAddonModule, InputGroupModule, SliderModule, ColorPickerModule, PopoverModule],
     templateUrl: './picker-icons.html'
 })
 export class PickerIcons {
     selectedIcon = input<Icon | null>(null);
     onSelectedIcon = output<Icon>();
 
-    icons = Icons.getAll();
+    icons = Icons.getAllDinamic();
+
+    defaultSkeletons = Array.from({ length: 20 });
 
     filterText = linkedSignal<string>(() => (this.selectedIcon() ? this.selectedIcon()!.name : ''));
     size = linkedSignal<number>(() => (this.selectedIcon() ? this.selectedIcon()!.size : Number(localStorage.getItem('picker-icon-last-size')) || 24));

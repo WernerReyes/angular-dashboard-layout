@@ -39,4 +39,9 @@ export class IconUpload {
         }
     }
 
+    removeFileSelect() {
+        this.form().patchValue({ [this.iconFileName()]: null });
+        this.form().get(this.iconFileName())?.markAsTouched();
+    }
+
 }

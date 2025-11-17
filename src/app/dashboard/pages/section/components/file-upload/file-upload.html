@@ -6,7 +6,8 @@
     @if (imageType() !== ImageType.NONE) { @if (imageType() === ImageType.LOCAL) {
 
     <p-fileupload
-        [chooseLabel]="'Seleccionar imagen'"
+        
+        chooseLabel="Seleccionar imagen"
         invalidFileSizeMessageSummary="Archivo demasiado grande"
         invalidFileSizeMessageDetail="El tamaño máximo permitido es de 5MB."
         invalidFileTypeMessageSummary="Tipo de archivo inválido"
@@ -15,6 +16,7 @@
         invalidFileLimitMessageDetail="Has excedido el número máximo de archivos permitidos."
         [showUploadButton]="false"
         (onSelect)="onFileSelect($event)"
+        (onRemove)="removeFileSelect()"
         [showCancelButton]="false"
         [multiple]="false"
         accept=".svg,.png,.jpg"
@@ -38,7 +40,8 @@
                             />
                         </svg>
                         <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Arrastrar</span> tu imagen aquí</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG o JPG (MAX. 800x400px)</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG o JPG ({{ imageSizePX() }})</p>
+                        <small class="text-gray-500 dark:text-gray-400">MÁX. 5MB</small>
                     </div>
                 </label>
             </div>
@@ -62,16 +65,5 @@
     <app-image-error containerClass="mx-auto" iconClass="w-24 h-24"></app-image-error>
     } @if (form().controls[imageFieldName()].errors) {
     <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form(), imageFieldName()) }} </p-message>
-    }
-    <!-- @if (selectedSectionItem()) { @let image = selectedSectionItem()?.[imageSelector()]; @if (image) {
-    <div class="flex flex-col gap-2 w-full relative mb-5">
-      
-        <p-button icon="pi pi-times" text class="p-button-rounded p-button-text p-button-plain absolute z-10 cursor-pointer self-end" (click)="selectedSectionItem()![imageSelector()] = null" title="Eliminar imagen"></p-button>
-        <p-image (onImageError)="selectedSectionItem()![imageSelector()] = null" [src]="image ?? undefined" class="mx-auto" imageClass="w-full sm:w-96  h-auto rounded-md" alt="Imagen actual" [preview]="true" />
-    </div>
-    } @else {
-    <app-image-error containerClass="mx-auto" iconClass="w-24 h-24"></app-image-error>
-    } }  -->
-
-    }
+    } }
 </div>

@@ -1,8 +1,6 @@
 <!-- [header]="selectedSectionItem () ? 'Editar item' : `Agregar item a la sección '${selectedSection()?.title}'`" -->
 
-<p-dialog class="!overflow-hidden" [visible]="display()"
-[closable]="!loading()"
-(visibleChange)="closeDialog()" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '80vw' }" [modal]="true" [maximizable]="true">
+<p-dialog class="!overflow-hidden" [visible]="display()" [closable]="!loading()" (visibleChange)="closeDialog()" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '80vw' }" [modal]="true" [maximizable]="true">
     <ng-template #header>
         <div class="flex items-center gap-3">
             <i class="pi pi-folder-open text-surface-600 dark:text-surface-400"></i>
@@ -86,7 +84,18 @@
                 <div class="flex flex-col gap-2">
                     <label>Imagen</label>
                     <!-- [selectedSectionItem]="selectedSectionItem()" -->
-                    <file-upload currentImageName="currentImage" imageSelector="image" [form]="form" label="URL de la imagen" imageTypeName="imageType" [imageType]="imageType" imageFieldName="imageFile" imageURLName="imageUrl"> </file-upload>
+                    <file-upload
+                        imageSizePX="250x100px"
+                        currentImageName="currentImage"
+                        imageSelector="image"
+                        [form]="form"
+                        label="URL de la imagen"
+                        imageTypeName="imageType"
+                        [imageType]="imageType"
+                        imageFieldName="imageFile"
+                        imageURLName="imageUrl"
+                    >
+                    </file-upload>
                 </div>
                 } @case (SectionType.OUR_COMPANY) {
                 <common-inputs
@@ -110,9 +119,7 @@
                     isTextarea: true
                 }]"
                 ></common-inputs>
-                }
-                
-                @case (SectionType.CONTACT_TOP_BAR) {
+                } @case (SectionType.CONTACT_TOP_BAR) {
                 <common-inputs
                     [form]="form"
                     [includeFields]="[{
@@ -156,9 +163,7 @@
                 ></common-inputs>
                 } @case (SectionType.CONTACT_US) {
                 <contact-us-form></contact-us-form>
-                } @case (SectionType.FOOTER) {
-               
-                } @case (SectionType.ADVANTAGES) {
+                } @case (SectionType.FOOTER) { } @case (SectionType.ADVANTAGES) {
                 <common-inputs
                     [form]="form"
                     [includeFields]="[{

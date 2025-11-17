@@ -23,9 +23,13 @@ export class FileUpload {
     imageTypeName = input.required<string>();
     imageFieldName = input.required<string>();
     imageURLName = input.required<string>();
+
+    imageSizePX = input.required<string>();
     // imageSelector = input.required<ImageSelector>();
     currentImageName = input.required<'currentImage' | 'currentImageBack'>();
     label = input<string>();
+
+   
 
     // selectedSectionItem = input<SectionItem | null>(null);
 
@@ -41,5 +45,10 @@ export class FileUpload {
             this.form().patchValue({ [this.imageFieldName()]: file as any });
             this.form().get(this.imageFieldName())?.markAsTouched();
         }
+    }
+
+    removeFileSelect() {
+        this.form().patchValue({ [this.imageFieldName()]: null });
+        this.form().get(this.imageFieldName())?.markAsTouched();
     }
 }

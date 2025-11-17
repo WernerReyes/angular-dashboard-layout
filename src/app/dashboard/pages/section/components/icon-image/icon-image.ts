@@ -3,7 +3,6 @@ import { Icons } from '@/shared/constants/icons';
 import { type Icon, IconType } from '@/shared/mappers/section-item.mapper';
 import { SanitizerHtmlPipe } from '@/shared/pipes/sanitizer-html-pipe';
 import { Component, input } from '@angular/core';
-import { JsonPipe } from '@angular/common';
 
 type IconImageFields = {
     iconType: IconType | null;
@@ -13,7 +12,7 @@ type IconImageFields = {
 };
 @Component({
     selector: 'icon-image',
-    imports: [ImageError, SanitizerHtmlPipe],
+    imports: [ImageError,  SanitizerHtmlPipe],
     templateUrl: './icon-image.html'
 })
 export class IconImage<T extends IconImageFields> {

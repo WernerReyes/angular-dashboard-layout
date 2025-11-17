@@ -1,4 +1,4 @@
-import type lucideData from '@iconify-json/lucide/icons.json';
+import lucideData from '@iconify-json/lucide/icons.json';
 
 export type IconName = keyof typeof lucideData.icons;
 
@@ -24,14 +24,14 @@ export class Icons {
         return this.cache;
     }
 
-    static getHtml(name: string) {
-        return this.cache!.find((i) => i.name === name)?.html || null;
-    }
+    // static getHtml(name: string) {
 
-    //   static getHtml3(name: IconName) {
-    //         const icon = lucideData.icons[name];
-    //         console.log('Getting icon html for:', name, icon.body.replace(/stroke-width="[^"]*"/g, ''));
-    //         if (!icon) return null;
-    //         return icon.body.replace(/stroke-width="[^"]*"/g, '');
-    //     }
+    //     return this.cache!.find((i) => i.name === name)?.html || null;
+    // }
+
+    static getHtml(name: IconName) {
+        const icon = lucideData.icons[name];
+        if (!icon) return null;
+        return icon.body.replace(/stroke-width="[^"]*"/g, '');
+    }
 }

@@ -22,20 +22,6 @@ export class SectionService {
     isUpdating = signal(false);
     loading = signal(false);
 
-    sectionListResource = httpResource<Section[]>(
-        () => ({
-            url: this.prefix,
-            method: 'GET',
-            cache: 'reload'
-        }),
-        {
-            parse: (value) => {
-                const data = value as ApiResponse<SectionEntity[]>;
-                return data.data.map(mapSectionEntityToSection);
-            },
-            defaultValue: []
-        }
-    );
 
     sectionLayoutsListRs = httpResource<Section[]>(
         () => ({
@@ -157,7 +143,7 @@ export class SectionService {
     moveSectionToPage(sectionId: number, fromPageId: number, toPageId: number) {
         return this.http.post<ApiResponse<SectionEntity>>(`${this.prefix}/${sectionId}/move-to-page`, { fromPageId, toPageId }).pipe(
             map(({ data }) => mapSectionEntityToSection(data)),
-            tap((sectionUpdated) => {
+            tap(() => {
                 
                 this.pageService.pageByIdRs.update((page) => {
                     if (!page) return page;
@@ -166,38 +152,9 @@ export class SectionService {
                         ...page,
                         sections: sections.filter((section) => section.id !== sectionId)
                     };
-                    // if (!page?.sections) return [];
-                    // return sections.map((section) => {
-                    //     if (section.id === sectionId) {
-                    //         return {
-                    //             ...sectionUpdated,
-                    //             items: section.items,
-                    //             machines: section.machines,
-                    //             menus: section.menus
-                    //         };
-                    //     }
-
-                    //     return section;
-                    // });
+                   
                 });
-                // this.pageService.pagesListResource.update((pages) => {
-                //     if (!pages) return [];
-                //     return pages.map((page) => {
-                //         if (page.id === toPageId) {
-                //             return {
-                //                 ...page,
-                //                 sections: page.sections ? [...page.sections, movedSection] : [movedSection]
-                //             };
-                //         }
-                //         if (page.id === fromPageId) {
-                //             return {
-                //                 ...page,
-                //                 sections: page.sections ? page.sections.filter((s) => s.id !== movedSection.id) : []
-                //             };
-                //         }
-                //         return page;
-                //     });
-                // });
+               
             })
         );
     }

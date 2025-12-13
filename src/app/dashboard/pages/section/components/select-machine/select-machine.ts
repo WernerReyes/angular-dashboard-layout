@@ -48,7 +48,6 @@ export class SelectMachine {
         });
     });
 
-   
 
     constructor() {
         this.breakpointObserver

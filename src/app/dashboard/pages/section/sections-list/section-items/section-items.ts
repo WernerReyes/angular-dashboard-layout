@@ -15,7 +15,7 @@ import { SectionSolutionsOverviewItems } from '../section-solutions-overview-ite
 import { SectionMissionVisionItems } from '../section-mission-vision-items/section-mission-vision-items';
 import { SectionContactUsItems } from '../section-contact-us-items/section-contact-us-items';
 import { SectionFooterItems } from '../section-footer-items/section-footer-items';
-import { DeleteSectionItemFunction } from '../sections-list';
+
 import type { SectionItem as ISectionItem } from '@/shared/interfaces/section-item';
 import { SectionCashProcessingEquipmentItems } from '../section-cash-processing-equipment-items/section-cash-processing-equipment-items';
 import { SectionAdvantagesItems } from '../section-advantages-items/section-advantages-items';
@@ -29,6 +29,13 @@ import { SectionFullMaintenancePlanItems } from '../section-full-maintenance-pla
 import { SectionPreventiveCorrectiveMaintenanceItems } from '../section-preventive-corrective-maintenance-items/section-preventive-corrective-maintenance-items';
 import { SectionSupportWidgetItems } from '../section-support-widget-items/section-support-widget-items';
 
+type DeleteSectionItemParams = {
+    id: number;
+    sectionId: number;
+};
+
+
+export type DeleteSectionItemFunction = (event: Event, params: DeleteSectionItemParams, accept?: () => void, reject?: () => void) => void;
 @Component({
     selector: 'section-items',
     imports: [

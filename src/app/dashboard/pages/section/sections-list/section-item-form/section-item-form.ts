@@ -3,7 +3,7 @@ import { LinkService } from '@/dashboard/services/link.service';
 import { SectionItemService } from '@/dashboard/services/section-item.service';
 import { Section } from '@/shared/interfaces/section';
 import { ImageType, imageTypeOptions, SectionItem } from '@/shared/interfaces/section-item';
-import { SectionType } from '@/shared/mappers/section.mapper';
+import { SectionMode, SectionType } from '@/shared/mappers/section.mapper';
 import { FormUtils } from '@/utils/form-utils';
 import { JsonPipe } from '@angular/common';
 import { Component, inject, input, model, output } from '@angular/core';
@@ -69,6 +69,7 @@ export class SectionItemForm {
     display = input.required<boolean>();
     selectedSectionItem = model<SectionItem | null>(null);
     selectedSection = input<Section | null>(null);
+    mode = input<SectionMode>(SectionMode.CUSTOM);
 
     FormUtils = FormUtils;
     SectionType = SectionType;
@@ -111,7 +112,7 @@ export class SectionItemForm {
                         ...sectionItemData,
                         currentImageUrl: formValue.currentImage || null,
                         currentBackgroundImageUrl: formValue.currentImageBack || null
-                    })
+                    }, this.mode())
                     .subscribe({
                         next: () => {
                             this.onCloseDialog.emit();
@@ -125,7 +126,7 @@ export class SectionItemForm {
                 return;
             }
 
-            this.sectionItemService.createSectionItem(sectionItemData).subscribe({
+            this.sectionItemService.createSectionItem(sectionItemData, this.mode()).subscribe({
                 next: () => {
                     this.onCloseDialog.emit();
                     this.sectionItemFormService.reset();

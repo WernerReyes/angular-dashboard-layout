@@ -9,12 +9,14 @@ import { TransformUtils } from '@/utils/transform-utils';
 import { CategoryService } from './category.service';
 import type { Machine } from '@/shared/interfaces/machine';
 import { SectionService } from './section.service';
+import { PageService } from './page.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class MachineService {
     private readonly sectionService = inject(SectionService);
+    private readonly pageService = inject(PageService);
     private readonly categoryService = inject(CategoryService);
     private readonly http = inject(HttpClient);
 
@@ -102,10 +104,32 @@ export class MachineService {
                     });
                 });
 
-                this.sectionService.sectionListResource.update((sections) => {
+
+
+                const pageId = this.pageService.pageId();
+                this.pageService.pageByIdRs.update((page) => {
+                    if (!page) return page;
+                    return {
+                        ...page,
+                        sections: page.id === pageId
+                            ? page.sections?.map((section) => {
+                                  if (section.machines?.some((m) => m.id === updatedMachine.id)) {
+                                      return {
+                                          ...section,
+                                          machines: section.machines ? section.machines.map((machine) => (machine.id === updatedMachine.id ? updatedMachine : machine)) : [updatedMachine]
+                                      };
+                                  }
+                                    return section;
+                                }) || []
+                            : page.sections
+                    };
+                });
+
+
+                this.sectionService.sectionLayoutsListRs.update((sections) => {
                     if (!sections) return [];
                     return sections.map((section) => {
-                        if (updatedMachine.sections?.some((s) => s.id === section.id)) {
+                        if (section.machines?.some((m) => m.id === updatedMachine.id)) {
                             return {
                                 ...section,
                                 machines: section.machines ? section.machines.map((machine) => (machine.id === updatedMachine.id ? updatedMachine : machine)) : [updatedMachine]
@@ -114,6 +138,19 @@ export class MachineService {
                         return section;
                     });
                 });
+
+                // this.sectionService.sectionListResource.update((sections) => {
+                //     if (!sections) return [];
+                //     return sections.map((section) => {
+                //         if (updatedMachine.sections?.some((s) => s.id === section.id)) {
+                //             return {
+                //                 ...section,
+                //                 machines: section.machines ? section.machines.map((machine) => (machine.id === updatedMachine.id ? updatedMachine : machine)) : [updatedMachine]
+                //             };
+                //         }
+                //         return section;
+                //     });
+                // });
             }),
             finalize(() => this.loading.set(false))
         );
@@ -143,7 +180,29 @@ export class MachineService {
                 });
 
 
-                this.sectionService.sectionListResource.update((sections) => {
+                const pageId = this.pageService.pageId();
+                this.pageService.pageByIdRs.update((page) => {
+                    if (!page) return page;
+                    return {
+                        ...page,
+                        sections: page.id === pageId
+                            ? page.sections?.map((section) => {
+                                    return {
+                                        ...section,
+                                        machines: section.machines
+                                            ? section.machines.map((machine) =>
+                                                    machine.id === machineId ? { ...machine, images: machine.images?.map((img) => ({ ...img, isMain: img.url === imageUrl })) || [] } : machine
+                                                )
+                                            : []
+                                    };
+                                }
+                            ) || []
+                            : page.sections
+                    };
+                });
+
+
+                this.sectionService.sectionLayoutsListRs.update((sections) => {
                     if (!sections) return [];
 
                     return sections.map((section) => {

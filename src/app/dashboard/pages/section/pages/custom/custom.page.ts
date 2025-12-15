@@ -14,20 +14,19 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { PopoverModule } from 'primeng/popover';
 import { SectionForm } from '../../section-form/section-form';
 // import { SectionsList } from '../../sections-list/sections-list';
-import { DataViewSkeleton } from '@/shared/components/skeleton/data-view-skeleton/data-view-skeleton';
-import { SectionItems } from '../../sections-list/section-items/section-items';
-import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Message } from 'primeng/message';
-import { MessageService } from '@/shared/services/message.service';
-import { ContextMenuCrud } from '../../components/context-menu-crud/context-menu-crud';
-import { Badge } from 'primeng/badge';
-import { Tag } from 'primeng/tag';
-import { SectionItem } from '@/shared/interfaces/section-item';
 import { SectionItemService } from '@/dashboard/services/section-item.service';
-import { SectionItemFormService } from '../../services/section-item-form.service';
-import { SectionFormService } from '../../services/section-form.service';
+import { DataViewSkeleton } from '@/shared/components/skeleton/data-view-skeleton/data-view-skeleton';
+import { SectionItem } from '@/shared/interfaces/section-item';
+import { MessageService } from '@/shared/services/message.service';
+import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Badge } from 'primeng/badge';
+import { Message } from 'primeng/message';
+import { Tag } from 'primeng/tag';
+import { ContextMenuCrud } from '../../components/context-menu-crud/context-menu-crud';
 import { SectionItemForm } from '../../sections-list/section-item-form/section-item-form';
-import { JsonPipe } from '@angular/common';
+import { SectionItems } from '../../sections-list/section-items/section-items';
+import { SectionFormService } from '../../services/section-form.service';
+import { SectionItemFormService } from '../../services/section-item-form.service';
 
 type DeleteSectionItemParams = {
     id: number;
@@ -66,6 +65,8 @@ export default class CustomPage {
     display = signal<boolean>(false);
     targetList = signal<Section[]>([]);
     hasPositionChanged = signal<boolean>(false);
+
+    savePosition = signal<boolean>(false);
 
     private readonly pageId = computed<number>(() => {
         const page = this.selectedPage();
@@ -107,8 +108,9 @@ export default class CustomPage {
     private setOriginalSectionList = effect(() => {
         const sections = this.sections();
 
-        if (sections.length && this.originalSectionList().length === 0) {
+        if ((sections.length && this.originalSectionList().length === 0) || this.savePosition()) {
             this.originalSectionList.set(structuredClone(sections));
+            this.savePosition.set(false);
         }
     });
 
@@ -286,6 +288,7 @@ export default class CustomPage {
                 });
 
                 this.hasPositionChanged.set(false);
+                this.savePosition.set(true);
             }
         });
     }

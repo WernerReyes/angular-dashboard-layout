@@ -48,6 +48,8 @@ export class TechnicalSpecificationsDialogForm {
             command: () => {
                 const index = this.findSpecificationIndexById(this.selectedSpecification()!.id);
                 this.specifications.removeAt(index);
+                const machineId = this.machineForm.value.id;
+                this.machineService.updateTechnicalSpecifications(machineId!, this.specifications.value).subscribe();
                 this.selectedSpecification.set(null);
             }
         }
@@ -73,7 +75,7 @@ export class TechnicalSpecificationsDialogForm {
 
     addNewSpecification(e: Event) {
         e.preventDefault();
-        
+
         if (this.form.invalid) {
             this.form.markAllAsTouched();
             return;

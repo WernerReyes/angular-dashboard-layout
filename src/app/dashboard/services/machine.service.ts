@@ -156,9 +156,9 @@ export class MachineService {
         );
     }
 
-    updateTechnicalSpecifications(machineId: number, technicalSpecifications: TecnicalSpecifications[], created = false) {
+    updateTechnicalSpecifications(machineId: number, technicalSpecifications: TecnicalSpecifications[], action = 'update') {
         this.loading.set(true);
-        return this.http.put<ApiResponse<MachineEntity>>(`${this.prefix}/${machineId}/technical-specifications`, { technicalSpecifications, created }).pipe(
+        return this.http.put<ApiResponse<MachineEntity>>(`${this.prefix}/${machineId}/technical-specifications`, { technicalSpecifications, action }).pipe(
             map(({ data }) => mapMachineEntityToMachine(data)),
             tap((updatedMachine) => {
                 this.machinesListRs.update((machines) => {

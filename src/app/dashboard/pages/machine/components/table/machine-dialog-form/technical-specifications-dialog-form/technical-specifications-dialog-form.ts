@@ -49,7 +49,7 @@ export class TechnicalSpecificationsDialogForm {
                 const index = this.findSpecificationIndexById(this.selectedSpecification()!.id);
                 this.specifications.removeAt(index);
                 const machineId = this.machineForm.value.id;
-                this.machineService.updateTechnicalSpecifications(machineId!, this.specifications.value).subscribe();
+                this.machineService.updateTechnicalSpecifications(machineId!, this.specifications.value, 'delete').subscribe();
                 this.selectedSpecification.set(null);
             }
         }
@@ -107,7 +107,7 @@ export class TechnicalSpecificationsDialogForm {
             );
 
             const machineId = this.machineForm.value.id;
-            this.machineService.updateTechnicalSpecifications(machineId!, this.specifications.value, true).subscribe();
+            this.machineService.updateTechnicalSpecifications(machineId!, this.specifications.value, 'create').subscribe();
         }
 
         this.form.reset();

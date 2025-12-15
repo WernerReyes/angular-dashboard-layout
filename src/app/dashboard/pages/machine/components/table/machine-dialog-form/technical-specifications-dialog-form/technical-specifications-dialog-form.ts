@@ -14,6 +14,7 @@ import { TecnicalSpecifications } from '@/shared/mappers/machine.mapper';
 import { MenuItem } from 'primeng/api';
 import { TechnicalSpecificationsTable } from '../../../technical-specifications-table/technical-specifications-table';
 import { TextareaModule } from 'primeng/textarea';
+import { MachineService } from '@/dashboard/services/machine.service';
 @Component({
     selector: 'technical-specifications-dialog-form',
     imports: [TechnicalSpecificationsTable, DialogModule, TableModule, InputTextModule, TextareaModule, ButtonModule, ReactiveFormsModule, MessageModule, ContextMenuModule],
@@ -21,6 +22,7 @@ import { TextareaModule } from 'primeng/textarea';
 })
 export class TechnicalSpecificationsDialogForm {
     private readonly fb = inject(FormBuilder);
+    private readonly machineService = inject(MachineService);
     readonly machineFormService = inject(MachineFormService);
     private machineForm = this.machineFormService.machineForm;
 
@@ -61,15 +63,36 @@ export class TechnicalSpecificationsDialogForm {
         return this.machineForm.get('technicalSpecifications') as FormArray;
     }
 
-    addNewSpecification() {
+    closeDialog() {
+        console.log('CLOSING DIALOG');
+        this.display.set(false);
+        this.form.reset();
+        this.selectedSpecification.set(null);
+        this.specificationToEdit.set(null);
+    }
+
+    addNewSpecification(e: Event) {
+        e.preventDefault();
+        
         if (this.form.invalid) {
             this.form.markAllAsTouched();
             return;
         }
 
         if (this.specificationToEdit()) {
+            const machineId = this.machineForm.value.id;
             const index = this.findSpecificationIndexById(this.specificationToEdit()!.id);
+
+            const beforeUpdate = [...this.specifications.value];
+
             this.specifications.at(index).patchValue(this.form.value);
+
+            this.machineService.updateTechnicalSpecifications(machineId!, this.specifications.value).subscribe({
+                error: () => {
+                    this.specifications.setValue(beforeUpdate);
+                }
+            });
+
             this.specificationToEdit.set(null);
         } else {
             const { title, description } = this.form.value;
@@ -80,6 +103,9 @@ export class TechnicalSpecificationsDialogForm {
                     description: [description]
                 })
             );
+
+            const machineId = this.machineForm.value.id;
+            this.machineService.updateTechnicalSpecifications(machineId!, this.specifications.value, true).subscribe();
         }
 
         this.form.reset();

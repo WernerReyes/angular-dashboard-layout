@@ -1,5 +1,5 @@
 import { ApiResponse } from '@/shared/interfaces/api-response';
-import { type MachineEntity, mapMachineEntityToMachine } from '@/shared/mappers/machine.mapper';
+import { type MachineEntity, mapMachineEntityToMachine, TecnicalSpecifications } from '@/shared/mappers/machine.mapper';
 import { HttpClient, httpResource } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { finalize, map, tap } from 'rxjs';
@@ -151,6 +151,69 @@ export class MachineService {
                 //         return section;
                 //     });
                 // });
+            }),
+            finalize(() => this.loading.set(false))
+        );
+    }
+
+    updateTechnicalSpecifications(machineId: number, technicalSpecifications: TecnicalSpecifications[], created = false) {
+        this.loading.set(true);
+        return this.http.put<ApiResponse<MachineEntity>>(`${this.prefix}/${machineId}/technical-specifications`, { technicalSpecifications, created }).pipe(
+            map(({ data }) => mapMachineEntityToMachine(data)),
+            tap((updatedMachine) => {
+                this.machinesListRs.update((machines) => {
+                    if (!machines) return [];
+                    return machines.map((machine) =>
+                        machine.id === machineId ? { ...machine, technicalSpecifications: updatedMachine.technicalSpecifications } : machine
+                    );
+                }
+                );
+
+                this.categoryService.categoryListResource.update((categories) => {
+                    if (!categories) return [];
+                    return categories.map((category) => {
+                        if (category.id === updatedMachine.categoryId) {
+                            return {
+                                ...category,
+                                machines: category.machines ? category.machines.map((machine) => (machine.id === updatedMachine.id ? updatedMachine : machine)) : [updatedMachine]
+                            };
+                        }
+                        return category;
+                    });
+                });
+
+                 const pageId = this.pageService.pageId();
+                this.pageService.pageByIdRs.update((page) => {
+                    if (!page) return page;
+                    return {
+                        ...page,
+                        sections: page.id === pageId
+                            ? page.sections?.map((section) => {
+                                  if (section.machines?.some((m) => m.id === machineId)) {
+                                      return {
+                                          ...section,
+                                          machines: section.machines ? section.machines.map((machine) => (machine.id === machineId ? { ...machine, technicalSpecifications: updatedMachine.technicalSpecifications } : machine)) : []
+                                      };
+                                  }
+                                    return section;
+                                }) || []
+                            : page.sections
+                    };
+                });
+
+
+                this.sectionService.sectionLayoutsListRs.update((sections) => {
+                    if (!sections) return [];
+                    return sections.map((section) => {
+                        if (section.machines?.some((m) => m.id === machineId)) {
+                            return {
+                                ...section,
+                                machines: section.machines ? section.machines.map((machine) => (machine.id === machineId ? { ...machine, technicalSpecifications: updatedMachine.technicalSpecifications } : machine)) : []
+                            };
+                        }
+                        return section;
+                    });
+                });
             }),
             finalize(() => this.loading.set(false))
         );

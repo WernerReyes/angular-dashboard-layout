@@ -1,12 +1,14 @@
-<p-dialog [visible]="display()" (visibleChange)="display.set(false)" [modal]="true" [closable]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '25rem' }">
+<p-dialog [visible]="display()"  [modal]="true" (visibleChange)="closeDialog()"  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '60rem' }">
     <ng-template #header>
+        
+        {{display()}}
         <div class="flex items-center gap-2">
             <i class="pi pi-cogs"></i>
             <span class="m-0">Especificaciones Técnicas</span>
         </div>
     </ng-template>
 
-    <form class="p-fluid p-formgrid p-grid gap-4" (ngSubmit)="addNewSpecification()" [formGroup]="form">
+    <form class="p-fluid p-formgrid p-grid gap-4" (ngSubmit)="addNewSpecification($event)" [formGroup]="form">
         <div class="flex flex-col gap-4 text-sm mb-10">
             <div class="flex flex-col gap-2">
                 <label for="specification-name">Nombre</label>

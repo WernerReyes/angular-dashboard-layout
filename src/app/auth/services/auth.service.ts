@@ -30,11 +30,15 @@ export class AuthService {
     });
 
     user = signal<User | null>(null);
+    
     token = signal<string | null>(null);
     loading = signal<boolean>(false);
 
+    initialized = signal(false); // indica que se terminó de inicializar
+
+
     isAuthenticated = computed(() => {
-        return !!this.user;
+        return !!this.user();
     });
 
 
@@ -100,7 +104,8 @@ export class AuthService {
                     refresh: data.refreshToken
                 })),
                 tap((res) => this.handleAuthSuccess(res.user, res.token)),
-                catchError((error) => this.handleAuthError(error))
+                catchError((error) => this.handleAuthError(error)),
+                finalize(() =>   this.initialized.set(true)),
             );
     }
 
@@ -143,8 +148,10 @@ export class AuthService {
         // this.userResource.update(() => user);
         localStorage.setItem('_session_token', token);
         this._authStatus.set('authenticated');
+       
         this.user.set(user);
         this.token.set(token);
+      
         return true;
     }
 

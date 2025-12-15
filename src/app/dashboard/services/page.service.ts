@@ -15,8 +15,9 @@ export class PageService {
 
     private readonly prefix = `${environment.apiUrl}/page`;
 
-
     loading = signal<boolean>(false);
+
+    pageId = signal<number | null>(null);
 
     pagesListResource = httpResource<Page[]>(
         () => ({
@@ -32,7 +33,28 @@ export class PageService {
         }
     );
 
-    
+    pageByIdRs = httpResource<Page | null>(
+        () => {
+            const id = this.pageId();
+
+            if (!id) {
+                return undefined;
+            }
+
+            return {
+                url: `${this.prefix}/${id}`,
+                method: 'GET',
+                cache: 'reload'
+            };
+        },
+        {
+            parse: (value) => {
+                const data = value as ApiResponse<PageEntity>;
+                return mapPageEntityToPage(data.data);
+            },
+            defaultValue: null
+        }
+    );
 
     createPage(create: CreatePage) {
         this.loading.set(true);
@@ -52,7 +74,6 @@ export class PageService {
                 }),
                 finalize(() => this.loading.set(false))
             );
-            
     }
 
     updatePage(pageId: number, update: Partial<CreatePage>) {

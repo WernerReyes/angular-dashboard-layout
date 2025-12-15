@@ -2,6 +2,7 @@
     <label>{{ label() }}</label>
     <app-error-boundary [resource]="machinesList" errorMessage="Ocurrió un error cargando las máquinas." emptyMessage="No hay máquinas disponibles. Por favor, crea una máquina primero.">
         <ng-template #content>
+            <!-- {{machines() | json}} -->
             <p-multiSelect
                 id="machine"
                 class="max-w-full"
@@ -23,6 +24,26 @@
                 filterBy="name,category.title,category.type.searchKeys"
                 fluid
             >
+                    <ng-template let-machine #item>
+                        <div class="flex items-center gap-2">
+                            <i class="text-lg" [class]="machine.category.type.icon"></i>
+                            <span>{{ machine.name }}</span>
+                        </div>
+
+                    </ng-template>
+
+                    <ng-template let-machines  #selecteditems>
+                        <div class="flex gap-3">
+
+                            @for (machine of machines; track machine.id) {
+                                <div class="flex items-center gap-2">
+                                    <i class="text-lg" [class]="machine.category.type.icon"></i>
+                                    <span>{{ machine.name }}</span>
+                                </div>
+                            }
+                        </div>
+                    </ng-template>
+
             </p-multiSelect>
         </ng-template>
     </app-error-boundary>

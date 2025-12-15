@@ -67,7 +67,7 @@ export class SectionForm {
     onCloseDialog = output<void>();
     display = input.required<boolean>();
     selectedSection = model<Section | null>();
-    selectedPageId = input.required<number>();
+    selectedPageId = input<number | null>(null);
     mode = input.required<SectionMode>();
 
     loading = computed(() => this.sectionService.isCreating() || this.sectionService.isUpdating());
@@ -134,7 +134,7 @@ export class SectionForm {
                         type: this.selectedSection()!.type,
                         currentImageUrl: formValue.currentImage || null,
                         currentVideoUrl: formValue.currentVideo || null
-                    })
+                    }, this.mode())
                     .subscribe({
                         next: () => {
                             this.closeDialog();
@@ -143,7 +143,7 @@ export class SectionForm {
                 return;
             }
 
-            this.sectionService.createSection(sectionData).subscribe({
+            this.sectionService.createSection(sectionData, this.mode()).subscribe({
                 next: () => {
                     this.closeDialog();
                 }

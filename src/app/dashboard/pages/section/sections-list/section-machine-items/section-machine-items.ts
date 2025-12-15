@@ -1,8 +1,10 @@
 import { FilterByIdsPipe } from '@/dashboard/pipes/filter-by-ids-pipe';
 import { MachineService } from '@/dashboard/services/machine.service';
 import { ImageError } from '@/shared/components/error/image/image';
+import { categoryTypesOptions } from '@/shared/interfaces/category';
 import { Machine } from '@/shared/interfaces/machine';
 import type { Section } from '@/shared/interfaces/section';
+import { CategoryType } from '@/shared/mappers/category.mapper';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -22,7 +24,7 @@ export class SectionMachineItems {
     private readonly breakpointObserver = inject(BreakpointObserver);
 
     machinesList = this.machineService.machinesListRs;
-
+    
     section = input.required<Section>();
     
     
@@ -37,6 +39,10 @@ export class SectionMachineItems {
     });
 
     isMobile = signal<boolean>(false);
+
+    getTypeOp = (type: CategoryType) => {
+        return categoryTypesOptions[type];
+    }
 
     constructor() {
         this.breakpointObserver

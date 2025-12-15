@@ -1,10 +1,10 @@
 <!-- {{section() | json}} -->
- @if (section().title) {
+@if (section().title) {
 
-     <h2 class="!text-xl md:!text-2xl font-bold text-primary-700 dark:text-primary-400  mb-6">{{section().title}}</h2>
- } @else {
-     <empty-field-message className="max-w-md mb-4" textContent="Sin título"></empty-field-message>
- }
+<h2 class="!text-xl md:!text-2xl font-bold text-primary-700 dark:text-primary-400 mb-6">{{section().title}}</h2>
+} @else {
+<empty-field-message className="max-w-md mb-4" textContent="Sin título"></empty-field-message>
+}
 <p-splitter
     [layout]="isMobile() ? 'vertical' : 'horizontal'"
     [panelSizes]="isMobile() ? [40, 60] : [25, 75]"
@@ -12,20 +12,26 @@
     panelStyleClass="bg-gradient-to-br from-gray-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 transition-all duration-300"
 >
     <ng-template #panel>
-     
-                @if (categories().length > 0) {
+        @if (categories().length > 0) {
 
-                <div class="p-3">
-                    <p-listbox [scrollHeight]="isMobile() ? '100px' : ''" [options]="categories()" [(ngModel)]="selectedCategoryId" optionLabel="title" optionValue="id" class="w-full" />
-                </div>
-                } @else {
-                <div class="flex flex-col items-center text-center justify-center my-auto h-full py-8 text-surface-500">
-                    <i class="pi pi-inbox text-4xl mb-3"></i>
-                    <div class="font-semibold text-lg mb-1">No se encontraron categorias</div>
-                    <div class="text-sm">No hay categorias asociadas a los items de esta sección.</div>
-                </div>
-                }
-           
+        <div class="p-3">
+            <p-listbox [scrollHeight]="isMobile() ? '100px' : ''" [options]="categories()" [(ngModel)]="selectedCategoryId" optionLabel="title" optionValue="id" class="w-full">
+                <ng-template let-category #item>
+                    <div class="flex items-center gap-2">
+                        @let typeOption = getTypeOp(category.type);
+                        <i class="text-lg" [class]="typeOption.icon"></i>
+                        <span>{{ category.title }}</span>
+                    </div>
+                </ng-template>
+            </p-listbox>
+        </div>
+        } @else {
+        <div class="flex flex-col items-center text-center justify-center my-auto h-full py-8 text-surface-500">
+            <i class="pi pi-inbox text-4xl mb-3"></i>
+            <div class="font-semibold text-lg mb-1">No se encontraron categorias</div>
+            <div class="text-sm">No hay categorias asociadas a los items de esta sección.</div>
+        </div>
+        }
     </ng-template>
     <ng-template #panel>
         @let machinesByCategory = section().machines || [] | filterByIds : selectedCategoryId() : 'categoryId';
@@ -50,8 +56,6 @@
                     <div class="flex items-center gap-4">{{ item.name }}</div>
                 </ng-template>
                 <p>{{ item.description }}</p>
-
-                
             </p-card>
             } }
         </div>

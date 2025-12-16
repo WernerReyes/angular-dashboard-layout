@@ -1,7 +1,5 @@
-<p-dialog [visible]="display()"  [modal]="true" (visibleChange)="closeDialog()"  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '60rem' }">
+<p-dialog [visible]="display()" appendTo="body" [modal]="true" (visibleChange)="closeDialog()" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '60rem' }">
     <ng-template #header>
-        
-        {{display()}}
         <div class="flex items-center gap-2">
             <i class="pi pi-cogs"></i>
             <span class="m-0">Especificaciones Técnicas</span>
@@ -23,9 +21,7 @@
             <div class="flex flex-col gap-2">
                 <label for="specification-value">Detalle</label>
                 <div class="w-full">
-                    <textarea id="specification-value" fluid size="small" pInputTextarea placeholder="Detalle de la especificación" formControlName="description" rows="3"
-                     [autoResize]="true" 
-                    ></textarea>
+                    <textarea id="specification-value" fluid size="small" pInputTextarea placeholder="Detalle de la especificación" formControlName="description" rows="3" [autoResize]="true"></textarea>
                     @if (form.controls['description'].errors) {
                     <p-message severity="error" size="small" variant="simple"> {{ FormUtils.getFieldError(form, 'description') }} </p-message>
                     }
@@ -39,7 +35,7 @@
     </form>
 
     <p-contextmenu appendTo="body" #cm [model]="items" (onHide)="selectedSpecification.set(null)" />
-   
+
     <technical-specifications-table [specifications]="machineFormService.technicalSpecifications" [cm]="cm" [(selectedSpecification)]="selectedSpecification"></technical-specifications-table>
 
     <!-- {{form.value| json}} -->

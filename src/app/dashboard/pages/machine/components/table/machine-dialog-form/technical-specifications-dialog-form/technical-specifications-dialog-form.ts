@@ -66,7 +66,6 @@ export class TechnicalSpecificationsDialogForm {
     }
 
     closeDialog() {
-        console.log('CLOSING DIALOG');
         this.display.set(false);
         this.form.reset();
         this.selectedSpecification.set(null);
@@ -107,7 +106,11 @@ export class TechnicalSpecificationsDialogForm {
             );
 
             const machineId = this.machineForm.value.id;
-            this.machineService.updateTechnicalSpecifications(machineId!, this.specifications.value, 'create').subscribe();
+            this.machineService.updateTechnicalSpecifications(machineId!, this.specifications.value, 'create').subscribe({
+                error: () => {
+                    this.specifications.removeAt(this.specifications.length - 1);
+                }
+            });
         }
 
         this.form.reset();
